@@ -11,7 +11,13 @@ const FONT_URL = '/fonts/pixel.woff2';
 const SITE = 'https://deepseekbot.botharness.ai';
 // the Chinese entry at / and the English one at /en/, each with its own share card, plus the
 // guides rendered from content/docs
-const PAGES = ['index.html', 'en/index.html', ...renderDocs()];
+const PAGES = [
+  'index.html',
+  'en/index.html',
+  'market/index.html',
+  'en/market/index.html',
+  ...renderDocs(),
+];
 const fontFile = () =>
   readFileSync(
     require.resolve('@fontsource/fusion-pixel-12px-proportional-sc/files/fusion-pixel-12px-proportional-sc-latin-400-normal.woff2'),
@@ -70,13 +76,18 @@ function pixelAssets(): Plugin {
 
 const sitemap = () => `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${['/', '/en/']
+${[
+  ['/', '/', '/en/'],
+  ['/en/', '/', '/en/'],
+  ['/market/', '/market/', '/en/market/'],
+  ['/en/market/', '/market/', '/en/market/'],
+]
   .map(
-    (path) => `  <url>
+    ([path, zh, en]) => `  <url>
     <loc>${SITE}${path}</loc>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="${SITE}/" />
-    <xhtml:link rel="alternate" hreflang="en" href="${SITE}/en/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="${SITE}${zh}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE}${en}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${zh}" />
   </url>`,
   )
   .join('\n')}

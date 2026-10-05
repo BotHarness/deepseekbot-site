@@ -1,5 +1,4 @@
 import { Button } from '@astryxdesign/core/Button';
-import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { Theme } from '@astryxdesign/core/theme';
 import { useEffect, useState } from 'react';
 import { Community } from './components/Community';
@@ -8,35 +7,10 @@ import { Install } from './components/Install';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
-import { COPY, LINKS, type Lang } from './content';
+import { COPY, LINKS } from './content';
 import { pixelTheme } from './theme';
-
-type Mode = 'light' | 'dark';
-
-const read = (key: string) => {
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-};
-const write = (key: string, value: string) => {
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    // private windows may refuse storage; the choice just won't persist
-  }
-};
-
-// Like botharness.ai, the language is the path: Chinese at / (and /zh, which redirects
-// there), English under /en/. Each entry has its own title, description and share card.
-const pathLang = (): Lang =>
-  location.pathname === '/en' || location.pathname.startsWith('/en/') ? 'en' : 'zh';
-const initialMode = (): Mode => {
-  const saved = read('dsb-mode');
-  if (saved === 'light' || saved === 'dark') return saved;
-  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-};
+import { SiteHeader } from './components/SiteHeader';
+import { initialMode, pathLang, write, type Mode } from './site';
 
 export function App() {
   const lang = pathLang();
@@ -51,58 +25,16 @@ export function App() {
 
   return (
     <Theme theme={pixelTheme} mode={mode}>
-      <a className="skip" href="#main">
-        {lang === 'zh' ? '跳到正文' : 'Skip to content'}
-      </a>
-      <header className="topbar">
-        <a className="brand" href="#top">
-          <img className="brand-logo" src="/logo.png" width={32} height={32} alt="" />
-          <span>DeepSeekBot</span>
-        </a>
-        <nav className="topnav" aria-label="DeepSeekBot">
-          <a href="#features">{copy.nav.features}</a>
-          <a href="#avatar">{copy.nav.avatar}</a>
-          <a href="#install">{copy.nav.install}</a>
-          <a href={lang === 'zh' ? '/docs/overview/' : '/en/docs/overview/'}>{copy.nav.docs}</a>
-          <a href="#community">{copy.nav.community}</a>
-          <a href={LINKS.github} target="_blank" rel="noreferrer">
-            {copy.nav.github}
-          </a>
-        </nav>
-        <div className="toggles">
-          <nav className="lang-switch" aria-label={copy.langLabel}>
-            <a
-              href="/"
-              hrefLang="zh-Hans"
-              lang="zh-Hans"
-              aria-current={lang === 'zh' ? 'page' : undefined}
-            >
-              中文
-            </a>
-            <a
-              href="/en/"
-              hrefLang="en"
-              lang="en"
-              aria-current={lang === 'en' ? 'page' : undefined}
-            >
-              EN
-            </a>
-          </nav>
-          <SegmentedControl
-            label={copy.modeLabel}
-            size="sm"
-            value={mode}
-            onChange={(value) => {
-              const next = value === 'dark' ? 'dark' : 'light';
-              setMode(next);
-              write('dsb-mode', next);
-            }}
-          >
-            <SegmentedControlItem value="light" label={copy.modeLight} />
-            <SegmentedControlItem value="dark" label={copy.modeDark} />
-          </SegmentedControl>
-        </div>
-      </header>
+      <SiteHeader
+        copy={copy}
+        lang={lang}
+        mode={mode}
+        page="home"
+        onMode={(next) => {
+          setMode(next);
+          write('dsb-mode', next);
+        }}
+      />
 
       <main id="main">
         <section className="hero" id="top">

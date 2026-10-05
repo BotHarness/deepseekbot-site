@@ -1,0 +1,75 @@
+import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
+import { LINKS, type Copy, type Lang } from '../content';
+import { homePath, marketPath, type Mode } from '../site';
+
+export function SiteHeader({
+  copy,
+  lang,
+  mode,
+  page,
+  onMode,
+}: {
+  copy: Copy;
+  lang: Lang;
+  mode: Mode;
+  page: 'home' | 'market';
+  onMode: (mode: Mode) => void;
+}) {
+  // on the home page the sections are anchors; elsewhere they lead back to them
+  const home = page === 'home' ? '' : homePath(lang);
+  return (
+    <>
+      <a className="skip" href="#main">
+        {lang === 'zh' ? '跳到正文' : 'Skip to content'}
+      </a>
+      <header className="topbar">
+        <a className="brand" href={page === 'home' ? '#top' : homePath(lang)}>
+          <img className="brand-logo" src="/logo.png" width={32} height={32} alt="" />
+          <span>DeepSeekBot</span>
+        </a>
+        <nav className="topnav" aria-label="DeepSeekBot">
+          <a href={`${home}#features`}>{copy.nav.features}</a>
+          <a href={`${home}#avatar`}>{copy.nav.avatar}</a>
+          <a href={`${home}#install`}>{copy.nav.install}</a>
+          <a href={marketPath(lang)} aria-current={page === 'market' ? 'page' : undefined}>
+            {copy.nav.market}
+          </a>
+          <a href={lang === 'zh' ? '/docs/overview/' : '/en/docs/overview/'}>{copy.nav.docs}</a>
+          <a href={`${home}#community`}>{copy.nav.community}</a>
+          <a href={LINKS.github} target="_blank" rel="noreferrer">
+            {copy.nav.github}
+          </a>
+        </nav>
+        <div className="toggles">
+          <nav className="lang-switch" aria-label={copy.langLabel}>
+            <a
+              href={page === 'home' ? '/' : marketPath('zh') + location.search}
+              hrefLang="zh-Hans"
+              lang="zh-Hans"
+              aria-current={lang === 'zh' ? 'page' : undefined}
+            >
+              中文
+            </a>
+            <a
+              href={page === 'home' ? '/en/' : marketPath('en') + location.search}
+              hrefLang="en"
+              lang="en"
+              aria-current={lang === 'en' ? 'page' : undefined}
+            >
+              EN
+            </a>
+          </nav>
+          <SegmentedControl
+            label={copy.modeLabel}
+            size="sm"
+            value={mode}
+            onChange={(value) => onMode(value === 'dark' ? 'dark' : 'light')}
+          >
+            <SegmentedControlItem value="light" label={copy.modeLight} />
+            <SegmentedControlItem value="dark" label={copy.modeDark} />
+          </SegmentedControl>
+        </div>
+      </header>
+    </>
+  );
+}

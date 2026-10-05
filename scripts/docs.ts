@@ -29,7 +29,7 @@ const UI = {
     suffix: 'DeepSeekBot 文档',
     guides: '使用教程',
     menu: '目录',
-    nav: { features: '能力', install: '安装', community: '社区' },
+    nav: { features: '能力', install: '安装', market: 'Bot 市场', community: '社区' },
     lang: '语言',
     mode: '昼夜',
     light: '白天',
@@ -49,7 +49,12 @@ const UI = {
     suffix: 'DeepSeekBot docs',
     guides: 'Guides',
     menu: 'Contents',
-    nav: { features: 'Features', install: 'Install', community: 'Community' },
+    nav: {
+      features: 'Features',
+      install: 'Install',
+      market: 'Marketplace',
+      community: 'Community',
+    },
     lang: 'Language',
     mode: 'Day or night',
     light: 'Day',
@@ -243,6 +248,7 @@ function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
         <a href="${docPath(lang, 'overview')}" aria-current="page">${t.docs}</a>
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
+        <a href="${home(lang)}market/">${t.nav.market}</a>
         <a href="${home(lang)}#community">${t.nav.community}</a>
         <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>

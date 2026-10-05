@@ -72,6 +72,7 @@ export interface Copy {
     features: string;
     avatar: string;
     install: string;
+    market: string;
     docs: string;
     community: string;
     github: string;
@@ -108,6 +109,42 @@ export interface Copy {
     poster: string;
     label: string;
     play: string;
+  };
+  market: {
+    pageTitle: string;
+    kicker: string;
+    title: string;
+    lead: string;
+    searchLabel: string;
+    searchPlaceholder: string;
+    relevance: string;
+    sortLabel: string;
+    sortUpdated: string;
+    sortStars: string;
+    topicsLabel: string;
+    topicsAll: string;
+    loading: string;
+    loadMore: string;
+    loadingMore: string;
+    retry: string;
+    unavailable: string;
+    empty: string;
+    emptySearch: string;
+    author: { title: string; body: string; docs: string };
+    open: string;
+    back: string;
+    github: string;
+    stars: string;
+    updated: string;
+    notFound: string;
+    readmeLoading: string;
+    noReadme: string;
+    gitUrl: string;
+    installTitle: string;
+    installSteps: string[];
+    risk: string;
+    commit: string;
+    getApp: string;
   };
   playground: {
     kicker: string;
@@ -159,6 +196,7 @@ const zh: Copy = {
     features: '能力',
     avatar: '像素头像',
     install: '安装',
+    market: 'Bot 市场',
     docs: '文档',
     community: '社区',
     github: 'GitHub',
@@ -248,6 +286,49 @@ const zh: Copy = {
     label: 'DeepSeekBot 宣传片（中文）',
     play: '播放宣传片',
   },
+  market: {
+    pageTitle: 'Bot 市场 · DeepSeekBot',
+    kicker: 'Bot 市场',
+    title: '找一个现成的 Bot',
+    lead: '这里收录了大家放在公开 GitHub 仓库里的 Bot。在 DeepSeekBot 里安装后，它会成为一个新的 PersonaBot，带着作者写好的 Memory。',
+    searchLabel: '搜索 Bot',
+    searchPlaceholder: '搜索名称、描述、话题或 README',
+    relevance: '搜索结果按相关度排序，最多显示前 200 个。',
+    sortLabel: '排序',
+    sortUpdated: '最近更新',
+    sortStars: '最多 Star',
+    topicsLabel: '按话题筛选',
+    topicsAll: '全部',
+    loading: '正在加载 Bot 市场…',
+    loadMore: '加载更多',
+    loadingMore: '加载中…',
+    retry: '重试',
+    unavailable: 'Bot 市场暂时无法访问，请稍后重试。',
+    empty: '还没有收录的 Bot。',
+    emptySearch: '没有符合条件的 Bot。换个关键词或话题试试。',
+    author: {
+      title: '想让你的 Bot 出现在这里？',
+      body: '把 Bot 的 Memory 放进公开 GitHub 仓库，给仓库加上 botharness-bot 话题，每天会自动收录；也可以在 DeepSeekBot 的「Bot 市场」里贴入仓库地址，立即收录。',
+      docs: '在仓库里加 .botharness/bot.json 可以设置名称、头像和岗位',
+    },
+    open: '查看 {name} 详情',
+    back: '← 返回 Bot 市场',
+    github: '在 GitHub 查看',
+    stars: '★ {count}',
+    updated: '更新于 {date}',
+    notFound: '这个 Bot 已不在市场中。',
+    readmeLoading: '正在加载 README…',
+    noReadme: '这个仓库没有 README。',
+    gitUrl: 'Git 仓库地址',
+    installTitle: '在 DeepSeekBot 里安装',
+    installSteps: [
+      '打开 DeepSeekBot，在侧栏的「更多」菜单里打开「Bot 市场」，搜索这个 Bot，点「安装」。',
+      '也可以选「更多 → 创建 PersonaBot」，记忆来源选「从 Git 仓库导入」，粘贴上面的地址。',
+    ],
+    risk: '这是第三方仓库：它的文件会成为新 Bot 的 Memory，可能包含有害内容或会被 Bot 执行的指令。请只安装你信任的仓库。',
+    commit: '最新提交 {sha} · {date}',
+    getApp: '还没装 DeepSeekBot？',
+  },
   playground: {
     kicker: 'BotPixel',
     title: '输入名字，得到一张脸',
@@ -330,6 +411,7 @@ const en: Copy = {
     features: 'Features',
     avatar: 'Avatars',
     install: 'Install',
+    market: 'Marketplace',
     docs: 'Docs',
     community: 'Community',
     github: 'GitHub',
@@ -418,6 +500,49 @@ const en: Copy = {
     poster: '/pv-poster-en-v1.png',
     label: 'DeepSeekBot promo video (English)',
     play: 'Play the video',
+  },
+  market: {
+    pageTitle: 'Bot Marketplace · DeepSeekBot',
+    kicker: 'Marketplace',
+    title: 'Find a ready-made Bot',
+    lead: 'Bots that people share as public GitHub repositories. Install one in DeepSeekBot and it becomes a new PersonaBot with the Memory its author wrote.',
+    searchLabel: 'Search Bots',
+    searchPlaceholder: 'Search names, descriptions, topics or READMEs',
+    relevance: 'Search results are ranked by relevance, top 200 only.',
+    sortLabel: 'Sort',
+    sortUpdated: 'Recently updated',
+    sortStars: 'Most stars',
+    topicsLabel: 'Filter by topic',
+    topicsAll: 'All',
+    loading: 'Loading the Bot Marketplace…',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    retry: 'Retry',
+    unavailable: 'The Bot Marketplace is unreachable right now. Try again later.',
+    empty: 'No Bots are listed yet.',
+    emptySearch: 'No Bots match. Try another keyword or topic.',
+    author: {
+      title: 'Want your Bot listed here?',
+      body: 'Put its Memory in a public GitHub repository and add the botharness-bot topic: it is picked up daily. Or paste the repository URL into the Bot Marketplace inside DeepSeekBot to list it right away.',
+      docs: 'Add .botharness/bot.json to set its name, avatar and roles',
+    },
+    open: 'Open {name}',
+    back: '← Back to the Marketplace',
+    github: 'View on GitHub',
+    stars: '★ {count}',
+    updated: 'Updated {date}',
+    notFound: 'This Bot is no longer in the Marketplace.',
+    readmeLoading: 'Loading the README…',
+    noReadme: 'This repository has no README.',
+    gitUrl: 'Git repository URL',
+    installTitle: 'Install it in DeepSeekBot',
+    installSteps: [
+      'In DeepSeekBot, open Bot Marketplace from the sidebar’s More menu, search for this Bot and click Install.',
+      'Or choose More → Create PersonaBot, set Memory source to Import from a Git repository and paste the URL above.',
+    ],
+    risk: 'This is a third-party repository: its files become the new Bot’s Memory and may contain harmful content or instructions the Bot will follow. Install only repositories you trust.',
+    commit: 'Latest commit {sha} · {date}',
+    getApp: 'Don’t have DeepSeekBot yet?',
   },
   playground: {
     kicker: 'BotPixel',
