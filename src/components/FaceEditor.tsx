@@ -7,9 +7,9 @@ import {
   AVATAR_RANGES,
   AVATAR_SWATCHES,
   detailedRecipe,
-  pixelAvatarSvg,
   type PixelAvatarRecipe,
 } from '@botharness/pixel-avatar';
+import { pixelTileSvg } from '../pixelTile';
 import { memo, useMemo, useState } from 'react';
 import type { Copy } from '../content';
 
@@ -66,7 +66,7 @@ const Tile = memo(function Tile({
   label: string;
   onSelect(): void;
 }) {
-  const markup = useMemo(() => pixelAvatarSvg(recipe), [recipe]);
+  const markup = useMemo(() => pixelTileSvg(recipe), [recipe]);
   return (
     <button
       type="button"

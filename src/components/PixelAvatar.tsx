@@ -1,11 +1,11 @@
 import {
   faceCells,
-  pixelAvatarSvg,
   pixelSymbolCells,
   type PixelAvatarRecipe,
   type PixelCell,
   type PixelSymbol,
 } from '@botharness/pixel-avatar';
+import { pixelTileSvg } from '../pixelTile';
 import { morphPixels, pixelPathMarkup, type PixelMorphRun } from '@botharness/pixel-morph';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, type Ref } from 'react';
 
@@ -33,7 +33,7 @@ export function PixelAvatar({ recipe, size, label, ref }: Props) {
   // the latest morph; its `current()` is what is on screen, so the next one starts from there
   const run = useRef<PixelMorphRun | null>(null);
   const shown = useRef<PixelCell[] | null>(null);
-  const svg = useMemo(() => pixelAvatarSvg(recipe), [recipe]);
+  const svg = useMemo(() => pixelTileSvg(recipe), [recipe]);
   const face = useMemo(() => faceCells(recipe), [recipe]);
 
   // a new recipe resets to its plain face

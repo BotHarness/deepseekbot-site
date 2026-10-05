@@ -169,6 +169,21 @@ export function App() {
           <p className="kicker">{copy.playground.kicker}</p>
           <h2 id="avatar-title">{copy.playground.title}</h2>
           <p className="section-lead">{copy.playground.lead}</p>
+          <p className="botpixel-cta">
+            <span>{copy.playground.botpixel.ask}</span>
+            <a
+              className="has-tip"
+              href={LINKS.botpixel}
+              target="_blank"
+              rel="noreferrer"
+              aria-describedby="botpixel-tip"
+            >
+              {copy.playground.botpixel.link} →
+              <span className="tip" role="tooltip" id="botpixel-tip">
+                {copy.playground.botpixel.tip}
+              </span>
+            </a>
+          </p>
           <Playground copy={copy} />
         </section>
 

@@ -110,6 +110,7 @@ export interface Copy {
     download: string;
     editor: { title: string; lead: string; parts: string; reset: string; shuffle: string };
     caption: string;
+    botpixel: { ask: string; link: string; tip: string };
   };
   avatarLabels: AvatarLabels;
   install: {
@@ -244,6 +245,11 @@ const zh: Copy = {
       shuffle: '随机捏一个',
     },
     caption: '头像来自开源的 @botharness/pixel-avatar，变形来自 @botharness/pixel-morph。',
+    botpixel: {
+      ask: '想在自己的项目里用像素头像？',
+      link: 'BotPixel 开源在 GitHub',
+      tip: '同一个名字生成同一张脸，还能变成工具图标。npm i @botharness/pixel-avatar',
+    },
   },
   avatarLabels: ZH_AVATAR_LABELS,
   install: {
@@ -401,6 +407,11 @@ const en: Copy = {
     },
     caption:
       'Avatars by the open-source @botharness/pixel-avatar, morphs by @botharness/pixel-morph.',
+    botpixel: {
+      ask: 'Want pixel avatars in your own project?',
+      link: 'BotPixel is open source on GitHub',
+      tip: 'The same name always gives the same face, and it morphs into tool icons. npm i @botharness/pixel-avatar',
+    },
   },
   avatarLabels: EN_AVATAR_LABELS,
   install: {
