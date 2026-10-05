@@ -1,10 +1,11 @@
 import { Button } from '@astryxdesign/core/Button';
 import { TextInput } from '@astryxdesign/core/TextInput';
-import type { PixelSymbol } from '@botharness/pixel-avatar';
+import type { PixelAvatarRecipe, PixelSymbol } from '@botharness/pixel-avatar';
 import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { SYMBOL_ORDER, type Copy } from '../content';
 import { downloadAvatar } from '../download';
 import { recipeFor } from '../mascot';
+import { FaceEditor } from './FaceEditor';
 import { PixelAvatar, type PixelAvatarHandle } from './PixelAvatar';
 import { SymbolIcon } from './SymbolIcon';
 
@@ -13,7 +14,10 @@ const NAMES = ['Mira', 'Theo', 'Nova', 'Juno', 'Kai', 'Lumi', 'Orion', 'Pixel', 
 export function Playground({ copy }: { copy: Copy }) {
   const [name, setName] = useState('DeepSeekBot');
   const seed = useDeferredValue(name.trim() || 'DeepSeekBot');
-  const recipe = useMemo(() => recipeFor(seed), [seed]);
+  const named = useMemo(() => recipeFor(seed), [seed]);
+  // a face edited in the editor wins until the name changes or it is reset
+  const [custom, setCustom] = useState<PixelAvatarRecipe | null>(null);
+  const recipe = custom ?? named;
   const avatar = useRef<PixelAvatarHandle>(null);
   const [tool, setTool] = useState<PixelSymbol | null>(null);
   const t = copy.playground;
@@ -26,6 +30,7 @@ export function Playground({ copy }: { copy: Copy }) {
   const shuffle = () => {
     const others = NAMES.filter((n) => n !== name);
     setTool(null);
+    setCustom(null);
     setName(others[Math.floor(Math.random() * others.length)]!);
   };
 
@@ -46,6 +51,7 @@ export function Playground({ copy }: { copy: Copy }) {
             placeholder={t.namePlaceholder}
             onChange={(value) => {
               setTool(null);
+              setCustom(null);
               setName(value.slice(0, 32));
             }}
           />
@@ -58,6 +64,19 @@ export function Playground({ copy }: { copy: Copy }) {
             />
           </div>
         </div>
+        <FaceEditor
+          copy={copy}
+          recipe={recipe}
+          edited={custom !== null}
+          onChange={(next) => {
+            setTool(null);
+            setCustom(next);
+          }}
+          onReset={() => {
+            setTool(null);
+            setCustom(null);
+          }}
+        />
         <fieldset className="playground-tools">
           <legend>{t.toolsLabel}</legend>
           <div className="tool-grid">

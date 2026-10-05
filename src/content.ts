@@ -1,3 +1,4 @@
+import { EN_AVATAR_LABELS, ZH_AVATAR_LABELS, type AvatarLabels } from './avatar-labels';
 import type { PixelSymbol } from '@botharness/pixel-avatar';
 
 export type Lang = 'zh' | 'en';
@@ -100,8 +101,10 @@ export interface Copy {
     face: string;
     shuffle: string;
     download: string;
+    editor: { title: string; lead: string; parts: string; reset: string; shuffle: string };
     caption: string;
   };
+  avatarLabels: AvatarLabels;
   install: {
     kicker: string;
     title: string;
@@ -225,8 +228,16 @@ const zh: Copy = {
     face: '变回脸',
     shuffle: '随机名字',
     download: '下载高清头像',
+    editor: {
+      title: '捏脸',
+      lead: '从名字生成的脸开始，逐个换发型、五官、服装和颜色，捏好直接下载。',
+      parts: '部位',
+      reset: '回到名字生成的脸',
+      shuffle: '随机捏一个',
+    },
     caption: '头像来自开源的 @botharness/pixel-avatar，变形来自 @botharness/pixel-morph。',
   },
+  avatarLabels: ZH_AVATAR_LABELS,
   install: {
     kicker: '安装',
     title: '装进 DeepSeek Harness',
@@ -372,9 +383,17 @@ const en: Copy = {
     face: 'Back to face',
     shuffle: 'Random name',
     download: 'Download HD avatar',
+    editor: {
+      title: 'Make your own',
+      lead: 'Start from the face your name gives, swap hair, features, outfit and colors, then download it.',
+      parts: 'Parts',
+      reset: 'Back to the name’s face',
+      shuffle: 'Surprise me',
+    },
     caption:
       'Avatars by the open-source @botharness/pixel-avatar, morphs by @botharness/pixel-morph.',
   },
+  avatarLabels: EN_AVATAR_LABELS,
   install: {
     kicker: 'Install',
     title: 'Add it to DeepSeek Harness',
