@@ -1,7 +1,7 @@
 import { Button } from '@astryxdesign/core/Button';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { useState, type ReactNode } from 'react';
-import { DESKTOP_PACKAGE, INSTALL_STEPS, LINKS, type Copy } from '../content';
+import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy } from '../content';
 
 function Command({
   command,
@@ -77,7 +77,7 @@ export function Install({ copy }: { copy: Copy }) {
             ))}
           </ol>
           <p className="install-links">
-            <a href={LINKS.dshDownload} target="_blank" rel="noreferrer">
+            <a href={t.desktop.downloadUrl} target="_blank" rel="noreferrer">
               {t.desktop.download}
             </a>
             <a href={t.desktop.docsUrl} target="_blank" rel="noreferrer">

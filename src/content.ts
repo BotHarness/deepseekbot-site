@@ -12,7 +12,6 @@ export const LINKS = {
   npm: 'https://www.npmjs.com/package/deepseekbot',
   botpixel: 'https://github.com/BotHarness/BotPixel',
   dsh: 'https://github.com/deepseek-ai/deepseek-harness',
-  dshDownload: 'https://www.deepseek.com/en/harness/',
   changelog: 'https://github.com/BotHarness/BotHarness/blob/main/CHANGELOG.md',
   issues: 'https://github.com/BotHarness/BotHarness/issues',
   discord: 'https://discord.gg/aEB2Ayhu7B',
@@ -125,6 +124,7 @@ export interface Copy {
       steps: string[];
       docs: string;
       docsUrl: string;
+      downloadUrl: string;
     };
     lead: string;
     steps: string[];
@@ -269,6 +269,7 @@ const zh: Copy = {
       ],
       docs: 'DSH 官方文档：打包与安装插件',
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
+      downloadUrl: 'https://www.deepseek.com/harness/',
     },
     lead: `需要 Node 22 以上。DeepSeekBot 当前支持 DSH ${DSH_VERSION} 起的 0.2 系列。`,
     steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
@@ -431,6 +432,7 @@ const en: Copy = {
       ],
       docs: 'DSH docs: package and install a plugin',
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
+      downloadUrl: 'https://www.deepseek.com/en/harness/',
     },
     lead: `Needs Node 22 or later. DeepSeekBot supports the DSH 0.2 line from ${DSH_VERSION}.`,
     steps: [
