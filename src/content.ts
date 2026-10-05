@@ -23,7 +23,7 @@ export const LINKS = {
 export const DESKTOP_PACKAGE = 'deepseekbot@next';
 
 /** Public R2 bucket for large media, served on its own domain. */
-export const MEDIA_BASE = 'https://media.botharness.ai/deepseekbot';
+export const MEDIA_BASE = 'https://media.botharness.ai';
 
 export const QQ_GROUP = '1125565676';
 
@@ -242,7 +242,7 @@ const zh: Copy = {
     kicker: '宣传片',
     title: '三分钟看懂 DeepSeekBot',
     lead: '一座像素小镇里，一群有名字、有记忆的 Bot 各忙各的，也会一起做事。',
-    src: `${MEDIA_BASE}/pv-v12-zh.mp4`,
+    src: `${MEDIA_BASE}/pv/botharness-town-v3-zh.mp4`,
     poster: '/pv-poster-zh-v1.png',
     label: 'DeepSeekBot 宣传片（中文）',
   },
@@ -412,7 +412,7 @@ const en: Copy = {
     kicker: 'Video',
     title: 'DeepSeekBot in three minutes',
     lead: 'A pixel town of Bots with names and memories, each busy with its own work, and working together.',
-    src: `${MEDIA_BASE}/pv-v12-en.mp4`,
+    src: `${MEDIA_BASE}/pv/botharness-town-v3-en.mp4`,
     poster: '/pv-poster-en-v1.png',
     label: 'DeepSeekBot promo video (English)',
   },
