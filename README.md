@@ -28,8 +28,11 @@ pnpm verify   # format:check, lint, typecheck, build
   switch between them.
 - **Share cards**: `/` is the Chinese entry and `/en/` the English one, each with its own
   title, description, Open Graph and Twitter card, hreflang and JSON-LD. `pnpm og` re-renders
-  `public/og-zh.png`, `public/og-en.png` and the apple-touch-icon from BotPixel presets and the
-  DeepSeekBot logo (`scripts/assets/deepseekbot-logo.png`, from BotHarness).
+  `public/og-zh-v2.png`, `public/og-en-v2.png` (same layout as the launch covers) and the
+  apple-touch-icon from BotPixel presets and the DeepSeekBot logo
+  (`scripts/assets/deepseekbot-logo.png`, from BotHarness). When the design changes, bump the
+  file suffix and the meta tags in both entries so social caches refetch; old files stay so
+  links already shared keep working.
 - **Frames**: the wooden nine-slice frame is pixel art in `scripts/frame-svg.mjs`; run
   `pnpm frames` after editing it to regenerate `src/frames.css`.
 - The visual direction takes cues from Stardew Valley UIs such as
