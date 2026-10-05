@@ -164,6 +164,7 @@ a:where(:not(.astryx-button)) {
 }
 .topnav {
   display: flex;
+  align-items: center;
   gap: 20px;
   font-size: 12px;
   margin-right: auto;
@@ -171,8 +172,9 @@ a:where(:not(.astryx-button)) {
 .topnav a {
   color: var(--ink);
   text-decoration: none;
-  padding: 4px 0;
-  border-bottom: var(--px) solid transparent;
+  line-height: 24px;
+  /* equal borders above and below keep the label centred; only the lower one shows */
+  border-block: var(--px) solid transparent;
 }
 .topnav a:hover {
   border-bottom-color: var(--accent);
