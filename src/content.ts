@@ -3,7 +3,7 @@ import type { PixelSymbol } from '@botharness/pixel-avatar';
 
 export type Lang = 'zh' | 'en';
 
-export const VERSION = '0.1.0-alpha.1';
+export const VERSION = '1.0.0';
 export const DSH_VERSION = '0.2.0-rc.1';
 
 export const LINKS = {
@@ -20,7 +20,7 @@ export const LINKS = {
 } as const;
 
 /** What to type into the desktop app's "Add plugin" field. */
-export const DESKTOP_PACKAGE = 'deepseekbot@next';
+export const DESKTOP_PACKAGE = 'deepseekbot';
 
 /** Public R2 bucket for large media, served on its own domain. */
 export const MEDIA_BASE = 'https://media.botharness.ai';
@@ -29,7 +29,7 @@ export const QQ_GROUP = '1125565676';
 
 export const INSTALL_STEPS = [
   `npm i -g @deepseek-ai/dsh@${DSH_VERSION}`,
-  'dsh plugin --profile web add deepseekbot@next',
+  'dsh plugin --profile web add deepseekbot',
   'dsh web',
 ] as const;
 
@@ -168,7 +168,7 @@ const zh: Copy = {
   modeLight: '白天',
   modeDark: '夜晚',
   hero: {
-    badge: `Alpha 预览 · v${VERSION}`,
+    badge: `v${VERSION} 正式版`,
     title: 'DeepSeekBot',
     tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
     lead: 'DeepSeekBot 是 BotHarness 的首个产品，以一个 npm 包装进 DeepSeek Harness（DSH）：Bot 名册、私聊与 Group、看得见的 Git Memory、任务委派，以及 Bot 自己的 IM 身份。',
@@ -298,7 +298,7 @@ const zh: Copy = {
     copied: '已复制',
     after:
       '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。要接入飞书、Slack、Discord 或微信，到「设置 → IM bots」连接应用，再在 Bot 的 Profile 里绑定身份、授权群组。',
-    note: '这是 Alpha 预览版本，发布在 npm 的 next 标签。想先试试又不想动现有配置，可以换一个新的 Profile 名字。',
+    note: '想先试试又不想动现有配置，可以换一个新的 Profile 名字。',
   },
   dsh: {
     title: '站在 DeepSeek Harness 上',
@@ -339,7 +339,7 @@ const en: Copy = {
   modeLight: 'Day',
   modeDark: 'Night',
   hero: {
-    badge: `Alpha preview · v${VERSION}`,
+    badge: `v${VERSION} is out`,
     title: 'DeepSeekBot',
     tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
     lead: 'DeepSeekBot is the first BotHarness product, installed into DeepSeek Harness (DSH) as one npm package: a Bot roster, DMs and Groups, Git Memory you can see, delegation, and IM identities of the Bots’ own.',
@@ -474,7 +474,7 @@ const en: Copy = {
     copied: 'Copied',
     after:
       'Open Bot mode, create a PersonaBot, DM it, then start a Group and invite members. To use Lark, Slack, Discord or WeChat, connect the app in Settings → IM bots, then bind the identity and authorize a group in the Bot’s Profile.',
-    note: 'This is an alpha preview on the npm next tag. To try it without touching your current setup, use a new Profile name.',
+    note: 'To try it without touching your current setup, use a new Profile name.',
   },
   dsh: {
     title: 'Built on DeepSeek Harness',
