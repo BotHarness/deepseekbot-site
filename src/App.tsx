@@ -136,7 +136,11 @@ export function App() {
           <div className="ground" aria-hidden="true" />
         </section>
 
-        <section className="section section--alt" id="video" aria-labelledby="video-title">
+        <section
+          className="section section--alt section--center"
+          id="video"
+          aria-labelledby="video-title"
+        >
           <p className="kicker">{copy.video.kicker}</p>
           <h2 id="video-title">{copy.video.title}</h2>
           <p className="section-lead">{copy.video.lead}</p>

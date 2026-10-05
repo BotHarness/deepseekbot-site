@@ -455,8 +455,16 @@ a:where(:not(.astryx-button)) {
   color: var(--ink-soft);
 }
 
+.section--center {
+  text-align: center;
+}
+.section--center .section-lead {
+  margin-inline: auto;
+}
+
 .pv {
   max-width: 960px;
+  margin-inline: auto;
   padding: 0;
   overflow: hidden;
   background: #000;
