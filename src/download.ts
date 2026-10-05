@@ -5,10 +5,10 @@ const SIZE = 1024;
 
 /** Saves the avatar as a PNG named after the bot. */
 export async function downloadAvatar(recipe: PixelAvatarRecipe, name: string) {
-  const svg = pixelAvatarSvg(recipe).replace(
-    'width="512" height="512"',
-    `width="${SIZE}" height="${SIZE}"`,
-  );
+  // a full square: drop the tile's rounded corners the site shows
+  const svg = pixelAvatarSvg(recipe)
+    .replace('width="512" height="512"', `width="${SIZE}" height="${SIZE}"`)
+    .replace('<rect width="32" height="32" rx="6"', '<rect width="32" height="32"');
   const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
   try {
     const image = new Image(SIZE, SIZE);
