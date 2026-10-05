@@ -1,8 +1,10 @@
 import { Button } from '@astryxdesign/core/Button';
 import { TextInput } from '@astryxdesign/core/TextInput';
-import { seededRecipe, type PixelSymbol } from '@botharness/pixel-avatar';
+import type { PixelSymbol } from '@botharness/pixel-avatar';
 import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { SYMBOL_ORDER, type Copy } from '../content';
+import { downloadAvatar } from '../download';
+import { recipeFor } from '../mascot';
 import { PixelAvatar, type PixelAvatarHandle } from './PixelAvatar';
 import { SymbolIcon } from './SymbolIcon';
 
@@ -11,7 +13,7 @@ const NAMES = ['Mira', 'Theo', 'Nova', 'Juno', 'Kai', 'Lumi', 'Orion', 'Pixel', 
 export function Playground({ copy }: { copy: Copy }) {
   const [name, setName] = useState('DeepSeekBot');
   const seed = useDeferredValue(name.trim() || 'DeepSeekBot');
-  const recipe = useMemo(() => seededRecipe(seed), [seed]);
+  const recipe = useMemo(() => recipeFor(seed), [seed]);
   const avatar = useRef<PixelAvatarHandle>(null);
   const [tool, setTool] = useState<PixelSymbol | null>(null);
   const t = copy.playground;
@@ -32,7 +34,7 @@ export function Playground({ copy }: { copy: Copy }) {
       <div className="playground-stage frame">
         <PixelAvatar ref={avatar} recipe={recipe} size={256} label={seed} />
         <p className="playground-status" aria-live="polite">
-          <strong>{seed}</strong>
+          <strong title={seed}>{seed}</strong>
           <span>{tool ? copy.symbols[tool] : ' '}</span>
         </p>
       </div>
@@ -47,7 +49,14 @@ export function Playground({ copy }: { copy: Copy }) {
               setName(value.slice(0, 32));
             }}
           />
-          <Button label={t.shuffle} onClick={shuffle} />
+          <div className="playground-buttons">
+            <Button label={t.shuffle} onClick={shuffle} />
+            <Button
+              label={t.download}
+              variant="primary"
+              clickAction={() => downloadAvatar(recipe, seed)}
+            />
+          </div>
         </div>
         <fieldset className="playground-tools">
           <legend>{t.toolsLabel}</legend>
@@ -67,7 +76,7 @@ export function Playground({ copy }: { copy: Copy }) {
           </div>
         </fieldset>
         <div className="playground-actions">
-          <Button label={t.face} variant="primary" isDisabled={!tool} onClick={() => use(null)} />
+          <Button label={t.face} isDisabled={!tool} onClick={() => use(null)} />
         </div>
         <p className="caption">{t.caption}</p>
       </div>

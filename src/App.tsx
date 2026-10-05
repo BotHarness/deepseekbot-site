@@ -1,11 +1,9 @@
 import { Button } from '@astryxdesign/core/Button';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { Theme } from '@astryxdesign/core/theme';
-import { seededRecipe } from '@botharness/pixel-avatar';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Crew } from './components/Crew';
 import { Install } from './components/Install';
-import { PixelAvatar } from './components/PixelAvatar';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
 import { COPY, LINKS, type Lang } from './content';
@@ -42,7 +40,6 @@ export function App() {
   const lang = pathLang();
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
-  const mascot = useMemo(() => seededRecipe('DeepSeekBot'), []);
 
   useEffect(() => {
     document.documentElement.lang = copy.htmlLang;
@@ -57,7 +54,7 @@ export function App() {
       </a>
       <header className="topbar">
         <a className="brand" href="#top">
-          <PixelAvatar recipe={mascot} size={32} />
+          <img className="brand-logo" src="/logo.png" width={32} height={32} alt="" />
           <span>DeepSeekBot</span>
         </a>
         <nav className="topnav" aria-label="DeepSeekBot">
@@ -166,7 +163,6 @@ export function App() {
         <section className="section" id="install" aria-labelledby="install-title">
           <p className="kicker">{copy.install.kicker}</p>
           <h2 id="install-title">{copy.install.title}</h2>
-          <p className="section-lead">{copy.install.lead}</p>
           <Install copy={copy} />
         </section>
       </main>

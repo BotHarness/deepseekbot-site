@@ -11,11 +11,15 @@ export const LINKS = {
   npm: 'https://www.npmjs.com/package/deepseekbot',
   botpixel: 'https://github.com/BotHarness/BotPixel',
   dsh: 'https://github.com/deepseek-ai/deepseek-harness',
+  dshDownload: 'https://www.deepseek.com/en/harness/',
   changelog: 'https://github.com/BotHarness/BotHarness/blob/main/CHANGELOG.md',
   issues: 'https://github.com/BotHarness/BotHarness/issues',
   lark: 'https://github.com/BotHarness/BotHarness/blob/main/docs/lark-connection.md',
   slack: 'https://github.com/BotHarness/BotHarness/blob/main/docs/slack-connection.md',
 } as const;
+
+/** What to type into the desktop app's "Add plugin" field. */
+export const DESKTOP_PACKAGE = 'deepseekbot@next';
 
 export const INSTALL_STEPS = [
   `npm i -g @deepseek-ai/dsh@${DSH_VERSION}`,
@@ -84,11 +88,22 @@ export interface Copy {
     toolsLabel: string;
     face: string;
     shuffle: string;
+    download: string;
     caption: string;
   };
   install: {
     kicker: string;
     title: string;
+    tabsLabel: string;
+    desktopTab: string;
+    devTab: string;
+    desktop: {
+      lead: string;
+      download: string;
+      steps: string[];
+      docs: string;
+      docsUrl: string;
+    };
     lead: string;
     steps: string[];
     copy: string;
@@ -192,11 +207,27 @@ const zh: Copy = {
     toolsLabel: '让它用一个工具',
     face: '变回脸',
     shuffle: '随机名字',
+    download: '下载高清头像',
     caption: '头像来自开源的 @botharness/pixel-avatar，变形来自 @botharness/pixel-morph。',
   },
   install: {
     kicker: '安装',
-    title: '三行命令，装进 DSH',
+    title: '装进 DeepSeek Harness',
+    tabsLabel: '安装方式',
+    desktopTab: '桌面端',
+    devTab: '开发者（命令行）',
+    desktop: {
+      lead: `一句话：打开 DeepSeek Harness 桌面端，点「插件 → 添加插件」，在「包名或地址」里输入 ${DESKTOP_PACKAGE}，点「安装」。`,
+      download: '还没装 DeepSeek Harness？先下载桌面端',
+      steps: [
+        '打开 DeepSeek Harness 桌面端，点左侧「插件」，再点「添加插件」',
+        '在「包名或地址」里输入下面这一行，保持「npm 官方源」，点「安装」',
+        '显示「已安装」后点「立即启用」；如果提示重启，重启当前 Profile',
+        '侧栏出现「Bot 模式」，创建你的第一个 PersonaBot',
+      ],
+      docs: 'DSH 官方文档：打包与安装插件',
+      docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
+    },
     lead: `需要 Node 22 以上。DeepSeekBot 当前支持 DSH ${DSH_VERSION} 起的 0.2 系列。`,
     steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
     copy: '复制',
@@ -301,12 +332,28 @@ const en: Copy = {
     toolsLabel: 'Hand it a tool',
     face: 'Back to face',
     shuffle: 'Random name',
+    download: 'Download HD avatar',
     caption:
       'Avatars by the open-source @botharness/pixel-avatar, morphs by @botharness/pixel-morph.',
   },
   install: {
     kicker: 'Install',
-    title: 'Three commands into DSH',
+    title: 'Add it to DeepSeek Harness',
+    tabsLabel: 'How to install',
+    desktopTab: 'Desktop',
+    devTab: 'Developers (CLI)',
+    desktop: {
+      lead: `In one line: open the DeepSeek Harness desktop app, go to Plugins → Add plugin, enter ${DESKTOP_PACKAGE} as the package name or address, and click Install.`,
+      download: 'No DeepSeek Harness yet? Get the desktop app',
+      steps: [
+        'Open the DeepSeek Harness desktop app, click Plugins in the sidebar, then Add plugin',
+        'Enter this line as the package name or address, keep the official npm registry, and click Install',
+        'When it shows Installed, click Enable now; if DSH asks, restart the current Profile',
+        'Bot mode appears in the sidebar: create your first PersonaBot',
+      ],
+      docs: 'DSH docs: package and install a plugin',
+      docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
+    },
     lead: `Needs Node 22 or later. DeepSeekBot supports the DSH 0.2 line from ${DSH_VERSION}.`,
     steps: [
       'Install DeepSeek Harness',

@@ -1,5 +1,6 @@
-import { seededRecipe, type PixelSymbol } from '@botharness/pixel-avatar';
+import { type PixelSymbol } from '@botharness/pixel-avatar';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { recipeFor } from '../mascot';
 import { CREW, SYMBOL_ORDER, type Copy } from '../content';
 import { MORPH_MS, PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
 
@@ -16,7 +17,7 @@ const pick = <T,>(values: readonly T[]) => values[Math.floor(Math.random() * val
 
 /** One crew member: idles as a face, then picks up a tool, works a while and puts it down. */
 function Member({ name, symbols }: { name: string; symbols: Copy['symbols'] }) {
-  const recipe = useMemo(() => seededRecipe(name), [name]);
+  const recipe = useMemo(() => recipeFor(name), [name]);
   const avatar = useRef<PixelAvatarHandle>(null);
   const [tool, setTool] = useState<PixelSymbol | null>(null);
   const hero = name === 'DeepSeekBot';

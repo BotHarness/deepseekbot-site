@@ -149,6 +149,11 @@ a:where(:not(.astryx-button)) {
   backdrop-filter: blur(6px);
   border-bottom: var(--px) solid var(--px-ink);
 }
+.brand-logo {
+  display: block;
+  border-radius: 8px;
+  outline: 2px solid var(--px-ink);
+}
 .brand {
   display: inline-flex;
   align-items: center;
@@ -497,22 +502,39 @@ a:where(:not(.astryx-button)) {
   align-items: start;
 }
 .playground-stage {
+  container-type: inline-size;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   gap: 12px;
   padding: 20px 12px 12px;
 }
 .playground-stage .pixel-avatar {
-  max-width: 100%;
+  width: 100% !important;
+  max-width: 256px;
   height: auto !important;
   aspect-ratio: 1;
 }
 .playground-status {
   display: grid;
   justify-items: center;
+  width: 100%;
+  min-width: 0;
   margin: 0;
+  text-align: center;
   font-size: 24px;
   line-height: 1.4;
+}
+.playground-status strong {
+  /* long names wrap anywhere, then stop at two lines with an ellipsis */
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: clamp(16px, 5cqi, 24px);
 }
 .playground-status span {
   font-size: 12px;
@@ -525,11 +547,18 @@ a:where(:not(.astryx-button)) {
 }
 .playground-name {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   align-items: flex-end;
 }
 .playground-name > :first-child {
-  flex: 1;
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.playground-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 .playground-tools {
   margin: 0;
@@ -642,6 +671,15 @@ a:where(:not(.astryx-button)) {
 }
 .install p {
   margin: 0 0 12px;
+}
+.install .install-lead {
+  margin: 16px 0 20px;
+  font-weight: 600;
+}
+.install-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
 }
 .install .note {
   margin: 0;

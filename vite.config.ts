@@ -1,7 +1,6 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
-import { pixelAvatarSvg, seededRecipe } from '@botharness/pixel-avatar';
 import react from '@vitejs/plugin-react';
 import subsetFont from 'subset-font';
 import { defineConfig, type Plugin } from 'vite';
@@ -38,7 +37,7 @@ function siteCharacters(): string {
 
 /**
  * Fusion Pixel covers all of simplified Chinese (~600 KB). Dev serves the whole font; the
- * build ships only the glyphs the site uses, and the favicon is the mascot's BotPixel face.
+ * build ships only the glyphs the site uses.
  */
 function pixelAssets(): Plugin {
   return {
@@ -48,21 +47,13 @@ function pixelAssets(): Plugin {
         res.setHeader('Content-Type', 'font/woff2');
         res.end(fontFile());
       });
-      server.middlewares.use('/favicon.svg', (_req, res) => {
-        res.setHeader('Content-Type', 'image/svg+xml');
-        res.end(favicon());
-      });
     },
     async generateBundle() {
       const subset = await subsetFont(fontFile(), siteCharacters(), { targetFormat: 'woff2' });
       this.emitFile({ type: 'asset', fileName: FONT_URL.slice(1), source: subset });
-      this.emitFile({ type: 'asset', fileName: 'favicon.svg', source: favicon() });
     },
   };
 }
-
-const favicon = () =>
-  pixelAvatarSvg(seededRecipe('DeepSeekBot')).replace(' aria-hidden="true"', '');
 
 export default defineConfig({
   plugins: [react(), pixelAssets()],
