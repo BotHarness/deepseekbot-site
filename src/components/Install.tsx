@@ -3,7 +3,7 @@ import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/Segme
 import { useState, type ReactNode } from 'react';
 import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy } from '../content';
 
-function Command({
+export function Command({
   command,
   copy,
   shell = true,

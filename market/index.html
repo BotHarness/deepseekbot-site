@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bot 市场 · DeepSeekBot</title>
+    <meta
+      name="description"
+      content="浏览大家分享在公开 GitHub 仓库里的 Bot：按 Star 或更新时间排序，搜索名称、描述、话题和 README，在 DeepSeekBot 里一键安装成新的 PersonaBot。"
+    />
+    <link rel="canonical" href="https://deepseekbot.botharness.ai/market/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://deepseekbot.botharness.ai/market/" />
+    <link rel="alternate" hreflang="en" href="https://deepseekbot.botharness.ai/en/market/" />
+    <link rel="alternate" hreflang="x-default" href="https://deepseekbot.botharness.ai/market/" />
+    <meta name="theme-color" content="#f6e7c1" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DeepSeekBot" />
+    <meta property="og:url" content="https://deepseekbot.botharness.ai/market/" />
+    <meta property="og:title" content="Bot 市场 · DeepSeekBot" />
+    <meta
+      property="og:description"
+      content="浏览大家分享在公开 GitHub 仓库里的 Bot：按 Star 或更新时间排序，搜索名称、描述、话题和 README，在 DeepSeekBot 里一键安装成新的 PersonaBot。"
+    />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:image" content="https://deepseekbot.botharness.ai/og-zh-v2.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bot 市场 · DeepSeekBot" />
+    <meta
+      name="twitter:description"
+      content="浏览大家分享在公开 GitHub 仓库里的 Bot：按 Star 或更新时间排序，搜索名称、描述、话题和 README，在 DeepSeekBot 里一键安装成新的 PersonaBot。"
+    />
+    <meta name="twitter:image" content="https://deepseekbot.botharness.ai/og-zh-v2.png" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://market.botharness.ai" crossorigin />
+    <link rel="preload" href="/fonts/pixel.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face {
+        font-family: 'DSB Pixel';
+        src: url('/fonts/pixel.woff2') format('woff2');
+        font-display: swap;
+      }
+    </style>
+    <script>
+      // apply the saved day/night choice before first paint
+      try {
+        var m = localStorage.getItem('dsb-mode');
+        if (m !== 'light' && m !== 'dark')
+          m = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = m;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Bot 市场 · DeepSeekBot https://github.com/topics/botharness-bot</noscript>
+    <script type="module" src="/src/market.tsx"></script>
+  </body>
+</html>
