@@ -56,6 +56,8 @@ interface Feature {
 
 export interface Copy {
   htmlLang: string;
+  /** Matches the <title> of this language's entry page. */
+  pageTitle: string;
   nav: { features: string; avatar: string; install: string; github: string };
   langLabel: string;
   modeLabel: string;
@@ -69,6 +71,7 @@ export interface Copy {
     ctaInstall: string;
     ctaGithub: string;
     crewLabel: string;
+    chips: string[];
   };
   symbols: SymbolLabels;
   features: { kicker: string; title: string; lead: string; items: Feature[] };
@@ -102,6 +105,7 @@ export interface Copy {
 
 const zh: Copy = {
   htmlLang: 'zh-CN',
+  pageTitle: 'DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness',
   nav: { features: '能力', avatar: '像素头像', install: '安装', github: 'GitHub' },
   langLabel: '语言',
   modeLabel: '昼夜',
@@ -115,6 +119,13 @@ const zh: Copy = {
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
     crewLabel: '一组正在工作的 PersonaBots，头像会变成它们正在使用的工具',
+    chips: [
+      'GrokBot 的开源平替',
+      '基于 DeepSeek Harness',
+      '兼容其他 DSH 插件',
+      '连接飞书 / Slack',
+      'MIT 开源',
+    ],
   },
   symbols: {
     thinking: '思考',
@@ -204,6 +215,7 @@ const zh: Copy = {
 
 const en: Copy = {
   htmlLang: 'en',
+  pageTitle: 'DeepSeekBot: the open-source Grok Bot alternative for DeepSeek Harness',
   nav: { features: 'Features', avatar: 'Avatars', install: 'Install', github: 'GitHub' },
   langLabel: 'Language',
   modeLabel: 'Day or night',
@@ -217,6 +229,13 @@ const en: Copy = {
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
     crewLabel: 'A crew of working PersonaBots whose avatars turn into the tool each one is using',
+    chips: [
+      'Open-source Grok Bot alternative',
+      'Built on DeepSeek Harness',
+      'Works with other DSH plugins',
+      'Connects to Lark and Slack',
+      'MIT licensed',
+    ],
   },
   symbols: {
     thinking: 'Thinking',

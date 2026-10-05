@@ -23,6 +23,9 @@ pnpm verify   # format:check, lint, typecheck, build
 - **Font**: Fusion Pixel 12px SC (OFL). Dev serves the whole font; `vite build` subsets it to the
   characters in `index.html` and `src/` (about 13 KB instead of 600 KB), so new copy is covered
   automatically.
+- **Share cards**: `/` is the Chinese entry and `/en/` the English one, each with its own
+  title, description, Open Graph and Twitter card, hreflang and JSON-LD. `pnpm og` re-renders
+  `public/og-zh.png`, `public/og-en.png` and the apple-touch-icon from the same avatars and font.
 - **Frames**: the wooden nine-slice frame is pixel art in `scripts/frame-svg.mjs`; run
   `pnpm frames` after editing it to regenerate `src/frames.css`.
 - The visual direction takes cues from Stardew Valley UIs such as

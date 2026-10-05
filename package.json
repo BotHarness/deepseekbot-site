@@ -15,7 +15,8 @@
     "verify": "pnpm format:check && pnpm lint && pnpm build",
     "deploy": "pnpm build && wrangler deploy",
     "deploy:preview": "pnpm build && wrangler versions upload",
-    "frames": "node scripts/frame-svg.mjs"
+    "frames": "node scripts/frame-svg.mjs",
+    "og": "node scripts/og-image.mjs"
   },
   "dependencies": {
     "@astryxdesign/core": "^0.6.5",
@@ -35,6 +36,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "oxfmt": "^0.71.0",
     "oxlint": "^1.86.0",
+    "playwright-core": "1.56.1",
     "subset-font": "^2.9.0",
     "typescript": "7.0.2",
     "vite": "^8.3.2",

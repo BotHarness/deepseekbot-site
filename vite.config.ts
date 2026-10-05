@@ -8,6 +8,8 @@ import { defineConfig, type Plugin } from 'vite';
 
 const require = createRequire(import.meta.url);
 const FONT_URL = '/fonts/pixel.woff2';
+// the Chinese entry at / and the English one at /en/, each with its own share card
+const PAGES = ['index.html', 'en/index.html'];
 const fontFile = () =>
   readFileSync(
     require.resolve('@fontsource/fusion-pixel-12px-proportional-sc/files/fusion-pixel-12px-proportional-sc-latin-400-normal.woff2'),
@@ -20,7 +22,7 @@ function siteCharacters(): string {
   const add = (text: string) => {
     for (const ch of text) chars.add(ch);
   };
-  add(readFileSync('index.html', 'utf8'));
+  for (const page of PAGES) add(readFileSync(page, 'utf8'));
   const walk = (dir: string) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       const path = join(dir, entry.name);
@@ -64,4 +66,5 @@ const favicon = () =>
 
 export default defineConfig({
   plugins: [react(), pixelAssets()],
+  build: { rollupOptions: { input: PAGES } },
 });

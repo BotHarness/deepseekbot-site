@@ -29,6 +29,8 @@ const write = (key: string, value: string) => {
 };
 
 const initialLang = (): Lang => {
+  // /en/ is the English entry (its own title, description and share card)
+  if (location.pathname.startsWith('/en')) return 'en';
   const saved = read('dsb-lang');
   if (saved === 'zh' || saved === 'en') return saved;
   return navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
@@ -47,8 +49,9 @@ export function App() {
 
   useEffect(() => {
     document.documentElement.lang = copy.htmlLang;
+    document.title = copy.pageTitle;
     document.documentElement.dataset.theme = mode;
-  }, [copy.htmlLang, mode]);
+  }, [copy.htmlLang, copy.pageTitle, mode]);
 
   return (
     <Theme theme={pixelTheme} mode={mode}>
@@ -77,6 +80,8 @@ export function App() {
               const next = value === 'en' ? 'en' : 'zh';
               setLang(next);
               write('dsb-lang', next);
+              // keep the address on the matching entry, so a copied link opens in this language
+              history.replaceState(null, '', (next === 'en' ? '/en/' : '/') + location.hash);
             }}
           >
             <SegmentedControlItem value="zh" label="中文" />
@@ -111,6 +116,11 @@ export function App() {
             <h1 className="wordmark">{copy.hero.title}</h1>
             <p className="tagline">{copy.hero.tagline}</p>
             <p className="lead">{copy.hero.lead}</p>
+            <ul className="chips">
+              {copy.hero.chips.map((chip) => (
+                <li key={chip}>{chip}</li>
+              ))}
+            </ul>
             <div className="cta">
               <Button label={copy.hero.ctaInstall} variant="primary" size="lg" href="#install" />
               <Button
