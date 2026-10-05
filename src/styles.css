@@ -453,6 +453,41 @@ a:where(:not(.astryx-button)) {
   color: var(--ink-soft);
 }
 
+.dsh-note {
+  margin-top: 36px;
+  padding: 16px 20px;
+}
+.dsh-note h3 {
+  margin: 0 0 8px;
+}
+.dsh-note p {
+  margin: 0;
+}
+.community-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+  max-width: 820px;
+}
+.community-card {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 16px 20px 20px;
+}
+.community-card h3,
+.community-card p {
+  margin: 0;
+}
+.qq-number {
+  font-family: var(--pixel-font);
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
 .feature-grid {
   list-style: none;
   margin: 0;
@@ -823,4 +858,12 @@ a:where(:not(.astryx-button)) {
 }
 .lang-switch a:not([aria-current]):hover {
   background: var(--bg-alt);
+}
+
+.community-card h3,
+.dsh-note h3 {
+  font-family: var(--pixel-font);
+  font-weight: 400;
+  font-size: 24px;
+  -webkit-font-smoothing: none;
 }

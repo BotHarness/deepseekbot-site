@@ -2,6 +2,7 @@ import { Button } from '@astryxdesign/core/Button';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { Theme } from '@astryxdesign/core/theme';
 import { useEffect, useState } from 'react';
+import { Community } from './components/Community';
 import { Crew } from './components/Crew';
 import { Install } from './components/Install';
 import { Playground } from './components/Playground';
@@ -61,6 +62,7 @@ export function App() {
           <a href="#features">{copy.nav.features}</a>
           <a href="#avatar">{copy.nav.avatar}</a>
           <a href="#install">{copy.nav.install}</a>
+          <a href="#community">{copy.nav.community}</a>
           <a href={LINKS.github} target="_blank" rel="noreferrer">
             {copy.nav.github}
           </a>
@@ -151,6 +153,15 @@ export function App() {
               </li>
             ))}
           </ul>
+          <aside className="dsh-note frame">
+            <h3>{copy.dsh.title}</h3>
+            <p>
+              {copy.dsh.body}{' '}
+              <a href={LINKS.issues} target="_blank" rel="noreferrer">
+                {copy.dsh.issues}
+              </a>
+            </p>
+          </aside>
         </section>
 
         <section className="section section--alt" id="avatar" aria-labelledby="avatar-title">
@@ -164,6 +175,13 @@ export function App() {
           <p className="kicker">{copy.install.kicker}</p>
           <h2 id="install-title">{copy.install.title}</h2>
           <Install copy={copy} />
+        </section>
+
+        <section className="section section--alt" id="community" aria-labelledby="community-title">
+          <p className="kicker">{copy.community.kicker}</p>
+          <h2 id="community-title">{copy.community.title}</h2>
+          <p className="section-lead">{copy.community.lead}</p>
+          <Community copy={copy} />
         </section>
       </main>
 
@@ -183,6 +201,9 @@ export function App() {
           </a>
           <a href={LINKS.changelog} target="_blank" rel="noreferrer">
             Changelog
+          </a>
+          <a href={LINKS.discord} target="_blank" rel="noreferrer">
+            Discord
           </a>
         </div>
         <p>

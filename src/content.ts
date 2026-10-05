@@ -14,12 +14,15 @@ export const LINKS = {
   dshDownload: 'https://www.deepseek.com/en/harness/',
   changelog: 'https://github.com/BotHarness/BotHarness/blob/main/CHANGELOG.md',
   issues: 'https://github.com/BotHarness/BotHarness/issues',
+  discord: 'https://discord.gg/aEB2Ayhu7B',
   lark: 'https://github.com/BotHarness/BotHarness/blob/main/docs/lark-connection.md',
   slack: 'https://github.com/BotHarness/BotHarness/blob/main/docs/slack-connection.md',
 } as const;
 
 /** What to type into the desktop app's "Add plugin" field. */
 export const DESKTOP_PACKAGE = 'deepseekbot@next';
+
+export const QQ_GROUP = '1125565676';
 
 export const INSTALL_STEPS = [
   `npm i -g @deepseek-ai/dsh@${DSH_VERSION}`,
@@ -62,7 +65,7 @@ export interface Copy {
   htmlLang: string;
   /** Matches the <title> of this language's entry page. */
   pageTitle: string;
-  nav: { features: string; avatar: string; install: string; github: string };
+  nav: { features: string; avatar: string; install: string; community: string; github: string };
   langLabel: string;
   modeLabel: string;
   modeLight: string;
@@ -79,6 +82,14 @@ export interface Copy {
   };
   symbols: SymbolLabels;
   features: { kicker: string; title: string; lead: string; items: Feature[] };
+  dsh: { title: string; body: string; issues: string };
+  community: {
+    kicker: string;
+    title: string;
+    lead: string;
+    discord: { title: string; body: string; cta: string };
+    qq: { title: string; body: string };
+  };
   playground: {
     kicker: string;
     title: string;
@@ -121,7 +132,13 @@ export interface Copy {
 const zh: Copy = {
   htmlLang: 'zh-Hans',
   pageTitle: 'DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness',
-  nav: { features: '能力', avatar: '像素头像', install: '安装', github: 'GitHub' },
+  nav: {
+    features: '能力',
+    avatar: '像素头像',
+    install: '安装',
+    community: '社区',
+    github: 'GitHub',
+  },
   langLabel: '语言',
   modeLabel: '昼夜',
   modeLight: '白天',
@@ -236,6 +253,22 @@ const zh: Copy = {
       '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。要接入飞书、Slack、Discord 或微信，到「设置 → IM bots」连接应用，再在 Bot 的 Profile 里绑定身份、授权群组。',
     note: '这是 Alpha 预览版本，发布在 npm 的 next 标签。想先试试又不想动现有配置，可以换一个新的 Profile 名字。',
   },
+  dsh: {
+    title: '站在 DeepSeek Harness 上',
+    body: 'DeepSeekBot 直接用 DSH 自己的 Session 管理和 Harness：你在 DSH 里接入的任何 LLM 模型 provider，Bot 都能用；也可以和其他 DSH 插件装在一起。个别插件可能还不兼容，遇到了欢迎提 Issue 或 PR。',
+    issues: '去 GitHub 提 Issue',
+  },
+  community: {
+    kicker: '社区',
+    title: '一起来聊',
+    lead: '问题、想法，还有你做出来的 Bot，都欢迎带来。',
+    discord: {
+      title: 'Discord',
+      body: '加入 DeepSeekBot 的 Discord 服务器。',
+      cta: '加入 Discord',
+    },
+    qq: { title: 'QQ 群', body: '群号' },
+  },
   footer: {
     built: '用 React、Astryx 和 BotPixel 搭建，部署在 Cloudflare。',
     license: '开源，MIT 许可。',
@@ -246,7 +279,13 @@ const zh: Copy = {
 const en: Copy = {
   htmlLang: 'en',
   pageTitle: 'DeepSeekBot: the open-source Grok Bot alternative for DeepSeek Harness',
-  nav: { features: 'Features', avatar: 'Avatars', install: 'Install', github: 'GitHub' },
+  nav: {
+    features: 'Features',
+    avatar: 'Avatars',
+    install: 'Install',
+    community: 'Community',
+    github: 'GitHub',
+  },
   langLabel: 'Language',
   modeLabel: 'Day or night',
   modeLight: 'Day',
@@ -365,6 +404,22 @@ const en: Copy = {
     after:
       'Open Bot mode, create a PersonaBot, DM it, then start a Group and invite members. To use Lark, Slack, Discord or WeChat, connect the app in Settings → IM bots, then bind the identity and authorize a group in the Bot’s Profile.',
     note: 'This is an alpha preview on the npm next tag. To try it without touching your current setup, use a new Profile name.',
+  },
+  dsh: {
+    title: 'Built on DeepSeek Harness',
+    body: 'DeepSeekBot runs on DSH’s own session management and harness, so any LLM provider you connect in DSH works for your Bots, and it installs alongside other DSH plugins. Some plugins may not be compatible yet; if you hit one, please open an issue or a PR.',
+    issues: 'Open an issue on GitHub',
+  },
+  community: {
+    kicker: 'Community',
+    title: 'Come say hi',
+    lead: 'Questions, ideas and the Bots you build are all welcome.',
+    discord: {
+      title: 'Discord',
+      body: 'Join the DeepSeekBot Discord server.',
+      cta: 'Join Discord',
+    },
+    qq: { title: 'QQ group', body: 'Group number' },
   },
   footer: {
     built: 'Built with React, Astryx and BotPixel. Hosted on Cloudflare.',
