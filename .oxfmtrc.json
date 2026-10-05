@@ -5,5 +5,13 @@
   "semi": true,
   "trailingComma": "all",
   "tabWidth": 2,
-  "ignorePatterns": ["dist", ".wrangler", "pnpm-lock.yaml"]
+  "ignorePatterns": [
+    "dist",
+    ".wrangler",
+    "pnpm-lock.yaml",
+    "docs",
+    "en/docs",
+    "content",
+    "public/guides"
+  ]
 }

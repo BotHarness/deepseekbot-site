@@ -4,3 +4,7 @@
 /zh/ / 301
 /zh/* /:splat 301
 /en /en/ 301
+/docs /docs/overview/ 302
+/docs/ /docs/overview/ 302
+/en/docs /en/docs/overview/ 302
+/en/docs/ /en/docs/overview/ 302

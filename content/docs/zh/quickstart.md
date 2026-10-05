@@ -1,0 +1,38 @@
+---
+{
+  "title": "快速开始",
+  "description": "安装 DeepSeekBot，创建 PersonaBot 并连接聊天平台。",
+  "order": 11,
+  "source": "apps/docs/src/content/docs-zh/docs/quickstart.mdx"
+}
+---
+
+
+## 安装插件
+
+按 [图文安装教程](/zh/docs/installation) 操作：在 DSH 打开 **插件 → 添加插件**，填入 `deepseekbot@0.1.0-alpha.1`，安装后点击 **立即启用**。此公共 npm 预发布版本已在 DSH `0.2.0-rc.1` 上实际验证。
+
+## 配置 API 提供商
+
+打开 **设置 → 模型**，配置 Provider 的 API、凭据和模型目录。参见 [API 与 Bot 模型图文教程](/zh/docs/model-setup)。
+
+## 创建第一个 PersonaBot
+
+进入 **Bot 模式**，点击 **创建第一个 PersonaBot**，填写名称并创建。打开 Bot 的 DM，点击顶部名称 / 头像 → **查看详细 → 模型预设**，选择 Orchestrator 与 Assignment 模型，点击 **创建并应用**。返回聊天并发送一句问候，检查实际回复。
+
+## 连接聊天平台
+
+本地 DM 正常后，按 [连接 Lark / 飞书](/zh/docs/lark-connection) 配置。应用连接、身份绑定和群授权分别完成。
+
+
+## 使用 Channel sidebar
+
+[Channel sidebar 章节](/zh/docs/channel-sidebar)包含总览，以及记忆文件、记忆演化、会话、Bot 收件箱、工作区授权、本地群管理、显示与布局的独立教程。打开 Bot 私聊或群聊，再按对应功能操作。
+
+## 调整其他设置
+
+[设置指南](/zh/docs/settings) 说明全局偏好、Bot 并发与名字、人格与头像、提醒策略、侧栏视图和工作区授权的参数及生效范围。
+
+## 从源码开发
+
+仓库环境与开发命令见 [README](https://github.com/BotHarness/BotHarness#readme) 和 [本地开发指南](/zh/dev/guides/client-bridge)。

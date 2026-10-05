@@ -66,7 +66,14 @@ export interface Copy {
   htmlLang: string;
   /** Matches the <title> of this language's entry page. */
   pageTitle: string;
-  nav: { features: string; avatar: string; install: string; community: string; github: string };
+  nav: {
+    features: string;
+    avatar: string;
+    install: string;
+    docs: string;
+    community: string;
+    github: string;
+  };
   langLabel: string;
   modeLabel: string;
   modeLight: string;
@@ -139,6 +146,7 @@ const zh: Copy = {
     features: '能力',
     avatar: '像素头像',
     install: '安装',
+    docs: '文档',
     community: '社区',
     github: 'GitHub',
   },
@@ -294,6 +302,7 @@ const en: Copy = {
     features: 'Features',
     avatar: 'Avatars',
     install: 'Install',
+    docs: 'Docs',
     community: 'Community',
     github: 'GitHub',
   },

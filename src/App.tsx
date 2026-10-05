@@ -62,6 +62,7 @@ export function App() {
           <a href="#features">{copy.nav.features}</a>
           <a href="#avatar">{copy.nav.avatar}</a>
           <a href="#install">{copy.nav.install}</a>
+          <a href={lang === 'zh' ? '/docs/overview/' : '/en/docs/overview/'}>{copy.nav.docs}</a>
           <a href="#community">{copy.nav.community}</a>
           <a href={LINKS.github} target="_blank" rel="noreferrer">
             {copy.nav.github}

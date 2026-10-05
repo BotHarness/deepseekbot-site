@@ -4,11 +4,14 @@ import { join } from 'node:path';
 import react from '@vitejs/plugin-react';
 import subsetFont from 'subset-font';
 import { defineConfig, type Plugin } from 'vite';
+import { docsSitemap, renderDocs } from './scripts/docs.ts';
 
 const require = createRequire(import.meta.url);
 const FONT_URL = '/fonts/pixel.woff2';
-// the Chinese entry at / and the English one at /en/, each with its own share card
-const PAGES = ['index.html', 'en/index.html'];
+const SITE = 'https://deepseekbot.botharness.ai';
+// the Chinese entry at / and the English one at /en/, each with its own share card, plus the
+// guides rendered from content/docs
+const PAGES = ['index.html', 'en/index.html', ...renderDocs()];
 const fontFile = () =>
   readFileSync(
     require.resolve('@fontsource/fusion-pixel-12px-proportional-sc/files/fusion-pixel-12px-proportional-sc-latin-400-normal.woff2'),
@@ -21,7 +24,16 @@ function siteCharacters(): string {
   const add = (text: string) => {
     for (const ch of text) chars.add(ch);
   };
-  for (const page of PAGES) add(readFileSync(page, 'utf8'));
+  // guide bodies are set in the system font; only their titles and headings use the pixel face
+  for (const page of PAGES) {
+    const html = readFileSync(page, 'utf8');
+    if (!page.includes('docs/')) add(html);
+    else
+      for (const m of html.matchAll(
+        /<(h[1-6]|nav|header|a class="pager[^"]*"|p class="kicker")[^>]*>([\s\S]*?)<\/(h[1-6]|nav|header|a|p)>/g,
+      ))
+        add(m[2]!.replace(/<[^>]+>/g, ''));
+  }
   const walk = (dir: string) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       const path = join(dir, entry.name);
@@ -51,9 +63,26 @@ function pixelAssets(): Plugin {
     async generateBundle() {
       const subset = await subsetFont(fontFile(), siteCharacters(), { targetFormat: 'woff2' });
       this.emitFile({ type: 'asset', fileName: FONT_URL.slice(1), source: subset });
+      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() });
     },
   };
 }
+
+const sitemap = () => `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${['/', '/en/']
+  .map(
+    (path) => `  <url>
+    <loc>${SITE}${path}</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="${SITE}/" />
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE}/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/" />
+  </url>`,
+  )
+  .join('\n')}
+${docsSitemap()}
+</urlset>
+`;
 
 export default defineConfig({
   plugins: [react(), pixelAssets()],

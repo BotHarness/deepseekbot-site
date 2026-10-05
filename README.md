@@ -33,6 +33,11 @@ pnpm verify   # format:check, lint, typecheck, build
   (`scripts/assets/deepseekbot-logo.png`, from BotHarness). When the design changes, bump the
   file suffix and the meta tags in both entries so social caches refetch; old files stay so
   links already shared keep working.
+- **Docs**: the DeepSeekBot guides (formerly botharness.ai/docs) live in `content/docs/{zh,en}`,
+  copied from a BotHarness checkout with `BOTHARNESS=../BotHarness pnpm docs:sync` (screenshots go
+  to `public/guides`). The build renders them into static pages at `/docs/<slug>/` and
+  `/en/docs/<slug>/` (`scripts/docs.ts`; the generated `docs/` and `en/docs/` folders are not
+  committed) and lists them in `sitemap.xml`. Developer docs stay on botharness.ai.
 - **Frames**: the wooden nine-slice frame is pixel art in `scripts/frame-svg.mjs`; run
   `pnpm frames` after editing it to regenerate `src/frames.css`.
 - The visual direction takes cues from Stardew Valley UIs such as

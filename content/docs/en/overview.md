@@ -1,0 +1,37 @@
+---
+{
+  "title": "Overview",
+  "description": "What BotHarness is, why it exists, and what it is made of.",
+  "order": 10,
+  "source": "apps/docs/src/content/docs/docs/overview.mdx"
+}
+---
+
+
+BotHarness is a **plugin layer on top of DeepSeek Harness (DSH)** that gives LLM agents a persistent identity: the **PersonaBot**.
+
+Existing harnesses work one session at a time — across sessions there is at most a "cloud memory", with no Bot entity that has a persona and can work across conversations. That is the layer BotHarness fills:
+
+- **PersonaBot**: a first-class entity — persona, cross-session memory, state, channel bindings, and several Sessions handled at once
+- **Memory**: file-first (front-matter, directory-tree injection, tool-driven writes, git versioning)
+- **How work happens**: delegation (@PersonaBot hands work off, executes it in the background, and reports back), with tiered approvals
+- **No DSH fork**: delivered as an SDK + bundle; capabilities like IM come from bases such as dsh-im
+
+## Two products
+
+| Name | What it is |
+| --- | --- |
+| **BotHarness** | The platform layer (this repository): PersonaBot entities, memory, state, and how work happens |
+| **DeepSeekBot** | The first app: brings PersonaBots into the DSH sidebar (create, @-delegate, keep working) and connects Feishu / Lark |
+
+## Where to start
+
+- [Concepts](/docs/concepts): BOT mode, channels, sections, inboxes, bridges, sessions, Builder
+- [Quickstart](/docs/quickstart): install the public plugin, configure models and create your first Bot
+- [Channel sidebar](/docs/channel-sidebar): Memory, Sessions, Inbox, folders, groups and display controls
+- [Developer docs](/dev): choose Design, verified Guides, current-code Reference, or Architecture Decisions
+- [Architecture & data flow](/dev/design/architecture): system context, modules, data flow, boundaries (kept current)
+- [BotHarness Product Context](/dev/design/context): canonical product terms, distinct from DSH and Cordis vocabulary
+- [BotHarness Runtime Architecture](/dev/design/bot-runtime): PersonaBot, Inbox, Orchestrator, Work, and DSH execution boundaries
+- [Decision records](/dev/adr/0015-botharness-is-a-dsh-plugin-layer): why things are the way they are
+- [Changelog](/changelog): what changed in each version

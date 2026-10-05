@@ -1,0 +1,38 @@
+---
+{
+  "title": "Quickstart",
+  "description": "Install DeepSeekBot, create a PersonaBot and connect a messaging app.",
+  "order": 11,
+  "source": "apps/docs/src/content/docs/docs/quickstart.mdx"
+}
+---
+
+
+## Install the plugin
+
+Follow the [illustrated installation guide](/docs/installation): open DSH **Plugins → Add plugin**, enter `deepseekbot@0.1.0-alpha.1`, install it and click **Enable now**. This public npm prerelease was verified with DSH `0.2.0-rc.1`.
+
+## Configure an API provider
+
+Open **Settings → Models** and configure a provider’s endpoint, credentials, and model catalog. Follow the illustrated [API and Bot model guide](/docs/model-setup).
+
+## Create your first PersonaBot
+
+Open **Bot mode**, choose **Create your first PersonaBot**, enter a name and create it. Open its DM and click its header name/avatar → **View details → Model preset**. Choose Orchestrator and Assignment models and **Create and apply**. Return to chat and verify a real reply.
+
+## Connect a messaging app
+
+After the local DM works, follow [Connect a Bot to Lark / Feishu](/docs/lark-connection). Connection, identity binding and group authorization are separate steps.
+
+
+## Explore the Channel sidebar
+
+The [Channel sidebar chapter](/docs/channel-sidebar) has an overview and separate guides for Memory files and evolution, Sessions, Bot Inbox, Workspace Grants, local group management, and display/layout. Open a Bot DM or group and follow the matching guide.
+
+## Adjust other settings
+
+The [Settings guide](/docs/settings) explains global preferences, Bot concurrency/name, persona/avatar, attention, sidebar views, workspace grants, and when changes apply.
+
+## Develop from source
+
+For repository setup and development commands, see the [README](https://github.com/BotHarness/BotHarness#readme) and [local development guide](/dev/guides/client-bridge).
