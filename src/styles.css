@@ -455,6 +455,19 @@ a:where(:not(.astryx-button)) {
   color: var(--ink-soft);
 }
 
+.pv {
+  max-width: 960px;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+}
+.pv video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
 .dsh-note {
   margin-top: 36px;
   padding: 16px 20px;
