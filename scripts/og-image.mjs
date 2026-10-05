@@ -19,13 +19,23 @@ const CARDS = {
     lang: 'zh-CN',
     headline: '开源的 GrokBot 平替',
     sub: '一组有各自身份、人格和记忆的 bots，一起做事',
-    chips: ['基于 DeepSeek Harness', '兼容其他 DSH 插件', '连接飞书 / Slack', 'MIT 开源'],
+    chips: [
+      '基于 DeepSeek Harness',
+      '兼容其他 DSH 插件',
+      '飞书 / Slack / Discord / 微信',
+      'MIT 开源',
+    ],
   },
   en: {
     lang: 'en',
     headline: 'The open-source Grok Bot alternative',
     sub: 'Bots with their own identity, persona and memory, working together',
-    chips: ['Built on DeepSeek Harness', 'Works with DSH plugins', 'Lark + Slack', 'MIT'],
+    chips: [
+      'Built on DeepSeek Harness',
+      'Works with DSH plugins',
+      'Lark/Slack/Discord/WeChat',
+      'MIT',
+    ],
   },
 };
 
@@ -68,8 +78,8 @@ svg { image-rendering: pixelated; filter: drop-shadow(6px 6px 0 rgb(59 36 20 / .
 .headline { margin-top: 34px; font-size: 48px; line-height: 1.2; }
 .headline span { background: #3d5afe; color: #fff; padding: 0 12px; outline: 4px solid #3b2414; }
 .sub { margin-top: 18px; font-size: 24px; }
-.chips { display: flex; gap: 14px; margin-top: 20px; }
-.chips span { font-size: 24px; line-height: 36px; padding: 0 12px; background: #fffbea; outline: 4px solid #3b2414; }
+.chips { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; max-width: 1072px; }
+.chips span { white-space: nowrap; font-size: 24px; line-height: 36px; padding: 0 12px; background: #fffbea; outline: 4px solid #3b2414; }
 .crew { position: absolute; right: 44px; bottom: 66px; display: flex; align-items: flex-end; gap: 14px; }
 .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; border-top: 6px solid #3b2414;
   background: linear-gradient(#8fb85d 0 10px, transparent 10px),

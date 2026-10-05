@@ -123,7 +123,7 @@ const zh: Copy = {
       'GrokBot 的开源平替',
       '基于 DeepSeek Harness',
       '兼容其他 DSH 插件',
-      '连接飞书 / Slack',
+      '连接飞书 / Slack / Discord / 微信',
       'MIT 开源',
     ],
   },
@@ -158,7 +158,7 @@ const zh: Copy = {
       {
         icon: 'read',
         title: '看得见的 Git Memory',
-        body: 'Bot 的记忆是一个普通 Git 工作树。在侧栏浏览记忆文件、分支、commit 历史与 diff，也能用你自己的编辑器和 Git 工具。',
+        body: 'Bot 的记忆是一个普通 Git 工作树。在侧栏浏览记忆文件、分支、commit 历史与 diff，也能推到 GitHub，在多台机器之间共享同一份记忆。',
       },
       {
         icon: 'subagent',
@@ -173,8 +173,7 @@ const zh: Copy = {
       {
         icon: 'web',
         title: '自己的 IM 身份',
-        body: '在飞书 / Lark 与 Slack 绑定 Bot 自己的应用身份，被 @ 时在原话题里回复。只有你授权过的群和频道才会进入 Bot 的 Inbox。',
-        tag: 'Discord 验证中',
+        body: '在飞书 / Lark、Slack、Discord 和微信里绑定 Bot 自己的身份，被 @ 时在原话题里回复。只有你授权过的群和频道才会进入 Bot 的 Inbox。',
       },
       {
         icon: 'bash',
@@ -203,7 +202,7 @@ const zh: Copy = {
     copy: '复制',
     copied: '已复制',
     after:
-      '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。要接入飞书或 Slack，到「设置 → IM bots」连接应用，再在 Bot 的 Profile 里绑定身份、授权群组。',
+      '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。要接入飞书、Slack、Discord 或微信，到「设置 → IM bots」连接应用，再在 Bot 的 Profile 里绑定身份、授权群组。',
     note: '这是 Alpha 预览版本，发布在 npm 的 next 标签。想先试试又不想动现有配置，可以换一个新的 Profile 名字。',
   },
   footer: {
@@ -233,7 +232,7 @@ const en: Copy = {
       'Open-source Grok Bot alternative',
       'Built on DeepSeek Harness',
       'Works with other DSH plugins',
-      'Connects to Lark and Slack',
+      'Lark, Slack, Discord and WeChat',
       'MIT licensed',
     ],
   },
@@ -268,7 +267,7 @@ const en: Copy = {
       {
         icon: 'read',
         title: 'Git Memory you can see',
-        body: 'A Bot’s memory is a plain Git working tree. Browse its files, branches, commits and diffs in the sidebar, or use your own editor and Git tools.',
+        body: 'A Bot’s memory is a plain Git working tree. Browse its files, branches, commits and diffs in the sidebar, or push it to GitHub to share the same memory across machines.',
       },
       {
         icon: 'subagent',
@@ -283,8 +282,7 @@ const en: Copy = {
       {
         icon: 'web',
         title: 'Their own IM identity',
-        body: 'Bind a Bot to its own app identity in Lark / Feishu and Slack, and it replies in the original thread when mentioned. Only groups and channels you authorize reach its Inbox.',
-        tag: 'Discord in testing',
+        body: 'Bind a Bot to its own identity in Lark / Feishu, Slack, Discord and WeChat, and it replies in the original thread when mentioned. Only groups and channels you authorize reach its Inbox.',
       },
       {
         icon: 'bash',
@@ -318,7 +316,7 @@ const en: Copy = {
     copy: 'Copy',
     copied: 'Copied',
     after:
-      'Open Bot mode, create a PersonaBot, DM it, then start a Group and invite members. To use Lark or Slack, connect the app in Settings → IM bots, then bind the identity and authorize a group in the Bot’s Profile.',
+      'Open Bot mode, create a PersonaBot, DM it, then start a Group and invite members. To use Lark, Slack, Discord or WeChat, connect the app in Settings → IM bots, then bind the identity and authorize a group in the Bot’s Profile.',
     note: 'This is an alpha preview on the npm next tag. To try it without touching your current setup, use a new Profile name.',
   },
   footer: {
