@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // static assets only: no Worker script runs
+  "name": "deepseekbot-site",
+  // the Cloudflare account that holds the botharness.ai zone (same as BotHarness docs)
+  "account_id": "332e72d480d7cb3e60ee671d3ca0cad0",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+  },
+  "preview_urls": true,
+  "routes": [{ "pattern": "deepseekbot.botharness.ai", "custom_domain": true }],
+}

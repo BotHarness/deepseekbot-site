@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DeepSeekBot · 有身份、人格和记忆的 bots</title>
+    <meta
+      name="description"
+      content="DeepSeekBot 是 BotHarness 的首个产品：一组有各自身份、人格和记忆的 bots，在 DeepSeek Harness 里一起做事。A crew of bots with their own identity, persona and memory, for DeepSeek Harness."
+    />
+    <meta name="theme-color" content="#f6e7c1" />
+    <meta property="og:title" content="DeepSeekBot" />
+    <meta property="og:description" content="一组有各自身份、人格和记忆的 bots，一起做事。" />
+    <meta property="og:url" content="https://deepseekbot.botharness.ai/" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/pixel.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face {
+        font-family: 'DSB Pixel';
+        src: url('/fonts/pixel.woff2') format('woff2');
+        font-display: swap;
+      }
+    </style>
+    <script>
+      // apply the saved day/night choice before first paint
+      try {
+        var m = localStorage.getItem('dsb-mode');
+        if (m !== 'light' && m !== 'dark')
+          m = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = m;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>DeepSeekBot: https://github.com/BotHarness/BotHarness</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
