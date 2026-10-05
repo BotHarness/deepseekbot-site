@@ -28,13 +28,10 @@ const write = (key: string, value: string) => {
   }
 };
 
-const initialLang = (): Lang => {
-  // /en/ is the English entry (its own title, description and share card)
-  if (location.pathname.startsWith('/en')) return 'en';
-  const saved = read('dsb-lang');
-  if (saved === 'zh' || saved === 'en') return saved;
-  return navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
-};
+// Like botharness.ai, the language is the path: Chinese at / (and /zh, which redirects
+// there), English under /en/. Each entry has its own title, description and share card.
+const pathLang = (): Lang =>
+  location.pathname === '/en' || location.pathname.startsWith('/en/') ? 'en' : 'zh';
 const initialMode = (): Mode => {
   const saved = read('dsb-mode');
   if (saved === 'light' || saved === 'dark') return saved;
@@ -42,7 +39,7 @@ const initialMode = (): Mode => {
 };
 
 export function App() {
-  const [lang, setLang] = useState<Lang>(initialLang);
+  const lang = pathLang();
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
   const mascot = useMemo(() => seededRecipe('DeepSeekBot'), []);
@@ -72,21 +69,24 @@ export function App() {
           </a>
         </nav>
         <div className="toggles">
-          <SegmentedControl
-            label={copy.langLabel}
-            size="sm"
-            value={lang}
-            onChange={(value) => {
-              const next = value === 'en' ? 'en' : 'zh';
-              setLang(next);
-              write('dsb-lang', next);
-              // keep the address on the matching entry, so a copied link opens in this language
-              history.replaceState(null, '', (next === 'en' ? '/en/' : '/') + location.hash);
-            }}
-          >
-            <SegmentedControlItem value="zh" label="中文" />
-            <SegmentedControlItem value="en" label="EN" />
-          </SegmentedControl>
+          <nav className="lang-switch" aria-label={copy.langLabel}>
+            <a
+              href="/"
+              hrefLang="zh-Hans"
+              lang="zh-Hans"
+              aria-current={lang === 'zh' ? 'page' : undefined}
+            >
+              中文
+            </a>
+            <a
+              href="/en/"
+              hrefLang="en"
+              lang="en"
+              aria-current={lang === 'en' ? 'page' : undefined}
+            >
+              EN
+            </a>
+          </nav>
           <SegmentedControl
             label={copy.modeLabel}
             size="sm"

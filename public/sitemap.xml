@@ -2,12 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://deepseekbot.botharness.ai/</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://deepseekbot.botharness.ai/" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://deepseekbot.botharness.ai/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://deepseekbot.botharness.ai/en/" />
   </url>
   <url>
     <loc>https://deepseekbot.botharness.ai/en/</loc>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://deepseekbot.botharness.ai/" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://deepseekbot.botharness.ai/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://deepseekbot.botharness.ai/en/" />
   </url>
 </urlset>

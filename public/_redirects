@@ -1,0 +1,6 @@
+# Chinese is the default language at the root; /zh is the same tree (botharness.ai
+# does the same with /en for its default language). English lives under /en/.
+/zh / 301
+/zh/ / 301
+/zh/* /:splat 301
+/en /en/ 301

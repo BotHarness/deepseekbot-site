@@ -4,8 +4,7 @@
 // (PLAYWRIGHT_BROWSERS_PATH) or CHROMIUM_PATH.
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { pixelAvatarSvg, pixelSymbolCells, seededRecipe } from '@botharness/pixel-avatar';
-import { pixelPathMarkup } from '@botharness/pixel-morph';
+import { AVATAR_PRESETS, pixelAvatarSvg } from '@botharness/pixel-avatar';
 import { chromium } from 'playwright-core';
 
 const require = createRequire(import.meta.url);
@@ -39,28 +38,17 @@ const CARDS = {
   },
 };
 
-// who stands on the grass, and which tool they are using (null: their face)
-const CREW = [
-  ['Mira', 'read'],
-  ['Theo', null],
-  ['DeepSeekBot', null],
-  ['Nova', 'bash'],
-  ['Juno', null],
-];
+// four of BotPixel's built-in presets around the DeepSeekBot logo (from BotHarness
+// packages/client/assets/bot/deepseekbot-light.png), which takes the biggest spot
+const LOGO = `data:image/png;base64,${readFileSync(new URL('./assets/deepseekbot-logo.png', import.meta.url)).toString('base64')}`;
+const CREW = [2, 9, 'logo', 7, 10];
 
-function avatar(name, symbol, size) {
-  const recipe = seededRecipe(name);
-  let svg = pixelAvatarSvg(recipe);
-  if (symbol) {
-    svg = svg
-      .replace(
-        '<g data-avatar-pixel-morph=""></g>',
-        `<g>${pixelPathMarkup(pixelSymbolCells(symbol, recipe.hairColor))}</g>`,
-      )
-      .replace('<svg ', '<svg class="tool" ');
-  }
-  return svg.replace('width="512" height="512"', `width="${size}" height="${size}"`);
-}
+const avatar = (preset, size) =>
+  pixelAvatarSvg(AVATAR_PRESETS[preset]).replace(
+    'width="512" height="512"',
+    `width="${size}" height="${size}"`,
+  );
+const logo = (size) => `<img class="logo" src="${LOGO}" width="${size}" height="${size}" alt="">`;
 
 const page = (card) => `<!doctype html>
 <html lang="${card.lang}"><head><meta charset="utf-8"><style>
@@ -68,8 +56,9 @@ const page = (card) => `<!doctype html>
 * { box-sizing: border-box; margin: 0; }
 body { width: 1200px; height: 630px; overflow: hidden; font-family: Px, sans-serif; color: #3b2414;
   background: linear-gradient(#7cc6ff, #d4efff 70%); position: relative; -webkit-font-smoothing: none; }
-.tool .bh-illustrated-body, .tool .bh-illustrated-head { visibility: hidden; }
-svg { image-rendering: pixelated; filter: drop-shadow(6px 6px 0 rgb(59 36 20 / .35)); }
+svg, .logo { filter: drop-shadow(6px 6px 0 rgb(59 36 20 / .35)); }
+.logo { display: block; border-radius: 33px; background: #fff; outline: 6px solid #3b2414; outline-offset: -1px; }
+svg { image-rendering: pixelated; }
 .cloud { position: absolute; background: #fff; box-shadow: 0 12px 0 #fff, 12px 12px 0 #fff; }
 .copy { position: absolute; left: 64px; top: 52px; width: 1072px; }
 .mark { font-size: 96px; line-height: 1; color: #fff; letter-spacing: 2px;
@@ -97,7 +86,7 @@ svg { image-rendering: pixelated; filter: drop-shadow(6px 6px 0 rgb(59 36 20 / .
   <div class="chips">${card.chips.map((c) => `<span>${c}</span>`).join('')}</div>
 </div>
 <div class="ground"></div>
-<div class="crew">${CREW.map(([n, s]) => avatar(n, s, n === 'DeepSeekBot' ? 176 : 124)).join('')}</div>
+<div class="crew">${CREW.map((c) => (c === 'logo' ? logo(176) : avatar(c, 124))).join('')}</div>
 <p class="url">deepseekbot.botharness.ai</p>
 </body></html>`;
 
@@ -112,8 +101,8 @@ for (const [key, card] of Object.entries(CARDS)) {
 }
 await tab.setViewportSize({ width: 180, height: 180 });
 await tab.setContent(
-  `<body style="margin:0">${avatar('DeepSeekBot', null, 180).replace(/filter:[^;]*;/, '')}</body>`,
+  `<body style="margin:0;background:#fff"><img src="${LOGO}" width="180" height="180"></body>`,
 );
-await tab.screenshot({ path: 'public/apple-touch-icon.png', omitBackground: true });
+await tab.screenshot({ path: 'public/apple-touch-icon.png' });
 await browser.close();
 console.log('wrote public/og-zh.png, public/og-en.png, public/apple-touch-icon.png');

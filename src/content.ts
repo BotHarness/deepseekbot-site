@@ -104,7 +104,7 @@ export interface Copy {
 }
 
 const zh: Copy = {
-  htmlLang: 'zh-CN',
+  htmlLang: 'zh-Hans',
   pageTitle: 'DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness',
   nav: { features: '能力', avatar: '像素头像', install: '安装', github: 'GitHub' },
   langLabel: '语言',
