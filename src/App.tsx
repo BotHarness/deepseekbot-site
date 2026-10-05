@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Community } from './components/Community';
 import { Crew } from './components/Crew';
 import { Install } from './components/Install';
+import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
 import { COPY, LINKS, type Lang } from './content';
@@ -144,16 +145,7 @@ export function App() {
           <p className="kicker">{copy.video.kicker}</p>
           <h2 id="video-title">{copy.video.title}</h2>
           <p className="section-lead">{copy.video.lead}</p>
-          <div className="pv frame">
-            <video
-              controls
-              playsInline
-              preload="none"
-              poster={copy.video.poster}
-              src={copy.video.src}
-              aria-label={copy.video.label}
-            />
-          </div>
+          <PromoVideo copy={copy} />
         </section>
 
         <section className="section" id="features" aria-labelledby="features-title">

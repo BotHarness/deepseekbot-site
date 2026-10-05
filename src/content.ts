@@ -107,6 +107,7 @@ export interface Copy {
     src: string;
     poster: string;
     label: string;
+    play: string;
   };
   playground: {
     kicker: string;
@@ -245,6 +246,7 @@ const zh: Copy = {
     src: `${MEDIA_BASE}/pv/botharness-town-v12-zh.mp4`,
     poster: '/pv-poster-zh-v1.png',
     label: 'DeepSeekBot 宣传片（中文）',
+    play: '播放宣传片',
   },
   playground: {
     kicker: 'BotPixel',
@@ -415,6 +417,7 @@ const en: Copy = {
     src: `${MEDIA_BASE}/pv/botharness-town-v12-en.mp4`,
     poster: '/pv-poster-en-v1.png',
     label: 'DeepSeekBot promo video (English)',
+    play: 'Play the video',
   },
   playground: {
     kicker: 'BotPixel',
