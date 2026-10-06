@@ -856,8 +856,8 @@ a:where(:not(.astryx-button)) {
   .topnav {
     order: 3;
     width: 100%;
-    gap: 16px;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    gap: 6px 16px;
   }
   .toggles {
     margin-left: auto;
