@@ -45,6 +45,8 @@ const UI = {
     versions: '版本',
     development: '开发历史',
     developmentNote: '首个 npm 版本之前的开发记录，没有对应的安装包。',
+    latest: '最新',
+    count: (n: number) => `${n} 项`,
     nav: { features: '能力', install: '安装', market: 'Bot 市场', docs: '文档', community: '社区' },
     lang: '语言',
     mode: '昼夜',
@@ -58,7 +60,7 @@ const UI = {
       Changed: '变更',
       Fixed: '修复',
       Documentation: '文档',
-      'Breaking Changes': '不兼容变更',
+      'Breaking Changes': '不兼容',
       Deprecated: '弃用',
       Removed: '移除',
       Security: '安全',
@@ -74,6 +76,8 @@ const UI = {
     versions: 'Versions',
     development: 'Development history',
     developmentNote: 'Work before the first npm release; it has no installable package.',
+    latest: 'Latest',
+    count: (n: number) => `${n} changes`,
     nav: {
       features: 'Features',
       install: 'Install',
@@ -92,8 +96,8 @@ const UI = {
       Added: 'Added',
       Changed: 'Changed',
       Fixed: 'Fixed',
-      Documentation: 'Documentation',
-      'Breaking Changes': 'Breaking changes',
+      Documentation: 'Docs',
+      'Breaking Changes': 'Breaking',
       Deprecated: 'Deprecated',
       Removed: 'Removed',
       Security: 'Security',
@@ -160,6 +164,17 @@ function inline() {
   return (text: string) => md.parseInline(text, { async: false }) as string;
 }
 
+const KIND: Record<string, string> = {
+  Added: 'added',
+  Changed: 'changed',
+  Fixed: 'fixed',
+  Documentation: 'docs',
+  'Breaking Changes': 'breaking',
+  Deprecated: 'deprecated',
+  Removed: 'removed',
+  Security: 'security',
+};
+
 function body(lang: Lang, releases: Release[]) {
   const t = UI[lang];
   const render = inline();
@@ -167,24 +182,24 @@ function body(lang: Lang, releases: Release[]) {
     .map((release, index) => {
       const id = anchor(release);
       const development = release.identity === 'Development';
-      const sections = release.sections
-        .map(
-          (section) =>
-            `<details class="changelog-section"${index === 0 ? ' open' : ''}><summary>${escape(
+      const entries = release.sections.flatMap((section) =>
+        section.entries.map(
+          (entry) =>
+            `<li><span class="changelog-chip" data-kind="${KIND[section.name] ?? 'other'}">${escape(
               t.sections[section.name] ?? section.name,
-            )} <span class="changelog-count">${section.entries.length}</span></summary><ul>${section.entries
-              .map((entry) => `<li>${render(entry)}</li>`)
-              .join('')}</ul></details>`,
-        )
-        .join('');
-      return `<section class="changelog-release" aria-labelledby="${id}">
-  <h2 id="${id}"><a class="anchor" href="#${id}" aria-hidden="true">#</a>${
-    development ? t.development : `v${escape(release.identity)}`
-  } <time datetime="${release.date}">${release.date}</time></h2>
+            )}</span><span class="changelog-text">${render(entry)}</span></li>`,
+        ),
+      );
+      return `<details class="changelog-release" id="${id}"${index === 0 ? ' open' : ''}>
+  <summary class="changelog-head"><h2>${development ? t.development : `v${escape(release.identity)}`}</h2><time datetime="${release.date}">${release.date}</time>${
+    index === 0 ? `<span class="changelog-latest">${t.latest}</span>` : ''
+  }<span class="changelog-rule" aria-hidden="true"></span><span class="changelog-count">${t.count(entries.length)}</span></summary>
+  <div class="changelog-content">
   <p class="changelog-summary">${render(release.summary)}</p>
   ${development ? `<p class="changelog-note">${t.developmentNote}</p>` : ''}
-  ${sections}
-</section>`;
+  <ul class="changelog-entries">${entries.join('')}</ul>
+  </div>
+</details>`;
     })
     .join('\n');
 }

@@ -295,16 +295,67 @@
   }
 }
 
-/* changelog: one block per release, sections fold so a long release stays scannable */
-.changelog-release + .changelog-release {
-  margin-top: 32px;
-  padding-top: 8px;
-  border-top: 3px dashed var(--px-ink);
+/* changelog: each release folds as a whole; every entry carries a colored type chip */
+.changelog-release {
+  margin: 0;
 }
-.changelog-release h2 time {
-  margin-left: 8px;
-  font-size: 16px;
+.changelog-release + .changelog-release {
+  margin-top: 8px;
+}
+.changelog-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.changelog-head::-webkit-details-marker {
+  display: none;
+}
+.changelog-head::before {
+  content: '';
+  flex: none;
+  width: 0;
+  height: 0;
+  border-block: 6px solid transparent;
+  border-left: 8px solid var(--ink);
+  transition: transform 0.15s ease;
+}
+.changelog-release[open] > .changelog-head::before {
+  transform: rotate(90deg);
+}
+.changelog-head h2 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+}
+.changelog-head:hover h2 {
+  color: var(--accent);
+}
+.changelog-head time,
+.changelog-count {
+  flex: none;
+  font-size: 15px;
   color: var(--ink-soft);
+}
+.changelog-latest {
+  flex: none;
+  padding: 2px 8px;
+  font-family: var(--pixel-font);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--accent-ink);
+  background: var(--accent);
+  box-shadow: 2px 2px 0 var(--px-ink);
+}
+.changelog-rule {
+  flex: 1;
+  min-width: 16px;
+  border-top: 3px dashed var(--px-shadow);
+}
+.changelog-content {
+  padding: 0 0 20px 20px;
 }
 .changelog-summary {
   font-size: 18px;
@@ -312,28 +363,91 @@
 .changelog-note {
   color: var(--ink-soft);
 }
-.changelog-section {
-  margin: 0 0 10px;
+.docs-body .changelog-entries {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px 14px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
 }
-.changelog-section > summary {
-  cursor: pointer;
+.changelog-entries > li {
+  display: contents;
+}
+.changelog-chip {
+  --chip: #4f7a2e;
+  padding: 1px 10px;
+  margin-top: 2px;
   font-family: var(--pixel-font);
-  font-size: 20px;
-  line-height: 1.6;
-}
-.changelog-count {
-  display: inline-block;
-  min-width: 1.6em;
-  margin-left: 6px;
-  padding: 0 6px;
   font-size: 14px;
+  line-height: 1.6;
   text-align: center;
-  color: var(--accent-ink);
-  background: var(--accent);
+  white-space: nowrap;
+  color: var(--chip);
+  background: color-mix(in srgb, var(--chip) 16%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--chip) 45%, transparent);
 }
-.changelog-section > ul {
-  margin-top: 8px;
+.changelog-chip[data-kind='changed'] {
+  --chip: #2f55d4;
 }
-.changelog-release h2 {
+.changelog-chip[data-kind='fixed'],
+.changelog-chip[data-kind='deprecated'] {
+  --chip: #b45f06;
+}
+.changelog-chip[data-kind='breaking'],
+.changelog-chip[data-kind='security'] {
+  --chip: #c0392b;
+}
+.changelog-chip[data-kind='docs'],
+.changelog-chip[data-kind='removed'],
+.changelog-chip[data-kind='other'] {
+  --chip: #6b4a2e;
+}
+:root[data-theme='dark'] .changelog-chip {
+  --chip: #9bd36a;
+}
+:root[data-theme='dark'] .changelog-chip[data-kind='changed'] {
+  --chip: #8c9eff;
+}
+:root[data-theme='dark'] .changelog-chip[data-kind='fixed'],
+:root[data-theme='dark'] .changelog-chip[data-kind='deprecated'] {
+  --chip: #ffb35c;
+}
+:root[data-theme='dark'] .changelog-chip[data-kind='breaking'],
+:root[data-theme='dark'] .changelog-chip[data-kind='security'] {
+  --chip: #ff7b6b;
+}
+:root[data-theme='dark'] .changelog-chip[data-kind='docs'],
+:root[data-theme='dark'] .changelog-chip[data-kind='removed'],
+:root[data-theme='dark'] .changelog-chip[data-kind='other'] {
+  --chip: #c2b59b;
+}
+.changelog-text {
+  min-width: 0;
+}
+.changelog-release {
   scroll-margin-top: 16px;
+}
+@media (max-width: 600px) {
+  .changelog-head {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .changelog-rule {
+    display: none;
+  }
+  .changelog-content {
+    padding-left: 0;
+  }
+  .docs-body .changelog-entries {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .changelog-chip {
+    justify-self: start;
+  }
+  .changelog-text {
+    margin-bottom: 8px;
+  }
 }

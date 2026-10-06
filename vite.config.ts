@@ -33,13 +33,13 @@ function siteCharacters(): string {
     for (const ch of text) chars.add(ch);
   };
   // guide and changelog bodies are set in the system font; only their titles, headings and
-  // section toggles use the pixel face
+  // section toggles and changelog chips use the pixel face
   for (const page of PAGES) {
     const html = readFileSync(page, 'utf8');
     if (!/(?:docs|changelog)\//.test(page)) add(html);
     else
       for (const m of html.matchAll(
-        /<(h[1-6]|nav|header|summary|a class="pager[^"]*"|p class="kicker")[^>]*>([\s\S]*?)<\/(h[1-6]|nav|header|summary|a|p)>/g,
+        /<(h[1-6]|nav|header|summary|a class="pager[^"]*"|p class="kicker"|span class="changelog-(?:chip|latest)")[^>]*>([\s\S]*?)<\/(h[1-6]|nav|header|summary|a|p|span)>/g,
       ))
         add(m[2]!.replace(/<[^>]+>/g, ''));
   }
