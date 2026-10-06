@@ -184,6 +184,19 @@
 .code-copy:focus-visible {
   opacity: 1;
 }
+.docs-body pre:has(> code.language-text) {
+  padding-top: 40px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.docs-body pre:has(> code.language-text) .code-copy {
+  opacity: 1;
+}
+@media (hover: none) {
+  .code-copy {
+    opacity: 1;
+  }
+}
 .docs-body blockquote {
   margin: 0 0 16px;
   padding: 10px 16px;

@@ -308,8 +308,8 @@ const zh: Copy = {
     emptySearch: '没有符合条件的 Bot。换个关键词或话题试试。',
     author: {
       title: '想让你的 Bot 出现在这里？',
-      body: '把 Bot 的 Memory 放进公开 GitHub 仓库，给仓库加上 botharness-bot 话题，每天会自动收录；也可以在 DeepSeekBot 的「Bot 市场」里贴入仓库地址，立即收录。',
-      docs: '在仓库里加 .botharness/bot.json 可以设置名称、头像和岗位',
+      body: '把 Bot 的 Memory 发布成公开 GitHub 仓库并加上 botharness-bot 话题，每天会自动收录；也可以在 DeepSeekBot 的「Bot 市场」里贴入仓库地址，立即收录。',
+      docs: '分享 Bot 教程：发布前检查、一键复制给 Bot 的提示词、名称和头像设置',
     },
     open: '查看 {name} 详情',
     back: '← 返回 Bot 市场',
@@ -322,8 +322,8 @@ const zh: Copy = {
     gitUrl: 'Git 仓库地址',
     installTitle: '在 DeepSeekBot 里安装',
     installSteps: [
-      '打开 DeepSeekBot，在侧栏的「更多」菜单里打开「Bot 市场」，搜索这个 Bot，点「安装」。',
-      '也可以选「更多 → 创建 PersonaBot」，记忆来源选「从 Git 仓库导入」，粘贴上面的地址。',
+      '打开 DeepSeekBot，点侧栏消息列表上方的「＋」，选「Bot 市场」，搜索这个 Bot，点「安装」。',
+      '也可以在「＋」里选「创建 PersonaBot」，记忆来源选「从 Git 仓库导入」，粘贴上面的地址。',
     ],
     risk: '这是第三方仓库：它的文件会成为新 Bot 的 Memory，可能包含有害内容或会被 Bot 执行的指令。请只安装你信任的仓库。',
     commit: '最新提交 {sha} · {date}',
@@ -524,7 +524,7 @@ const en: Copy = {
     author: {
       title: 'Want your Bot listed here?',
       body: 'Put its Memory in a public GitHub repository and add the botharness-bot topic: it is picked up daily. Or paste the repository URL into the Bot Marketplace inside DeepSeekBot to list it right away.',
-      docs: 'Add .botharness/bot.json to set its name, avatar and roles',
+      docs: 'Share a Bot: checks before publishing, a prompt to paste to your Bot, name and avatar',
     },
     open: 'Open {name}',
     back: '← Back to the Marketplace',
@@ -537,8 +537,8 @@ const en: Copy = {
     gitUrl: 'Git repository URL',
     installTitle: 'Install it in DeepSeekBot',
     installSteps: [
-      'In DeepSeekBot, open Bot Marketplace from the sidebar’s More menu, search for this Bot and click Install.',
-      'Or choose More → Create PersonaBot, set Memory source to Import from a Git repository and paste the URL above.',
+      'In DeepSeekBot, click + above the message list in the sidebar, choose Bot Marketplace, search for this Bot and click Install.',
+      'Or choose + → Create PersonaBot, set Memory source to Import from a Git repository and paste the URL above.',
     ],
     risk: 'This is a third-party repository: its files become the new Bot’s Memory and may contain harmful content or instructions the Bot will follow. Install only repositories you trust.',
     commit: 'Latest commit {sha} · {date}',
