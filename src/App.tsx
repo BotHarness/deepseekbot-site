@@ -10,7 +10,7 @@ import { SymbolIcon } from './components/SymbolIcon';
 import { COPY, LINKS } from './content';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
-import { initialMode, pathLang, write, type Mode } from './site';
+import { changelogPath, initialMode, pathLang, write, type Mode } from './site';
 
 export function App() {
   const lang = pathLang();
@@ -65,7 +65,7 @@ export function App() {
               />
             </div>
           </div>
-          <Crew copy={copy} />
+          <Crew copy={copy} lang={lang} />
           <div className="ground" aria-hidden="true" />
         </section>
 
@@ -134,7 +134,7 @@ export function App() {
         <section className="section" id="install" aria-labelledby="install-title">
           <p className="kicker">{copy.install.kicker}</p>
           <h2 id="install-title">{copy.install.title}</h2>
-          <Install copy={copy} />
+          <Install copy={copy} lang={lang} />
         </section>
 
         <section className="section section--alt" id="community" aria-labelledby="community-title">
@@ -159,9 +159,7 @@ export function App() {
           <a href={LINKS.botpixel} target="_blank" rel="noreferrer">
             BotPixel
           </a>
-          <a href={lang === 'zh' ? '/changelog/' : '/en/changelog/'}>
-            {lang === 'zh' ? '更新日志' : 'Changelog'}
-          </a>
+          <a href={changelogPath(lang)}>{copy.nav.changelog}</a>
           <a href={LINKS.discord} target="_blank" rel="noreferrer">
             Discord
           </a>

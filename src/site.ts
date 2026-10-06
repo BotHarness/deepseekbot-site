@@ -29,3 +29,5 @@ export const initialMode = (): Mode => {
 
 export const homePath = (lang: Lang) => (lang === 'zh' ? '/' : '/en/');
 export const marketPath = (lang: Lang) => (lang === 'zh' ? '/market' : '/en/market');
+export const docsPath = (lang: Lang) => (lang === 'zh' ? '/docs/overview/' : '/en/docs/overview/');
+export const changelogPath = (lang: Lang) => (lang === 'zh' ? '/changelog/' : '/en/changelog/');

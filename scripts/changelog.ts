@@ -5,7 +5,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Marked, type Tokens } from 'marked';
-import { navIconSvg } from '../src/navIcons.ts';
+import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { privacyPath } from './docs.ts';
 
 type Lang = 'zh' | 'en';
@@ -48,7 +48,14 @@ const UI = {
     developmentNote: '首个 npm 版本之前的开发记录，没有对应的安装包。',
     latest: '最新',
     count: (n: number) => `${n} 项`,
-    nav: { features: '能力', install: '安装', market: 'Bot 市场', docs: '文档', community: '社区' },
+    nav: {
+      features: '能力',
+      install: '安装',
+      market: 'Bot 市场',
+      changelog: '更新日志',
+      docs: '文档',
+      community: '社区',
+    },
     lang: '语言',
     mode: '昼夜',
     light: '白天',
@@ -84,6 +91,7 @@ const UI = {
       features: 'Features',
       install: 'Install',
       market: 'Marketplace',
+      changelog: 'Changelog',
       docs: 'Docs',
       community: 'Community',
     },
@@ -223,8 +231,7 @@ function page(lang: Lang, releases: Release[]) {
   const url = `${SITE}${changelogPath(lang)}`;
   const title = `${t.title} · ${t.suffix}`;
   const image = `${SITE}/og-${lang}-v2.png`;
-  const icon = (name: 'market' | 'docs') =>
-    `<span class="nav-icon-wrap">${navIconSvg(name)}</span>`;
+  const icon = (name: NavIcon) => `<span class="nav-icon-wrap">${navIconSvg(name)}</span>`;
   return `<!doctype html>
 <html lang="${t.htmlLang}">
   <head>
@@ -273,7 +280,7 @@ function page(lang: Lang, releases: Release[]) {
     <a class="skip" href="#main">${t.skip}</a>
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
-        <img class="brand-logo" src="/logo.png" width="32" height="32" alt="" />
+        <span class="brand-logo"><img src="/logo.png" width="32" height="32" alt="" /></span>
         <span>DeepSeekBot</span>
       </a>
       <nav class="topnav" aria-label="DeepSeekBot">
@@ -281,6 +288,7 @@ function page(lang: Lang, releases: Release[]) {
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market">${icon('market')}${t.nav.market}</a>
         <a href="${home(lang)}docs/overview/">${icon('docs')}${t.nav.docs}</a>
+        <a href="${changelogPath(lang)}" aria-current="page">${icon('changelog')}${t.nav.changelog}</a>
         <a href="${home(lang)}#community">${t.nav.community}</a>
         <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>

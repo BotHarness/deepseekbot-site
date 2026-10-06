@@ -30,7 +30,13 @@ const UI = {
     suffix: 'DeepSeekBot 文档',
     guides: '使用教程',
     menu: '目录',
-    nav: { features: '能力', install: '安装', market: 'Bot 市场', community: '社区' },
+    nav: {
+      features: '能力',
+      install: '安装',
+      market: 'Bot 市场',
+      changelog: '更新日志',
+      community: '社区',
+    },
     lang: '语言',
     mode: '昼夜',
     light: '白天',
@@ -55,6 +61,7 @@ const UI = {
       features: 'Features',
       install: 'Install',
       market: 'Marketplace',
+      changelog: 'Changelog',
       community: 'Community',
     },
     lang: 'Language',
@@ -259,7 +266,7 @@ function page(
     <a class="skip" href="#main">${t.skip}</a>
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
-        <img class="brand-logo" src="/logo.png" width="32" height="32" alt="" />
+        <span class="brand-logo"><img src="/logo.png" width="32" height="32" alt="" /></span>
         <span>DeepSeekBot</span>
       </a>
       <nav class="topnav" aria-label="DeepSeekBot">
@@ -267,6 +274,7 @@ function page(
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
+        <a href="${home(lang)}changelog/"><span class="nav-icon-wrap">${navIconSvg('changelog')}</span>${t.nav.changelog}</a>
         <a href="${home(lang)}#community">${t.nav.community}</a>
         <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>

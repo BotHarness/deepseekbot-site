@@ -1,7 +1,9 @@
 import { type PixelSymbol } from '@botharness/pixel-avatar';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { recipeFor } from '../mascot';
-import { CREW, SYMBOL_ORDER, type Copy } from '../content';
+import { CREW, SYMBOL_ORDER, type Copy, type Lang } from '../content';
+import { navIconSvg } from '../navIcons';
+import { marketPath } from '../site';
 import { MORPH_MS, PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
 
 const wait = (ms: number, signal: AbortSignal) =>
@@ -57,12 +59,38 @@ function Member({ name, symbols }: { name: string; symbols: Copy['symbols'] }) {
   );
 }
 
-export function Crew({ copy }: { copy: Copy }) {
+/** A wooden signpost planted on the grass beside the crew, pointing to the marketplace. */
+function Signpost({ copy, lang }: { copy: Copy; lang: Lang }) {
   return (
-    <ul className="crew" aria-label={copy.hero.crewLabel}>
-      {CREW.map((name) => (
-        <Member key={name} name={name} symbols={copy.symbols} />
-      ))}
-    </ul>
+    <a
+      className="signpost"
+      href={marketPath(lang)}
+      aria-label={copy.hero.signpostLabel}
+      data-placement="hero_signpost"
+    >
+      <span className="signpost-board">
+        {/* static markup from navIconSvg, no user input */}
+        <span
+          className="nav-icon-wrap"
+          dangerouslySetInnerHTML={{ __html: navIconSvg('market') }}
+        />
+        {copy.hero.signpost}
+        <span aria-hidden="true">→</span>
+      </span>
+      <span className="signpost-post" aria-hidden="true" />
+    </a>
+  );
+}
+
+export function Crew({ copy, lang }: { copy: Copy; lang: Lang }) {
+  return (
+    <div className="meadow">
+      <ul className="crew" aria-label={copy.hero.crewLabel}>
+        {CREW.map((name) => (
+          <Member key={name} name={name} symbols={copy.symbols} />
+        ))}
+      </ul>
+      <Signpost copy={copy} lang={lang} />
+    </div>
   );
 }

@@ -149,10 +149,38 @@ a:where(:not(.astryx-button)) {
   backdrop-filter: blur(6px);
   border-bottom: var(--px) solid var(--px-ink);
 }
+/* the logo gets the avatar tiles' stepped pixel corners (2px art pixels); the outline is drawn
+   with drop shadows on the wrapper so it follows the steps */
 .brand-logo {
   display: block;
-  border-radius: 8px;
-  outline: 2px solid var(--px-ink);
+  filter: drop-shadow(2px 0 0 var(--px-ink)) drop-shadow(-2px 0 0 var(--px-ink))
+    drop-shadow(0 2px 0 var(--px-ink)) drop-shadow(0 -2px 0 var(--px-ink));
+}
+.brand-logo img {
+  display: block;
+  background: #fff;
+  clip-path: polygon(
+    4px 0,
+    28px 0,
+    28px 2px,
+    30px 2px,
+    30px 4px,
+    100% 4px,
+    100% 28px,
+    30px 28px,
+    30px 30px,
+    28px 30px,
+    28px 100%,
+    4px 100%,
+    4px 30px,
+    2px 30px,
+    2px 28px,
+    0 28px,
+    0 4px,
+    2px 4px,
+    2px 2px,
+    4px 2px
+  );
 }
 .brand {
   display: inline-flex;
@@ -411,6 +439,99 @@ a:where(:not(.astryx-button)) {
     -3px 0 0 0 var(--px-ink),
     3px 0 0 0 var(--px-ink),
     0 3px 0 0 var(--px-ink);
+}
+/* the crew and the marketplace signpost share the strip of sky above the grass */
+.meadow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px clamp(16px, 3vw, 32px);
+}
+.meadow .crew {
+  flex: 0 1 auto;
+}
+/* a wooden signpost: pixel board on a post that sinks into the grass */
+.signpost {
+  --wood: #d9a066;
+  --wood-dark: #a86b3c;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+  margin-bottom: -14px;
+  color: #3b2414;
+  text-decoration: none;
+}
+:root[data-theme='dark'] .signpost {
+  --wood: #b07a48;
+  --wood-dark: #7a4c2a;
+}
+.signpost-board {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: var(--pixel-font);
+  font-size: 16px;
+  line-height: 24px;
+  white-space: nowrap;
+  -webkit-font-smoothing: none;
+  position: relative;
+  background: var(--wood);
+  /* plank edges */
+  box-shadow:
+    inset 0 -4px 0 var(--wood-dark),
+    inset 0 4px 0 color-mix(in srgb, #fff 25%, var(--wood)),
+    var(--px) var(--px) 0 var(--px-shadow);
+  outline: 3px solid #3b2414;
+  transition: translate 0.15s steps(2);
+}
+.signpost-board::before,
+.signpost-board::after {
+  /* nails */
+  content: '';
+  position: absolute;
+  top: 6px;
+  width: 4px;
+  height: 4px;
+  background: #3b2414;
+}
+.signpost-board::before {
+  left: 6px;
+}
+.signpost-board::after {
+  right: 6px;
+}
+.signpost-post {
+  width: 16px;
+  height: 72px;
+  background: linear-gradient(90deg, var(--wood) 0 50%, var(--wood-dark) 50%);
+  outline: 3px solid #3b2414;
+  margin-top: 3px;
+}
+.signpost:hover .signpost-board,
+.signpost:focus-visible .signpost-board {
+  translate: 0 -4px;
+}
+.signpost:focus-visible {
+  outline: none;
+}
+.signpost:focus-visible .signpost-board {
+  outline-color: var(--accent);
+}
+/* wide screens: the signpost stands to the right of the crew without pushing it off centre */
+@media (min-width: 1320px) {
+  .signpost {
+    position: absolute;
+    bottom: -14px;
+    left: calc(50% + 456px);
+    margin: 0;
+  }
 }
 .ground {
   height: 72px;
@@ -827,6 +948,12 @@ a:where(:not(.astryx-button)) {
   flex-wrap: wrap;
   gap: 8px 24px;
 }
+.step-next .step-no {
+  font-size: 20px;
+}
+.step-next .step-title {
+  margin-bottom: 10px;
+}
 .install .note {
   margin: 0;
   font-size: 14px;
@@ -901,6 +1028,34 @@ a:where(:not(.astryx-button)) {
 }
 
 /* ---- small screens ---- */
+/* mid widths: a tighter header so the nav and toggles stay on one row */
+@media (max-width: 1180px) {
+  .topbar {
+    gap: 16px;
+  }
+  .topnav {
+    gap: 14px;
+  }
+  .topnav .nav-icon-wrap {
+    display: none;
+  }
+}
+@media (min-width: 861px) and (max-width: 960px) {
+  .brand > span:not(.brand-logo) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+/* the crew and the signpost fit on one row once the crew stands a little closer together */
+@media (min-width: 861px) and (max-width: 1319px) {
+  .meadow .crew {
+    gap: 12px;
+  }
+}
 @media (max-width: 860px) {
   .consent-bar {
     left: 16px;
@@ -945,8 +1100,13 @@ a:where(:not(.astryx-button)) {
   }
 }
 @media (max-width: 520px) {
-  .brand span {
-    display: none;
+  .brand > span:not(.brand-logo) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .crew-member:not(.crew-member--hero) .pixel-avatar {
     width: 64px !important;
@@ -968,6 +1128,9 @@ a:where(:not(.astryx-button)) {
   .cloud,
   .crew-member {
     animation: none;
+  }
+  .signpost-board {
+    transition: none;
   }
 }
 
