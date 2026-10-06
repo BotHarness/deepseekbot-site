@@ -240,6 +240,20 @@ export const DOC_PAGES = [
     },
   },
   {
+    slug: 'share-bot',
+    order: 26,
+    en: {
+      source: 'docs/share-bot.md',
+      title: 'Share a Bot',
+      description: 'Publish a Bot’s Memory to GitHub and list it in the Bot Marketplace.',
+    },
+    zh: {
+      source: 'docs/share-bot.zh.md',
+      title: '分享 Bot',
+      description: '把 Bot 的 Memory 发布到 GitHub，并收录进 Bot 市场。',
+    },
+  },
+  {
     slug: 'overview',
     en: {
       source: 'apps/docs/src/content/docs/docs/overview.mdx',
