@@ -4,6 +4,7 @@
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { Marked, type Tokens } from 'marked';
+import { navIconSvg } from '../src/navIcons.ts';
 
 type Lang = 'zh' | 'en';
 const SITE = 'https://deepseekbot.botharness.ai';
@@ -245,10 +246,10 @@ function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
         <span>DeepSeekBot</span>
       </a>
       <nav class="topnav" aria-label="DeepSeekBot">
-        <a href="${docPath(lang, 'overview')}" aria-current="page">${t.docs}</a>
+        <a href="${docPath(lang, 'overview')}" aria-current="page"><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
-        <a href="${home(lang)}market">${t.nav.market}</a>
+        <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
         <a href="${home(lang)}#community">${t.nav.community}</a>
         <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>

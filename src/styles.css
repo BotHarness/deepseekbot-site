@@ -170,11 +170,20 @@ a:where(:not(.astryx-button)) {
   margin-right: auto;
 }
 .topnav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--ink);
   text-decoration: none;
   line-height: 24px;
   /* equal borders above and below keep the label centred; only the lower one shows */
   border-block: var(--px) solid transparent;
+}
+.nav-icon-wrap {
+  display: inline-flex;
+}
+.nav-icon {
+  display: block;
 }
 .topnav a:hover {
   border-bottom-color: var(--accent);

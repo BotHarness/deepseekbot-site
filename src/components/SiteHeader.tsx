@@ -1,6 +1,7 @@
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { LINKS, type Copy, type Lang } from '../content';
 import { homePath, marketPath, type Mode } from '../site';
+import { navIconSvg, type NavIcon } from '../navIcons';
 
 export function SiteHeader({
   copy,
@@ -32,9 +33,13 @@ export function SiteHeader({
           <a href={`${home}#avatar`}>{copy.nav.avatar}</a>
           <a href={`${home}#install`}>{copy.nav.install}</a>
           <a href={marketPath(lang)} aria-current={page === 'market' ? 'page' : undefined}>
+            <Icon name="market" />
             {copy.nav.market}
           </a>
-          <a href={lang === 'zh' ? '/docs/overview/' : '/en/docs/overview/'}>{copy.nav.docs}</a>
+          <a href={lang === 'zh' ? '/docs/overview/' : '/en/docs/overview/'}>
+            <Icon name="docs" />
+            {copy.nav.docs}
+          </a>
           <a href={`${home}#community`}>{copy.nav.community}</a>
           <a href={LINKS.github} target="_blank" rel="noreferrer">
             {copy.nav.github}
@@ -73,3 +78,8 @@ export function SiteHeader({
     </>
   );
 }
+
+// Static markup from navIconSvg, no user input.
+const Icon = ({ name }: { name: NavIcon }) => (
+  <span className="nav-icon-wrap" dangerouslySetInnerHTML={{ __html: navIconSvg(name) }} />
+);
