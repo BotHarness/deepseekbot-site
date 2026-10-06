@@ -159,8 +159,8 @@ export function App() {
           <a href={LINKS.botpixel} target="_blank" rel="noreferrer">
             BotPixel
           </a>
-          <a href={LINKS.changelog} target="_blank" rel="noreferrer">
-            Changelog
+          <a href={lang === 'zh' ? '/changelog/' : '/en/changelog/'}>
+            {lang === 'zh' ? '更新日志' : 'Changelog'}
           </a>
           <a href={LINKS.discord} target="_blank" rel="noreferrer">
             Discord

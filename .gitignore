@@ -5,3 +5,5 @@ dist
 *.log
 /docs
 /en/docs
+/changelog
+/en/changelog

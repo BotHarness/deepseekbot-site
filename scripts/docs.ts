@@ -112,7 +112,9 @@ function href(lang: Lang, url: string, slugs: Set<string>): string {
     return docPath(doc[1] === 'zh' ? 'zh' : doc[1] === 'en' ? 'en' : lang, slug) + hash;
   }
   if (path.startsWith('/guides/')) return url;
-  // /dev, /changelog and the rest live on botharness.ai, where Chinese sits under /zh
+  if (/^\/(?:(?:zh|en)\/)?changelog\/?$/.test(path))
+    return `${path.startsWith('/en/') || (lang === 'en' && !path.startsWith('/zh/')) ? '/en' : ''}/changelog/${hash}`;
+  // /dev and the rest live on botharness.ai, where Chinese sits under /zh
   const upstream = lang === 'zh' && !path.startsWith('/zh/') ? `/zh${path}` : path;
   return `${UPSTREAM}${upstream}${hash}`;
 }

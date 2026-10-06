@@ -294,3 +294,46 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* changelog: one block per release, sections fold so a long release stays scannable */
+.changelog-release + .changelog-release {
+  margin-top: 32px;
+  padding-top: 8px;
+  border-top: 3px dashed var(--px-ink);
+}
+.changelog-release h2 time {
+  margin-left: 8px;
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+.changelog-summary {
+  font-size: 18px;
+}
+.changelog-note {
+  color: var(--ink-soft);
+}
+.changelog-section {
+  margin: 0 0 10px;
+}
+.changelog-section > summary {
+  cursor: pointer;
+  font-family: var(--pixel-font);
+  font-size: 20px;
+  line-height: 1.6;
+}
+.changelog-count {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-left: 6px;
+  padding: 0 6px;
+  font-size: 14px;
+  text-align: center;
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+.changelog-section > ul {
+  margin-top: 8px;
+}
+.changelog-release h2 {
+  scroll-margin-top: 16px;
+}

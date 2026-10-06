@@ -4,14 +4,22 @@ import { join } from 'node:path';
 import react from '@vitejs/plugin-react';
 import subsetFont from 'subset-font';
 import { defineConfig, type Plugin } from 'vite';
+import { changelogPath, renderChangelog } from './scripts/changelog.ts';
 import { docsSitemap, renderDocs } from './scripts/docs.ts';
 
 const require = createRequire(import.meta.url);
 const FONT_URL = '/fonts/pixel.woff2';
 const SITE = 'https://deepseekbot.botharness.ai';
 // the Chinese entry at / and the English one at /en/, each with its own share card, plus the
-// guides rendered from content/docs
-const PAGES = ['index.html', 'en/index.html', 'market.html', 'en/market.html', ...renderDocs()];
+// guides rendered from content/docs and the changelog from content/changelog
+const PAGES = [
+  'index.html',
+  'en/index.html',
+  'market.html',
+  'en/market.html',
+  ...renderDocs(),
+  ...renderChangelog(),
+];
 const fontFile = () =>
   readFileSync(
     require.resolve('@fontsource/fusion-pixel-12px-proportional-sc/files/fusion-pixel-12px-proportional-sc-latin-400-normal.woff2'),
@@ -24,13 +32,14 @@ function siteCharacters(): string {
   const add = (text: string) => {
     for (const ch of text) chars.add(ch);
   };
-  // guide bodies are set in the system font; only their titles and headings use the pixel face
+  // guide and changelog bodies are set in the system font; only their titles, headings and
+  // section toggles use the pixel face
   for (const page of PAGES) {
     const html = readFileSync(page, 'utf8');
-    if (!page.includes('docs/')) add(html);
+    if (!/(?:docs|changelog)\//.test(page)) add(html);
     else
       for (const m of html.matchAll(
-        /<(h[1-6]|nav|header|a class="pager[^"]*"|p class="kicker")[^>]*>([\s\S]*?)<\/(h[1-6]|nav|header|a|p)>/g,
+        /<(h[1-6]|nav|header|summary|a class="pager[^"]*"|p class="kicker")[^>]*>([\s\S]*?)<\/(h[1-6]|nav|header|summary|a|p)>/g,
       ))
         add(m[2]!.replace(/<[^>]+>/g, ''));
   }
@@ -75,6 +84,8 @@ ${[
   ['/en/', '/', '/en/'],
   ['/market', '/market', '/en/market'],
   ['/en/market', '/market', '/en/market'],
+  [changelogPath('zh'), changelogPath('zh'), changelogPath('en')],
+  [changelogPath('en'), changelogPath('zh'), changelogPath('en')],
 ]
   .map(
     ([path, zh, en]) => `  <url>
