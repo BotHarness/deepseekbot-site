@@ -7,7 +7,7 @@
 }
 ---
 
-The integration accepts text and one file per direct message from the person who scanned the Bot QR code, then lets the PersonaBot reply in the original WeChat Bot conversation. The #904 preview also supports native images as described in section 6. Section 7 describes the #905 platform-provided voice transcript candidate. Group messages, other contacts, raw audio, video, history/search and scheduled or proactive messages are separate slices. Enterprise WeChat is a separate integration.
+The integration accepts text and one file per direct message from the person who scanned the Bot QR code, then lets the PersonaBot reply in the original WeChat Bot conversation. The #904 preview also supports native images as described in section 6. Section 7 describes platform-provided voice transcripts; section 8 describes the #906 original-audio candidate. Section 9 describes the #907 native-video candidate. Group messages, other contacts, history/search and scheduled or proactive messages are separate slices. Enterprise WeChat is a separate integration.
 
 ## Before you start
 
@@ -95,11 +95,71 @@ This voice's platform text was “语音测试暗号是蓝色灯塔37，请只�
 
 WeChat transcription is optional. When no transcript is supplied, the UI explicitly says **WeChat voice · no transcript** and asks for text. BotHarness does not run ASR, infer audio content, or offer a raw-audio player/download in this slice. The missing-transcript state has automated coverage; the real successful test did include platform text. Native transcription can change number formatting or words, so verify the displayed text before acting on it. Partial/generating and ambiguous multi-item messages are outside this candidate.
 
+## 8. Download original voice or prepare playback
+
+The #906 candidate (`0.0.0-test.906.3`, managed Provider `4.32.0-botharness.8`) retains platform text and original audio separately; it is not a public npm release. Open the native voice Source Modal. When the Provider has readable audio, **Download original voice** retrieves the unchanged original. Native codec, sample rate and bit depth appear in collapsed message details only when WeChat actually supplies them; missing fields are not inferred.
+
+Choose **Prepare playback** to create a separate WAV for supported SILK input and reveal an audio player. The fresh iLink test reported codec identifier `4` but carried a valid Tencent SILK header; playback accepts observed identifiers `4` and `6` only after checking the actual SILK packets, and preserves the reported value. This is not support for arbitrary codec-4 files. The converted file is mono, 24 kHz, 16-bit PCM; these are output properties, not the native recording's inferred sample rate. Closing the Modal cancels preparation and releases playback resources; reopening requires selecting playback again. Unsupported codec, failed decoding or processing-limit refusal leaves original download available. Original downloads have the existing 25 MiB bound. Playback preparation limits input to 1 MiB, packet count to 6,000, decoding time to 10 seconds and PCM output to 12 MiB.
+
+With a writable Workspace Grant, the Bot can use `bridge_attachment_save` with `representation: playback` to save an independent `voice.wav` working copy, then process that file using authorized native tools. Omit that field to save the unchanged original. Normal native Tool approval still applies, and another Bot's identity is never borrowed. After actual processing, `bridge_reply` can send text to the original DM. Saving, playing or inspecting a file is not speech understanding: this connection adds no ASR, automatic audio-model input or native voice reply. Without platform text or a separately configured and verified audio-understanding route, ask for text.
+
+The installed #906 candidate has completed a fresh paired-owner test: native voice → Bot Inbox → unchanged original through the checked download endpoint → separate WAV → authorized Workspace copy → approved native Python file inspection → `BH906-AUDIO-OK` in the original WeChat DM, confirmed by the receiving Human. The Bot inspected the actual file as mono, 16-bit, 24 kHz PCM with 179,040 frames (7.46 seconds) and wrote a JSON result. The Workspace copy and checked WAV have identical bytes. This proves audio file processing, not speech understanding. The voice also carried a platform transcript; transcript-free intake and refusal paths have automated coverage, not a separate real receiving-side test.
+
+![Reopened voice source: choose Prepare playback; the original remains separately downloadable](/guides/wechat/voice-audio-prepare.jpg)
+
+![The same real voice prepared as a WAV player in light mode](/guides/wechat/voice-audio-player-light.jpg)
+
+![The same real voice player in dark mode](/guides/wechat/voice-audio-player-dark.jpg)
+
+The browser player reached the actual end without a media error; closing removed the player and reopening required explicit preparation again. Original-byte download was independently verified through the authenticated endpoint; the browser automation did not report a completed file-download event, so a browser-saved original file is not claimed. Automated coverage also includes real SILK encoding/decoding, unchanged original bytes, cached restart, cancellation, codec refusal and authorization revocation. #905 transcript success does not substitute for these raw-audio checks.
+
+## 9. Receive a native video and return a video result
+
+The #907 local candidate uses product `0.0.0-test.907.4` and managed Provider `4.32.0-botharness.9`; it is not a public npm release. Real native-video intake, checked download, browser playback and model file processing have been verified. The Provider accepted the resulting native-video reply in the original DM; the Human confirmed native receipt, and the receiving-client screenshot shows the matching fixture with a three-second duration. Independent receiver-side downloaded-byte equality is not claimed.
+
+Send one **native video** in the paired WeChat Bot DM, rather than attaching it as an ordinary document. Intake retains an opaque attachment reference and the native video item's available metadata in the canonical Source Event. The reported `video_size` is retained as `reportedSizeBytes`. Its meaning can differ between incoming and outgoing messages: the tested incoming value matched the decrypted MP4 length, while the official sending implementation supplies encrypted length. It is not treated as a guaranteed decrypted or encrypted size; checked downloaded bytes determine actual file size. The optional `play_length` is retained without assuming its time unit. Missing dimensions, duration, thumbnail and codec are not invented. Private CDN locations, encryption keys and conversation continuation tokens remain outside model-readable source data.
+
+Open the video source in **Bot Inbox**. The original video is retrieved and shown directly in the message bubble through the existing current-identity/current-authorization checked attachment path, up to 25 MiB. The player is offered for conservatively recognized MP4 bytes; actual playback depends on browser codec support. It does not auto-play. A video-only message no longer repeats `[Video]`; captions remain visible. A failed preview offers **Retry playback** and retains **Download file**. Closing the Modal cancels the request and releases the playback resource. This candidate adds playback to the source Modal; it does not add media rendering to Channel message history or mirror Inbox-only traffic into a local DM.
+
+![Actual video source displayed directly in the message bubble, light theme](/guides/wechat/video-source-light.png)
+
+![The same video source in dark theme](/guides/wechat/video-source-dark.png)
+
+These captures use the installed candidate after integration with main `fe177d46`. The five-second H.264 fixture arrived through real WeChat intake; its checked 239,132 bytes exactly match the sent fixture. Native browser playback reached the end without a media error, and reopening reset the player without autoplay. These UI captures do not prove external result delivery.
+
+For actual processing, authorize a writable Workspace for that PersonaBot. The Bot saves an independent copy using `bridge_attachment_save`, then processes that selected file with native tools and normal approval. Import the completed MP4 with `channel_attachment_import` and reply to the same Source Event using `bridge_reply_file`. A checked WeChat Provider sends the matching MP4 as a native video using that Bot's own bound identity. Video upload and the final send recheck the current authorization. Each Source Event has one reply intent: do not acknowledge first if a video result is required.
+
+In the real QA run, the Bot saved the original into an explicitly authorized isolated Workspace and, after once-only native Tool approvals, produced the first three seconds using ffmpeg. Independent inspection confirmed a 204,644-byte, three-second H.264 result and an unchanged input. The Bot imported that result and sent it using its own identity; the Provider accepted the reply. This is file processing, not semantic video understanding.
+
+Inspect the returned video in the original WeChat conversation and independently verify its actual contents. Tool processing, a working browser player, or Provider acceptance alone is not model video understanding, recipient delivery, a read receipt or byte equality. Unsupported formats retain original-download or refusal paths; this slice does not add arbitrary video transcoding or automatic video-model input.
+
+## 10. Quote a message and read retained context
+
+In WeChat, use **Quote** on a message in the paired-owner private conversation, then write your follow-up. Open that source from the PersonaBot's Inbox in BotHarness. The quoted block distinguishes **Quote supplied by WeChat**, **Quote found in retained local records**, and **Quoted content unavailable**. Expand **Quote details** to inspect native IDs and any resolved Source Event.
+
+WeChat can provide embedded quoted text, a display summary, an item ID, a server message ID, or partial-quote metadata. A summary is not promoted to the original body; item IDs stay separate from server message IDs. When WeChat omits the body, BotHarness resolves a genuine server message ID only from readable canonical records in the same currently authorized account/private conversation. An unknown, unretained or inaccessible reference stays unavailable; this does not prove that the original was deleted. Quoted attachments are not automatically fetched. A quote never creates a Thread.
+
+Ask the Bot to read **retained local context** when needed. `bridge_context` uses `retained` for the latest retained sources (newest first), or `retained-nearby` for up to 10 preceding / 5 following retained sources around the anchor, excluding the anchor; the Bot may request 0–20 on either side. Every result keeps the native Message ID and canonical Source Event ID. These records cover only what this Bot can currently read locally, not remote WeChat history or search; the nearby counts do not promise a five-minute remote window.
+
+Reads return at most 20 records per page and obey a JSON budget (1,000–24,000 characters, default 12,000). Follow `nextCursor` with the same source, scope and counts. The cursor fixes the initial record boundary, so later arrivals are excluded; it expires after 30 minutes or a Host restart. A changed Grant/identity or revoked authorization refuses continuation. If a single record exceeds the budget, `requiredCharacters` indicates the budget needed. Reading context creates no new Inbox delivery, wake, subscription, local DM or external send. The source panel shows the Bot's read audit and latest page.
+
+WeChat send receipts remain client acknowledgements. They cannot be used to resolve a server-message-ID-only quote of a Bot reply. Embedded native quoted text can still be shown; without that text or a genuine retained server ID, the quote remains unavailable.
+
+The #908 live test received an item-ID-only quote: WeChat supplied neither the quoted body nor a server message ID. BotHarness kept the quote explicitly unavailable. The Bot read the original canonical Source Event through two retained-context pages and one nearby query, then sent `BH908-QUOTE-OK 紫色风铃42` to the same authorized private conversation. The Provider accepted the send, and the Human confirmed receipt with a native WeChat screenshot. Embedded-body and server-ID resolution variants are covered by regressions, not claimed as live-tested client variants.
+
+![Real item-ID-only quote shown as unavailable, light theme](/guides/wechat/quote-after-light.jpg)
+
+![The same source and quote in dark theme](/guides/wechat/quote-after-dark.jpg)
+
+![Read audit and the original retained message, with its test password](/guides/wechat/quote-context-light.jpg)
+
+![Human-confirmed reply in the original quoted-message conversation](/guides/wechat/native-quote-reply.png)
+
 ## Pause or reconnect
 
 Disable DM intake to stop future receipt while retaining configuration and history. Revoke the target authorization or unbind the identity to remove its authority. Re-pairing changes the identity fingerprint and requires explicit reauthorization; stale source continuations must not be reused. Restart with the same Profile to retain local pairing, canonical source records and Outbox outcomes.
 
-If text does not arrive, check the connected account, enabled identity and owner-DM authorization. Messages from other contacts and groups remain unsupported. This candidate supports owner text, files, qualified images and platform voice transcripts; raw audio and video remain unavailable. If a reply is refused because its original continuation expired or is absent, send a new text in the paired conversation; the Bot must not borrow another conversation. An unknown send outcome must not be blindly resent.
+If text does not arrive, check the connected account, enabled identity and owner-DM authorization. Messages from other contacts and groups remain unsupported. This candidate supports owner text, files, qualified images and platform voice transcripts; section 8 describes the separately qualified original-audio candidate. Section 9 describes the separately qualified native-video candidate; its real native intake, processing and Human-confirmed original-DM video receipt are verified. If a reply is refused because its original continuation expired or is absent, send a new text in the paired conversation; the Bot must not borrow another conversation. An unknown send outcome must not be blindly resent.
 
 ## Verification and scope
 
