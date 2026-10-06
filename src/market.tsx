@@ -5,6 +5,9 @@ import './market.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { MarketApp } from './MarketApp';
+import { initAnalytics } from './analytics';
+
+void initAnalytics();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

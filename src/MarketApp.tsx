@@ -88,7 +88,10 @@ export function MarketApp() {
         ) : null}
       </main>
       <footer className="footer market-footer">
-        <p>{copy.footer.built}</p>
+        <p>
+          {copy.footer.built}{' '}
+          <a href={lang === 'zh' ? '/privacy/' : '/en/privacy/'}>{copy.footer.privacy}</a>
+        </p>
       </footer>
     </Theme>
   );
