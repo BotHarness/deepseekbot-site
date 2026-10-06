@@ -4,6 +4,7 @@ import { TextInput } from '@astryxdesign/core/TextInput';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { useEffect, useMemo, useState } from 'react';
+import { track } from '../analytics';
 import type { Copy, Lang } from '../content';
 import { recipeFor } from '../mascot';
 import {
@@ -177,6 +178,7 @@ export function MarketList({
                     if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0)
                       return;
                     event.preventDefault();
+                    track('market_bot_opened', { bot: bot.id });
                     onOpen(bot);
                   }}
                 >
@@ -372,7 +374,14 @@ export function MarketDetail({
             <div className="frame detail-card">
               <h2>{t.installTitle}</h2>
               <p className="detail-label">{t.gitUrl}</p>
-              <Command command={bot.cloneUrl} copy={copy} shell={false} />
+              <Command
+                command={bot.cloneUrl}
+                copy={copy}
+                shell={false}
+                onCopy={() =>
+                  track('market_install_clicked', { bot: bot.id, action: 'copy_git_url' })
+                }
+              />
               <ol className="detail-steps">
                 {t.installSteps.map((step) => (
                   <li key={step}>{step}</li>
@@ -380,7 +389,14 @@ export function MarketDetail({
               </ol>
               <p className="detail-risk">{t.risk}</p>
               <p>
-                <a href={lang === 'zh' ? '/#install' : '/en/#install'}>{t.getApp} →</a>
+                <a
+                  href={lang === 'zh' ? '/#install' : '/en/#install'}
+                  onClick={() =>
+                    track('market_install_clicked', { bot: bot.id, action: 'get_app' })
+                  }
+                >
+                  {t.getApp} →
+                </a>
               </p>
             </div>
           </aside>
