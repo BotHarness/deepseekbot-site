@@ -2,7 +2,7 @@
 {
   "title": "Members and group management",
   "description": "Manage a local group’s members, invitations, attention settings and identity.",
-  "order": 6,
+  "order": 7,
   "parent": "channel-sidebar",
   "source": "docs/channel-sidebar/groups.md"
 }

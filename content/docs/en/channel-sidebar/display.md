@@ -2,7 +2,7 @@
 {
   "title": "Display and layout",
   "description": "Resize, reorder and hide sidebar entries, with explicit save and cancel behavior.",
-  "order": 7,
+  "order": 8,
   "parent": "channel-sidebar",
   "source": "docs/channel-sidebar/display.md"
 }
