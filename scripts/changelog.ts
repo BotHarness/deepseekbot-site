@@ -280,7 +280,7 @@ function page(lang: Lang, releases: Release[]) {
     <a class="skip" href="#main">${t.skip}</a>
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
-        <img class="brand-logo" src="/logo.png" width="32" height="32" alt="" />
+        <span class="brand-logo"><img src="/logo.png" width="32" height="32" alt="" /></span>
         <span>DeepSeekBot</span>
       </a>
       <nav class="topnav" aria-label="DeepSeekBot">

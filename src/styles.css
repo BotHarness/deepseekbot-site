@@ -149,10 +149,38 @@ a:where(:not(.astryx-button)) {
   backdrop-filter: blur(6px);
   border-bottom: var(--px) solid var(--px-ink);
 }
+/* the logo gets the avatar tiles' stepped pixel corners (2px art pixels); the outline is drawn
+   with drop shadows on the wrapper so it follows the steps */
 .brand-logo {
   display: block;
-  border-radius: 8px;
-  outline: 2px solid var(--px-ink);
+  filter: drop-shadow(2px 0 0 var(--px-ink)) drop-shadow(-2px 0 0 var(--px-ink))
+    drop-shadow(0 2px 0 var(--px-ink)) drop-shadow(0 -2px 0 var(--px-ink));
+}
+.brand-logo img {
+  display: block;
+  background: #fff;
+  clip-path: polygon(
+    4px 0,
+    28px 0,
+    28px 2px,
+    30px 2px,
+    30px 4px,
+    100% 4px,
+    100% 28px,
+    30px 28px,
+    30px 30px,
+    28px 30px,
+    28px 100%,
+    4px 100%,
+    4px 30px,
+    2px 30px,
+    2px 28px,
+    0 28px,
+    0 4px,
+    2px 4px,
+    2px 2px,
+    4px 2px
+  );
 }
 .brand {
   display: inline-flex;

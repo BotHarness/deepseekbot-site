@@ -25,7 +25,9 @@ export function SiteHeader({
       </a>
       <header className="topbar">
         <a className="brand" href={page === 'home' ? '#top' : homePath(lang)}>
-          <img className="brand-logo" src="/logo.png" width={32} height={32} alt="" />
+          <span className="brand-logo">
+            <img src="/logo.png" width={32} height={32} alt="" />
+          </span>
           <span>DeepSeekBot</span>
         </a>
         <nav className="topnav" aria-label="DeepSeekBot">
