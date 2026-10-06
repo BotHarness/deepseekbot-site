@@ -2,7 +2,8 @@ import { Button } from '@astryxdesign/core/Button';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { useState, type ReactNode } from 'react';
 import { track } from '../analytics';
-import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy } from '../content';
+import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy, type Lang } from '../content';
+import { docsPath } from '../site';
 
 export function Command({
   command,
@@ -56,7 +57,22 @@ function Step({ n, title, children }: { n: number; title: string; children?: Rea
 
 type Way = 'desktop' | 'dev';
 
-export function Install({ copy }: { copy: Copy }) {
+/** The step after the last one: once it is installed, go read how to use it. */
+function NextStep({ copy, lang, way }: { copy: Copy; lang: Lang; way: Way }) {
+  return (
+    <li className="step-next" data-placement={`install_${way}`}>
+      <span className="step-no" aria-hidden="true">
+        →
+      </span>
+      <div>
+        <p className="step-title">{copy.install.next.title}</p>
+        <Button label={`${copy.install.next.button} →`} variant="primary" href={docsPath(lang)} />
+      </div>
+    </li>
+  );
+}
+
+export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
   const [way, setWay] = useState<Way>('desktop');
   const t = copy.install;
   return (
@@ -90,6 +106,7 @@ export function Install({ copy }: { copy: Copy }) {
                 ) : null}
               </Step>
             ))}
+            <NextStep copy={copy} lang={lang} way="desktop" />
           </ol>
           <p className="install-links">
             <a href={t.desktop.downloadUrl} target="_blank" rel="noreferrer">
@@ -115,6 +132,9 @@ export function Install({ copy }: { copy: Copy }) {
             ))}
           </ol>
           <p>{t.after}</p>
+          <ol className="steps">
+            <NextStep copy={copy} lang={lang} way="dev" />
+          </ol>
         </>
       )}
       <p className="note">{t.note}</p>

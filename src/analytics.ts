@@ -52,16 +52,22 @@ const siteProperties = () => ({
   page: pageKind(location.pathname),
 });
 
-/** Where on the page a click happened: header, footer, or the enclosing section's id. */
+/**
+ * Where on the page a click happened: an explicit `data-placement` (for controls that need telling
+ * apart within one section), else header, footer, or the enclosing section's id.
+ */
 function placement(element: Element) {
+  const named = element.closest<HTMLElement>('[data-placement]')?.dataset.placement;
+  if (named) return named;
   if (element.closest('header')) return 'header';
   if (element.closest('footer')) return 'footer';
   return element.closest('section[id]')?.id ?? 'main';
 }
 
 /**
- * Outbound GitHub and Discord links and the language switch appear on every page, including the
- * static docs, so they are tracked by one delegated listener instead of in each component.
+ * Outbound GitHub and Discord links, the language switch, and the header links to the marketplace,
+ * docs and changelog appear on every page, including the static docs, so they are tracked by one
+ * delegated listener instead of in each component.
  */
 export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, unknown>] | null {
   const at = placement(anchor);
@@ -73,6 +79,14 @@ export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, un
   try {
     url = new URL(anchor.href);
   } catch {
+    return null;
+  }
+  if (url.origin === location.origin) {
+    const kind = pageKind(url.pathname);
+    // moving around within the marketplace or the docs is not a way in
+    if (kind === pageKind(location.pathname)) return null;
+    if (kind === 'market' || kind === 'docs' || kind === 'changelog')
+      return [`${kind}_clicked`, { target: url.pathname, placement: at }];
     return null;
   }
   if (url.hostname === 'github.com')

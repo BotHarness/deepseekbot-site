@@ -1,6 +1,6 @@
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { LINKS, type Copy, type Lang } from '../content';
-import { homePath, marketPath, type Mode } from '../site';
+import { changelogPath, docsPath, homePath, marketPath, type Mode } from '../site';
 import { navIconSvg, type NavIcon } from '../navIcons';
 
 export function SiteHeader({
@@ -36,9 +36,13 @@ export function SiteHeader({
             <Icon name="market" />
             {copy.nav.market}
           </a>
-          <a href={lang === 'zh' ? '/docs/overview/' : '/en/docs/overview/'}>
+          <a href={docsPath(lang)}>
             <Icon name="docs" />
             {copy.nav.docs}
+          </a>
+          <a href={changelogPath(lang)}>
+            <Icon name="changelog" />
+            {copy.nav.changelog}
           </a>
           <a href={`${home}#community`}>{copy.nav.community}</a>
           <a href={LINKS.github} target="_blank" rel="noreferrer">

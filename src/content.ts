@@ -73,6 +73,7 @@ export interface Copy {
     install: string;
     market: string;
     docs: string;
+    changelog: string;
     community: string;
     github: string;
   };
@@ -88,6 +89,8 @@ export interface Copy {
     ctaInstall: string;
     ctaGithub: string;
     crewLabel: string;
+    signpost: string;
+    signpostLabel: string;
     chips: string[];
   };
   symbols: SymbolLabels;
@@ -176,6 +179,7 @@ export interface Copy {
     };
     lead: string;
     steps: string[];
+    next: { title: string; button: string };
     copy: string;
     copied: string;
     after: string;
@@ -198,6 +202,7 @@ const zh: Copy = {
     install: '安装',
     market: 'Bot 市场',
     docs: '文档',
+    changelog: '更新日志',
     community: '社区',
     github: 'GitHub',
   },
@@ -213,6 +218,8 @@ const zh: Copy = {
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
     crewLabel: '一组正在工作的 PersonaBots，头像会变成它们正在使用的工具',
+    signpost: 'Bot 市场',
+    signpostLabel: '去 Bot 市场找别人分享的 Bot',
     chips: [
       'GrokBot 的开源平替',
       '基于 DeepSeek Harness',
@@ -375,6 +382,7 @@ const zh: Copy = {
     },
     lead: `需要 Node 22 以上。DeepSeekBot 当前支持 DSH ${DSH_VERSION} 起的 0.2 系列。`,
     steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
+    next: { title: '装好了？接下来看看怎么用', button: '查看使用文档' },
     copy: '复制',
     copied: '已复制',
     after:
@@ -414,6 +422,7 @@ const en: Copy = {
     install: 'Install',
     market: 'Marketplace',
     docs: 'Docs',
+    changelog: 'Changelog',
     community: 'Community',
     github: 'GitHub',
   },
@@ -429,6 +438,8 @@ const en: Copy = {
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
     crewLabel: 'A crew of working PersonaBots whose avatars turn into the tool each one is using',
+    signpost: 'Marketplace',
+    signpostLabel: 'Find Bots other people shared in the Bot Marketplace',
     chips: [
       'Open-source Grok Bot alternative',
       'Built on DeepSeek Harness',
@@ -596,6 +607,7 @@ const en: Copy = {
       'Add DeepSeekBot to the web Profile',
       'Start it and open Bot mode',
     ],
+    next: { title: 'Installed? See what to do next', button: 'Read the guides' },
     copy: 'Copy',
     copied: 'Copied',
     after:
