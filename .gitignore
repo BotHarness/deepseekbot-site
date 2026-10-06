@@ -5,5 +5,7 @@ dist
 *.log
 /docs
 /en/docs
+/changelog
+/en/changelog
 /privacy
 /en/privacy

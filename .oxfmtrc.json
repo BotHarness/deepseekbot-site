@@ -11,6 +11,8 @@
     "pnpm-lock.yaml",
     "docs",
     "en/docs",
+    "changelog",
+    "en/changelog",
     "content",
     "public/guides"
   ]

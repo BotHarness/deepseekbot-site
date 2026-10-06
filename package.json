@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "docs:sync": "node scripts/sync-docs.mjs",
+    "changelog:sync": "node scripts/sync-changelog.mjs",
     "build": "pnpm typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",

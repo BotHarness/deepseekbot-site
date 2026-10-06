@@ -43,3 +43,12 @@ for (const pre of document.querySelectorAll<HTMLPreElement>('.docs-body pre')) {
 // on a phone the contents list starts folded so the article comes first
 if (matchMedia('(max-width: 860px)').matches)
   document.querySelector<HTMLDetailsElement>('.docs-nav details')?.removeAttribute('open');
+
+// changelog releases fold; a version link or #anchor opens the release it points at
+const reveal = () => {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const target = id ? document.getElementById(id) : null;
+  if (target instanceof HTMLDetailsElement) target.open = true;
+};
+addEventListener('hashchange', reveal);
+reveal();
