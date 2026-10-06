@@ -254,12 +254,14 @@ a.bot-card {
 }
 .detail-side {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   position: sticky;
   top: 88px;
 }
 .detail-card {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   padding: 18px 20px;
 }
@@ -281,6 +283,7 @@ a.bot-card {
   max-width: 100%;
 }
 .detail-card .command code {
+  white-space: normal;
   overflow-wrap: anywhere;
 }
 .detail-steps {

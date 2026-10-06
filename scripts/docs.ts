@@ -248,7 +248,7 @@ function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
         <a href="${docPath(lang, 'overview')}" aria-current="page">${t.docs}</a>
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
-        <a href="${home(lang)}market/">${t.nav.market}</a>
+        <a href="${home(lang)}market">${t.nav.market}</a>
         <a href="${home(lang)}#community">${t.nav.community}</a>
         <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>

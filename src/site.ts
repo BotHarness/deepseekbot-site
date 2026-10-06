@@ -28,4 +28,4 @@ export const initialMode = (): Mode => {
 };
 
 export const homePath = (lang: Lang) => (lang === 'zh' ? '/' : '/en/');
-export const marketPath = (lang: Lang) => (lang === 'zh' ? '/market/' : '/en/market/');
+export const marketPath = (lang: Lang) => (lang === 'zh' ? '/market' : '/en/market');

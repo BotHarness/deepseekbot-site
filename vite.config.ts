@@ -11,13 +11,7 @@ const FONT_URL = '/fonts/pixel.woff2';
 const SITE = 'https://deepseekbot.botharness.ai';
 // the Chinese entry at / and the English one at /en/, each with its own share card, plus the
 // guides rendered from content/docs
-const PAGES = [
-  'index.html',
-  'en/index.html',
-  'market/index.html',
-  'en/market/index.html',
-  ...renderDocs(),
-];
+const PAGES = ['index.html', 'en/index.html', 'market.html', 'en/market.html', ...renderDocs()];
 const fontFile = () =>
   readFileSync(
     require.resolve('@fontsource/fusion-pixel-12px-proportional-sc/files/fusion-pixel-12px-proportional-sc-latin-400-normal.woff2'),
@@ -79,8 +73,8 @@ const sitemap = () => `<?xml version="1.0" encoding="UTF-8"?>
 ${[
   ['/', '/', '/en/'],
   ['/en/', '/', '/en/'],
-  ['/market/', '/market/', '/en/market/'],
-  ['/en/market/', '/market/', '/en/market/'],
+  ['/market', '/market', '/en/market'],
+  ['/en/market', '/market', '/en/market'],
 ]
   .map(
     ([path, zh, en]) => `  <url>
