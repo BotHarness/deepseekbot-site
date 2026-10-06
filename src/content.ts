@@ -3,7 +3,7 @@ import type { PixelSymbol } from '@botharness/pixel-avatar';
 
 export type Lang = 'zh' | 'en';
 
-export const VERSION = '1.0.1';
+export const VERSION = '1.1.0';
 export const DSH_VERSION = '0.2.0-rc.1';
 
 export const LINKS = {
