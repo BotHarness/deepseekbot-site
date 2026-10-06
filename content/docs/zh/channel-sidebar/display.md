@@ -2,7 +2,7 @@
 {
   "title": "显示与布局",
   "description": "调整侧栏宽度、项目顺序与显示，了解完成和取消的作用。",
-  "order": 7,
+  "order": 8,
   "parent": "channel-sidebar",
   "source": "docs/channel-sidebar/display.zh.md"
 }

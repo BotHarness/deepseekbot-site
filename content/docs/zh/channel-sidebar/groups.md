@@ -2,7 +2,7 @@
 {
   "title": "成员与群管理",
   "description": "管理本地群聊的成员、邀请、提醒设置与群信息。",
-  "order": 6,
+  "order": 7,
   "parent": "channel-sidebar",
   "source": "docs/channel-sidebar/groups.zh.md"
 }
