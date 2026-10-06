@@ -86,6 +86,8 @@ ${[
   ['/en/market', '/market', '/en/market'],
   [changelogPath('zh'), changelogPath('zh'), changelogPath('en')],
   [changelogPath('en'), changelogPath('zh'), changelogPath('en')],
+  ['/privacy/', '/privacy/', '/en/privacy/'],
+  ['/en/privacy/', '/privacy/', '/en/privacy/'],
 ]
   .map(
     ([path, zh, en]) => `  <url>

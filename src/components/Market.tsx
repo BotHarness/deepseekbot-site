@@ -227,13 +227,7 @@ export function MarketList({
         <h2>{t.author.title}</h2>
         <p>{t.author.body}</p>
         <p>
-          <a
-            href="https://github.com/BotHarness/BotHarness/blob/main/packages/market/README.md#sharing-presentation-botharnessbotjson"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t.author.docs} →
-          </a>
+          <a href={lang === 'zh' ? '/docs/share-bot/' : '/en/docs/share-bot/'}>{t.author.docs} →</a>
         </p>
       </aside>
     </div>

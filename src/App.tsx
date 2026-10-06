@@ -165,6 +165,7 @@ export function App() {
           <a href={LINKS.discord} target="_blank" rel="noreferrer">
             Discord
           </a>
+          <a href={lang === 'zh' ? '/privacy/' : '/en/privacy/'}>{copy.footer.privacy}</a>
         </div>
         <p>
           {copy.footer.built} {copy.footer.license} {copy.footer.community}

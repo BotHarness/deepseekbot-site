@@ -44,6 +44,10 @@ pnpm verify   # format:check, lint, typecheck, build
   [stardewUi](https://github.com/a985987819/stardewUi); no code or assets are copied from it
   (its license forbids commercial use).
 
+## Analytics
+
+Anonymous PostHog analytics, as decided in BotHarness ADR-0132 (`src/analytics.ts`). A build sends nothing unless `VITE_POSTHOG_KEY` (the project's public `phc_…` key) is set, for example in `.env.production`; `VITE_POSTHOG_HOST` overrides the ingest proxy (default `https://t.botharness.ai`). Visitors get a consent box: accepting keeps an anonymous ID for cross-day attribution, declining falls back to PostHog's cookieless mode, which must also be enabled in the PostHog project settings. `?ref=<x>` is rewritten to `utm_source=<x>` before PostHog starts. `/privacy/` and `/en/privacy/` render from `content/privacy/{zh,en}.md`.
+
 ## Deploy
 
 `wrangler.jsonc` deploys `dist/` as static assets on the Worker `deepseekbot-site`, with the custom

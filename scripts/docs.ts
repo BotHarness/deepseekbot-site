@@ -42,6 +42,7 @@ const UI = {
     copy: '复制',
     copied: '已复制',
     footer: '开源，MIT 许可。',
+    privacy: '隐私说明',
   },
   en: {
     htmlLang: 'en',
@@ -67,6 +68,7 @@ const UI = {
     copy: 'Copy',
     copied: 'Copied',
     footer: 'Open source under the MIT license.',
+    privacy: 'Privacy',
   },
 } as const;
 
@@ -75,6 +77,8 @@ const escape = (text: string) =>
 
 const home = (lang: Lang) => (lang === 'zh' ? '/' : '/en/');
 export const docPath = (lang: Lang, slug: string) => `${lang === 'zh' ? '' : '/en'}/docs/${slug}/`;
+export const privacyPath = (lang: Lang) => `${lang === 'zh' ? '' : '/en'}/privacy/`;
+export const PRIVACY_OUT = ['privacy', 'en/privacy'];
 
 function read(lang: Lang): Doc[] {
   const docs: Doc[] = [];
@@ -180,12 +184,23 @@ function sidebar(lang: Lang, docs: Doc[], current: string) {
   return `<nav class="docs-nav" aria-label="${t.guides}"><details open><summary>${t.menu}</summary><p class="docs-nav-title">${t.guides}</p><ul>${items}</ul></details></nav>`;
 }
 
-function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
+/**
+ * A guide page, or with `at` a standalone page (the privacy notice) outside the guide list: no
+ * sidebar, pager or source link.
+ */
+function page(
+  lang: Lang,
+  doc: Doc,
+  docs: Doc[],
+  html: string,
+  at: (lang: Lang) => string = (l) => docPath(l, doc.slug),
+) {
   const t = UI[lang];
+  const guide = docs.includes(doc);
   const i = docs.indexOf(doc);
   const prev = docs[i - 1];
   const next = docs[i + 1];
-  const url = `${SITE}${docPath(lang, doc.slug)}`;
+  const url = `${SITE}${at(lang)}`;
   const title = `${doc.title} · ${t.suffix}`;
   const image = `${SITE}/og-${lang}-v2.png`;
   const pager = [
@@ -204,9 +219,9 @@ function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
     <title>${escape(title)}</title>
     <meta name="description" content="${escape(doc.description)}" />
     <link rel="canonical" href="${url}" />
-    <link rel="alternate" hreflang="zh-Hans" href="${SITE}${docPath('zh', doc.slug)}" />
-    <link rel="alternate" hreflang="en" href="${SITE}${docPath('en', doc.slug)}" />
-    <link rel="alternate" hreflang="x-default" href="${SITE}${docPath('zh', doc.slug)}" />
+    <link rel="alternate" hreflang="zh-Hans" href="${SITE}${at('zh')}" />
+    <link rel="alternate" hreflang="en" href="${SITE}${at('en')}" />
+    <link rel="alternate" hreflang="x-default" href="${SITE}${at('zh')}" />
     <meta name="theme-color" content="#f6e7c1" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="DeepSeekBot" />
@@ -248,7 +263,7 @@ function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
         <span>DeepSeekBot</span>
       </a>
       <nav class="topnav" aria-label="DeepSeekBot">
-        <a href="${docPath(lang, 'overview')}" aria-current="page"><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
+        <a href="${docPath(lang, 'overview')}"${guide ? ' aria-current="page"' : ''}><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
@@ -257,8 +272,8 @@ function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
       </nav>
       <div class="toggles">
         <nav class="lang-switch" aria-label="${t.lang}">
-          <a href="${docPath('zh', doc.slug)}" hreflang="zh-Hans" lang="zh-Hans"${lang === 'zh' ? ' aria-current="page"' : ''}>中文</a>
-          <a href="${docPath('en', doc.slug)}" hreflang="en" lang="en"${lang === 'en' ? ' aria-current="page"' : ''}>EN</a>
+          <a href="${at('zh')}" hreflang="zh-Hans" lang="zh-Hans"${lang === 'zh' ? ' aria-current="page"' : ''}>中文</a>
+          <a href="${at('en')}" hreflang="en" lang="en"${lang === 'en' ? ' aria-current="page"' : ''}>EN</a>
         </nav>
         <div class="mode-switch" role="group" aria-label="${t.mode}">
           <button type="button" data-mode="light">${t.light}</button>
@@ -266,29 +281,33 @@ function page(lang: Lang, doc: Doc, docs: Doc[], html: string) {
         </div>
       </div>
     </header>
-    <div class="docs-layout">
-      ${sidebar(lang, docs, doc.slug)}
+    <div class="docs-layout${guide ? '' : ' docs-standalone'}">
+      ${guide ? sidebar(lang, docs, doc.slug) : ''}
       <main id="main" class="docs-main">
         <article class="docs-article frame">
-          <p class="kicker">${t.docs}</p>
+          ${guide ? `<p class="kicker">${t.docs}</p>` : ''}
           <h1>${escape(doc.title)}</h1>
           ${doc.description ? `<p class="docs-lead">${escape(doc.description)}</p>` : ''}
           <div class="docs-body">${html}</div>
         </article>
-        <nav class="docs-pager" aria-label="${t.prev} / ${t.next}">${pager}</nav>
-        <p class="docs-source"><a href="https://github.com/BotHarness/BotHarness/blob/main/${doc.source}" target="_blank" rel="noreferrer">${t.edit}</a></p>
+        ${
+          guide
+            ? `<nav class="docs-pager" aria-label="${t.prev} / ${t.next}">${pager}</nav>
+        <p class="docs-source"><a href="https://github.com/BotHarness/BotHarness/blob/main/${doc.source}" target="_blank" rel="noreferrer">${t.edit}</a></p>`
+            : ''
+        }
       </main>
     </div>
-    <footer class="footer"><p>DeepSeekBot · ${t.footer}</p></footer>
+    <footer class="footer"><p>DeepSeekBot · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>
 `;
 }
 
-/** Writes every guide page and returns their paths, for Vite's inputs. */
+/** Writes every guide page and the privacy notice and returns their paths, for Vite's inputs. */
 export function renderDocs(): string[] {
-  for (const dir of DOCS_OUT) rmSync(dir, { recursive: true, force: true });
+  for (const dir of [...DOCS_OUT, ...PRIVACY_OUT]) rmSync(dir, { recursive: true, force: true });
   const written: string[] = [];
   for (const lang of ['zh', 'en'] as const) {
     const docs = read(lang);
@@ -299,6 +318,16 @@ export function renderDocs(): string[] {
       writeFileSync(file, page(lang, doc, docs, render(doc.body)));
       written.push(file);
     }
+    // the privacy notice is hand-written here, not synced from BotHarness
+    const text = readFileSync(join('content/privacy', `${lang}.md`), 'utf8');
+    const match = text.match(/^---\n([\s\S]*?)\n---\n/);
+    if (!match) throw new Error(`content/privacy/${lang}.md: missing front matter`);
+    const meta = JSON.parse(match[1]!) as Pick<Doc, 'title' | 'description'>;
+    const notice: Doc = { ...meta, slug: 'privacy', order: 0, source: '', body: '' };
+    const file = join(privacyPath(lang).slice(1), 'index.html');
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, page(lang, notice, docs, render(text.slice(match[0].length)), privacyPath));
+    written.push(file);
   }
   return written;
 }

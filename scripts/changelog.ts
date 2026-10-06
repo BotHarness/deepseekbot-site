@@ -6,6 +6,7 @@ import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Marked, type Tokens } from 'marked';
 import { navIconSvg } from '../src/navIcons.ts';
+import { privacyPath } from './docs.ts';
 
 type Lang = 'zh' | 'en';
 const SITE = 'https://deepseekbot.botharness.ai';
@@ -55,6 +56,7 @@ const UI = {
     skip: '跳到正文',
     source: '在 GitHub 查看原文',
     footer: '开源，MIT 许可。',
+    privacy: '隐私说明',
     sections: {
       Added: '新增',
       Changed: '变更',
@@ -92,6 +94,7 @@ const UI = {
     skip: 'Skip to content',
     source: 'View the source on GitHub',
     footer: 'Open source under the MIT license.',
+    privacy: 'Privacy',
     sections: {
       Added: 'Added',
       Changed: 'Changed',
@@ -304,7 +307,7 @@ function page(lang: Lang, releases: Release[]) {
         <p class="docs-source"><a href="${GITHUB_BLOB}${lang === 'zh' ? 'CHANGELOG.zh.md' : 'CHANGELOG.md'}" target="_blank" rel="noreferrer">${t.source}</a></p>
       </main>
     </div>
-    <footer class="footer"><p>DeepSeekBot · ${t.footer}</p></footer>
+    <footer class="footer"><p>DeepSeekBot · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>
