@@ -284,6 +284,21 @@ export const DOC_PAGES = [
     },
   },
   {
+    slug: 'soul-and-core-memory',
+    order: 28,
+    en: {
+      source: 'docs/soul-and-core-memory.md',
+      title: 'Bot Soul and Core Memory',
+      description:
+        'How SOUL.md and MEMORY.md start every Session, their size limits, and when edits apply.',
+    },
+    zh: {
+      source: 'docs/soul-and-core-memory.zh.md',
+      title: 'Bot 灵魂与核心记忆',
+      description: 'SOUL.md 与 MEMORY.md 如何进入每个 Session、字数上限，以及修改何时生效。',
+    },
+  },
+  {
     slug: 'overview',
     en: {
       source: 'apps/docs/src/content/docs/docs/overview.mdx',
