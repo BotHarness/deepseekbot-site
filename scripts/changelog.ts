@@ -6,7 +6,7 @@ import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Marked, type Tokens } from 'marked';
 import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
-import { privacyPath } from './docs.ts';
+import { privacyPath, searchButton } from './docs.ts';
 
 type Lang = 'zh' | 'en';
 const SITE = 'https://deepseekbot.botharness.ai';
@@ -276,7 +276,7 @@ function page(lang: Lang, releases: Release[]) {
       } catch (e) {}
     </script>
   </head>
-  <body data-docs data-changelog>
+  <body data-docs data-changelog data-lang="${lang}">
     <a class="skip" href="#main">${t.skip}</a>
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
@@ -293,6 +293,7 @@ function page(lang: Lang, releases: Release[]) {
         <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
       <div class="toggles">
+        ${searchButton(lang)}
         <nav class="lang-switch" aria-label="${t.lang}">
           <a href="${changelogPath('zh')}" hreflang="zh-Hans" lang="zh-Hans"${lang === 'zh' ? ' aria-current="page"' : ''}>中文</a>
           <a href="${changelogPath('en')}" hreflang="en" lang="en"${lang === 'en' ? ' aria-current="page"' : ''}>EN</a>

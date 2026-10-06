@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 import subsetFont from 'subset-font';
 import { defineConfig, type Plugin } from 'vite';
 import { changelogPath, renderChangelog } from './scripts/changelog.ts';
-import { docsSitemap, renderDocs } from './scripts/docs.ts';
+import { docsSitemap, renderDocs, searchIndex } from './scripts/docs.ts';
 
 const require = createRequire(import.meta.url);
 const FONT_URL = '/fonts/pixel.woff2';
@@ -58,7 +58,7 @@ function siteCharacters(): string {
 
 /**
  * Fusion Pixel covers all of simplified Chinese (~600 KB). Dev serves the whole font; the
- * build ships only the glyphs the site uses.
+ * build ships only the glyphs the site uses. Also the sitemap and the docs search indexes.
  */
 function pixelAssets(): Plugin {
   return {
@@ -68,11 +68,23 @@ function pixelAssets(): Plugin {
         res.setHeader('Content-Type', 'font/woff2');
         res.end(fontFile());
       });
+      for (const lang of ['zh', 'en'] as const)
+        server.middlewares.use(`/search/${lang}.json`, (_req, res) => {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(searchIndex(lang)));
+        });
     },
     async generateBundle() {
       const subset = await subsetFont(fontFile(), siteCharacters(), { targetFormat: 'woff2' });
       this.emitFile({ type: 'asset', fileName: FONT_URL.slice(1), source: subset });
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() });
+      // the docs search box loads its language's index on first open
+      for (const lang of ['zh', 'en'] as const)
+        this.emitFile({
+          type: 'asset',
+          fileName: `search/${lang}.json`,
+          source: JSON.stringify(searchIndex(lang)),
+        });
     },
   };
 }

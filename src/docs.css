@@ -82,6 +82,96 @@
   color: var(--ink);
 }
 
+/* the page's sections, right of the article */
+.docs-has-toc {
+  grid-template-columns: 240px minmax(0, 1fr) 200px;
+  gap: 40px 32px;
+  max-width: 1440px;
+}
+.docs-toc {
+  position: sticky;
+  top: 84px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  font-size: 13px;
+}
+.docs-toc summary {
+  display: none;
+}
+.docs-toc-title {
+  margin: 0 0 10px;
+  font-family: var(--pixel-font);
+  font-size: 12px;
+  color: var(--accent);
+  -webkit-font-smoothing: none;
+}
+.docs-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  border-left: var(--px) solid color-mix(in srgb, var(--px-ink) 18%, transparent);
+}
+.docs-toc a {
+  display: block;
+  margin-left: calc(var(--px) * -1);
+  padding: 3px 8px 3px 12px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  line-height: 1.45;
+  border-left: var(--px) solid transparent;
+}
+.docs-toc-child a {
+  padding-left: 24px;
+}
+.docs-toc a:hover {
+  color: var(--ink);
+  background: var(--bg-alt);
+}
+.docs-toc a[aria-current] {
+  color: var(--ink);
+  border-left-color: var(--accent);
+  background: var(--bubble);
+}
+@media (max-width: 1180px) {
+  .docs-has-toc {
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 20px 40px;
+    max-width: 1200px;
+  }
+  .docs-has-toc .docs-nav {
+    grid-row: 1 / span 2;
+  }
+  .docs-has-toc .docs-toc {
+    grid-column: 2;
+    grid-row: 1;
+    position: static;
+    max-height: none;
+    /* the folded summary's outline would be clipped by a scroll box */
+    overflow: visible;
+  }
+  .docs-has-toc .docs-main {
+    grid-column: 2;
+  }
+  .docs-toc summary {
+    display: block;
+    padding: 8px 12px;
+    font-family: var(--pixel-font);
+    font-size: 14px;
+    background: var(--bubble);
+    outline: 3px solid var(--px-ink);
+    cursor: pointer;
+    -webkit-font-smoothing: none;
+  }
+  .docs-toc details[open] ul {
+    margin-top: 12px;
+  }
+  .docs-toc-title {
+    display: none;
+  }
+}
+
 .docs-article {
   padding: 20px 28px 28px;
 }
@@ -286,6 +376,22 @@
   .docs-nav {
     position: static;
     max-height: none;
+    overflow: visible;
+  }
+  .docs-has-toc {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docs-has-toc :is(.docs-nav, .docs-toc, .docs-main) {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  /* guides list, then this page's contents, then the article */
+  .docs-has-toc .docs-main {
+    order: 1;
+  }
+  /* the header wraps to two rows here; anchors land below it */
+  :root {
+    scroll-padding-top: 116px;
   }
   .docs-nav summary {
     display: block;
@@ -309,6 +415,169 @@
   }
   .docs-pager {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ---- search (Ctrl/⌘+K) ---- */
+.search-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 6px 2px 10px;
+  border: 0;
+  outline: 3px solid var(--px-ink);
+  background: var(--bubble);
+  color: var(--ink);
+  font-family: var(--pixel-font);
+  font-size: 12px;
+  line-height: 24px;
+  cursor: pointer;
+  -webkit-font-smoothing: none;
+}
+.search-open:hover {
+  background: var(--bg-alt);
+}
+.search-icon {
+  flex: none;
+  image-rendering: pixelated;
+}
+.search-kbd,
+.search-close {
+  padding: 0 5px;
+  font-family: var(--pixel-font);
+  font-size: 11px;
+  line-height: 18px;
+  color: var(--ink-soft);
+  background: var(--bg);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--px-ink) 35%, transparent);
+  -webkit-font-smoothing: none;
+}
+.search-locked {
+  overflow: hidden;
+}
+.search-dialog {
+  width: min(640px, calc(100vw - 32px));
+  max-width: none;
+  max-height: none;
+  margin: 12vh auto 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  overflow: visible;
+}
+.search-dialog::backdrop {
+  background: color-mix(in srgb, var(--px-ink) 45%, transparent);
+}
+.search-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  max-height: min(560px, 76vh);
+  /* the frame's fill is the wood; the content sits on paper */
+  background: var(--bubble);
+  background-clip: padding-box;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: var(--px) solid var(--px-ink);
+  color: var(--ink-soft);
+}
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 17px;
+}
+.search-box input::-webkit-search-cancel-button {
+  display: none;
+}
+.search-close {
+  border: 0;
+  cursor: pointer;
+}
+.search-results {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.search-results:empty {
+  display: none;
+}
+.search-results a {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  color: var(--ink);
+  text-decoration: none;
+  border-left: var(--px) solid transparent;
+}
+.search-results a[aria-selected='true'] {
+  background: var(--bg-alt);
+  border-left-color: var(--accent);
+}
+.search-hit-title {
+  font-family: var(--pixel-font);
+  font-size: 14px;
+  -webkit-font-smoothing: none;
+}
+.search-hit-sep {
+  color: var(--ink-soft);
+}
+.search-hit-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.search-results mark {
+  color: inherit;
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.search-status {
+  margin: 0;
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.search-help {
+  margin: 0;
+  padding: 6px 12px;
+  border-top: 2px solid color-mix(in srgb, var(--px-ink) 20%, transparent);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+@media (max-width: 860px) {
+  .search-dialog {
+    margin-top: 16px;
+  }
+  .search-panel {
+    max-height: calc(100dvh - 48px);
+  }
+  .search-kbd,
+  .search-help {
+    display: none;
+  }
+}
+@media (max-width: 520px) {
+  .search-label {
+    display: none;
+  }
+  .search-open {
+    padding-inline: 8px;
   }
 }
 
