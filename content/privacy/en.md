@@ -4,7 +4,7 @@
 
 We collect anonymous analytics for one reason: **to improve DeepSeekBot by learning how it is used and where site visitors come from**. We collect nothing that identifies you, and never your conversations or Memory. The code doing this is open source: [site](https://github.com/BotHarness/deepseekbot-site), [plugin](https://github.com/BotHarness/BotHarness), and the design is recorded in [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md).
 
-Data is stored in [PostHog](https://posthog.com)'s EU region and forwarded through our own domain, `t.botharness.ai`. IP addresses are discarded; only the country or region reported by Cloudflare is kept.
+Data is stored in [PostHog](https://posthog.com)'s US region and forwarded through our own domain, `t.botharness.ai`. PostHog uses the IP address only to infer the country or region, then discards it; it is never stored.
 
 ## Site
 

@@ -93,7 +93,7 @@ export async function initAnalytics() {
   const { default: posthog } = await import('posthog-js');
   posthog.init(KEY, {
     api_host: HOST,
-    ui_host: 'https://eu.posthog.com',
+    ui_host: 'https://us.posthog.com',
     cookieless_mode: 'on_reject',
     // until the visitor answers, count them the cookieless way
     opt_out_capturing_by_default: true,

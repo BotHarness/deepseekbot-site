@@ -4,7 +4,7 @@
 
 我们收集匿名统计只有一个目的：**改善 DeepSeekBot，了解它被怎样使用、官网从哪里被访问**。我们不收集能识别你本人的信息，也不收集你的对话或 Memory 内容。做这件事的代码全部开源：[官网](https://github.com/BotHarness/deepseekbot-site)、[插件](https://github.com/BotHarness/BotHarness)，设计记录在 [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md)。
 
-统计数据存放在 [PostHog](https://posthog.com) 的欧盟区域，经由我们自己的域名 `t.botharness.ai` 转发。我们关闭了 IP 地址存储，只保留由 Cloudflare 判断的国家或地区。
+统计数据存放在 [PostHog](https://posthog.com) 的美国区域，经由我们自己的域名 `t.botharness.ai` 转发。PostHog 只用 IP 地址推断国家或地区，然后丢弃，不会存储。
 
 ## 官网
 
