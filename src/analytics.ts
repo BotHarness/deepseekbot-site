@@ -38,6 +38,63 @@ export function normalizeRef(url: URL): URL | null {
   return next;
 }
 
+/** Which page family this is, so events can be split without parsing paths. */
+export function pageKind(pathname: string) {
+  const path = pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+  if (path === '/') return 'home';
+  const first = path.split('/')[1] ?? '';
+  return ['market', 'docs', 'privacy', 'changelog'].includes(first) ? first : 'other';
+}
+
+const siteProperties = () => ({
+  source: 'site',
+  lang: pathLang(),
+  page: pageKind(location.pathname),
+});
+
+/** Where on the page a click happened: header, footer, or the enclosing section's id. */
+function placement(element: Element) {
+  if (element.closest('header')) return 'header';
+  if (element.closest('footer')) return 'footer';
+  return element.closest('section[id]')?.id ?? 'main';
+}
+
+/**
+ * Outbound GitHub and Discord links and the language switch appear on every page, including the
+ * static docs, so they are tracked by one delegated listener instead of in each component.
+ */
+export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, unknown>] | null {
+  const at = placement(anchor);
+  if (anchor.closest('.lang-switch')) {
+    const to = anchor.hreflang.startsWith('zh') ? 'zh' : 'en';
+    return to === pathLang() ? null : ['language_switched', { to, placement: at }];
+  }
+  let url: URL;
+  try {
+    url = new URL(anchor.href);
+  } catch {
+    return null;
+  }
+  if (url.hostname === 'github.com')
+    return ['github_clicked', { target: url.pathname, placement: at }];
+  if (url.hostname === 'discord.gg' || url.hostname.endsWith('discord.com'))
+    return ['discord_clicked', { placement: at }];
+  return null;
+}
+
+function trackLinks() {
+  document.addEventListener(
+    'click',
+    (event) => {
+      const anchor = (event.target as Element | null)?.closest?.('a[href]');
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      const hit = linkEvent(anchor);
+      if (hit) track(...hit);
+    },
+    { capture: true },
+  );
+}
+
 function consentBar(posthog: PostHog, register: () => void) {
   if (posthog.get_explicit_consent_status() !== 'pending') return;
   const t = COPY[pathLang()];
@@ -68,7 +125,7 @@ function consentBar(posthog: PostHog, register: () => void) {
     button(t.accept, () => {
       // opting in starts a fresh persistent identity: give it the super properties and this page
       // (with its UTM) as its first pageview, since the earlier cookieless one can't be linked
-      posthog.opt_in_capturing();
+      posthog.opt_in_capturing({ captureProperties: siteProperties() });
       register();
       const utm = Object.fromEntries(
         [...new URLSearchParams(location.search)].filter(([key]) => key.startsWith('utm_')),
@@ -89,6 +146,7 @@ export async function initAnalytics() {
   if (normalized) history.replaceState(history.state, '', normalized);
   // builds without a project key (local dev, forks) send nothing
   if (!KEY) return;
+  trackLinks();
   // loaded after the page so analytics never delays it
   const { default: posthog } = await import('posthog-js');
   posthog.init(KEY, {
@@ -106,7 +164,7 @@ export async function initAnalytics() {
     // a consenting visitor's first-touch UTM lives on their (anonymous) person
     person_profiles: 'always',
   });
-  const register = () => posthog.register({ source: 'site', lang: pathLang() });
+  const register = () => posthog.register(siteProperties());
   register();
   client = posthog;
   for (const [event, properties] of queued.splice(0)) posthog.capture(event, properties);

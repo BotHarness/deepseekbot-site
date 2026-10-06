@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { track } from '../analytics';
 import type { Copy } from '../content';
 
 export function PromoVideo({ copy }: { copy: Copy }) {
@@ -8,6 +9,7 @@ export function PromoVideo({ copy }: { copy: Copy }) {
 
   const start = () => {
     setStarted(true);
+    track('video_played');
     void video.current?.play();
   };
 
