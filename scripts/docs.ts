@@ -47,6 +47,8 @@ const UI = {
     skip: '跳到正文',
     copy: '复制',
     copied: '已复制',
+    toc: '本页内容',
+    search: '搜索',
     footer: '开源，MIT 许可。',
     privacy: '隐私说明',
   },
@@ -74,6 +76,8 @@ const UI = {
     skip: 'Skip to content',
     copy: 'Copy',
     copied: 'Copied',
+    toc: 'On this page',
+    search: 'Search',
     footer: 'Open source under the MIT license.',
     privacy: 'Privacy',
   },
@@ -81,6 +85,12 @@ const UI = {
 
 const escape = (text: string) =>
   text.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+const decode = (html: string) =>
+  html.replace(
+    /&(amp|lt|gt|quot|#39);/g,
+    (_, e: string) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" })[e]!,
+  );
 
 const home = (lang: Lang) => (lang === 'zh' ? '/' : '/en/');
 export const docPath = (lang: Lang, slug: string) => `${lang === 'zh' ? '' : '/en'}/docs/${slug}/`;
@@ -130,9 +140,22 @@ function href(lang: Lang, url: string, slugs: Set<string>): string {
   return `${UPSTREAM}${upstream}${hash}`;
 }
 
+interface Heading {
+  id: string;
+  depth: number;
+  text: string;
+}
+
+interface Rendered {
+  html: string;
+  /** the h2 and h3 headings, for the page's table of contents */
+  headings: Heading[];
+}
+
 function markdown(lang: Lang, slugs: Set<string>) {
   const md = new Marked({ gfm: true });
   const ids = new Map<string, number>();
+  let headings: Heading[] = [];
   md.use({
     walkTokens(token) {
       if (token.type === 'link' || token.type === 'image') {
@@ -153,6 +176,7 @@ function markdown(lang: Lang, slugs: Set<string>) {
         const n = ids.get(base) ?? 0;
         ids.set(base, n + 1);
         const id = n ? `${base}-${n}` : base;
+        if (depth === 2 || depth === 3) headings.push({ id, depth, text: decode(plain) });
         return `<h${depth} id="${id}"><a class="anchor" href="#${id}" aria-hidden="true">#</a>${text}</h${depth}>\n`;
       },
       link({ href: url, title, tokens }) {
@@ -169,12 +193,14 @@ function markdown(lang: Lang, slugs: Set<string>) {
       },
     },
   });
-  return (body: string) => {
+  return (body: string): Rendered => {
     ids.clear();
+    headings = [];
     // wide tables scroll inside their own box instead of widening the page
-    return (md.parse(body, { async: false }) as string)
+    const html = (md.parse(body, { async: false }) as string)
       .replaceAll('<table>', '<div class="table-wrap"><table>')
       .replaceAll('</table>', '</table></div>');
+    return { html, headings };
   };
 }
 
@@ -191,6 +217,24 @@ function sidebar(lang: Lang, docs: Doc[], current: string) {
   return `<nav class="docs-nav" aria-label="${t.guides}"><details open><summary>${t.menu}</summary><p class="docs-nav-title">${t.guides}</p><ul>${items}</ul></details></nav>`;
 }
 
+/** The page's sections on the right; it folds above the article on narrower screens. */
+function toc(lang: Lang, headings: Heading[]) {
+  // one section is not worth a contents list
+  if (headings.length < 2) return '';
+  const t = UI[lang];
+  const items = headings
+    .map(
+      (h) =>
+        `<li${h.depth === 3 ? ' class="docs-toc-child"' : ''}><a href="#${h.id}">${escape(h.text)}</a></li>`,
+    )
+    .join('');
+  return `<nav class="docs-toc" aria-label="${t.toc}"><details open><summary>${t.toc}</summary><p class="docs-toc-title">${t.toc}</p><ul>${items}</ul></details></nav>`;
+}
+
+/** The header's search button; src/docs.ts opens the search box from it or from Ctrl/⌘+K. */
+export const searchButton = (lang: Lang) =>
+  `<button type="button" class="search-open" data-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K"><svg class="search-icon" viewBox="0 0 7 7" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 0h3v1H1zM0 1h1v3H0zM4 1h1v3H4zM1 4h3v1H1zM4 4h1v1H4zM5 5h2v1H5zM5 6h2v1H5z"/></svg><span class="search-label">${UI[lang].search}</span><kbd class="search-kbd" data-search-kbd>Ctrl K</kbd></button>`;
+
 /**
  * A guide page, or with `at` a standalone page (the privacy notice) outside the guide list: no
  * sidebar, pager or source link.
@@ -199,11 +243,12 @@ function page(
   lang: Lang,
   doc: Doc,
   docs: Doc[],
-  html: string,
+  { html, headings }: Rendered,
   at: (lang: Lang) => string = (l) => docPath(l, doc.slug),
 ) {
   const t = UI[lang];
   const guide = docs.includes(doc);
+  const contents = guide ? toc(lang, headings) : '';
   const i = docs.indexOf(doc);
   const prev = docs[i - 1];
   const next = docs[i + 1];
@@ -262,7 +307,7 @@ function page(
       } catch (e) {}
     </script>
   </head>
-  <body data-docs data-copy="${t.copy}" data-copied="${t.copied}">
+  <body data-docs data-lang="${lang}" data-copy="${t.copy}" data-copied="${t.copied}">
     <a class="skip" href="#main">${t.skip}</a>
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
@@ -279,6 +324,7 @@ function page(
         <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
       <div class="toggles">
+        ${searchButton(lang)}
         <nav class="lang-switch" aria-label="${t.lang}">
           <a href="${at('zh')}" hreflang="zh-Hans" lang="zh-Hans"${lang === 'zh' ? ' aria-current="page"' : ''}>中文</a>
           <a href="${at('en')}" hreflang="en" lang="en"${lang === 'en' ? ' aria-current="page"' : ''}>EN</a>
@@ -289,7 +335,7 @@ function page(
         </div>
       </div>
     </header>
-    <div class="docs-layout${guide ? '' : ' docs-standalone'}">
+    <div class="docs-layout${guide ? '' : ' docs-standalone'}${contents ? ' docs-has-toc' : ''}">
       ${guide ? sidebar(lang, docs, doc.slug) : ''}
       <main id="main" class="docs-main">
         <article class="docs-article frame">
@@ -305,6 +351,7 @@ function page(
             : ''
         }
       </main>
+      ${contents}
     </div>
     <footer class="footer"><p>DeepSeekBot · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
     <script type="module" src="/src/docs.ts"></script>
@@ -358,4 +405,55 @@ export function docsSitemap(): string {
         .join('\n');
     })
     .join('\n');
+}
+
+/** One searchable section: a guide's intro or the text under one of its h2/h3 headings. */
+export interface SearchEntry {
+  /** guide title */
+  t: string;
+  /** section heading, empty for the text before the first heading */
+  h: string;
+  /** page path with the section's #anchor */
+  u: string;
+  /** the section's plain text */
+  x: string;
+}
+
+const plainText = (html: string) =>
+  decode(
+    html
+      .replace(/<a class="anchor"[^>]*>#<\/a>/g, '')
+      // block boundaries become spaces; inline tags vanish so 「插件层」 stays next to its comma
+      .replace(/<\/?(?:p|li|ul|ol|h\d|pre|div|table|tr|td|th|blockquote|br|hr|img)\b[^>]*>/g, ' ')
+      .replace(/<[^>]+>/g, ''),
+  )
+    .replace(/\s+/g, ' ')
+    .trim();
+
+/**
+ * The client-side search index for one language (served as /search/<lang>.json): every guide cut
+ * into sections at its h2 and h3 headings, so a hit can link straight to its section.
+ */
+export function searchIndex(lang: Lang): SearchEntry[] {
+  const docs = read(lang);
+  const render = markdown(lang, new Set(docs.map((d) => d.slug)));
+  return docs.flatMap((doc) => {
+    const path = docPath(lang, doc.slug);
+    const parts = render(doc.body).html.split(/(?=<h[23] id=")/);
+    return parts.flatMap((part, i) => {
+      const head = part.match(/^<h[23] id="([^"]+)">([\s\S]*?)<\/h[23]>/);
+      const heading = head ? plainText(head[2]!) : '';
+      const text = plainText(head ? part.slice(head[0].length) : part);
+      const intro = i === 0 && !head;
+      if (!text && !heading) return [];
+      return [
+        {
+          t: doc.title,
+          h: heading,
+          u: head ? `${path}#${head[1]}` : path,
+          x: intro ? `${doc.description} ${text}`.trim() : text,
+        },
+      ];
+    });
+  });
 }

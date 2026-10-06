@@ -37,7 +37,11 @@ pnpm verify   # format:check, lint, typecheck, build
   copied from a BotHarness checkout with `BOTHARNESS=../BotHarness pnpm docs:sync` (screenshots go
   to `public/guides`). The build renders them into static pages at `/docs/<slug>/` and
   `/en/docs/<slug>/` (`scripts/docs.ts`; the generated `docs/` and `en/docs/` folders are not
-  committed) and lists them in `sitemap.xml`. Developer docs stay on botharness.ai.
+  committed) and lists them in `sitemap.xml`. Each guide gets an "On this page" list of its h2/h3
+  sections on the right (folded above the article below 1180px). Ctrl/⌘+K or the header's search
+  button opens a client-side search over `/search/zh.json` or `/search/en.json`, built from the
+  same Markdown at build time (one entry per section, plain substring matching so Chinese needs no
+  segmenter; `src/search.ts`). Developer docs stay on botharness.ai.
 - **Frames**: the wooden nine-slice frame is pixel art in `scripts/frame-svg.mjs`; run
   `pnpm frames` after editing it to regenerate `src/frames.css`.
 - The visual direction takes cues from Stardew Valley UIs such as
@@ -48,7 +52,7 @@ pnpm verify   # format:check, lint, typecheck, build
 
 Anonymous PostHog analytics, as decided in BotHarness ADR-0132 (`src/analytics.ts`). A build sends nothing unless `VITE_POSTHOG_KEY` (the project's public `phc_…` key) is set, for example in `.env.production`; `VITE_POSTHOG_HOST` overrides the ingest proxy (default `https://t.botharness.ai`). Visitors get a consent box: accepting keeps an anonymous ID for cross-day attribution, declining falls back to PostHog's cookieless mode, which must also be enabled in the PostHog project settings. `?ref=<x>` is rewritten to `utm_source=<x>` before PostHog starts. `/privacy/` and `/en/privacy/` render from `content/privacy/{zh,en}.md`.
 
-Every event carries `source: site`, `lang` and `page` (`home`, `market`, `docs`, `privacy`, `changelog`). Named events go through `track()` in the component that owns the control: `install_tab_switched`, `install_command_copied`, `qq_group_copied`, `video_played`, `avatar_downloaded`, `market_bot_opened`, `market_install_clicked`. Outbound GitHub and Discord links, links into the marketplace, docs and changelog, and the language switch are caught by one delegated click listener in `src/analytics.ts`, so they also work on the static docs pages: `github_clicked` (`target` path), `discord_clicked`, `market_clicked`, `docs_clicked`, `changelog_clicked` (`target` path; not fired for links within the same page family) and `language_switched` (`to`), each with a `placement`: a `data-placement` on the link or an ancestor (`hero_signpost`, `install_desktop`, `install_dev`), else `header`, `footer`, or the section id.
+Every event carries `source: site`, `lang` and `page` (`home`, `market`, `docs`, `privacy`, `changelog`). Named events go through `track()` in the component that owns the control: `install_tab_switched`, `install_command_copied`, `qq_group_copied`, `video_played`, `avatar_downloaded`, `market_bot_opened`, `market_install_clicked`, and on the docs and changelog pages `docs_search_opened` (`via`: `shortcut` or `button`), `docs_search_queried` (`query`, `results`; sent once typing pauses for a second) and `docs_search_result_opened` (`query`, `position`, `target`). Outbound GitHub and Discord links, links into the marketplace, docs and changelog, and the language switch are caught by one delegated click listener in `src/analytics.ts`, so they also work on the static docs pages: `github_clicked` (`target` path), `discord_clicked`, `market_clicked`, `docs_clicked`, `changelog_clicked` (`target` path; not fired for links within the same page family) and `language_switched` (`to`), each with a `placement`: a `data-placement` on the link or an ancestor (`hero_signpost`, `install_desktop`, `install_dev`), else `header`, `footer`, or the section id.
 
 ## Deploy
 
