@@ -1,5 +1,6 @@
 import { Button } from '@astryxdesign/core/Button';
 import { useState } from 'react';
+import { track } from '../analytics';
 import { LINKS, QQ_GROUP, type Copy } from '../content';
 import { SymbolIcon } from './SymbolIcon';
 
@@ -33,8 +34,14 @@ export function Community({ copy }: { copy: Copy }) {
         <Button
           label={copied ? copy.install.copied : copy.install.copy}
           clickAction={async () => {
-            await navigator.clipboard.writeText(QQ_GROUP);
+            try {
+              await navigator.clipboard.writeText(QQ_GROUP);
+            } catch {
+              // the browser refused the clipboard; the text stays on screen to select by hand
+              return;
+            }
             setCopied(true);
+            track('qq_group_copied');
             setTimeout(() => setCopied(false), 1600);
           }}
         />

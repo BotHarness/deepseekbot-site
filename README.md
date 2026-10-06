@@ -48,6 +48,23 @@ pnpm verify   # format:check, lint, typecheck, build
 
 Anonymous PostHog analytics, as decided in BotHarness ADR-0132 (`src/analytics.ts`). A build sends nothing unless `VITE_POSTHOG_KEY` (the project's public `phc_…` key) is set, for example in `.env.production`; `VITE_POSTHOG_HOST` overrides the ingest proxy (default `https://t.botharness.ai`). Visitors get a consent box: accepting keeps an anonymous ID for cross-day attribution, declining falls back to PostHog's cookieless mode, which must also be enabled in the PostHog project settings. `?ref=<x>` is rewritten to `utm_source=<x>` before PostHog starts. `/privacy/` and `/en/privacy/` render from `content/privacy/{zh,en}.md`.
 
+Named events (no autocapture) go through `track()` in `src/analytics.ts`; every event carries the super properties `source=site`, `lang` and `page` (`home`, `market`, `docs`, `changelog`, `privacy`). Keep the names stable, the PostHog dashboard "Site named events" keys on them:
+
+| Event                    | Sent when                                                  | Properties                     |
+| ------------------------ | ---------------------------------------------------------- | ------------------------------ |
+| `install_tab_switched`   | the install section switches between desktop and developer | `tab`                          |
+| `install_command_copied` | an install command is copied                               | `tab`, `step`                  |
+| `github_clicked`         | a link to the BotHarness repository is clicked (any page)  | `placement`                    |
+| `discord_clicked`        | a Discord invite link is clicked                           | `placement`                    |
+| `qq_group_copied`        | the QQ group number is copied                              |                                |
+| `video_played`           | the promo video is started                                 |                                |
+| `avatar_downloaded`      | a pixel avatar is downloaded                               | `edited`                       |
+| `market_bot_opened`      | a Bot card in the Marketplace is opened                    | `bot` (public repository name) |
+| `market_install_clicked` | a Bot's Git URL is copied in the Marketplace               | `bot`                          |
+| `language_switched`      | the 中文 / EN switch is used (any page)                    | `to`                           |
+
+`placement` is `header`, `footer`, or the id of the page section holding the link.
+
 ## Deploy
 
 `wrangler.jsonc` deploys `dist/` as static assets on the Worker `deepseekbot-site`, with the custom

@@ -16,6 +16,7 @@ import {
   type Sort,
 } from '../marketApi';
 import { pixelTileSvg } from '../pixelTile';
+import { track } from '../analytics';
 import { Command } from './Install';
 
 const fill = (template: string, values: Record<string, string | number>) =>
@@ -372,7 +373,12 @@ export function MarketDetail({
             <div className="frame detail-card">
               <h2>{t.installTitle}</h2>
               <p className="detail-label">{t.gitUrl}</p>
-              <Command command={bot.cloneUrl} copy={copy} shell={false} />
+              <Command
+                command={bot.cloneUrl}
+                copy={copy}
+                shell={false}
+                onCopied={() => track('market_install_clicked', { bot: bot.fullName })}
+              />
               <ol className="detail-steps">
                 {t.installSteps.map((step) => (
                   <li key={step}>{step}</li>

@@ -2,6 +2,7 @@
 // accept get a persistent anonymous ID so a campaign visit that converts days later still counts;
 // visitors who decline, or never answer, are counted without anything stored on their device.
 import type { PostHog } from 'posthog-js';
+import { LINKS } from './links';
 import { pathLang } from './site';
 
 const KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
@@ -82,13 +83,14 @@ function consentBar(posthog: PostHog, register: () => void) {
 }
 
 let client: PostHog | undefined;
-const queued: [string, Record<string, unknown> | undefined][] = [];
+const queued: [SiteEvent, Record<string, unknown> | undefined][] = [];
 
 export async function initAnalytics() {
   const normalized = normalizeRef(new URL(location.href));
   if (normalized) history.replaceState(history.state, '', normalized);
   // builds without a project key (local dev, forks) send nothing
   if (!KEY) return;
+  document.addEventListener('click', trackLinkClick);
   // loaded after the page so analytics never delays it
   const { default: posthog } = await import('posthog-js');
   posthog.init(KEY, {
@@ -106,16 +108,71 @@ export async function initAnalytics() {
     // a consenting visitor's first-touch UTM lives on their (anonymous) person
     person_profiles: 'always',
   });
-  const register = () => posthog.register({ source: 'site', lang: pathLang() });
+  const register = () => posthog.register({ source: 'site', lang: pathLang(), page: pageName() });
   register();
   client = posthog;
   for (const [event, properties] of queued.splice(0)) posthog.capture(event, properties);
   consentBar(posthog, register);
 }
 
-/** Named site events (ADR-0132); a no-op when PostHog is not configured. */
-export function track(event: string, properties?: Record<string, unknown>) {
+/** The site's named events (ADR-0132); keep the names stable, PostHog insights key on them. */
+export type SiteEvent =
+  | 'install_tab_switched'
+  | 'install_command_copied'
+  | 'github_clicked'
+  | 'discord_clicked'
+  | 'qq_group_copied'
+  | 'video_played'
+  | 'avatar_downloaded'
+  | 'market_bot_opened'
+  | 'market_install_clicked'
+  | 'language_switched';
+
+/**
+ * Sends a named site event; a no-op when PostHog is not configured. `leaving` sends it at once by
+ * beacon, for a click that navigates this tab away before the next batch would go out.
+ */
+export function track(event: SiteEvent, properties?: Record<string, unknown>, leaving = false) {
   if (!KEY) return;
-  if (client) client.capture(event, properties);
+  if (client)
+    client.capture(
+      event,
+      properties,
+      leaving ? { send_instantly: true, transport: 'sendBeacon' } : undefined,
+    );
   else queued.push([event, properties]);
+}
+
+/** `home`, `market`, `docs`, `changelog` or `privacy`, the same for both languages. */
+function pageName(path = location.pathname) {
+  const [first = ''] = path
+    .replace(/^\/en(?=\/|$)/, '')
+    .split('/')
+    .filter(Boolean);
+  return first === '' ? 'home' : first.replace(/\.html$/, '');
+}
+
+/** Where on the page a link sits: `header`, `footer`, or the id of its section. */
+function placement(link: Element) {
+  if (link.closest('header')) return 'header';
+  if (link.closest('footer')) return 'footer';
+  return link.closest('section[id]')?.id ?? 'page';
+}
+
+/**
+ * The GitHub, Discord and language links also live in the generated docs, changelog and privacy
+ * pages, so they are tracked by one listener on the document rather than in each component.
+ */
+function trackLinkClick(event: MouseEvent) {
+  const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+  if (!(link instanceof HTMLAnchorElement)) return;
+  if (link.closest('.lang-switch')) {
+    if (link.getAttribute('aria-current') !== 'page')
+      track('language_switched', { to: link.hreflang === 'en' ? 'en' : 'zh' }, true);
+    return;
+  }
+  // the repository itself, not its issues or a source file the docs link to
+  if (link.href.replace(/\/$/, '') === LINKS.github)
+    track('github_clicked', { placement: placement(link) });
+  else if (link.href === LINKS.discord) track('discord_clicked', { placement: placement(link) });
 }

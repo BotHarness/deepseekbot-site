@@ -1,5 +1,6 @@
 import { Theme } from '@astryxdesign/core/theme';
 import { useEffect, useRef, useState } from 'react';
+import { track } from './analytics';
 import { MarketDetail, MarketList } from './components/Market';
 import { SiteHeader } from './components/SiteHeader';
 import { COPY } from './content';
@@ -40,6 +41,7 @@ export function MarketApp() {
   }, []);
 
   const open = (bot: MarketplaceEntry) => {
+    track('market_bot_opened', { bot: bot.fullName });
     preview.current = bot;
     openedHere.current = true;
     listScroll.current = scrollY;

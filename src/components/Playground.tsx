@@ -3,6 +3,7 @@ import { TextInput } from '@astryxdesign/core/TextInput';
 import type { PixelAvatarRecipe, PixelSymbol } from '@botharness/pixel-avatar';
 import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { SYMBOL_ORDER, type Copy } from '../content';
+import { track } from '../analytics';
 import { downloadAvatar } from '../download';
 import { recipeFor } from '../mascot';
 import { FaceEditor } from './FaceEditor';
@@ -60,7 +61,10 @@ export function Playground({ copy }: { copy: Copy }) {
             <Button
               label={t.download}
               variant="primary"
-              clickAction={() => downloadAvatar(recipe, seed)}
+              clickAction={async () => {
+                await downloadAvatar(recipe, seed);
+                track('avatar_downloaded', { edited: custom !== null });
+              }}
             />
           </div>
         </div>

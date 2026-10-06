@@ -1,16 +1,19 @@
 import { Button } from '@astryxdesign/core/Button';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { useState, type ReactNode } from 'react';
+import { track } from '../analytics';
 import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy } from '../content';
 
 export function Command({
   command,
   copy,
   shell = true,
+  onCopied,
 }: {
   command: string;
   copy: Copy;
   shell?: boolean;
+  onCopied?: () => void;
 }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -27,8 +30,14 @@ export function Command({
         size="sm"
         label={copied ? copy.install.copied : copy.install.copy}
         clickAction={async () => {
-          await navigator.clipboard.writeText(command);
+          try {
+            await navigator.clipboard.writeText(command);
+          } catch {
+            // the browser refused the clipboard; the text stays on screen to select by hand
+            return;
+          }
           setCopied(true);
+          onCopied?.();
           setTimeout(() => setCopied(false), 1600);
         }}
       />
@@ -60,7 +69,11 @@ export function Install({ copy }: { copy: Copy }) {
       <SegmentedControl
         label={t.tabsLabel}
         value={way}
-        onChange={(value) => setWay(value === 'dev' ? 'dev' : 'desktop')}
+        onChange={(value) => {
+          const next = value === 'dev' ? 'dev' : 'desktop';
+          if (next !== way) track('install_tab_switched', { tab: next });
+          setWay(next);
+        }}
       >
         <SegmentedControlItem value="desktop" label={t.desktopTab} />
         <SegmentedControlItem value="dev" label={t.devTab} />
@@ -72,7 +85,14 @@ export function Install({ copy }: { copy: Copy }) {
           <ol className="steps">
             {t.desktop.steps.map((step, i) => (
               <Step key={step} n={i + 1} title={step}>
-                {i === 1 ? <Command command={DESKTOP_PACKAGE} copy={copy} shell={false} /> : null}
+                {i === 1 ? (
+                  <Command
+                    command={DESKTOP_PACKAGE}
+                    copy={copy}
+                    shell={false}
+                    onCopied={() => track('install_command_copied', { tab: 'desktop', step: 2 })}
+                  />
+                ) : null}
               </Step>
             ))}
           </ol>
@@ -91,7 +111,11 @@ export function Install({ copy }: { copy: Copy }) {
           <ol className="steps">
             {INSTALL_STEPS.map((command, i) => (
               <Step key={command} n={i + 1} title={t.steps[i] ?? ''}>
-                <Command command={command} copy={copy} />
+                <Command
+                  command={command}
+                  copy={copy}
+                  onCopied={() => track('install_command_copied', { tab: 'dev', step: i + 1 })}
+                />
               </Step>
             ))}
           </ol>
