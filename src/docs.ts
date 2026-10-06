@@ -1,6 +1,9 @@
 import '@astryxdesign/core/reset.css';
 import './styles.css';
 import './docs.css';
+import { initAnalytics } from './analytics';
+
+void initAnalytics();
 
 // The guide pages are static HTML; this adds the day/night switch and copy buttons.
 const root = document.documentElement;

@@ -1,9 +1,10 @@
 # pnpm 12 refuses a dependency's install script unless it is listed here.
 # esbuild and workerd (via wrangler) download their platform binaries; Astryx's
-# scripts only print an "astryx init" hint.
+# scripts only print an "astryx init" hint; core-js (via posthog-js) only prints a banner.
 allowBuilds:
   '@astryxdesign/cli': false
   '@astryxdesign/core': false
+  core-js: false
   esbuild: true
   workerd: true
 
