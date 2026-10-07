@@ -1,4 +1,3 @@
-import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { LINKS, type Copy, type Lang } from '../content';
 import { changelogPath, docsPath, homePath, marketPath, type Mode } from '../site';
 import { navIconSvg, type NavIcon } from '../navIcons';
@@ -70,15 +69,18 @@ export function SiteHeader({
               EN
             </a>
           </nav>
-          <SegmentedControl
-            label={copy.modeLabel}
-            size="sm"
-            value={mode}
-            onChange={(value) => onMode(value === 'dark' ? 'dark' : 'light')}
-          >
-            <SegmentedControlItem value="light" label={copy.modeLight} />
-            <SegmentedControlItem value="dark" label={copy.modeDark} />
-          </SegmentedControl>
+          <div className="lang-switch" role="group" aria-label={copy.modeLabel}>
+            {(['light', 'dark'] as const).map((value) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={mode === value}
+                onClick={() => onMode(value)}
+              >
+                {value === 'light' ? copy.modeLight : copy.modeDark}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
     </>
