@@ -1,6 +1,8 @@
 import { Button } from '@astryxdesign/core/Button';
 import { Theme } from '@astryxdesign/core/theme';
 import { useEffect, useState } from 'react';
+import { BotCompanion } from './components/BotCompanion';
+import { useAvatarDesign } from './avatarDesign';
 import { Community } from './components/Community';
 import { Crew } from './components/Crew';
 import { Install } from './components/Install';
@@ -16,6 +18,7 @@ export function App() {
   const lang = pathLang();
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
+  const design = useAvatarDesign();
 
   useEffect(() => {
     document.documentElement.lang = copy.htmlLang;
@@ -133,7 +136,7 @@ export function App() {
               </span>
             </a>
           </p>
-          <Playground copy={copy} />
+          <Playground copy={copy} design={design} />
         </section>
 
         <section className="section" id="install" aria-labelledby="install-title">
@@ -149,6 +152,8 @@ export function App() {
           <Community copy={copy} />
         </section>
       </main>
+
+      <BotCompanion lang={lang} design={design} />
 
       <footer className="footer">
         <div className="footer-links">

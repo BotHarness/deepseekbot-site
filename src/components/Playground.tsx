@@ -1,24 +1,17 @@
 import { Button } from '@astryxdesign/core/Button';
 import { TextInput } from '@astryxdesign/core/TextInput';
-import type { PixelAvatarRecipe, PixelSymbol } from '@botharness/pixel-avatar';
-import { useDeferredValue, useMemo, useRef, useState } from 'react';
+import type { PixelSymbol } from '@botharness/pixel-avatar';
+import { useRef, useState } from 'react';
 import { SYMBOL_ORDER, type Copy } from '../content';
 import { track } from '../analytics';
 import { downloadAvatar } from '../download';
-import { recipeFor } from '../mascot';
+import type { AvatarDesign } from '../avatarDesign';
 import { FaceEditor } from './FaceEditor';
 import { PixelAvatar, type PixelAvatarHandle } from './PixelAvatar';
 import { SymbolIcon } from './SymbolIcon';
 
-const NAMES = ['Mira', 'Theo', 'Nova', 'Juno', 'Kai', 'Lumi', 'Orion', 'Pixel', 'Sora', 'Ada'];
-
-export function Playground({ copy }: { copy: Copy }) {
-  const [name, setName] = useState('DeepSeekBot');
-  const seed = useDeferredValue(name.trim() || 'DeepSeekBot');
-  const named = useMemo(() => recipeFor(seed), [seed]);
-  // a face edited in the editor wins until the name changes or it is reset
-  const [custom, setCustom] = useState<PixelAvatarRecipe | null>(null);
-  const recipe = custom ?? named;
+export function Playground({ copy, design }: { copy: Copy; design: AvatarDesign }) {
+  const { name, seed, recipe, edited } = design;
   const avatar = useRef<PixelAvatarHandle>(null);
   const [tool, setTool] = useState<PixelSymbol | null>(null);
   const t = copy.playground;
@@ -29,10 +22,8 @@ export function Playground({ copy }: { copy: Copy }) {
   };
 
   const shuffle = () => {
-    const others = NAMES.filter((n) => n !== name);
     setTool(null);
-    setCustom(null);
-    setName(others[Math.floor(Math.random() * others.length)]!);
+    design.shuffle();
   };
 
   return (
@@ -52,8 +43,7 @@ export function Playground({ copy }: { copy: Copy }) {
             placeholder={t.namePlaceholder}
             onChange={(value) => {
               setTool(null);
-              setCustom(null);
-              setName(value.slice(0, 32));
+              design.rename(value);
             }}
           />
           <div className="playground-buttons">
@@ -62,7 +52,7 @@ export function Playground({ copy }: { copy: Copy }) {
               label={t.download}
               variant="primary"
               clickAction={() => {
-                track('avatar_downloaded', { edited: custom !== null });
+                track('avatar_downloaded', { edited: edited });
                 return downloadAvatar(recipe, seed);
               }}
             />
@@ -71,14 +61,14 @@ export function Playground({ copy }: { copy: Copy }) {
         <FaceEditor
           copy={copy}
           recipe={recipe}
-          edited={custom !== null}
+          edited={edited}
           onChange={(next) => {
             setTool(null);
-            setCustom(next);
+            design.edit(next);
           }}
           onReset={() => {
             setTool(null);
-            setCustom(null);
+            design.reset();
           }}
         />
         <fieldset className="playground-tools">
