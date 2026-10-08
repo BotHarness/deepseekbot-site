@@ -61,6 +61,7 @@ interface Feature {
   title: string;
   body: string;
   tag?: string;
+  guide?: { slug: string; label: string };
 }
 
 export interface Copy {
@@ -179,7 +180,7 @@ export interface Copy {
     };
     lead: string;
     steps: string[];
-    next: { title: string; button: string };
+    next: { title: string; button: string; overview: string };
     copy: string;
     copied: string;
     after: string;
@@ -243,7 +244,7 @@ const zh: Copy = {
   features: {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
-    lead: '以下都是已经交付的能力。安装后账号默认不连接，由你逐个开启。',
+    lead: '核心能力随 v1.1.0 提供。下方另有最新源码的接入流程与可选组件；外部账号和操作权限由你开启。',
     items: [
       {
         icon: 'present',
@@ -273,13 +274,16 @@ const zh: Copy = {
       {
         icon: 'web',
         title: '自己的 IM 身份',
-        body: '在飞书 / Lark、Slack、Discord 和微信里绑定 Bot 自己的身份，被 @ 时在原话题里回复。只有你授权过的群和频道才会进入 Bot 的 Inbox。',
+        body: '连接飞书 / Lark、Slack、Discord 或个人微信。微信仅接收扫码者私聊；其他平台按各自会话规则收件、回复。最新源码：设置连接应用 → 私聊侧栏「外部身份」绑定 → 发消息测试；新会话可自动接收或先询问。',
+        tag: '接入流程：最新源码',
+        guide: { slug: 'capabilities', label: '平台范围与绑定步骤' },
       },
       {
         icon: 'bash',
         title: 'Computer 与 Browser use',
-        body: 'Bot 可以操作共享桌面（需要 Docker）或受管浏览器，你能实时观看，也能暂停它的浏览器操作。按 Bot 单独开启，默认每个 Session 第一次操作前先请你授权。',
-        tag: '源码版可选',
+        body: '可用 macOS 本机电脑、授权的日常 Chrome 页面 / Profile、本机或 Docker 受管浏览器，以及 Docker Bot Computer。浏览器只读分享不能点击或导航，各模式权限不同。需从源码安装可选组件，npm 主包尚未包含。',
+        tag: '可选组件',
+        guide: { slug: 'capabilities', label: '选择操作目标与配置' },
       },
     ],
   },
@@ -381,12 +385,16 @@ const zh: Copy = {
     },
     lead: `需要 Node 22 以上。DeepSeekBot 当前支持 DSH ${DSH_VERSION} 起的 0.2 系列。`,
     steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
-    next: { title: '装好了？接下来看看怎么用', button: '查看使用文档' },
+    next: {
+      title: '装好了？选择接入方式与可选能力',
+      button: '查看接入与配置',
+      overview: '使用文档总览',
+    },
     copy: '复制',
     copied: '已复制',
     after:
-      '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。要接入飞书、Slack、Discord 或微信，到「设置 → IM bots」连接应用，再在 Bot 的 Profile 里绑定身份、授权群组。',
-    note: '想先试试又不想动现有配置，可以换一个新的 Profile 名字。',
+      '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。接入指南区分 v1.1.0 与最新源码流程；在新版中，从私聊侧栏「外部身份」绑定已连接的应用。',
+    note: '此入口安装 npm 正式版 v1.1.0，不包含可选 Computer / Browser 组件。想独立试用，可换一个新的 Profile 名字。',
   },
   dsh: {
     title: '站在 DeepSeek Harness 上',
@@ -462,7 +470,7 @@ const en: Copy = {
   features: {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
-    lead: 'Everything below has shipped. Accounts start disconnected after install; you turn each one on.',
+    lead: 'Core features come with v1.1.0. Current-source setup and optional components are labelled below; you enable external accounts and action permissions.',
     items: [
       {
         icon: 'present',
@@ -492,13 +500,16 @@ const en: Copy = {
       {
         icon: 'web',
         title: 'Their own IM identity',
-        body: 'Bind a Bot to its own identity in Lark / Feishu, Slack, Discord and WeChat, and it replies in the original thread when mentioned. Only groups and channels you authorize reach its Inbox.',
+        body: 'Connect Lark / Feishu, Slack, Discord or personal WeChat. WeChat accepts only the QR owner’s DMs; each platform has its own intake and reply rules. Current source: connect in Settings → bind in the DM sidebar’s External identities → send a test. New conversations can be automatic or ask first.',
+        tag: 'Setup: current source',
+        guide: { slug: 'capabilities', label: 'Platform scope and binding steps' },
       },
       {
         icon: 'bash',
         title: 'Computer and Browser use',
-        body: 'Bots can drive a shared desktop (needs Docker) or a managed browser. You can watch live and pause its browsing. Enabled per Bot, and by default each Session asks you before its first action.',
-        tag: 'Source build, optional',
+        body: 'Choose a local macOS computer, an authorized daily Chrome document / Profile, a local or Docker managed browser, or a Docker Bot Computer. Read-only sharing cannot click or navigate; tools differ by mode. Optional components require a source setup and are absent from the npm product.',
+        tag: 'Optional components',
+        guide: { slug: 'capabilities', label: 'Choose a target and set it up' },
       },
     ],
   },
@@ -605,12 +616,16 @@ const en: Copy = {
       'Add DeepSeekBot to the web Profile',
       'Start it and open Bot mode',
     ],
-    next: { title: 'Installed? See what to do next', button: 'Read the guides' },
+    next: {
+      title: 'Installed? Choose connections and optional tools',
+      button: 'Connections and setup',
+      overview: 'All user guides',
+    },
     copy: 'Copy',
     copied: 'Copied',
     after:
-      'Open Bot mode, create a PersonaBot, DM it, then start a Group and invite members. To use Lark, Slack, Discord or WeChat, connect the app in Settings → IM bots, then bind the identity and authorize a group in the Bot’s Profile.',
-    note: 'To try it without touching your current setup, use a new Profile name.',
+      'Open Bot mode, create a PersonaBot, DM it, then invite members to a Group. The setup guide separates v1.1.0 from current source; newer builds bind connected apps in the DM sidebar’s External identities.',
+    note: 'This installs npm v1.1.0 without the optional Computer / Browser components. Use a new Profile name for a separate trial.',
   },
   dsh: {
     title: 'Built on DeepSeek Harness',

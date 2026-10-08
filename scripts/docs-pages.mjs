@@ -2,6 +2,38 @@
 // descriptions come from BotHarness scripts/sync-docs.mjs, or the .mdx frontmatter when absent.
 export const DOC_PAGES = [
   {
+    slug: 'capabilities',
+    order: 11,
+    siteSource: true,
+    en: {
+      source: 'content/site-guides/en/capabilities.md',
+      title: 'Connections and optional tools',
+      description:
+        'Choose an IM connection or computer/browser target, with release and permission boundaries.',
+    },
+    zh: {
+      source: 'content/site-guides/zh/capabilities.md',
+      title: '接入与可选能力',
+      description: '选择 IM 接入和电脑、浏览器目标，了解版本、安装要求与权限范围。',
+    },
+  },
+  {
+    slug: 'channel-sidebar/external-identities',
+    order: 9,
+    parent: 'channel-sidebar',
+    currentSource: true,
+    en: {
+      source: 'docs/channel-sidebar/external-identities.md',
+      title: 'External identities',
+      description: 'Bind a connected app in the Bot DM sidebar and manage new conversations.',
+    },
+    zh: {
+      source: 'docs/channel-sidebar/external-identities.zh.md',
+      title: '外部身份',
+      description: '在 Bot 私聊侧栏绑定已连接的应用，管理新会话接收方式。',
+    },
+  },
+  {
     slug: 'channel-sidebar',
     order: 15,
     en: {
@@ -142,17 +174,17 @@ export const DOC_PAGES = [
   },
   {
     slug: 'wechat-connection',
+    currentSource: true,
     order: 25,
     en: {
       source: 'docs/wechat-connection.md',
       title: 'Connect a Bot to personal WeChat',
-      description:
-        'Pair a WeChat Bot, authorize owner text DMs and verify original-conversation replies.',
+      description: 'Pair a personal WeChat Bot, bind the owner DM identity and verify replies.',
     },
     zh: {
       source: 'docs/wechat-connection.zh.md',
       title: '连接个人微信',
-      description: '扫码绑定微信 Bot、授权扫码者文字私聊，并核对原会话回复。',
+      description: '扫码连接个人微信 Bot、绑定扫码者私聊身份，并核对回复。',
     },
   },
   {
@@ -171,6 +203,7 @@ export const DOC_PAGES = [
   },
   {
     slug: 'settings',
+    currentSource: true,
     order: 14,
     en: {
       source: 'docs/settings.md',
@@ -185,6 +218,7 @@ export const DOC_PAGES = [
   },
   {
     slug: 'installation',
+    currentSource: true,
     order: 12,
     en: {
       source: 'docs/installation.md',
@@ -199,36 +233,37 @@ export const DOC_PAGES = [
   },
   {
     slug: 'slack-connection',
+    currentSource: true,
     order: 24,
     en: {
       source: 'docs/slack-connection.md',
       title: 'Connect a Bot to Slack',
-      description:
-        'Configure a Slack app, bind a Bot identity and verify authorized public-channel messages.',
+      description: 'Connect a Slack app, bind it in the Bot DM sidebar and manage conversations.',
     },
     zh: {
       source: 'docs/slack-connection.zh.md',
       title: '连接 Slack',
-      description: '配置 Slack 应用、绑定 Bot 身份，并验证已授权公共频道的收件与原话题回复。',
+      description: '连接 Slack 应用，在 Bot 私聊侧栏绑定，并管理会话。',
     },
   },
   {
     slug: 'lark-connection',
+    currentSource: true,
     order: 23,
     en: {
       source: 'docs/lark-connection.md',
       title: 'Connect a Bot to Lark / Feishu',
-      description:
-        'Set up an application bot, bind its identity and route authorized group messages.',
+      description: 'Connect an application bot, bind its identity and manage group conversations.',
     },
     zh: {
       source: 'docs/lark-connection.zh.md',
       title: '连接 Lark / 飞书',
-      description: '配置应用机器人、绑定外部身份，并把授权群消息接入 Bot 收件箱或频道。',
+      description: '连接应用机器人、绑定外部身份，并管理群会话收件。',
     },
   },
   {
     slug: 'daily-browser',
+    currentSource: true,
     order: 22,
     en: {
       source: 'docs/daily-browser.md',

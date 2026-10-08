@@ -15,7 +15,7 @@ Cloudflare Workers static assets.
 ```bash
 pnpm install
 pnpm dev      # http://localhost:5173
-pnpm verify   # format:check, lint, typecheck, build
+pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 ```
 
 - **Copy** lives in `src/content.ts`. It only claims what the BotHarness README, CONTEXT and
@@ -35,7 +35,13 @@ pnpm verify   # format:check, lint, typecheck, build
   links already shared keep working.
 - **Docs**: the DeepSeekBot guides (formerly botharness.ai/docs) live in `content/docs/{zh,en}`,
   copied from a BotHarness checkout with `BOTHARNESS=../BotHarness pnpm docs:sync` (screenshots go
-  to `public/guides`). The build renders them into static pages at `/docs/<slug>/` and
+  to `public/guides`). To update a bounded set without replacing other guides or media, use
+  `BOTHARNESS=../BotHarness pnpm docs:sync --only capabilities,channel-sidebar/external-identities,lark-connection,slack-connection,wechat-connection,daily-browser,settings,installation`.
+  Site-owned copy lives in `content/site-guides/{zh,en}` and is included via `siteSource` in
+  `scripts/docs-pages.mjs`; both full and scoped syncs preserve its authored source. Current-source
+  guides carry a release notice and the copied upstream SHA. `editorialBody` in the sync script
+  corrects historical pre-release installation statements without discarding qualification records.
+  The build renders them into static pages at `/docs/<slug>/` and
   `/en/docs/<slug>/` (`scripts/docs.ts`; the generated `docs/` and `en/docs/` folders are not
   committed) and lists them in `sitemap.xml`. Each guide gets an "On this page" list of its h2/h3
   sections on the right (folded above the article below 1180px). Ctrl/⌘+K or the header's search

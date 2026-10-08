@@ -3,7 +3,7 @@ import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/Segme
 import { useState, type ReactNode } from 'react';
 import { track } from '../analytics';
 import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy, type Lang } from '../content';
-import { docsPath } from '../site';
+import { docsPath, guidePath } from '../site';
 
 export function Command({
   command,
@@ -66,7 +66,14 @@ function NextStep({ copy, lang, way }: { copy: Copy; lang: Lang; way: Way }) {
       </span>
       <div>
         <p className="step-title">{copy.install.next.title}</p>
-        <Button label={`${copy.install.next.button} →`} variant="primary" href={docsPath(lang)} />
+        <Button
+          label={`${copy.install.next.button} →`}
+          variant="primary"
+          href={guidePath(lang, 'capabilities')}
+        />
+        <p>
+          <a href={docsPath(lang)}>{copy.install.next.overview} →</a>
+        </p>
       </div>
     </li>
   );
