@@ -321,19 +321,19 @@ function page(
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
         <a href="${docPath(lang, 'overview')}"${guide ? ' aria-current="page"' : ''}><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
-        <a href="${home(lang)}changelog/"><span class="nav-icon-wrap">${navIconSvg('changelog')}</span>${t.nav.changelog}</a>
+        <a class="nav-changelog" href="${home(lang)}changelog/"><span class="nav-icon-wrap">${navIconSvg('changelog')}</span>${t.nav.changelog}</a>
+        ${searchButton(lang)}
       </nav>
       <div class="header-actions">
         ${headerCommunityMarkup(lang)}
         <div class="toggles">
-        ${searchButton(lang)}
         <nav class="lang-switch" aria-label="${t.lang}">
           <a href="${at('zh')}" hreflang="zh-Hans" lang="zh-Hans"${lang === 'zh' ? ' aria-current="page"' : ''}>中文</a>
           <a href="${at('en')}" hreflang="en" lang="en"${lang === 'en' ? ' aria-current="page"' : ''}>EN</a>
         </nav>
         <div class="mode-switch" role="group" aria-label="${t.mode}">
-          <button type="button" data-mode="light">${t.light}</button>
-          <button type="button" data-mode="dark">${t.dark}</button>
+          <button type="button" data-mode="light" aria-label="${t.light}" title="${t.light}">${navIconSvg('sun')}</button>
+          <button type="button" data-mode="dark" aria-label="${t.dark}" title="${t.dark}">${navIconSvg('moon')}</button>
         </div>
       </div>
       </div>

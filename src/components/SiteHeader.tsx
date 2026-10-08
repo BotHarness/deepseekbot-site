@@ -41,7 +41,7 @@ export function SiteHeader({
             <Icon name="docs" />
             {copy.nav.docs}
           </a>
-          <a href={changelogPath(lang)}>
+          <a className="nav-changelog" href={changelogPath(lang)}>
             <Icon name="changelog" />
             {copy.nav.changelog}
           </a>
@@ -67,15 +67,17 @@ export function SiteHeader({
                 EN
               </a>
             </nav>
-            <div className="lang-switch" role="group" aria-label={copy.modeLabel}>
+            <div className="mode-switch" role="group" aria-label={copy.modeLabel}>
               {(['light', 'dark'] as const).map((value) => (
                 <button
                   key={value}
                   type="button"
+                  aria-label={value === 'light' ? copy.modeLight : copy.modeDark}
+                  title={value === 'light' ? copy.modeLight : copy.modeDark}
                   aria-pressed={mode === value}
                   onClick={() => onMode(value)}
                 >
-                  {value === 'light' ? copy.modeLight : copy.modeDark}
+                  <Icon name={value === 'light' ? 'sun' : 'moon'} />
                 </button>
               ))}
             </div>

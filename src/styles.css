@@ -141,7 +141,8 @@ a:where(:not(.astryx-button)) {
   position: sticky;
   top: 0;
   z-index: 5;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 24px;
   padding: 10px 24px;
@@ -220,7 +221,7 @@ a:where(:not(.astryx-button)) {
   display: flex;
   /* the switches draw a 3px outline outside their box, so leave room for both */
   gap: 14px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .header-actions {
   display: flex;
@@ -1165,30 +1166,25 @@ a:where(:not(.astryx-button)) {
 }
 
 /* ---- small screens ---- */
-/* mid widths: a tighter header so the nav and toggles stay on one row */
+/* Keep actions beside the brand; navigation gets one dedicated second row. */
 @media (max-width: 1180px) {
   .topbar {
-    gap: 16px;
-    flex-wrap: wrap;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 16px;
   }
   .topnav {
+    grid-column: 1 / -1;
+    grid-row: 2;
     gap: 14px;
+    margin-right: 0;
   }
   .topnav .nav-icon-wrap {
     display: none;
   }
   .header-actions {
+    grid-column: 2;
+    grid-row: 1;
     gap: 10px;
-  }
-}
-@media (min-width: 861px) and (max-width: 960px) {
-  .brand > span:not(.brand-logo) {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 }
 /* the crew and the signpost fit on one row once the crew stands a little closer together */
@@ -1203,27 +1199,26 @@ a:where(:not(.astryx-button)) {
     max-width: none;
   }
   .topbar {
-    flex-wrap: wrap;
-    gap: 8px 16px;
+    gap: 8px 12px;
     padding: 8px 16px;
   }
   .topnav {
-    order: 2;
     width: 100%;
-    flex-wrap: wrap;
-    gap: 6px 16px;
+    flex-wrap: nowrap;
+    gap: 16px;
   }
   .toggles {
-    gap: 10px;
+    gap: 8px;
+  }
+  .topnav .nav-changelog {
+    display: none;
   }
   .header-actions {
-    order: 3;
-    width: 100%;
-    flex-wrap: wrap;
     position: relative;
   }
   .header-community-item {
     position: static;
+    padding: 2px;
   }
   .header-community-control {
     width: 32px;
@@ -1309,6 +1304,42 @@ a:where(:not(.astryx-button)) {
 .chips li:first-child {
   color: var(--accent-ink);
   background: var(--accent);
+}
+
+/* One shared icon-only mode control for React and generated pages. */
+.mode-switch {
+  display: flex;
+  flex: none;
+  outline: 3px solid var(--px-ink);
+  background: var(--bubble);
+}
+.mode-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  background: none;
+  cursor: pointer;
+}
+.mode-switch button[aria-pressed='true'] {
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+.mode-switch button:not([aria-pressed='true']):hover {
+  background: var(--bg-alt);
+}
+.mode-switch button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  z-index: 1;
+}
+.topnav .search-open {
+  margin-left: auto;
+  flex: none;
 }
 
 /* language links, one page per language (same scheme as botharness.ai) */
@@ -1791,4 +1822,34 @@ a:where(:not(.astryx-button)) {
 }
 .companion-copy {
   grid-column: 1 / -1;
+}
+
+@media (max-width: 520px) {
+  .header-actions {
+    gap: 8px;
+  }
+  .lang-switch a {
+    padding: 4px 8px;
+  }
+}
+@media (max-width: 380px) {
+  .topbar {
+    padding-inline: 12px;
+    column-gap: 8px;
+  }
+  .topnav {
+    gap: 12px;
+  }
+  .header-community-control,
+  .mode-switch button {
+    width: 28px;
+    height: 32px;
+  }
+  .header-community-control .community-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .lang-switch a {
+    padding-inline: 6px;
+  }
 }
