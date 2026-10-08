@@ -3,7 +3,8 @@ import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/Segme
 import { TextInput } from '@astryxdesign/core/TextInput';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { useEffect, useMemo, useState } from 'react';
+import { isPixelBannerRecipe, pixelBannerPixels } from '@botharness/pixel-banner';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { track } from '../analytics';
 import type { Copy, Lang } from '../content';
 import { recipeFor } from '../mascot';
@@ -37,6 +38,41 @@ function BotFace({ bot, size }: { bot: MarketplaceEntry; size: number }) {
     [bot.fullName, size],
   );
   return <span className="bot-face" aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg }} />;
+}
+
+const botBio = (bot: MarketplaceEntry) => bot.bio ?? bot.description;
+
+// A pixel-scene banner is drawn here from its recipe; an uploaded one is the repository's
+// .botharness/banner.png. Bots without one get the neutral strip.
+function BotBanner({ bot, className }: { bot: MarketplaceEntry; className: string }) {
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const recipe = bot.banner && 'recipe' in bot.banner ? bot.banner.recipe : null;
+  const [failed, setFailed] = useState<string | null>(null);
+  const uploaded =
+    bot.banner &&
+    'image' in bot.banner &&
+    bot.banner.image.startsWith('https://raw.githubusercontent.com/')
+      ? bot.banner.image
+      : null;
+  const image = uploaded !== failed ? uploaded : null;
+  useEffect(() => {
+    const context = canvas.current?.getContext('2d');
+    if (!context || !recipe || !isPixelBannerRecipe(recipe)) return;
+    const { data, width, height } = pixelBannerPixels(recipe);
+    context.putImageData(new ImageData(new Uint8ClampedArray(data), width, height), 0, 0);
+  }, [recipe?.scene, recipe?.seed]);
+  return (
+    <span
+      className={className}
+      aria-hidden="true"
+      data-banner={recipe ? 'scene' : image ? 'image' : 'none'}
+    >
+      {recipe ? <canvas ref={canvas} width={150} height={50} /> : null}
+      {image ? (
+        <img src={image} alt="" loading="lazy" decoding="async" onError={() => setFailed(image)} />
+      ) : null}
+    </span>
+  );
 }
 
 type ListState =
@@ -182,6 +218,7 @@ export function MarketList({
                     onOpen(bot);
                   }}
                 >
+                  <BotBanner bot={bot} className="bot-card-banner" />
                   <BotFace bot={bot} size={64} />
                   <span className="bot-card-body">
                     <span className="bot-card-name">{botName(bot)}</span>
@@ -195,9 +232,7 @@ export function MarketList({
                         ))}
                       </span>
                     ) : null}
-                    {bot.description ? (
-                      <span className="bot-card-desc">{bot.description}</span>
-                    ) : null}
+                    {botBio(bot) ? <span className="bot-card-desc">{botBio(bot)}</span> : null}
                     <span className="bot-card-meta">
                       <span>{fill(t.stars, { count: bot.stars })}</span>
                       <span>{fill(t.updated, { date: dates.format(new Date(bot.pushedAt)) })}</span>
@@ -312,6 +347,7 @@ export function MarketDetail({
       ) : (
         <div className="detail-layout">
           <article className="detail-main">
+            <BotBanner bot={bot} className="detail-banner" />
             <header className="detail-head">
               <BotFace bot={bot} size={96} />
               <div>
@@ -328,7 +364,7 @@ export function MarketDetail({
                 ) : null}
               </div>
             </header>
-            {bot.description ? <p className="detail-desc">{bot.description}</p> : null}
+            {botBio(bot) ? <p className="detail-desc">{botBio(bot)}</p> : null}
             {bot.topics.length > 0 ? (
               <ul className="detail-topics">
                 {bot.topics.map((name) => (
