@@ -14,12 +14,13 @@
     "lint": "oxlint",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
-    "verify": "pnpm format:check && pnpm lint && pnpm test:docs-sync && pnpm build",
+    "verify": "pnpm format:check && pnpm lint && pnpm test:docs-sync && pnpm test:community && pnpm build",
     "deploy": "pnpm build && wrangler deploy",
     "deploy:preview": "pnpm build && wrangler versions upload",
     "frames": "node scripts/frame-svg.mjs",
     "og": "node scripts/og-image.mjs",
-    "test:docs-sync": "node --test scripts/sync-docs.test.mjs"
+    "test:docs-sync": "node --test scripts/sync-docs.test.mjs",
+    "test:community": "node --test scripts/community.test.mjs"
   },
   "dependencies": {
     "@astryxdesign/core": "^0.6.5",
