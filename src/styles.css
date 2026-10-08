@@ -222,6 +222,74 @@ a:where(:not(.astryx-button)) {
   gap: 14px;
   flex-wrap: wrap;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  margin-left: auto;
+}
+.header-community {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.header-community-item {
+  position: relative;
+  padding: 4px;
+}
+.header-community-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--ink);
+  background: var(--bubble);
+  border: 2px solid var(--px-ink);
+  cursor: pointer;
+}
+.header-community-control .community-icon {
+  width: 24px;
+  height: 24px;
+}
+.header-community-control:hover {
+  background: var(--bg-alt);
+}
+.header-community-control:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.header-community-tip {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+  width: 260px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 14px;
+  border: var(--px) solid var(--px-ink);
+  box-shadow: 4px 4px 0 var(--px-ink);
+  color: var(--ink);
+  background: var(--bubble);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.header-community-tip p {
+  margin: 0 0 6px;
+}
+.header-community-tip [data-qq-result]:empty {
+  display: none;
+}
+.header-community-tip small {
+  color: var(--ink-soft);
+}
+.header-community-tip .header-qq-number {
+  font-family: var(--pixel-font);
+  font-size: 22px;
+  user-select: text;
+}
 
 /* ---- hero ---- */
 .hero {
@@ -1101,12 +1169,16 @@ a:where(:not(.astryx-button)) {
 @media (max-width: 1180px) {
   .topbar {
     gap: 16px;
+    flex-wrap: wrap;
   }
   .topnav {
     gap: 14px;
   }
   .topnav .nav-icon-wrap {
     display: none;
+  }
+  .header-actions {
+    gap: 10px;
   }
 }
 @media (min-width: 861px) and (max-width: 960px) {
@@ -1136,13 +1208,26 @@ a:where(:not(.astryx-button)) {
     padding: 8px 16px;
   }
   .topnav {
-    order: 3;
+    order: 2;
     width: 100%;
     flex-wrap: wrap;
     gap: 6px 16px;
   }
   .toggles {
-    margin-left: auto;
+    gap: 10px;
+  }
+  .header-actions {
+    order: 3;
+    width: 100%;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .header-community-item {
+    position: static;
+  }
+  .header-community-control {
+    width: 32px;
+    height: 32px;
   }
   .hero {
     padding: 48px 16px 0;

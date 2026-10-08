@@ -5,6 +5,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Marked, type Tokens } from 'marked';
+import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { privacyPath, searchButton } from './docs.ts';
 
@@ -289,10 +290,10 @@ function page(lang: Lang, releases: Release[]) {
         <a href="${home(lang)}market">${icon('market')}${t.nav.market}</a>
         <a href="${home(lang)}docs/overview/">${icon('docs')}${t.nav.docs}</a>
         <a href="${changelogPath(lang)}" aria-current="page">${icon('changelog')}${t.nav.changelog}</a>
-        <a href="${home(lang)}#community">${t.nav.community}</a>
-        <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
-      <div class="toggles">
+      <div class="header-actions">
+        ${headerCommunityMarkup(lang)}
+        <div class="toggles">
         ${searchButton(lang)}
         <nav class="lang-switch" aria-label="${t.lang}">
           <a href="${changelogPath('zh')}" hreflang="zh-Hans" lang="zh-Hans"${lang === 'zh' ? ' aria-current="page"' : ''}>中文</a>
@@ -302,6 +303,7 @@ function page(lang: Lang, releases: Release[]) {
           <button type="button" data-mode="light">${t.light}</button>
           <button type="button" data-mode="dark">${t.dark}</button>
         </div>
+      </div>
       </div>
     </header>
     <div class="docs-layout">

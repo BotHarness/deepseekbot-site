@@ -1,5 +1,7 @@
 import { EN_AVATAR_LABELS, ZH_AVATAR_LABELS, type AvatarLabels } from './avatar-labels';
 import type { PixelSymbol } from '@botharness/pixel-avatar';
+import { COMMUNITY_LINKS } from './communityLinks';
+export { QQ_GROUP } from './communityLinks';
 
 export type Lang = 'zh' | 'en';
 
@@ -7,13 +9,13 @@ export const VERSION = '1.1.0';
 export const DSH_VERSION = '0.2.0-rc.1';
 
 export const LINKS = {
-  github: 'https://github.com/BotHarness/BotHarness',
+  github: COMMUNITY_LINKS.github,
   docs: 'https://botharness.ai',
   npm: 'https://www.npmjs.com/package/deepseekbot',
   botpixel: 'https://github.com/BotHarness/BotPixel',
   dsh: 'https://github.com/deepseek-ai/deepseek-harness',
   issues: 'https://github.com/BotHarness/BotHarness/issues',
-  discord: 'https://discord.gg/aEB2Ayhu7B',
+  discord: COMMUNITY_LINKS.discord,
   lark: 'https://github.com/BotHarness/BotHarness/blob/main/docs/lark-connection.md',
   slack: 'https://github.com/BotHarness/BotHarness/blob/main/docs/slack-connection.md',
 } as const;
@@ -23,8 +25,6 @@ export const DESKTOP_PACKAGE = 'deepseekbot';
 
 /** Public R2 bucket for large media, served on its own domain. */
 export const MEDIA_BASE = 'https://media.botharness.ai';
-
-export const QQ_GROUP = '1125565676';
 
 export const INSTALL_STEPS = [
   `npm i -g @deepseek-ai/dsh@${DSH_VERSION}`,

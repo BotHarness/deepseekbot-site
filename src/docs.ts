@@ -1,11 +1,13 @@
 import '@astryxdesign/core/reset.css';
 import './styles.css';
 import './docs.css';
-import { initAnalytics } from './analytics';
+import { initAnalytics, track } from './analytics';
 import { initSearch } from './search';
+import { initHeaderCommunity } from './headerCommunityEvents';
 
 void initAnalytics();
 initSearch();
+initHeaderCommunity(document, () => track('qq_group_copied', { placement: 'header' }));
 
 // The guide pages are static HTML; this adds the day/night switch and copy buttons.
 const root = document.documentElement;
