@@ -10,7 +10,7 @@ import { SymbolIcon } from './components/SymbolIcon';
 import { COPY, LINKS } from './content';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
-import { changelogPath, initialMode, pathLang, write, type Mode } from './site';
+import { changelogPath, guidePath, initialMode, pathLang, write, type Mode } from './site';
 
 export function App() {
   const lang = pathLang();
@@ -95,6 +95,11 @@ export function App() {
                   {item.tag ? <span className="tag">{item.tag}</span> : null}
                 </h3>
                 <p>{item.body}</p>
+                {item.guide ? (
+                  <a className="feature-guide" href={guidePath(lang, item.guide.slug)}>
+                    {item.guide.label} →
+                  </a>
+                ) : null}
               </li>
             ))}
           </ul>

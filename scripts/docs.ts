@@ -19,6 +19,7 @@ interface Doc {
   order: number;
   parent?: string;
   source: string;
+  sourceRevision?: string;
   body: string;
 }
 
@@ -347,7 +348,7 @@ function page(
         ${
           guide
             ? `<nav class="docs-pager" aria-label="${t.prev} / ${t.next}">${pager}</nav>
-        <p class="docs-source"><a href="https://github.com/BotHarness/BotHarness/blob/main/${doc.source}" target="_blank" rel="noreferrer">${t.edit}</a></p>`
+        <p class="docs-source"><a href="${escape(doc.source.startsWith('https://') ? doc.source : `https://github.com/BotHarness/BotHarness/blob/${doc.sourceRevision ?? 'main'}/${doc.source}`)}" target="_blank" rel="noreferrer">${t.edit}</a></p>`
             : ''
         }
       </main>

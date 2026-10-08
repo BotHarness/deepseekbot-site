@@ -752,6 +752,10 @@ a:where(:not(.astryx-button)) {
 .feature p {
   margin: 0;
 }
+.feature-guide {
+  display: inline-block;
+  margin-top: 12px;
+}
 .tag {
   font-size: 12px;
   padding: 2px 6px;
