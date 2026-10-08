@@ -175,6 +175,9 @@ importers:
       '@botharness/pixel-avatar':
         specifier: ^0.1.0
         version: 0.1.0
+      '@botharness/pixel-banner':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@botharness/pixel-morph':
         specifier: ^0.2.0
         version: 0.2.0
@@ -450,6 +453,9 @@ packages:
 
   '@botharness/pixel-avatar@0.1.0':
     resolution: {integrity: sha512-O6AV6cx8EZzDjrEiqcDNY4CR4v4ULFAkZ+OohdyMsaAhCVbzDXV+vwbLT8EycZmN98BOHWHDxXpuNAmHVr3nfg==}
+
+  '@botharness/pixel-banner@0.1.0':
+    resolution: {integrity: sha512-2qzZK8O73u9m97sCeQh9s/4QaRsMwCTM42n2HLxCHQNiQp7dYYhulYiYNviasr/9eAGR4ARZr3B06yOCD/Ge1A==}
 
   '@botharness/pixel-morph@0.1.0':
     resolution: {integrity: sha512-LHVZsfjRrBeWLwMjZ+ubeVTHt1lTTTPXzkCeGi7h2mwNjhlXOZZFOBojJts82PJsUaVAQPuNrjOOV3hU1M3q4A==}
@@ -2314,6 +2320,8 @@ snapshots:
   '@botharness/pixel-avatar@0.1.0':
     dependencies:
       '@botharness/pixel-morph': 0.1.0
+
+  '@botharness/pixel-banner@0.1.0': {}
 
   '@botharness/pixel-morph@0.1.0': {}
 

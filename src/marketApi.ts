@@ -8,7 +8,11 @@ export interface MarketplaceEntry {
   fullName: string;
   displayName: string | null;
   roles: string[];
+  // bot.json `bio`, else the GitHub description; absent from Workers older than the bio column
+  bio?: string | null;
   description: string | null;
+  // bot.json `banner`: a pixel-banner recipe, or the uploaded image as a raw GitHub URL
+  banner?: MarketplaceBanner | null;
   topics: string[];
   stars: number;
   pushedAt: string;
@@ -17,6 +21,8 @@ export interface MarketplaceEntry {
   defaultBranch: string;
   headCommit: { sha: string; committedAt: string } | null;
 }
+
+export type MarketplaceBanner = { recipe: { scene: string; seed: number } } | { image: string };
 
 export interface MarketplacePage {
   bots: MarketplaceEntry[];
