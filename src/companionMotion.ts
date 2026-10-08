@@ -50,6 +50,9 @@ export class SiteCompanionMotion {
     downward: boolean,
     reduced: boolean,
   ): 'entry' | 'drop' | undefined {
+    // The Hero layer already moved with native document scrolling. Bring its
+    // viewport model to that displayed position before a grab or support switch.
+    if (this.started && this.support === 'hero') this.y += bounds.ground - this.bounds.ground;
     this.bounds = bounds;
     if (!this.started && bounds.ground < bounds.top) {
       // Deep links / restored scroll positions start quietly at the bottom.
