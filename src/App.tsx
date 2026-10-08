@@ -80,7 +80,7 @@ export function App() {
           <PromoVideo copy={copy} />
         </section>
 
-        <section className="section" id="features" aria-labelledby="features-title">
+        <section className="section feature-section" id="features" aria-labelledby="features-title">
           <p className="kicker">{copy.features.kicker}</p>
           <h2 id="features-title">{copy.features.title}</h2>
           <p className="section-lead">{copy.features.lead}</p>

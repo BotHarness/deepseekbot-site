@@ -719,12 +719,15 @@ a:where(:not(.astryx-button)) {
   font-weight: 400;
   letter-spacing: 1px;
 }
+.feature-section {
+  container: features / inline-size;
+}
 .feature-grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 28px;
 }
 .feature {
@@ -762,6 +765,31 @@ a:where(:not(.astryx-button)) {
   color: var(--accent-ink);
   background: var(--accent);
   outline: 2px solid var(--px-ink);
+}
+
+/* Balance cards against the available content width, including in narrower shells. */
+@container features (min-width: 640px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .feature-grid > .feature:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+@container features (min-width: 960px) {
+  .feature-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .feature-grid > .feature {
+    grid-column: span 2;
+  }
+  .feature-grid > .feature:nth-child(n + 4),
+  .feature-grid > .feature:last-child:nth-child(odd) {
+    grid-column: span 3;
+  }
+  .feature-grid > .feature:nth-child(n + 4):last-child:nth-child(even) {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ---- playground ---- */
@@ -1099,9 +1127,6 @@ a:where(:not(.astryx-button)) {
     max-width: 320px;
     width: 100%;
     justify-self: center;
-  }
-  .feature-grid {
-    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 520px) {
