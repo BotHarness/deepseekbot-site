@@ -4,6 +4,7 @@
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { Marked, type Tokens } from 'marked';
+import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg } from '../src/navIcons.ts';
 
 type Lang = 'zh' | 'en';
@@ -234,7 +235,7 @@ function toc(lang: Lang, headings: Heading[]) {
 
 /** The header's search button; src/docs.ts opens the search box from it or from Ctrl/⌘+K. */
 export const searchButton = (lang: Lang) =>
-  `<button type="button" class="search-open" data-search-open aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K"><svg class="search-icon" viewBox="0 0 7 7" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 0h3v1H1zM0 1h1v3H0zM4 1h1v3H4zM1 4h3v1H1zM4 4h1v1H4zM5 5h2v1H5zM5 6h2v1H5z"/></svg><span class="search-label">${UI[lang].search}</span><kbd class="search-kbd" data-search-kbd>Ctrl K</kbd></button>`;
+  `<button type="button" class="search-open" data-search-open aria-label="${UI[lang].search}" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K"><svg class="search-icon" viewBox="0 0 7 7" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 0h3v1H1zM0 1h1v3H0zM4 1h1v3H4zM1 4h3v1H1zM4 4h1v1H4zM5 5h2v1H5zM5 6h2v1H5z"/></svg><span class="search-label">${UI[lang].search}</span><kbd class="search-kbd" data-search-kbd>Ctrl K</kbd></button>`;
 
 /**
  * A guide page, or with `at` a standalone page (the privacy notice) outside the guide list: no
@@ -316,15 +317,15 @@ function page(
         <span>DeepSeekBot</span>
       </a>
       <nav class="topnav" aria-label="DeepSeekBot">
-        <a href="${docPath(lang, 'overview')}"${guide ? ' aria-current="page"' : ''}><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
+        <a href="${docPath(lang, 'overview')}"${guide ? ' aria-current="page"' : ''}><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
         <a href="${home(lang)}changelog/"><span class="nav-icon-wrap">${navIconSvg('changelog')}</span>${t.nav.changelog}</a>
-        <a href="${home(lang)}#community">${t.nav.community}</a>
-        <a href="https://github.com/BotHarness/BotHarness" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
-      <div class="toggles">
+      <div class="header-actions">
+        ${headerCommunityMarkup(lang)}
+        <div class="toggles">
         ${searchButton(lang)}
         <nav class="lang-switch" aria-label="${t.lang}">
           <a href="${at('zh')}" hreflang="zh-Hans" lang="zh-Hans"${lang === 'zh' ? ' aria-current="page"' : ''}>中文</a>
@@ -334,6 +335,7 @@ function page(
           <button type="button" data-mode="light">${t.light}</button>
           <button type="button" data-mode="dark">${t.dark}</button>
         </div>
+      </div>
       </div>
     </header>
     <div class="docs-layout${guide ? '' : ' docs-standalone'}${contents ? ' docs-has-toc' : ''}">
