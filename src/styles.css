@@ -1760,8 +1760,35 @@ a:where(:not(.astryx-button)) {
   text-decoration: underline;
 }
 .companion-community button {
-  min-width: 108px;
+  min-width: 0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
+}
+
+.companion-community {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.companion-community > a,
+.companion-community > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px;
+  font-size: 12px;
+}
+.companion-community .community-icon-wrap {
+  display: inline-flex;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+.companion-community .community-icon-wrap svg {
+  width: 18px;
+  height: 18px;
+}
+.companion-copy {
+  grid-column: 1 / -1;
 }

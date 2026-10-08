@@ -4,6 +4,7 @@ import type { Lang } from '../content';
 import { companionAvatarSvg } from '../companionAvatar';
 import {
   COMPANION_COPY,
+  nextGuideMessage,
   loadChoices,
   saveChoices,
   type CompanionChoices,
@@ -14,6 +15,7 @@ import { COMMUNITY_LINKS, QQ_GROUP } from '../communityLinks';
 import { copyText } from '../clipboard';
 import { track } from '../analytics';
 import { analyticsConsent, CONSENT_COPY } from '../analyticsConsent';
+import { CommunityIcon } from './CommunityIcon';
 
 function session() {
   try {
@@ -53,17 +55,12 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
   const motion = useCompanionMotion({
     ...choices,
     hidden: pending ? false : choices.hidden,
-    consentPending: pending,
     reading: reading || pending,
     onEvent(event, support) {
       if (consentRef.current === 'pending' || consentRef.current === 'loading') return;
       if (event === 'welcome' && !choicesRef.current.invited) setMessage('welcome');
       if (event === 'drop') setMessage('drop');
       if (event === 'drag') setMessage('drag');
-      if (event === 'interested' && !choicesRef.current.invited) {
-        update({ invited: true });
-        setMessage('community');
-      }
       if (event === 'landed') {
         if (support === 'viewport' && !choicesRef.current.invited) {
           update({ invited: true });
@@ -164,8 +161,9 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
           onClick={(e) => {
             if (consentRef.current === 'pending') return;
             if (motion.clicked(e.detail)) {
-              if (message) dismiss();
-              else setMessage('welcome');
+              const next = nextGuideMessage(message);
+              if (next === 'community') update({ invited: true });
+              setMessage(next);
             }
           }}
           onKeyDown={(e) => {
@@ -242,17 +240,14 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
               </>
             )}
 
-            {!pending && message === 'community' && (
+            {!pending && message && (
               <div className="companion-community">
-                <a
-                  href={COMMUNITY_LINKS.discord}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => update({ invited: true })}
+                <button
+                  type="button"
+                  title={c.qqHint}
+                  disabled={copyState === 'busy'}
+                  onClick={() => void copyQQ()}
                 >
-                  {c.discord} ↗
-                </a>
-                <button type="button" disabled={copyState === 'busy'} onClick={() => void copyQQ()}>
                   {copyState === 'copied' ? (
                     <>
                       <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
@@ -266,9 +261,21 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
                   ) : copyState === 'busy' ? (
                     c.busy
                   ) : (
-                    c.qq
+                    <>
+                      <CommunityIcon brand="qq" />
+                      <span>{c.qq}</span>
+                    </>
                   )}
                 </button>
+                <a
+                  href={COMMUNITY_LINKS.discord}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => update({ invited: true })}
+                >
+                  <CommunityIcon brand="discord" />
+                  <span>{c.discord}</span>
+                </a>
                 {copyState === 'failed' && (
                   <p className="companion-copy" role="status">
                     {c.failed}

@@ -44,16 +44,6 @@ export class SiteCompanionMotion {
     );
   }
 
-  /** A pending privacy question is reachable even when mobile Hero ground is below the fold. */
-  revealAtViewport(bounds: CompanionBounds) {
-    if (this.started) return;
-    this.bounds = bounds;
-    this.started = true;
-    this.support = 'viewport';
-    this.x = 32;
-    this.settle();
-  }
-
   /** Returns an observable transition, so the presentation can welcome or invite once. */
   measure(
     bounds: CompanionBounds,
@@ -65,6 +55,13 @@ export class SiteCompanionMotion {
       // Deep links / restored scroll positions start quietly at the bottom.
       this.started = true;
       this.support = 'viewport';
+      if (downward && !reduced) {
+        // A fast active scroll can skip the mobile ground. Still show a fall from above.
+        this.x = 32;
+        this.y = bounds.top;
+        this.phase = 'fall';
+        return 'drop';
+      }
       this.settle();
       return;
     }

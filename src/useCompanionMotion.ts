@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { SiteCompanionMotion } from './companionMotion';
 
-type MotionEvent = 'welcome' | 'drop' | 'landed' | 'drag' | 'interested';
+type MotionEvent = 'welcome' | 'drop' | 'landed' | 'drag';
 interface Options {
   hidden: boolean;
   walking: boolean;
   quiet: boolean;
   reading: boolean;
-  consentPending: boolean;
   onEvent: (event: MotionEvent, support: 'hero' | 'viewport') => void;
 }
 /** Owns one model, one animation loop and its DOM measurements for the whole visit. */
@@ -45,8 +44,7 @@ export function useCompanionMotion(options: Options) {
       downward = false,
       oldScroll = scrollY;
     let blocked = false,
-      disposed = false,
-      consentAtViewport = false;
+      disposed = false;
     const viewport = window.visualViewport;
     let geometry = {
       width: innerWidth,
@@ -111,26 +109,7 @@ export function useCompanionMotion(options: Options) {
         bottom: Math.max(top, height - size - safe),
         ground: ground?.getBoundingClientRect().top ?? -1,
       };
-      // On a tall mobile Hero the consent question must be visible before scrolling.
-      // Start that first encounter at the viewport floor, using the same motion model.
-      if (
-        latest.current.consentPending &&
-        model.current.phase === 'waiting' &&
-        geometry.ground > height + 24
-      ) {
-        model.current.revealAtViewport(geometry);
-        consentAtViewport = true;
-      }
       const event = model.current.measure(geometry, downward, reducedNow());
-      if (
-        consentAtViewport &&
-        !latest.current.consentPending &&
-        downward &&
-        geometry.ground < geometry.top
-      ) {
-        consentAtViewport = false;
-        latest.current.onEvent('interested', model.current.support);
-      }
       downward = false;
       if (event === 'entry' && reducedNow())
         latest.current.onEvent('welcome', model.current.support);
@@ -256,7 +235,7 @@ export function useCompanionMotion(options: Options) {
 
   useEffect(() => {
     wake.current();
-  }, [options.hidden, options.walking, options.quiet, options.reading, options.consentPending]);
+  }, [options.hidden, options.walking, options.quiet, options.reading]);
   const reducedNow = () => reduced || latest.current.quiet;
   return {
     root,

@@ -1,7 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SiteCompanionMotion } from '../src/companionMotion.ts';
-import { loadChoices, saveChoices, COMPANION_SESSION_KEY } from '../src/companionGuide.ts';
+import {
+  loadChoices,
+  saveChoices,
+  COMPANION_SESSION_KEY,
+  nextGuideMessage,
+} from '../src/companionGuide.ts';
 import { companionAvatarSvg } from '../src/companionAvatar.ts';
 import { pixelFigure, seededRecipe } from '@botharness/pixel-avatar';
 
@@ -163,20 +168,39 @@ test('resizing Hero below the viewport follows actual ground instead of floating
   assert.equal(m.phase, 'rest');
 });
 
-test('mobile privacy encounter uses one visible model at the viewport floor', () => {
+test('mobile privacy encounter follows Hero entry and jump rather than pinning to the floor', () => {
   const m = new SiteCompanionMotion();
-  const mobile = { width: 390, height: 844, size: 80, top: 76, bottom: 764, ground: 1400 };
+  const mobile = { width: 390, height: 844, size: 80, top: 142, bottom: 764, ground: 1400 };
   m.measure(mobile, false, false);
   assert.equal(m.phase, 'waiting');
-  m.revealAtViewport(mobile);
-  assert.equal(m.phase, 'rest');
-  assert.equal(m.y + mobile.size, mobile.height);
-  assert.equal(m.support, 'viewport');
-  m.measure({ ...mobile, ground: 1000 }, true, false);
-  assert.equal(m.y, 764);
-  m.grab(0, false);
-  m.drag(200, 400, 16, false);
-  m.release(18, false);
+  assert.equal(m.support, 'hero');
+  assert.equal(m.measure({ ...mobile, ground: 740 }, true, false), 'entry');
+  assert.deepEqual(advance(m), ['welcome']);
+  assert.equal(m.y, 668);
+  assert.equal(m.measure({ ...mobile, ground: -300 }, true, false), 'drop');
+  assert.equal(m.phase, 'fall');
+  assert.ok(m.y < mobile.bottom);
   assert.deepEqual(advance(m), ['landed']);
   assert.equal(m.y + mobile.size, mobile.height);
+});
+test('a fast scroll skipping the mobile ground still falls; a restored deep link stays quiet', () => {
+  const m = new SiteCompanionMotion();
+  m.measure({ ...bounds, ground: 1400 }, false, false);
+  assert.equal(m.measure({ ...bounds, ground: -300 }, true, false), 'drop');
+  assert.equal(m.phase, 'fall');
+  assert.ok(m.y < bounds.bottom);
+  assert.deepEqual(advance(m), ['landed']);
+  const restored = new SiteCompanionMotion();
+  restored.measure({ ...bounds, ground: -300 }, false, false);
+  assert.equal(restored.phase, 'rest');
+});
+test('explicit conversation taps weave a community turn between avatar and Bot introductions', () => {
+  let message;
+  const turns = [];
+  for (let i = 0; i < 5; i++) {
+    message = nextGuideMessage(message);
+    turns.push(message);
+  }
+  assert.deepEqual(turns, ['welcome', 'bots', 'appearance', 'community', 'welcome']);
+  assert.equal(nextGuideMessage('drag'), 'welcome');
 });
