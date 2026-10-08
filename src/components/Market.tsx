@@ -219,24 +219,22 @@ export function MarketList({
                   }}
                 >
                   <BotBanner bot={bot} className="bot-card-banner" />
-                  <BotFace bot={bot} size={64} />
-                  <span className="bot-card-body">
-                    <span className="bot-card-name">{botName(bot)}</span>
-                    <span className="bot-card-repo">{bot.fullName}</span>
-                    {bot.roles.length > 0 ? (
-                      <span className="bot-roles">
-                        {bot.roles.map((role) => (
-                          <span key={role} className="tag">
-                            {role}
-                          </span>
-                        ))}
-                      </span>
-                    ) : null}
-                    {botBio(bot) ? <span className="bot-card-desc">{botBio(bot)}</span> : null}
-                    <span className="bot-card-meta">
-                      <span>{fill(t.stars, { count: bot.stars })}</span>
-                      <span>{fill(t.updated, { date: dates.format(new Date(bot.pushedAt)) })}</span>
+                  <span className="bot-card-head">
+                    <BotFace bot={bot} size={72} />
+                    <span className="bot-card-id">
+                      <span className="bot-card-name">{botName(bot)}</span>
+                      <span className="bot-card-repo">{bot.fullName}</span>
                     </span>
+                  </span>
+                  {botBio(bot) ? <span className="bot-card-desc">{botBio(bot)}</span> : null}
+                  <span className="bot-card-meta">
+                    {bot.roles.map((role) => (
+                      <span key={role} className="tag">
+                        {role}
+                      </span>
+                    ))}
+                    <span>{fill(t.stars, { count: bot.stars })}</span>
+                    <span>{fill(t.updated, { date: dates.format(new Date(bot.pushedAt)) })}</span>
                   </span>
                 </a>
               </li>
@@ -348,22 +346,22 @@ export function MarketDetail({
         <div className="detail-layout">
           <article className="detail-main">
             <BotBanner bot={bot} className="detail-banner" />
-            <header className="detail-head">
+            <header className="detail-head" data-banner={bot.banner ? 'shown' : 'none'}>
               <BotFace bot={bot} size={96} />
               <div>
                 <h1>{botName(bot)}</h1>
                 <p className="bot-card-repo">{bot.fullName}</p>
-                {bot.roles.length > 0 ? (
-                  <p className="bot-roles">
-                    {bot.roles.map((role) => (
-                      <span key={role} className="tag">
-                        {role}
-                      </span>
-                    ))}
-                  </p>
-                ) : null}
               </div>
             </header>
+            {bot.roles.length > 0 ? (
+              <p className="bot-roles">
+                {bot.roles.map((role) => (
+                  <span key={role} className="tag">
+                    {role}
+                  </span>
+                ))}
+              </p>
+            ) : null}
             {botBio(bot) ? <p className="detail-desc">{botBio(bot)}</p> : null}
             {bot.topics.length > 0 ? (
               <ul className="detail-topics">

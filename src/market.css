@@ -75,7 +75,7 @@ button.topic-chip[aria-pressed='true'] {
 
 .bot-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 24px;
   margin: 0;
   padding: 0;
@@ -84,13 +84,13 @@ button.topic-chip[aria-pressed='true'] {
 .bot-grid > li {
   display: flex;
 }
+/* A profile card: banner on top, the Bot's face half over its lower edge, identity beside it. */
 .bot-card {
   flex: 1;
   display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 16px;
-  padding: 16px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 12px 14px;
   color: var(--ink);
   text-decoration: none;
 }
@@ -103,17 +103,14 @@ a.bot-card {
 .bot-card-banner,
 .detail-banner {
   display: block;
-  aspect-ratio: 3 / 1;
+  aspect-ratio: 4 / 1;
   overflow: hidden;
   line-height: 0;
   background: var(--bg-alt);
 }
-.bot-card-banner {
-  flex: 1 0 100%;
-}
 .detail-banner {
-  max-height: 220px;
-  margin-bottom: 24px;
+  aspect-ratio: 5 / 1;
+  max-height: 200px;
 }
 .bot-card-banner canvas,
 .bot-card-banner img,
@@ -127,27 +124,37 @@ a.bot-card {
 .detail-banner canvas {
   image-rendering: pixelated;
 }
-.bot-card-body {
-  flex: 1;
-}
 .bot-face {
+  position: relative;
   flex: none;
   line-height: 0;
+  /* A one-art-pixel ink outline that follows the stepped corners. */
+  filter: drop-shadow(3px 0 0 var(--px-ink)) drop-shadow(-3px 0 0 var(--px-ink))
+    drop-shadow(0 3px 0 var(--px-ink)) drop-shadow(0 -3px 0 var(--px-ink));
 }
 .bot-face svg {
   image-rendering: pixelated;
 }
-.bot-card-body {
+.bot-card-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  min-width: 0;
+  margin-top: -30px;
+  padding-left: 12px;
+}
+.bot-card-id {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 .bot-card-name {
   font-family: var(--pixel-font);
   font-size: 18px;
   line-height: 1.3;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .bot-card-repo {
   margin: 0;
@@ -159,7 +166,7 @@ a.bot-card {
   font-size: 14px;
   line-height: 1.5;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -172,10 +179,14 @@ a.bot-card {
 .bot-card-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
+  align-items: center;
+  gap: 4px 12px;
   margin: auto 0 0;
   font-size: 13px;
   color: var(--ink-soft);
+}
+.bot-card-meta > .tag {
+  color: var(--ink);
 }
 .market-more {
   display: flex;
@@ -212,18 +223,25 @@ a.bot-card {
 .detail-head {
   display: flex;
   gap: 20px;
-  align-items: center;
+  align-items: flex-end;
+  padding-left: 16px;
+}
+.detail-head[data-banner='shown'] {
+  margin-top: -36px;
 }
 .detail-head h1 {
   margin: 0;
   font-family: var(--pixel-font);
   font-weight: 400;
-  font-size: clamp(26px, 4vw, 40px);
+  font-size: clamp(24px, 3vw, 32px);
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
+.detail-main > .bot-roles {
+  margin: 16px 0 0;
+}
 .detail-desc {
-  margin: 20px 0 0;
+  margin: 16px 0 0;
   font-size: 17px;
 }
 .detail-topics {
