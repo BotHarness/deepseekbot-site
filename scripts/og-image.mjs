@@ -1,4 +1,4 @@
-// Renders the share cards (public/og-{zh,en}-v2.png, 1200×630; bump the suffix when the
+// Renders the share cards (public/og-{zh,en}-v3.png, 1200×630; bump the suffix when the
 // design changes so social caches refetch) and the
 // apple-touch-icon from the same BotPixel avatars and pixel font as the site.
 // Run `pnpm og` after changing the copy below. Needs a Chromium: Playwright's own
@@ -17,25 +17,15 @@ const font = `data:font/woff2;base64,${readFileSync(
 const CARDS = {
   zh: {
     lang: 'zh-CN',
-    headline: '开源的 GrokBot 平替',
-    // matches Bilibili cover A; English cards only use the Grok Bot line
-    extra: 'ChatGPT Dots 平替',
-    chips: [
-      '基于 DeepSeek Harness',
-      '兼容其他 DSH 插件',
-      '飞书 / Slack / Discord / 微信',
-      'MIT 开源',
-    ],
+    headline: 'GrokBot 开源平替',
+    extra: '持久身份 · 跨文件夹工作 · 定时任务',
+    chips: ['GrokBot 开源平替', '基于 DeepSeek Harness', 'MIT 开源'],
   },
   en: {
     lang: 'en',
     headline: 'The open-source Grok Bot alternative',
-    chips: [
-      'Built on DeepSeek Harness',
-      'Works with DSH plugins',
-      'Lark / Slack / Discord / WeChat',
-      'MIT',
-    ],
+    extra: 'Lasting identity · Cross-folder work · Scheduled tasks',
+    chips: ['Open-source Grok Bot alternative', 'Built on DeepSeek Harness', 'MIT open source'],
   },
 };
 
@@ -74,7 +64,7 @@ body { width: 1200px; height: 630px; overflow: hidden; font-family: Px, sans-ser
     -6px -6px #3b2414, 6px -6px #3b2414, -6px 6px #3b2414, 12px 12px #3d5afe, 18px 18px #3b2414; }
 .tag { margin-top: 18px; padding: 2px 22px; outline: 6px solid #3b2414; white-space: nowrap; }
 .tag--blue { font-size: ${card.extra ? 52 : 50}px; line-height: 1.25; background: #3d5afe; color: #fff; }
-.tag--yellow { margin-top: 20px; font-size: 32px; line-height: 1.3; background: #ffcf3a; padding: 0 18px; outline-width: 5px; }
+.tag--yellow { margin-top: 20px; font-size: 30px; line-height: 1.3; background: #ffcf3a; padding: 0 18px; outline-width: 5px; }
 .chips { display: flex; gap: 12px; margin-top: 22px; }
 .chips span { white-space: nowrap; font-size: 20px; line-height: 32px; padding: 0 10px; background: #fffbea;
   outline: 3px solid #3b2414; box-shadow: 5px 5px 0 rgb(59 36 20 / .3); }
@@ -106,7 +96,7 @@ const tab = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 for (const [key, card] of Object.entries(CARDS)) {
   await tab.setContent(page(card), { waitUntil: 'load' });
   await tab.evaluate(() => document.fonts.ready);
-  await tab.screenshot({ path: `public/og-${key}-v2.png` });
+  await tab.screenshot({ path: `public/og-${key}-v3.png` });
 }
 await tab.setViewportSize({ width: 180, height: 180 });
 await tab.setContent(
@@ -114,4 +104,4 @@ await tab.setContent(
 );
 await tab.screenshot({ path: 'public/apple-touch-icon.png' });
 await browser.close();
-console.log('wrote public/og-zh-v2.png, public/og-en-v2.png, public/apple-touch-icon.png');
+console.log('wrote public/og-zh-v3.png, public/og-en-v3.png, public/apple-touch-icon.png');

@@ -214,19 +214,13 @@ const zh: Copy = {
     badge: `v${VERSION} 正式版`,
     title: 'DeepSeekBot',
     tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
-    lead: 'DeepSeekBot 是 BotHarness 的首个产品，以一个 npm 包装进 DeepSeek Harness（DSH）：Bot 名册、私聊与 Group、看得见的 Git Memory、任务委派，以及 Bot 自己的 IM 身份。',
+    lead: 'DeepSeekBot 是 BotHarness 的首个产品，以一个 npm 包装进 DeepSeek Harness（DSH）：Bot 名册、私聊与 Group、看得见的 Git Memory、跨文件夹工作与定时任务，以及 Bot 自己的 IM 身份。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
     crewLabel: '一组正在工作的 PersonaBots，头像会变成它们正在使用的工具',
     signpost: 'Bot 市场',
     signpostLabel: '去 Bot 市场找别人分享的 Bot',
-    chips: [
-      'GrokBot 的开源平替',
-      '基于 DeepSeek Harness',
-      '兼容其他 DSH 插件',
-      '连接飞书 / Slack / Discord / 微信',
-      'MIT 开源',
-    ],
+    chips: ['GrokBot 开源平替', '基于 DeepSeek Harness', 'MIT 开源'],
   },
   symbols: {
     thinking: '思考',
@@ -254,7 +248,7 @@ const zh: Copy = {
       {
         icon: 'present',
         title: '持久身份',
-        body: '创建负责研究、设计或实现的 PersonaBots。每个 Bot 有自己的名字、人格（PERSONA.md）和头像，跨对话、Session 与 Workspace 延续。',
+        body: '创建负责研究、设计或实现的 PersonaBots。每个 Bot 有自己的名字和头像：SOUL.md 保存人格、表达方式与工作原则，MEMORY.md 保存核心记忆，跨对话和文件夹延续。',
       },
       {
         icon: 'read',
@@ -268,8 +262,13 @@ const zh: Copy = {
       },
       {
         icon: 'workflow',
-        title: 'Assignments 委派',
-        body: '授予 Workspace 后，Bot 可以委派独立的 Assignment，各自保留 Session 与报告；需要你回答或批准时，侧栏会显示待办数。',
+        title: '跨文件夹工作',
+        body: '授权文件夹后，同一个 Bot 可以在多个文件夹中开展工作。每项工作保留独立会话和进展；需要你回答或批准时，侧栏会提醒你。',
+      },
+      {
+        icon: 'todo',
+        title: '定时任务',
+        body: '设置计划，或让 Bot 帮你管理。查看每次触发及处理记录，随时暂停，也可锁定以防 Bot 修改。应用运行时按计划执行。',
       },
       {
         icon: 'web',
@@ -434,19 +433,13 @@ const en: Copy = {
     badge: `v${VERSION} is out`,
     title: 'DeepSeekBot',
     tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
-    lead: 'DeepSeekBot is the first BotHarness product, installed into DeepSeek Harness (DSH) as one npm package: a Bot roster, DMs and Groups, Git Memory you can see, delegation, and IM identities of the Bots’ own.',
+    lead: 'DeepSeekBot is the first BotHarness product, installed into DeepSeek Harness (DSH) as one npm package: a Bot roster, DMs and Groups, Git Memory you can see, work across folders, scheduled tasks, and IM identities of the Bots’ own.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
     crewLabel: 'A crew of working PersonaBots whose avatars turn into the tool each one is using',
     signpost: 'Marketplace',
     signpostLabel: 'Find Bots other people shared in the Bot Marketplace',
-    chips: [
-      'Open-source Grok Bot alternative',
-      'Built on DeepSeek Harness',
-      'Works with other DSH plugins',
-      'Lark, Slack, Discord and WeChat',
-      'MIT licensed',
-    ],
+    chips: ['Open-source Grok Bot alternative', 'Built on DeepSeek Harness', 'MIT open source'],
   },
   symbols: {
     thinking: 'Thinking',
@@ -474,7 +467,7 @@ const en: Copy = {
       {
         icon: 'present',
         title: 'Lasting identity',
-        body: 'Create PersonaBots for research, design or engineering. Each keeps its own name, persona (PERSONA.md) and avatar across chats, Sessions and Workspaces.',
+        body: 'Create PersonaBots for research, design or engineering. Each has its own name and avatar: SOUL.md holds its persona, voice and working principles; MEMORY.md holds core memory that lasts across chats and folders.',
       },
       {
         icon: 'read',
@@ -488,8 +481,13 @@ const en: Copy = {
       },
       {
         icon: 'workflow',
-        title: 'Assignments',
-        body: 'Grant a Workspace and a Bot can delegate independent Assignments, each with its own Session and report. When one needs your answer or approval, the sidebar counts it.',
+        title: 'Work across folders',
+        body: 'Authorize folders so the same Bot can work in several of them. Each job keeps its own conversation and progress; the sidebar alerts you when it needs your answer or approval.',
+      },
+      {
+        icon: 'todo',
+        title: 'Scheduled tasks',
+        body: 'Set a schedule or ask your Bot to manage one. Review triggers and handling history, pause it, or lock it against Bot edits. Tasks run while the app is running.',
       },
       {
         icon: 'web',
