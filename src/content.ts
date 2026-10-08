@@ -102,7 +102,8 @@ export interface Copy {
     title: string;
     lead: string;
     discord: { title: string; body: string; cta: string };
-    qq: { title: string; body: string };
+    github: { title: string; body: string; cta: string };
+    qq: { title: string; body: string; cta: string; copyFailed: string };
   };
   video: {
     kicker: string;
@@ -410,7 +411,17 @@ const zh: Copy = {
       body: '加入 DeepSeekBot 的 Discord 服务器。',
       cta: '加入 Discord',
     },
-    qq: { title: 'QQ 群', body: '群号' },
+    github: {
+      title: 'GitHub',
+      body: '查看源码，报告问题，或一起改进 DeepSeekBot。',
+      cta: '在 GitHub 查看',
+    },
+    qq: {
+      title: 'QQ 群',
+      body: '群号',
+      cta: '复制 QQ 群号',
+      copyFailed: '复制失败，请长按或选中上方群号手动复制。',
+    },
   },
   footer: {
     built: '用 React、Astryx 和 BotPixel 搭建，部署在 Cloudflare。',
@@ -641,7 +652,17 @@ const en: Copy = {
       body: 'Join the DeepSeekBot Discord server.',
       cta: 'Join Discord',
     },
-    qq: { title: 'QQ group', body: 'Group number' },
+    github: {
+      title: 'GitHub',
+      body: 'Explore the source, report a problem, or help improve DeepSeekBot.',
+      cta: 'View on GitHub',
+    },
+    qq: {
+      title: 'QQ group',
+      body: 'Group number',
+      cta: 'Copy QQ group number',
+      copyFailed: 'Copy failed. Select or long-press the number above to copy it manually.',
+    },
   },
   footer: {
     built: 'Built with React, Astryx and BotPixel. Hosted on Cloudflare.',
