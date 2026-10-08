@@ -235,12 +235,15 @@ a:where(:not(.astryx-button)) {
 .header-community {
   display: flex;
   align-items: center;
-  gap: 2px;
+  background: var(--bubble);
+  outline: 3px solid var(--px-ink);
 }
 .header-community-item {
   display: flex;
   position: relative;
-  padding: 4px;
+}
+.header-community-item + .header-community-item {
+  border-inline-start: 3px solid var(--px-ink);
 }
 .header-community-control {
   display: inline-flex;
@@ -252,7 +255,7 @@ a:where(:not(.astryx-button)) {
   color: var(--ink);
   background: var(--bubble);
   border: 0;
-  outline: 3px solid var(--px-ink);
+  outline: none;
   cursor: pointer;
 }
 .header-community-control .community-icon {
@@ -264,7 +267,7 @@ a:where(:not(.astryx-button)) {
 }
 .header-community-control:focus-visible {
   outline: 3px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: -3px;
 }
 .header-community-tip {
   position: absolute;
@@ -1222,7 +1225,6 @@ a:where(:not(.astryx-button)) {
   }
   .header-community-item {
     position: static;
-    padding: 2px;
   }
   .header-community-control {
     width: 32px;
