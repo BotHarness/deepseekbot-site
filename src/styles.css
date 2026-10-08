@@ -1636,10 +1636,6 @@ a:where(:not(.astryx-button)) {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.companion-bubble small {
-  color: var(--ink-soft);
-  font-size: 11px;
-}
 .companion-bubble p {
   margin: 8px 0 12px;
 }
@@ -1665,18 +1661,11 @@ a:where(:not(.astryx-button)) {
   font-size: 20px;
   line-height: 1.2;
 }
-.companion-topics,
-.companion-settings-actions,
+.companion-consent,
 .companion-community {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-}
-.companion-settings {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid var(--ink-soft);
-  font-size: 11px;
 }
 .companion-bubble button:disabled {
   opacity: 0.6;
@@ -1690,11 +1679,6 @@ a:where(:not(.astryx-button)) {
   margin: 0 !important;
   color: var(--ink-soft);
   font-size: 12px;
-}
-.companion-copy span {
-  display: block;
-  font-variant-numeric: tabular-nums;
-  user-select: text;
 }
 .companion-restore {
   position: absolute;
@@ -1762,14 +1746,22 @@ a:where(:not(.astryx-button)) {
   visibility: hidden;
 }
 
-.companion-settings summary {
-  cursor: pointer;
-  padding: 5px 0;
-  font-size: 12px;
-}
-.companion-settings-actions {
-  margin-top: 8px;
-}
 .bot-companion {
   overflow: clip;
+}
+
+.companion-consent {
+  margin-top: 12px;
+}
+.companion-bubble .companion-privacy {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  text-decoration: underline;
+}
+.companion-community button {
+  min-width: 108px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }

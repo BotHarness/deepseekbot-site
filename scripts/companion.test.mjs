@@ -162,3 +162,21 @@ test('resizing Hero below the viewport follows actual ground instead of floating
   assert.equal(m.y, 658);
   assert.equal(m.phase, 'rest');
 });
+
+test('mobile privacy encounter uses one visible model at the viewport floor', () => {
+  const m = new SiteCompanionMotion();
+  const mobile = { width: 390, height: 844, size: 80, top: 76, bottom: 764, ground: 1400 };
+  m.measure(mobile, false, false);
+  assert.equal(m.phase, 'waiting');
+  m.revealAtViewport(mobile);
+  assert.equal(m.phase, 'rest');
+  assert.equal(m.y + mobile.size, mobile.height);
+  assert.equal(m.support, 'viewport');
+  m.measure({ ...mobile, ground: 1000 }, true, false);
+  assert.equal(m.y, 764);
+  m.grab(0, false);
+  m.drag(200, 400, 16, false);
+  m.release(18, false);
+  assert.deepEqual(advance(m), ['landed']);
+  assert.equal(m.y + mobile.size, mobile.height);
+});

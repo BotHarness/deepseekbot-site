@@ -3,26 +3,10 @@
 // visitors who decline, or never answer, are counted without anything stored on their device.
 import type { PostHog } from 'posthog-js';
 import { pathLang } from './site';
+import { analyticsConsent, CONSENT_COPY } from './analyticsConsent';
 
 const KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
 const HOST = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) ?? 'https://t.botharness.ai';
-
-const COPY = {
-  zh: {
-    text: '我们用匿名统计了解官网从哪里被访问、哪些按钮有用。同意后会在本机保存一个匿名 ID，用于识别回访；拒绝则只记住你的选择，访问仍以不带标识的方式匿名计数。',
-    accept: '同意',
-    reject: '拒绝',
-    more: '隐私说明',
-    privacy: '/privacy/',
-  },
-  en: {
-    text: 'We use anonymous analytics to learn where visitors come from and which buttons help. Accepting stores an anonymous ID on this device to recognise return visits; declining only remembers your choice, and the visit is still counted without an identifier.',
-    accept: 'Accept',
-    reject: 'Decline',
-    more: 'Privacy',
-    privacy: '/en/privacy/',
-  },
-} as const;
 
 /**
  * Product Hunt and other directories link with `?ref=<name>`, which PostHog does not read. Move it
@@ -110,8 +94,27 @@ function trackLinks() {
 }
 
 function consentBar(posthog: PostHog, register: () => void) {
-  if (posthog.get_explicit_consent_status() !== 'pending') return;
-  const t = COPY[pathLang()];
+  const status = posthog.get_explicit_consent_status();
+  analyticsConsent.configure(
+    status === 'pending' ? 'pending' : status === 'granted' ? 'accepted' : 'declined',
+    (accept) => {
+      if (!accept) {
+        posthog.opt_out_capturing();
+        return;
+      }
+      // Retain the existing opt-in identity and first-touch attribution behavior.
+      posthog.opt_in_capturing({ captureProperties: siteProperties() });
+      register();
+      const utm = Object.fromEntries(
+        [...new URLSearchParams(location.search)].filter(([key]) => key.startsWith('utm_')),
+      );
+      const initial = Object.fromEntries(Object.entries(utm).map(([k, v]) => [`$initial_${k}`, v]));
+      posthog.capture('$pageview', utm, { $set_once: initial });
+    },
+  );
+  // The React homepage asks through its Bot; generated pages retain their consent region.
+  if (status !== 'pending' || pageKind(location.pathname) === 'home') return;
+  const t = CONSENT_COPY[pathLang()];
   const bar = document.createElement('div');
   bar.className = 'consent-bar frame';
   bar.setAttribute('role', 'region');
@@ -135,18 +138,8 @@ function consentBar(posthog: PostHog, register: () => void) {
     return b;
   };
   actions.append(
-    button(t.reject, () => posthog.opt_out_capturing()),
-    button(t.accept, () => {
-      // opting in starts a fresh persistent identity: give it the super properties and this page
-      // (with its UTM) as its first pageview, since the earlier cookieless one can't be linked
-      posthog.opt_in_capturing({ captureProperties: siteProperties() });
-      register();
-      const utm = Object.fromEntries(
-        [...new URLSearchParams(location.search)].filter(([key]) => key.startsWith('utm_')),
-      );
-      const initial = Object.fromEntries(Object.entries(utm).map(([k, v]) => [`$initial_${k}`, v]));
-      posthog.capture('$pageview', utm, { $set_once: initial });
-    }),
+    button(t.reject, () => analyticsConsent.choose(false)),
+    button(t.accept, () => analyticsConsent.choose(true)),
   );
   bar.append(text, actions);
   document.body.append(bar);
@@ -160,9 +153,16 @@ export async function initAnalytics() {
   if (normalized) history.replaceState(history.state, '', normalized);
   // builds without a project key (local dev, forks) send nothing
   if (!KEY) return;
+  analyticsConsent.loading();
   trackLinks();
   // loaded after the page so analytics never delays it
-  const { default: posthog } = await import('posthog-js');
+  let posthog: PostHog;
+  try {
+    posthog = (await import('posthog-js')).default;
+  } catch {
+    analyticsConsent.configure('unavailable');
+    return;
+  }
   posthog.init(KEY, {
     api_host: HOST,
     ui_host: 'https://us.posthog.com',

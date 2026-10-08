@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { AvatarDesign } from '../avatarDesign';
 import type { Lang } from '../content';
 import { companionAvatarSvg } from '../companionAvatar';
@@ -13,6 +13,7 @@ import { useCompanionMotion } from '../useCompanionMotion';
 import { COMMUNITY_LINKS, QQ_GROUP } from '../communityLinks';
 import { copyText } from '../clipboard';
 import { track } from '../analytics';
+import { analyticsConsent, CONSENT_COPY } from '../analyticsConsent';
 
 function session() {
   try {
@@ -23,6 +24,11 @@ function session() {
 }
 export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesign }) {
   const c = COMPANION_COPY[lang];
+  const consent = useSyncExternalStore(analyticsConsent.subscribe, analyticsConsent.snapshot);
+  const consentRef = useRef(consent);
+  consentRef.current = consent;
+  const pending = consent === 'pending';
+  const privacy = CONSENT_COPY[lang];
   const [choices, setChoices] = useState(() => loadChoices(session()));
   const choicesRef = useRef(choices);
   const [message, setMessage] = useState<GuideMessage>();
@@ -40,16 +46,24 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
     saveChoices(session(), value);
   }
   function dismiss() {
+    if (consentRef.current === 'pending') return;
     update({ invited: true });
     setMessage(undefined);
   }
   const motion = useCompanionMotion({
     ...choices,
-    reading,
+    hidden: pending ? false : choices.hidden,
+    consentPending: pending,
+    reading: reading || pending,
     onEvent(event, support) {
+      if (consentRef.current === 'pending' || consentRef.current === 'loading') return;
       if (event === 'welcome' && !choicesRef.current.invited) setMessage('welcome');
       if (event === 'drop') setMessage('drop');
       if (event === 'drag') setMessage('drag');
+      if (event === 'interested' && !choicesRef.current.invited) {
+        update({ invited: true });
+        setMessage('community');
+      }
       if (event === 'landed') {
         if (support === 'viewport' && !choicesRef.current.invited) {
           update({ invited: true });
@@ -62,7 +76,7 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
   // A newly opened/closed bubble also needs clamping, even when movement is paused.
   useEffect(() => {
     motion.wake();
-  }, [message, lang, design.seed, copyState]);
+  }, [message, lang, design.seed, copyState, consent]);
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -98,19 +112,25 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
       if (mounted.current) setCopyState('failed');
     }
   }
+  function chooseConsent(accept: boolean) {
+    analyticsConsent.choose(accept);
+    update({ hidden: false });
+    setMessage('welcome');
+  }
+
   return (
     <div
       ref={motion.root}
       className="bot-companion"
       data-placement="companion"
-      data-hidden={choices.hidden}
+      data-hidden={!pending && choices.hidden}
       aria-label={c.label}
     >
       <button
         ref={restore}
         type="button"
         className="companion-restore"
-        hidden={!choices.hidden}
+        hidden={pending || !choices.hidden}
         onClick={() => {
           update({ hidden: false, invited: true });
           setMessage('appearance');
@@ -119,7 +139,7 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
       >
         {c.restore}
       </button>
-      <div hidden={choices.hidden}>
+      <div hidden={!pending && choices.hidden}>
         <button
           ref={motion.actor}
           type="button"
@@ -142,6 +162,7 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
           onFocus={enter}
           onBlur={leave}
           onClick={(e) => {
+            if (consentRef.current === 'pending') return;
             if (motion.clicked(e.detail)) {
               if (message) dismiss();
               else setMessage('welcome');
@@ -170,7 +191,7 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
         <div
           ref={motion.bubble}
           className="companion-bubble"
-          hidden={!message}
+          hidden={!pending && (!message || consent === 'loading')}
           onMouseEnter={() => {
             hovering.current = true;
             enter();
@@ -191,39 +212,37 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
           <div className="companion-content">
             <div className="companion-heading">
               <strong title={design.seed}>{design.seed}</strong>
-              <button
-                type="button"
-                aria-label={c.close}
-                onClick={() => {
-                  dismiss();
-                  motion.actor.current?.focus();
-                }}
-              >
-                ×
-              </button>
-            </div>
-            <small>{c.guide}</small>
-            <p aria-live="polite">{message ? c.messages[message] : ''}</p>
-            {message !== 'community' && (
-              <div className="companion-topics">
-                <a href="#features" onClick={() => setMessage('bots')}>
-                  {c.bots}
-                </a>
-                <a href="#avatar" onClick={() => setMessage('appearance')}>
-                  {c.appearance}
-                </a>
+              {!pending && (
                 <button
                   type="button"
+                  aria-label={c.close}
                   onClick={() => {
-                    update({ invited: true });
-                    setMessage('community');
+                    dismiss();
+                    motion.actor.current?.focus();
                   }}
                 >
-                  {c.community}
+                  ×
                 </button>
-              </div>
+              )}
+            </div>
+            <p aria-live="polite">{pending ? privacy.text : message ? c.messages[message] : ''}</p>
+            {pending && (
+              <>
+                <a className="companion-privacy" href={privacy.privacy}>
+                  {privacy.more} ↗
+                </a>
+                <div className="companion-consent">
+                  <button type="button" onClick={() => chooseConsent(false)}>
+                    {privacy.reject}
+                  </button>
+                  <button type="button" onClick={() => chooseConsent(true)}>
+                    {privacy.accept}
+                  </button>
+                </div>
+              </>
             )}
-            {message === 'community' && (
+
+            {!pending && message === 'community' && (
               <div className="companion-community">
                 <a
                   href={COMMUNITY_LINKS.discord}
@@ -234,45 +253,29 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
                   {c.discord} ↗
                 </a>
                 <button type="button" disabled={copyState === 'busy'} onClick={() => void copyQQ()}>
-                  {copyState === 'busy' ? c.busy : c.qq}
+                  {copyState === 'copied' ? (
+                    <>
+                      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                        <path
+                          d="M2 8h2v2h2v2h2v-2h2V8h2V6h2V4h-2v2h-2v2H8v2H6V8H4V6H2z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      <span className="sr-only">{c.copied}</span>
+                    </>
+                  ) : copyState === 'busy' ? (
+                    c.busy
+                  ) : (
+                    c.qq
+                  )}
                 </button>
-                <p className="companion-copy" role="status">
-                  {copyState === 'copied' ? c.copied : copyState === 'failed' ? c.failed : ''}
-                  <span>{QQ_GROUP}</span>
-                </p>
+                {copyState === 'failed' && (
+                  <p className="companion-copy" role="status">
+                    {c.failed}
+                  </p>
+                )}
               </div>
             )}
-            <details className="companion-settings">
-              <summary>{c.settings}</summary>
-              <div className="companion-settings-actions">
-                <button
-                  type="button"
-                  aria-pressed={!choices.walking}
-                  onClick={() => update({ walking: !choices.walking })}
-                >
-                  {choices.walking ? c.pause : c.resume}
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={choices.quiet || motion.reduced}
-                  disabled={motion.reduced}
-                  onClick={() => update({ quiet: !choices.quiet })}
-                >
-                  {choices.quiet && !motion.reduced ? c.animated : c.quiet}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    update({ hidden: true, invited: true });
-                    setMessage(undefined);
-                    setReading(false);
-                    requestAnimationFrame(() => restore.current?.focus());
-                  }}
-                >
-                  {c.hide}
-                </button>
-              </div>
-            </details>
           </div>
         </div>
       </div>

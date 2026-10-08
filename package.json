@@ -22,7 +22,7 @@
     "test:docs-sync": "node --test scripts/sync-docs.test.mjs",
     "test:community": "node --test scripts/community.test.mjs",
     "test:header": "node --test scripts/header.test.mjs",
-    "test:companion": "node --test scripts/companion.test.mjs"
+    "test:companion": "node --test scripts/companion.test.mjs scripts/consent.test.mjs"
   },
   "dependencies": {
     "@astryxdesign/core": "^0.6.5",
