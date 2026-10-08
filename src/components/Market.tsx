@@ -47,12 +47,14 @@ const botBio = (bot: MarketplaceEntry) => bot.bio ?? bot.description;
 function BotBanner({ bot, className }: { bot: MarketplaceEntry; className: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const recipe = bot.banner && 'recipe' in bot.banner ? bot.banner.recipe : null;
-  const image =
+  const [failed, setFailed] = useState<string | null>(null);
+  const uploaded =
     bot.banner &&
     'image' in bot.banner &&
     bot.banner.image.startsWith('https://raw.githubusercontent.com/')
       ? bot.banner.image
       : null;
+  const image = uploaded !== failed ? uploaded : null;
   useEffect(() => {
     const context = canvas.current?.getContext('2d');
     if (!context || !recipe || !isPixelBannerRecipe(recipe)) return;
@@ -66,7 +68,9 @@ function BotBanner({ bot, className }: { bot: MarketplaceEntry; className: strin
       data-banner={recipe ? 'scene' : image ? 'image' : 'none'}
     >
       {recipe ? <canvas ref={canvas} width={150} height={50} /> : null}
-      {image ? <img src={image} alt="" loading="lazy" decoding="async" /> : null}
+      {image ? (
+        <img src={image} alt="" loading="lazy" decoding="async" onError={() => setFailed(image)} />
+      ) : null}
     </span>
   );
 }
