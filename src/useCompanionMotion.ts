@@ -19,6 +19,7 @@ export function useCompanionMotion(options: Options) {
   const latest = useRef(options);
   latest.current = options;
   const wake = useRef<() => void>(() => {});
+  const sync = useRef<() => void>(() => {});
   const [reduced, setReduced] = useState(false);
   const reducedRef = useRef(false);
   const pointer = useRef<{
@@ -47,6 +48,7 @@ export function useCompanionMotion(options: Options) {
       disposed = false;
     const viewport = window.visualViewport;
     let geometry = {
+      pageTop: scrollY,
       width: innerWidth,
       height: innerHeight,
       size: 96,
@@ -60,10 +62,18 @@ export function useCompanionMotion(options: Options) {
       const m = model.current;
       el!.dataset.phase = m.phase;
       el!.dataset.support = m.support;
+      // Hero support belongs to the scrolling document. Cache the measured origin:
+      // even if touch scrolling delays JS, the browser moves the actor and bubble
+      // together with the ground rather than leaving a fixed overlay behind.
+      const pageOffset = m.support === 'hero' ? geometry.pageTop : 0;
+      el!.style.setProperty(
+        '--hero-layer-height',
+        `${geometry.pageTop + Math.max(geometry.height, geometry.ground + geometry.size + 24)}px`,
+      );
       const inView = m.phase !== 'waiting' && m.y < geometry.height;
       el!.dataset.offscreen = String(!inView);
       el!.dataset.running = String(canRun() && inView && !reducedNow() && !latest.current.reading);
-      button!.style.transform = `translate3d(${m.x}px,${m.y}px,0)`;
+      button!.style.transform = `translate3d(${m.x}px,${m.y + pageOffset}px,0)`;
       if (sprite.current)
         sprite.current.style.transform = `rotate(${m.tilt}deg) scale(${1 + m.squash},${1 - m.squash})`;
       const panel = bubble.current;
@@ -86,7 +96,7 @@ export function useCompanionMotion(options: Options) {
             above ? m.y - height - 16 : m.y + geometry.size + 12,
           ),
         );
-        panel.style.transform = `translate3d(${left}px,${top}px,0)`;
+        panel.style.transform = `translate3d(${left}px,${top + pageOffset}px,0)`;
         panel.style.setProperty(
           '--tail',
           `${Math.max(16, Math.min(width - 24, m.x + geometry.size / 2 - left))}px`,
@@ -102,6 +112,7 @@ export function useCompanionMotion(options: Options) {
       const height = (viewport?.height ?? innerHeight) + (viewport?.offsetTop ?? 0);
       const safe = parseFloat(getComputedStyle(el!).paddingBottom) || 0;
       geometry = {
+        pageTop: scrollY,
         width: viewport?.width ?? innerWidth,
         height,
         size,
@@ -154,6 +165,10 @@ export function useCompanionMotion(options: Options) {
     wake.current = () => {
       dirty = true;
       request();
+    };
+    sync.current = () => {
+      if (dirty) measure();
+      paint();
     };
     const scroll = () => {
       downward ||= scrollY > oldScroll;
@@ -221,6 +236,7 @@ export function useCompanionMotion(options: Options) {
       disposed = true;
       if (frame) cancelAnimationFrame(frame);
       wake.current = () => {};
+      sync.current = () => {};
       sizes.disconnect();
       panelSizes.disconnect();
       mutations.disconnect();
@@ -250,6 +266,8 @@ export function useCompanionMotion(options: Options) {
     },
     pointerDown(event: React.PointerEvent<HTMLButtonElement>) {
       if (event.button !== 0 || pointer.current) return;
+      // A pointer can arrive before the queued scroll frame updates the model.
+      sync.current();
       event.currentTarget.setPointerCapture(event.pointerId);
       const m = model.current;
       pointer.current = {

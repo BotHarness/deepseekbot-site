@@ -204,3 +204,38 @@ test('explicit conversation taps weave a community turn between avatar and Bot i
   assert.deepEqual(turns, ['welcome', 'bots', 'appearance', 'community', 'welcome']);
   assert.equal(nextGuideMessage('drag'), 'welcome');
 });
+
+test('Hero scrolling preserves height above the moving ground during a drag-release fall', () => {
+  const m = new SiteCompanionMotion();
+  m.measure(bounds, false, false);
+  advance(m);
+  m.grab(0, false);
+  m.drag(180, 430, 16, false);
+  m.release(200, false);
+  const heightAboveGround = bounds.ground - m.y;
+  m.measure({ ...bounds, ground: 630 }, true, false);
+  assert.equal(m.phase, 'fall');
+  assert.equal(m.support, 'hero');
+  assert.equal(630 - m.y, heightAboveGround);
+  advance(m);
+  assert.equal(m.y, 630 - bounds.size + 8);
+});
+
+test('jump starts at the native-scrolled Hero position and viewport support ignores later ground shifts', () => {
+  const m = new SiteCompanionMotion();
+  const initial = { ...bounds, ground: 280 };
+  m.measure(initial, false, false);
+  advance(m);
+  const displayedY = m.y - 100;
+  assert.equal(m.measure({ ...initial, ground: 180 }, true, false), 'drop');
+  assert.equal(m.y, displayedY);
+  assert.equal(m.support, 'viewport');
+  m.advance(16, false, false);
+  const fallingY = m.y;
+  m.measure({ ...initial, ground: -800 }, true, false);
+  assert.equal(m.y, fallingY);
+  advance(m);
+  assert.equal(m.y, bounds.bottom);
+  assert.equal(m.measure(initial, false, false), undefined);
+  assert.equal(m.support, 'viewport');
+});

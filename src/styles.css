@@ -1597,6 +1597,11 @@ a:where(:not(.astryx-button)) {
   pointer-events: none;
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+.bot-companion[data-support='hero'] {
+  position: absolute;
+  bottom: auto;
+  height: var(--hero-layer-height, 100%);
+}
 .companion-actor {
   position: absolute;
   left: 0;
