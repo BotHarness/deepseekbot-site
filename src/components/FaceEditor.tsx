@@ -10,7 +10,6 @@ import {
   AVATAR_PATTERNS,
   AVATAR_PIECE_COLORS,
   AVATAR_PIECE_COLORS_V4,
-  AVATAR_PRESETS,
   AVATAR_RANGES,
   AVATAR_SPECIES,
   AVATAR_SPECIES_SWATCHES,
@@ -27,6 +26,7 @@ import {
   type AvatarSpeciesV4,
 } from '@botharness/pixel-avatar';
 import { pixelTileSvg } from '../pixelTile';
+import { PRESETS } from '../presets';
 import { memo, useMemo, useState } from 'react';
 import type { Copy } from '../content';
 
@@ -215,7 +215,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   if (category === 'presets') {
     panel = (
       <div className="face-options">
-        {AVATAR_PRESETS.map((preset, i) => (
+        {PRESETS.map((preset, i) => (
           <Tile
             key={i}
             recipe={preset}
