@@ -1,6 +1,6 @@
 import { Button } from '@astryxdesign/core/Button';
 import { TextInput } from '@astryxdesign/core/TextInput';
-import type { PixelSymbol } from '@botharness/pixel-avatar';
+import { PART_SLOTS, wornPart, type PartSlot, type PixelSymbol } from '@botharness/pixel-avatar';
 import { useRef, useState } from 'react';
 import { SYMBOL_ORDER, type Copy } from '../content';
 import { track } from '../analytics';
@@ -9,6 +9,8 @@ import type { AvatarDesign } from '../avatarDesign';
 import { FaceEditor } from './FaceEditor';
 import { PixelAvatar, type PixelAvatarHandle } from './PixelAvatar';
 import { SymbolIcon } from './SymbolIcon';
+
+const CUSTOM_SLOTS = Object.keys(PART_SLOTS) as PartSlot[];
 
 export function Playground({ copy, design }: { copy: Copy; design: AvatarDesign }) {
   const { name, seed, recipe, edited } = design;
@@ -52,7 +54,11 @@ export function Playground({ copy, design }: { copy: Copy; design: AvatarDesign 
               label={t.download}
               variant="primary"
               clickAction={() => {
-                track('avatar_downloaded', { edited: edited });
+                track('avatar_downloaded', {
+                  edited,
+                  species: recipe.species ?? 'human',
+                  drawn_parts: CUSTOM_SLOTS.filter((slot) => wornPart(recipe, slot)).length,
+                });
                 return downloadAvatar(recipe, seed);
               }}
             />
