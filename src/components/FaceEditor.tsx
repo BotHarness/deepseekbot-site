@@ -196,14 +196,61 @@ function shuffled(recipe: Recipe): Recipe {
   } as unknown as Recipe;
 }
 
-/** Tabs for parts the recipe can show: petals and base only on a flower, fur only on an animal. */
+// A flower draws petals, a face and a base: no hair, headwear, eye color or hair piece colors.
+// hiddenChoices() covers the rest.
+const FLOWER_HIDDEN = new Set(['headpiece', 'strand', 'beard']);
+const FLOWER_COLORS = new Set(['eyeColor', 'bangsColor', 'backHairColor', 'strandColor']);
+/** The hair piece each piece color paints, and the part slot a drawn piece would take. */
+const PIECE_OF: Record<string, [field: string, slot: PartSlot]> = {
+  bangsColor: ['bangs', 'bangs'],
+  leftSideHairColor: ['sideHair', 'leftSideHair'],
+  rightSideHairColor: ['rightSideHair', 'rightSideHair'],
+  backHairColor: ['backHair', 'backHair'],
+  strandColor: ['strand', 'headpiece'],
+};
+
+/**
+ * Whether a color row changes anything: a flower has no eyes or hair pieces and only a pot takes the
+ * outfit color, and a hair piece color needs that piece to be there, built in or drawn.
+ */
+function colorShown(recipe: Recipe, fields: Fields, key: string): boolean {
+  if (recipe.species === 'flower')
+    return !FLOWER_COLORS.has(key) && (key !== 'shirtColor' || fields.flowerBase === 'pot');
+  const piece = PIECE_OF[key];
+  if (!piece) return true;
+  const [field, slot] = piece;
+  const value = fields[field] ?? (field === 'rightSideHair' ? fields.sideHair : undefined);
+  if (field === 'strand') return value !== undefined && value !== 'none';
+  // BotPixel 0.10 draws bun and odango back hair in the hair color, ignoring backHairColor
+  if (field === 'backHair' && (value === 'bun' || value === 'odango'))
+    return wornPart(recipe, slot) !== undefined;
+  return (value !== undefined && value !== 'none') || wornPart(recipe, slot) !== undefined;
+}
+
+/**
+ * Parts the species itself never draws. Headwear also hides hair, but only until it comes off, so
+ * those tabs stay with a note; this asks with the headwear removed.
+ */
+function speciesHidden(recipe: Recipe): Set<string> {
+  const bare = { ...withBuiltInHeadpiece(recipe, undefined), accessory: 'none' } as Recipe;
+  const hidden = new Set(hiddenChoices(bare));
+  if (hidden.has('bangs')) hidden.add('hair');
+  if (recipe.species === 'flower') for (const key of FLOWER_HIDDEN) hidden.add(key);
+  return hidden;
+}
+
+/**
+ * Tabs for parts the recipe can show: petals and base only on a flower, fur only on an animal, and
+ * nothing the species hides, so every tile in a tab looks different.
+ */
 const categoriesFor = (recipe: Recipe) => {
   const flower = recipe.species === 'flower';
+  const hidden = speciesHidden(recipe);
   return CATEGORIES.filter((key) =>
-    key === 'petals' || key === 'flowerBase'
-      ? flower
-      : key === 'beard' || key === 'strand'
-        ? !flower
+    hidden.has(key)
+      ? false
+      : key === 'petals' || key === 'flowerBase'
+        ? flower
         : key === 'pattern'
           ? isAnimalSpecies(recipe.species)
           : true,
@@ -259,7 +306,7 @@ interface Props {
 }
 
 export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
-  const [chosen, setCategory] = useState('hair');
+  const [chosen, setCategory] = useState('presets');
   const [parts, setParts] = useState<PartEntry[]>(loadParts);
   const [started, setDrawing] = useState<Drawing>();
   const [libraryNote, setLibraryNote] = useState<string>();
@@ -271,8 +318,8 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   const t = copy.playground.editor;
   const labels = copy.avatarLabels;
   const categories = categoriesFor(recipe);
-  // a tab the new species doesn't have falls back to hair
-  const category = categories.includes(chosen) ? chosen : 'hair';
+  // a tab the new species doesn't have falls back to the presets
+  const category = categories.includes(chosen) ? chosen : 'presets';
   const fields = detailedRecipe(recipe) as unknown as Fields;
   const set = (key: string, value: string | number) => onChange(withPart(recipe, key, value));
   const option = (part: string, value: string) =>
@@ -533,7 +580,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     const skin = AVATAR_SPECIES_SWATCHES[recipe.species ?? 'human'];
     panel = (
       <div className="face-colors">
-        {COLORS.map((key) => (
+        {COLORS.filter((key) => colorShown(recipe, fields, key)).map((key) => (
           <div key={key} className="face-color-row">
             <span>{labels.parts[key]}</span>
             <div className="face-swatches">
@@ -575,28 +622,40 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   } else if (category === 'shape') {
     panel = (
       <div className="face-ranges">
-        {Object.entries(AVATAR_RANGES).map(([key, [min, max]]) => (
-          <label key={key}>
-            <span>{labels.parts[key]}</span>
-            <input
-              type="range"
-              min={min}
-              max={max}
-              step={1}
-              value={Number(fields[key] ?? 0)}
-              onChange={(event) => set(key, Number(event.currentTarget.value))}
-            />
-          </label>
-        ))}
+        {Object.entries(AVATAR_RANGES)
+          // a slider shows only where it moves something (hair length needs longer hair, say)
+          .filter(
+            ([key, [min, max]]) =>
+              Number(fields[key] ?? 0) !== 0 ||
+              pixelTileSvg(withPart(recipe, key, min)) !== pixelTileSvg(withPart(recipe, key, max)),
+          )
+          .map(([key, [min, max]]) => (
+            <label key={key}>
+              <span>{labels.parts[key]}</span>
+              <input
+                type="range"
+                min={min}
+                max={max}
+                step={1}
+                value={Number(fields[key] ?? 0)}
+                onChange={(event) => set(key, Number(event.currentTarget.value))}
+              />
+            </label>
+          ))}
       </div>
     );
   } else if (category === 'headpiece') {
     const worn = builtInHeadpiece(recipe);
+    // an animal has its own ears, so ear headpieces draw nothing on it: offer only ones that show
+    const bare = pixelTileSvg(withBuiltInHeadpiece(recipe, undefined));
+    const shown = AVATAR_HEADPIECES.filter(
+      (value) => value === worn || pixelTileSvg(withBuiltInHeadpiece(recipe, value)) !== bare,
+    );
     panel = (
       <div className="face-options">
         {note}
         {partActions('headpiece')}
-        {AVATAR_HEADPIECES.map((value) => (
+        {shown.map((value) => (
           <Tile
             key={value}
             recipe={withBuiltInHeadpiece(recipe, value)}
@@ -659,7 +718,11 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             type="button"
             className="face-tab"
             aria-pressed={category === key}
-            onClick={() => setCategory(key)}
+            onClick={() => {
+              if (key !== category)
+                track('avatar_tab_selected', { tab: key, species: recipe.species ?? 'human' });
+              setCategory(key);
+            }}
           >
             {labels.parts[key] ?? key}
           </button>
