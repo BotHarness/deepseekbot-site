@@ -13,9 +13,19 @@ export interface PanelItem {
   tone?: 'ok' | 'warn' | 'info';
 }
 
+/** A lucide icon, as the real app draws its sidebar sections and timeline events. */
+export type DemoIcon =
+  | 'members'
+  | 'sessions'
+  | 'files'
+  | 'history'
+  | 'schedules'
+  | 'workspace'
+  | 'asleep';
+
 export interface PanelSection {
   id: string;
-  icon: PixelSymbol;
+  icon: DemoIcon;
   title: string;
   items: PanelItem[];
 }
@@ -32,7 +42,7 @@ export type DemoStep =
   | { kind: 'work'; bot: string; tools: PixelSymbol[] }
   | { kind: 'bot'; bot: string; text: string }
   | { kind: 'checks'; bot: string; rows: { label: string; detail: string }[] }
-  | { kind: 'event'; icon: PixelSymbol; text: string; strong?: string }
+  | { kind: 'event'; icon: DemoIcon; text: string; strong?: string }
   /** playback waits here until the visitor answers */
   | { kind: 'approval'; bot: string; text: string; detail: string };
 
@@ -73,6 +83,8 @@ export interface DemoCopy {
   waiting: string;
   replay: string;
   sidebar: string;
+  hideSidebar: string;
+  showSidebar: string;
   /** the reply to anything a visitor types */
   fallback: string;
   fallbackCta: string;
@@ -150,6 +162,8 @@ const zhDemo: DemoCopy = {
   waiting: '等你回答，演示才会继续',
   replay: '再看一遍',
   sidebar: 'Channel sidebar',
+  hideSidebar: '收起 Channel sidebar',
+  showSidebar: '展开 Channel sidebar',
   fallback:
     '这里是预设脚本的演示，我还不能真的回答你。把 DeepSeekBot 装进 DeepSeek Harness，就能和真正的我聊了。',
   fallbackCta: '开始安装 →',
@@ -165,7 +179,7 @@ const zhDemo: DemoCopy = {
       panel: [
         {
           id: 'members',
-          icon: 'subagent',
+          icon: 'members',
           title: '成员',
           items: [
             { id: 'h', title: 'Human', badge: 'Human（你）' },
@@ -176,7 +190,7 @@ const zhDemo: DemoCopy = {
         },
         {
           id: 'sessions',
-          icon: 'workflow',
+          icon: 'sessions',
           title: '会话',
           items: [],
         },
@@ -185,7 +199,7 @@ const zhDemo: DemoCopy = {
         { kind: 'user', text: '@Mira 调研三家竞品的定价，@Nova 按结果更新我们的定价页。' },
         {
           kind: 'event',
-          icon: 'ask',
+          icon: 'asleep',
           text: 'Theo 设为「仅直接 @」，这条没有 @ 它，所以没有被叫醒',
         },
         {
@@ -295,7 +309,7 @@ const zhDemo: DemoCopy = {
       panel: [
         {
           id: 'files',
-          icon: 'read',
+          icon: 'files',
           title: '记忆文件',
           items: [
             { id: 'soul', title: 'SOUL.md' },
@@ -305,13 +319,13 @@ const zhDemo: DemoCopy = {
         },
         {
           id: 'commits',
-          icon: 'edit',
+          icon: 'history',
           title: '记忆演化',
           items: [{ id: 'c1', title: '整理竞品定价', meta: 'a41c9e2 · 昨天', badge: 'main' }],
         },
         {
           id: 'schedules',
-          icon: 'todo',
+          icon: 'schedules',
           title: '定时任务',
           items: [{ id: 's1', title: '每日早报', meta: '下次 明天 09:00', badge: '每天 09:00' }],
         },
@@ -321,7 +335,7 @@ const zhDemo: DemoCopy = {
         { kind: 'work', bot: 'Mira', tools: ['thinking', 'todo'] },
         {
           kind: 'event',
-          icon: 'todo',
+          icon: 'schedules',
           text: '创建了定时任务',
           strong: '竞品周报 · 每周五 17:30',
           panel: [
@@ -340,7 +354,7 @@ const zhDemo: DemoCopy = {
         { kind: 'work', bot: 'Mira', tools: ['write'] },
         {
           kind: 'event',
-          icon: 'edit',
+          icon: 'history',
           text: '记忆已更新',
           strong: 'MEMORY.md +1 行',
           panel: [
@@ -373,13 +387,13 @@ const zhDemo: DemoCopy = {
       panel: [
         {
           id: 'sessions',
-          icon: 'workflow',
+          icon: 'sessions',
           title: '会话',
           items: [{ id: 'main', title: '主会话', meta: '盯着 Bot 收件箱', badge: '空闲' }],
         },
         {
           id: 'grants',
-          icon: 'read',
+          icon: 'workspace',
           title: '工作区授权',
           items: [{ id: 'api', title: '~/code/api', meta: '读写' }],
         },
@@ -411,7 +425,7 @@ const zhDemo: DemoCopy = {
         },
         {
           kind: 'event',
-          icon: 'workflow',
+          icon: 'sessions',
           text: '新开了一个会话',
           strong: '~/code/web',
           panel: [
@@ -491,6 +505,8 @@ const enDemo: DemoCopy = {
   waiting: 'The demo waits for your answer',
   replay: 'Replay',
   sidebar: 'Channel sidebar',
+  hideSidebar: 'Hide the Channel sidebar',
+  showSidebar: 'Show the Channel sidebar',
   fallback:
     'This demo plays a script, so I can’t really answer you yet. Add DeepSeekBot to DeepSeek Harness and you can talk to the real me.',
   fallbackCta: 'Install →',
@@ -506,7 +522,7 @@ const enDemo: DemoCopy = {
       panel: [
         {
           id: 'members',
-          icon: 'subagent',
+          icon: 'members',
           title: 'Members',
           items: [
             { id: 'h', title: 'Human', badge: 'Human (you)' },
@@ -515,7 +531,7 @@ const enDemo: DemoCopy = {
             { id: 'theo', title: 'Theo', meta: 'Design', badge: 'Mentions only' },
           ],
         },
-        { id: 'sessions', icon: 'workflow', title: 'Sessions', items: [] },
+        { id: 'sessions', icon: 'sessions', title: 'Sessions', items: [] },
       ],
       steps: [
         {
@@ -524,7 +540,7 @@ const enDemo: DemoCopy = {
         },
         {
           kind: 'event',
-          icon: 'ask',
+          icon: 'asleep',
           text: 'Theo is on mentions only and wasn’t @-ed, so it stays asleep',
         },
         {
@@ -634,7 +650,7 @@ const enDemo: DemoCopy = {
       panel: [
         {
           id: 'files',
-          icon: 'read',
+          icon: 'files',
           title: 'Memory files',
           items: [
             { id: 'soul', title: 'SOUL.md' },
@@ -644,7 +660,7 @@ const enDemo: DemoCopy = {
         },
         {
           id: 'commits',
-          icon: 'edit',
+          icon: 'history',
           title: 'Memory history',
           items: [
             {
@@ -657,7 +673,7 @@ const enDemo: DemoCopy = {
         },
         {
           id: 'schedules',
-          icon: 'todo',
+          icon: 'schedules',
           title: 'Scheduled tasks',
           items: [
             {
@@ -677,7 +693,7 @@ const enDemo: DemoCopy = {
         { kind: 'work', bot: 'Mira', tools: ['thinking', 'todo'] },
         {
           kind: 'event',
-          icon: 'todo',
+          icon: 'schedules',
           text: 'Created a scheduled task',
           strong: 'Competitor digest · Fridays 17:30',
           panel: [
@@ -696,7 +712,7 @@ const enDemo: DemoCopy = {
         { kind: 'work', bot: 'Mira', tools: ['write'] },
         {
           kind: 'event',
-          icon: 'edit',
+          icon: 'history',
           text: 'Memory updated',
           strong: 'MEMORY.md +1 line',
           panel: [
@@ -729,7 +745,7 @@ const enDemo: DemoCopy = {
       panel: [
         {
           id: 'sessions',
-          icon: 'workflow',
+          icon: 'sessions',
           title: 'Sessions',
           items: [
             { id: 'main', title: 'Main session', meta: 'Watching the Bot Inbox', badge: 'Idle' },
@@ -737,7 +753,7 @@ const enDemo: DemoCopy = {
         },
         {
           id: 'grants',
-          icon: 'read',
+          icon: 'workspace',
           title: 'Workspace access',
           items: [{ id: 'api', title: '~/code/api', meta: 'Read & write' }],
         },
@@ -769,7 +785,7 @@ const enDemo: DemoCopy = {
         },
         {
           kind: 'event',
-          icon: 'workflow',
+          icon: 'sessions',
           text: 'Started another session in',
           strong: '~/code/web',
           panel: [

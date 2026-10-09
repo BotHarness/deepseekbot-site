@@ -36,6 +36,7 @@
     "@fontsource/fusion-pixel-12px-proportional-sc": "^5.3.0",
     "@stylexjs/stylex": "^0.19.1",
     "dompurify": "^3.4.16",
+    "lucide-react": "^1.53.0",
     "posthog-js": "^1.435.8",
     "react": "19.3.0",
     "react-dom": "19.3.0"
