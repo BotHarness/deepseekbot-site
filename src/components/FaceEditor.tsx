@@ -219,9 +219,6 @@ function colorShown(recipe: Recipe, fields: Fields, key: string): boolean {
   const [field, slot] = piece;
   const value = fields[field] ?? (field === 'rightSideHair' ? fields.sideHair : undefined);
   if (field === 'strand') return value !== undefined && value !== 'none';
-  // BotPixel 0.10 draws bun and odango back hair in the hair color, ignoring backHairColor
-  if (field === 'backHair' && (value === 'bun' || value === 'odango'))
-    return wornPart(recipe, slot) !== undefined;
   return (value !== undefined && value !== 'none') || wornPart(recipe, slot) !== undefined;
 }
 

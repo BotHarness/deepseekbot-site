@@ -1,6 +1,7 @@
 import { Theme } from '@astryxdesign/core/theme';
 import { useEffect, useState } from 'react';
 import { useAvatarDesign } from './avatarDesign';
+import { BotCompanion } from './components/BotCompanion';
 import { Playground } from './components/Playground';
 import { SiteHeader } from './components/SiteHeader';
 import { COPY, LINKS } from './content';
@@ -9,7 +10,8 @@ import { pixelTheme } from './theme';
 
 /**
  * The Avatar Studio at /avatar: the stage, the part editor and the color and shape panel side by
- * side. The design is the same one the home page shows, kept in this browser.
+ * side, with the companion walking along the bottom in the design being edited. The design is the
+ * same one the home page shows, kept in this browser.
  */
 export function AvatarApp() {
   const lang = pathLang();
@@ -50,6 +52,8 @@ export function AvatarApp() {
           · <a href={lang === 'zh' ? '/privacy/' : '/en/privacy/'}>{copy.footer.privacy}</a>
         </p>
       </footer>
+      {/* the same companion as on the home page, wearing the design as it is edited */}
+      <BotCompanion lang={lang} design={design} />
     </Theme>
   );
 }
