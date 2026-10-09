@@ -14,7 +14,7 @@
     "lint": "oxlint",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
-    "verify": "pnpm format:check && pnpm lint && pnpm test:docs-sync && pnpm test:community && pnpm test:header && pnpm test:companion && pnpm build",
+    "verify": "pnpm format:check && pnpm lint && pnpm test:docs-sync && pnpm test:community && pnpm test:header && pnpm test:companion && pnpm test:part-file && pnpm build",
     "deploy": "pnpm build && wrangler deploy",
     "deploy:preview": "pnpm build && wrangler versions upload",
     "frames": "node scripts/frame-svg.mjs",
@@ -22,7 +22,8 @@
     "test:docs-sync": "node --test scripts/sync-docs.test.mjs",
     "test:community": "node --test scripts/community.test.mjs",
     "test:header": "node --test scripts/header.test.mjs",
-    "test:companion": "node --test scripts/companion.test.mjs scripts/consent.test.mjs"
+    "test:companion": "node --test scripts/companion.test.mjs scripts/consent.test.mjs",
+    "test:part-file": "node --test scripts/part-file.test.mjs"
   },
   "dependencies": {
     "@astryxdesign/core": "^0.6.5",
