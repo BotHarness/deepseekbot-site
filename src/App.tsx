@@ -4,7 +4,9 @@ import { BotCompanion } from './components/BotCompanion';
 import { useAvatarDesign } from './avatarDesign';
 import { Community } from './components/Community';
 import { Crew } from './components/Crew';
+import { FeatureDemo } from './components/FeatureDemos';
 import { HeroLinks } from './components/HeroLinks';
+import { LiveDemo } from './components/LiveDemo';
 import { QuickInstall } from './components/QuickInstall';
 import { Install } from './components/Install';
 import { PromoVideo } from './components/PromoVideo';
@@ -66,6 +68,18 @@ export function App() {
         </section>
 
         <section
+          className="section section--center demo-section"
+          id="demo"
+          aria-labelledby="demo-title"
+        >
+          <p className="kicker">{copy.demo.kicker}</p>
+          <h2 id="demo-title">{copy.demo.title}</h2>
+          <p className="section-lead">{copy.demo.lead}</p>
+          <LiveDemo copy={copy} />
+          <p className="demo-note">{copy.demo.note}</p>
+        </section>
+
+        <section
           className="section section--alt section--center"
           id="video"
           aria-labelledby="video-title"
@@ -80,24 +94,50 @@ export function App() {
           <p className="kicker">{copy.features.kicker}</p>
           <h2 id="features-title">{copy.features.title}</h2>
           <p className="section-lead">{copy.features.lead}</p>
+          <ol className="feature-rows">
+            {copy.features.items
+              .filter((item) => item.demo)
+              .map((item) => (
+                <li key={item.title} className="feature-row">
+                  <div className="feature-text">
+                    <span className="feature-icon">
+                      <SymbolIcon symbol={item.icon} color="#3d5afe" size={40} />
+                    </span>
+                    <h3>
+                      {item.title}
+                      {item.tag ? <span className="tag">{item.tag}</span> : null}
+                    </h3>
+                    <p>{item.body}</p>
+                    {item.guide ? (
+                      <a className="feature-guide" href={guidePath(lang, item.guide.slug)}>
+                        {item.guide.label} →
+                      </a>
+                    ) : null}
+                  </div>
+                  <FeatureDemo copy={copy} demo={item.demo!} />
+                </li>
+              ))}
+          </ol>
           <ul className="feature-grid">
-            {copy.features.items.map((item) => (
-              <li key={item.title} className="feature frame">
-                <span className="feature-icon">
-                  <SymbolIcon symbol={item.icon} color="#3d5afe" size={40} />
-                </span>
-                <h3>
-                  {item.title}
-                  {item.tag ? <span className="tag">{item.tag}</span> : null}
-                </h3>
-                <p>{item.body}</p>
-                {item.guide ? (
-                  <a className="feature-guide" href={guidePath(lang, item.guide.slug)}>
-                    {item.guide.label} →
-                  </a>
-                ) : null}
-              </li>
-            ))}
+            {copy.features.items
+              .filter((item) => !item.demo)
+              .map((item) => (
+                <li key={item.title} className="feature frame">
+                  <span className="feature-icon">
+                    <SymbolIcon symbol={item.icon} color="#3d5afe" size={40} />
+                  </span>
+                  <h3>
+                    {item.title}
+                    {item.tag ? <span className="tag">{item.tag}</span> : null}
+                  </h3>
+                  <p>{item.body}</p>
+                  {item.guide ? (
+                    <a className="feature-guide" href={guidePath(lang, item.guide.slug)}>
+                      {item.guide.label} →
+                    </a>
+                  ) : null}
+                </li>
+              ))}
           </ul>
           <aside className="dsh-note frame">
             <h3>{copy.dsh.title}</h3>

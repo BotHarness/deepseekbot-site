@@ -1,6 +1,14 @@
 import { EN_AVATAR_LABELS, ZH_AVATAR_LABELS, type AvatarLabels } from './avatar-labels';
 import type { PixelSymbol } from '@botharness/pixel-avatar';
 import { COMMUNITY_LINKS } from './communityLinks';
+import {
+  EN_DEMO,
+  EN_FEATURE_DEMOS,
+  ZH_DEMO,
+  ZH_FEATURE_DEMOS,
+  type DemoCopy,
+  type FeatureDemoCopy,
+} from './demoCopy';
 import { QQ_GROUP } from './communityLinks';
 export { QQ_GROUP };
 
@@ -63,6 +71,8 @@ interface Feature {
   body: string;
   tag?: string;
   guide?: { slug: string; label: string };
+  /** the hands-on demo shown beside it; features without one are listed as cards */
+  demo?: keyof FeatureDemoCopy;
 }
 
 export interface Copy {
@@ -109,6 +119,8 @@ export interface Copy {
   };
   symbols: SymbolLabels;
   features: { kicker: string; title: string; lead: string; items: Feature[] };
+  demo: DemoCopy;
+  featureDemos: FeatureDemoCopy;
   dsh: { title: string; body: string; issues: string };
   community: {
     kicker: string;
@@ -280,26 +292,31 @@ const zh: Copy = {
     items: [
       {
         icon: 'present',
+        demo: 'identity',
         title: '持久身份',
         body: '创建负责研究、设计或实现的 PersonaBots。每个 Bot 有自己的名字和头像：SOUL.md 保存人格、表达方式与工作原则，MEMORY.md 保存核心记忆，跨对话和文件夹延续。',
       },
       {
         icon: 'read',
+        demo: 'memory',
         title: '看得见的 Git Memory',
         body: 'Bot 的记忆是一个普通 Git 工作树。在侧栏浏览记忆文件、分支、commit 历史与 diff，也能推到 GitHub，在多台机器之间共享同一份记忆。',
       },
       {
         icon: 'subagent',
+        demo: 'groups',
         title: 'Group 协作',
         body: '把不同的 bots 带进 Group，消息保留各自身份，需要谁就 @ 谁。每个成员可以选择每条提醒、摘要、仅提及或静默。',
       },
       {
         icon: 'workflow',
+        demo: 'folders',
         title: '跨文件夹工作',
         body: '授权文件夹后，同一个 Bot 可以在多个文件夹中开展工作。每项工作保留独立会话和进展；需要你回答或批准时，侧栏会提醒你。',
       },
       {
         icon: 'todo',
+        demo: 'schedules',
         title: '定时任务',
         body: '设置计划，或让 Bot 帮你管理。查看每次触发及处理记录，随时暂停，也可锁定以防 Bot 修改。应用运行时按计划执行。',
       },
@@ -407,6 +424,8 @@ const zh: Copy = {
     },
   },
   avatarLabels: ZH_AVATAR_LABELS,
+  demo: ZH_DEMO,
+  featureDemos: ZH_FEATURE_DEMOS,
   install: {
     kicker: '安装',
     title: '装进 DeepSeek Harness',
@@ -538,26 +557,31 @@ const en: Copy = {
     items: [
       {
         icon: 'present',
+        demo: 'identity',
         title: 'Lasting identity',
         body: 'Create PersonaBots for research, design or engineering. Each has its own name and avatar: SOUL.md holds its persona, voice and working principles; MEMORY.md holds core memory that lasts across chats and folders.',
       },
       {
         icon: 'read',
+        demo: 'memory',
         title: 'Git Memory you can see',
         body: 'A Bot’s memory is a plain Git working tree. Browse its files, branches, commits and diffs in the sidebar, or push it to GitHub to share the same memory across machines.',
       },
       {
         icon: 'subagent',
+        demo: 'groups',
         title: 'Groups',
         body: 'Bring different Bots into a Group. Messages keep each Bot’s identity, and you @ whoever you need. Each member picks every message, digest, mentions only or silent.',
       },
       {
         icon: 'workflow',
+        demo: 'folders',
         title: 'Work across folders',
         body: 'Authorize folders so the same Bot can work in several of them. Each job keeps its own conversation and progress; the sidebar alerts you when it needs your answer or approval.',
       },
       {
         icon: 'todo',
+        demo: 'schedules',
         title: 'Scheduled tasks',
         body: 'Set a schedule or ask your Bot to manage one. Review triggers and handling history, pause it, or lock it against Bot edits. Tasks run while the app is running.',
       },
@@ -666,6 +690,8 @@ const en: Copy = {
     },
   },
   avatarLabels: EN_AVATAR_LABELS,
+  demo: EN_DEMO,
+  featureDemos: EN_FEATURE_DEMOS,
   install: {
     kicker: 'Install',
     title: 'Add it to DeepSeek Harness',
