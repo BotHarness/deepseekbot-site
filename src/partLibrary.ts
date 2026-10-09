@@ -16,6 +16,8 @@ export interface PartEntry {
   name: string;
   part: PixelCustomPart;
   parent?: string;
+  /** who drew it, kept from an imported part file so exporting it again credits them */
+  author?: string;
   savedAt: number;
 }
 
@@ -29,6 +31,7 @@ function isEntry(value: unknown): value is PartEntry {
     typeof entry.name === 'string' &&
     typeof entry.savedAt === 'number' &&
     (entry.parent === undefined || typeof entry.parent === 'string') &&
+    (entry.author === undefined || typeof entry.author === 'string') &&
     isPixelCustomPart(entry.part)
   );
 }
@@ -82,6 +85,31 @@ export function addPart(
   };
   const next = [entry, ...entries.filter((item) => item.id !== id)];
   return store(next) ? { entries: next, entry } : undefined;
+}
+
+/** Adds imported parts, newest first; a part already saved keeps its entry. */
+export function addParts(
+  entries: readonly PartEntry[],
+  files: readonly { part: PixelCustomPart; name: string; author?: string }[],
+): { entries: PartEntry[]; added: number } | undefined {
+  const known = new Set(entries.map((entry) => entry.id));
+  const now = Date.now();
+  const added: PartEntry[] = [];
+  for (const file of files) {
+    const part = canonicalCustomPart(file.part);
+    const id = customPartId(part);
+    if (known.has(id)) continue;
+    known.add(id);
+    added.push({
+      id,
+      name: file.name.slice(0, 60),
+      part,
+      ...(file.author ? { author: file.author } : {}),
+      savedAt: now,
+    });
+  }
+  const next = [...added, ...entries];
+  return store(next) ? { entries: next, added: added.length } : undefined;
 }
 
 export function removePart(entries: readonly PartEntry[], id: string): PartEntry[] {

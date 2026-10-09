@@ -4,7 +4,7 @@
 export interface AvatarLabels {
   parts: Record<string, string>;
   options: Record<string, string>;
-  /** The part editor and Part Library; `remove` and `stored` are the site's own. */
+  /** The part editor and Part Library; `remove`, `stored`, `notPartFile` and `invalidPart` are the site's own. */
   draw: Record<string, string>;
 }
 
@@ -279,6 +279,15 @@ export const ZH_AVATAR_LABELS: AvatarLabels = {
     libraryEmpty: '部件库还是空的，画一个吧。',
     remove: '从部件库删除',
     stored: '画好的部件只保存在这个浏览器里。',
+    exportPart: '导出这个部件 PNG',
+    import: '导入部件文件',
+    exportLibrary: '导出部件库',
+    importTooLarge: '文件太大或无法读取（最大 8 MB）。',
+    exportFailed: '导出失败，请重试。',
+    imported: '已导入 {count} 个部件。',
+    importedRefused: '已导入 {count} 个部件，{refused} 个文件无法读取。',
+    notPartFile: '这不是部件 PNG，也不是部件 PNG 的压缩包。',
+    invalidPart: '文件里的部件数据无效。',
   },
 };
 
@@ -556,5 +565,14 @@ export const EN_AVATAR_LABELS: AvatarLabels = {
     libraryEmpty: 'Your Part Library is empty. Draw one!',
     remove: 'Delete from library',
     stored: 'Drawn parts are saved in this browser only.',
+    exportPart: 'Export this part as PNG',
+    import: 'Import part files',
+    exportLibrary: 'Export the library',
+    importTooLarge: 'The file is too large or could not be read (8 MB at most).',
+    exportFailed: "Couldn't export. Try again.",
+    imported: 'Parts imported: {count}.',
+    importedRefused: 'Parts imported: {count}. Files that could not be read: {refused}.',
+    notPartFile: 'The file is not a part PNG or a zip of part PNGs.',
+    invalidPart: 'The part data in this file is invalid.',
   },
 };
