@@ -5,6 +5,7 @@ import { BotCompanion } from './components/BotCompanion';
 import { useAvatarDesign } from './avatarDesign';
 import { Community } from './components/Community';
 import { Crew } from './components/Crew';
+import { QuickInstall } from './components/QuickInstall';
 import { Install } from './components/Install';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
@@ -57,6 +58,7 @@ export function App() {
                 <li key={chip}>{chip}</li>
               ))}
             </ul>
+            <QuickInstall copy={copy} />
             <div className="cta">
               <Button label={copy.hero.ctaInstall} variant="primary" size="lg" href="#install" />
               <Button
