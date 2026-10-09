@@ -196,11 +196,36 @@ function shuffled(recipe: Recipe): Recipe {
   } as unknown as Recipe;
 }
 
-// A flower draws petals, a face and a base: no hair, headwear, eye color or hair piece colors, and
-// its petals don't follow spacing or hair length. hiddenChoices() covers the rest.
+// A flower draws petals, a face and a base: no hair, headwear, eye color or hair piece colors.
+// hiddenChoices() covers the rest.
 const FLOWER_HIDDEN = new Set(['headpiece', 'strand', 'beard']);
 const FLOWER_COLORS = new Set(['eyeColor', 'bangsColor', 'backHairColor', 'strandColor']);
-const FLOWER_RANGES = new Set(['spacing', 'hairLength']);
+/** The hair piece each piece color paints, and the part slot a drawn piece would take. */
+const PIECE_OF: Record<string, [field: string, slot: PartSlot]> = {
+  bangsColor: ['bangs', 'bangs'],
+  leftSideHairColor: ['sideHair', 'leftSideHair'],
+  rightSideHairColor: ['rightSideHair', 'rightSideHair'],
+  backHairColor: ['backHair', 'backHair'],
+  strandColor: ['strand', 'headpiece'],
+};
+
+/**
+ * Whether a color row changes anything: a flower has no eyes or hair pieces and only a pot takes the
+ * outfit color, and a hair piece color needs that piece to be there, built in or drawn.
+ */
+function colorShown(recipe: Recipe, fields: Fields, key: string): boolean {
+  if (recipe.species === 'flower')
+    return !FLOWER_COLORS.has(key) && (key !== 'shirtColor' || fields.flowerBase === 'pot');
+  const piece = PIECE_OF[key];
+  if (!piece) return true;
+  const [field, slot] = piece;
+  const value = fields[field] ?? (field === 'rightSideHair' ? fields.sideHair : undefined);
+  if (field === 'strand') return value !== undefined && value !== 'none';
+  // BotPixel 0.10 draws bun and odango back hair in the hair color, ignoring backHairColor
+  if (field === 'backHair' && (value === 'bun' || value === 'odango'))
+    return wornPart(recipe, slot) !== undefined;
+  return (value !== undefined && value !== 'none') || wornPart(recipe, slot) !== undefined;
+}
 
 /**
  * Parts the species itself never draws. Headwear also hides hair, but only until it comes off, so
@@ -295,7 +320,6 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   const categories = categoriesFor(recipe);
   // a tab the new species doesn't have falls back to the presets
   const category = categories.includes(chosen) ? chosen : 'presets';
-  const flower = recipe.species === 'flower';
   const fields = detailedRecipe(recipe) as unknown as Fields;
   const set = (key: string, value: string | number) => onChange(withPart(recipe, key, value));
   const option = (part: string, value: string) =>
@@ -556,7 +580,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     const skin = AVATAR_SPECIES_SWATCHES[recipe.species ?? 'human'];
     panel = (
       <div className="face-colors">
-        {COLORS.filter((key) => !(flower && FLOWER_COLORS.has(key))).map((key) => (
+        {COLORS.filter((key) => colorShown(recipe, fields, key)).map((key) => (
           <div key={key} className="face-color-row">
             <span>{labels.parts[key]}</span>
             <div className="face-swatches">
@@ -599,7 +623,12 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     panel = (
       <div className="face-ranges">
         {Object.entries(AVATAR_RANGES)
-          .filter(([key]) => !(flower && FLOWER_RANGES.has(key)))
+          // a slider shows only where it moves something (hair length needs longer hair, say)
+          .filter(
+            ([key, [min, max]]) =>
+              Number(fields[key] ?? 0) !== 0 ||
+              pixelTileSvg(withPart(recipe, key, min)) !== pixelTileSvg(withPart(recipe, key, max)),
+          )
           .map(([key, [min, max]]) => (
             <label key={key}>
               <span>{labels.parts[key]}</span>
