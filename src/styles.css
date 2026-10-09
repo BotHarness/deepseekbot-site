@@ -445,6 +445,23 @@ a:where(:not(.astryx-button)) {
   max-width: 640px;
   color: var(--ink);
 }
+/* one line to copy for people who already run DSH */
+.quick-install {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  max-width: 520px;
+  margin: 24px auto 0;
+}
+.quick-install .command {
+  width: 100%;
+  text-align: left;
+}
+.quick-install-hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
 .cta {
   display: flex;
   justify-content: center;

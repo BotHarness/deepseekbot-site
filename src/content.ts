@@ -93,6 +93,8 @@ export interface Copy {
     signpost: string;
     signpostLabel: string;
     chips: string[];
+    /** the one-line install in the Hero, for people who already run DSH */
+    quick: { label: string; cliTab: string; desktopHint: string; cliHint: string };
   };
   symbols: SymbolLabels;
   features: { kicker: string; title: string; lead: string; items: Feature[] };
@@ -223,6 +225,12 @@ const zh: Copy = {
     signpost: 'Bot 市场',
     signpostLabel: '去 Bot 市场找别人分享的 Bot',
     chips: ['GrokBot 开源平替', '基于 DeepSeek Harness', 'MIT 开源'],
+    quick: {
+      label: '一行安装',
+      cliTab: '命令行',
+      desktopHint: '已经在用 DSH？复制这个 npm 包名，到「插件 → 添加插件」里粘贴，点「安装」。',
+      cliHint: '已经在用 DSH？在终端运行这一行，装好后用 dsh web 打开。',
+    },
   },
   symbols: {
     thinking: '思考',
@@ -459,6 +467,13 @@ const en: Copy = {
     signpost: 'Marketplace',
     signpostLabel: 'Find Bots other people shared in the Bot Marketplace',
     chips: ['Open-source Grok Bot alternative', 'Built on DeepSeek Harness', 'MIT open source'],
+    quick: {
+      label: 'One-line install',
+      cliTab: 'CLI',
+      desktopHint:
+        'Already on DSH? Copy this npm package name, paste it into Plugins → Add plugin, and click Install.',
+      cliHint: 'Already on DSH? Run this line in a terminal, then open it with dsh web.',
+    },
   },
   symbols: {
     thinking: 'Thinking',
