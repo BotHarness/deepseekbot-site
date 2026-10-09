@@ -1,7 +1,8 @@
 import { EN_AVATAR_LABELS, ZH_AVATAR_LABELS, type AvatarLabels } from './avatar-labels';
 import type { PixelSymbol } from '@botharness/pixel-avatar';
 import { COMMUNITY_LINKS } from './communityLinks';
-export { QQ_GROUP } from './communityLinks';
+import { QQ_GROUP } from './communityLinks';
+export { QQ_GROUP };
 
 export type Lang = 'zh' | 'en';
 
@@ -94,7 +95,17 @@ export interface Copy {
     signpostLabel: string;
     chips: string[];
     /** the one-line install in the Hero, for people who already run DSH */
-    quick: { label: string; cliTab: string; desktopHint: string; cliHint: string };
+    quick: {
+      label: string;
+      cliTab: string;
+      /** for people without DSH: where to get it first */
+      noDsh: string;
+      getDsh: string;
+      desktopHint: string;
+      cliHint: string;
+    };
+    qqCopied: string;
+    qqFailed: string;
   };
   symbols: SymbolLabels;
   features: { kicker: string; title: string; lead: string; items: Feature[] };
@@ -228,9 +239,13 @@ const zh: Copy = {
     quick: {
       label: '一行安装',
       cliTab: '命令行',
+      noDsh: '还没有 DSH？',
+      getDsh: '先去 DeepSeek 官网下载 DeepSeek Harness',
       desktopHint: '已经在用 DSH？复制这个 npm 包名，到「插件 → 添加插件」里粘贴，点「安装」。',
       cliHint: '已经在用 DSH？在终端运行这一行，装好后用 dsh web 打开。',
     },
+    qqCopied: '已复制群号',
+    qqFailed: `复制失败，QQ 群号是 ${QQ_GROUP}，请手动复制。`,
   },
   symbols: {
     thinking: '思考',
@@ -470,10 +485,14 @@ const en: Copy = {
     quick: {
       label: 'One-line install',
       cliTab: 'CLI',
+      noDsh: 'No DSH yet?',
+      getDsh: 'Get DeepSeek Harness from DeepSeek first',
       desktopHint:
         'Already on DSH? Copy this npm package name, paste it into Plugins → Add plugin, and click Install.',
       cliHint: 'Already on DSH? Run this line in a terminal, then open it with dsh web.',
     },
+    qqCopied: 'Group number copied',
+    qqFailed: `Copy failed. The QQ group number is ${QQ_GROUP}; copy it by hand.`,
   },
   symbols: {
     thinking: 'Thinking',
