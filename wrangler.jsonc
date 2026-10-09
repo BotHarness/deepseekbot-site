@@ -1,14 +1,23 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // static assets only: no Worker script runs
   "name": "deepseekbot-site",
-  // the Cloudflare account that holds the botharness.ai zone (same as BotHarness docs)
+  // the Cloudflare account that holds the botharness.ai, deepseekbot.app and deepseekbot.dev zones
   "account_id": "332e72d480d7cb3e60ee671d3ca0cad0",
   "compatibility_date": "2026-10-01",
+  // only redirects the other hostnames to deepseekbot.app (worker/index.ts); the site is the assets
+  "main": "worker/index.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application",
+    "run_worker_first": true,
   },
   "preview_urls": true,
-  "routes": [{ "pattern": "deepseekbot.botharness.ai", "custom_domain": true }],
+  "routes": [
+    { "pattern": "deepseekbot.app", "custom_domain": true },
+    { "pattern": "www.deepseekbot.app", "custom_domain": true },
+    { "pattern": "deepseekbot.dev", "custom_domain": true },
+    { "pattern": "www.deepseekbot.dev", "custom_domain": true },
+    { "pattern": "deepseekbot.botharness.ai", "custom_domain": true },
+  ],
 }

@@ -1,4 +1,4 @@
-# deepseekbot.botharness.ai
+# deepseekbot.app
 
 The product site for [DeepSeekBot](https://www.npmjs.com/package/deepseekbot), the first
 [BotHarness](https://github.com/BotHarness/BotHarness) product. A single pixel-art page in Chinese
@@ -62,8 +62,14 @@ Every event carries `source: site`, `lang` and `page` (`home`, `market`, `docs`,
 
 ## Deploy
 
-`wrangler.jsonc` deploys `dist/` as static assets on the Worker `deepseekbot-site`, with the custom
-domain `deepseekbot.botharness.ai` in the account that holds the `botharness.ai` zone.
+`wrangler.jsonc` deploys `dist/` as static assets on the Worker `deepseekbot-site`, in the account
+that holds the `deepseekbot.app`, `deepseekbot.dev` and `botharness.ai` zones. **deepseekbot.app** is
+the canonical domain: canonical links, share cards, the sitemap and `SITE` in `vite.config.ts`,
+`scripts/docs.ts` and `scripts/changelog.ts` use it. `www.deepseekbot.app`, `deepseekbot.dev`,
+`www.deepseekbot.dev` and the original `deepseekbot.botharness.ai` stay bound as custom domains and
+301 to the same path on deepseekbot.app through the small Worker in `worker/index.ts` (it runs before
+the assets; preview URLs are served directly). The Marketplace API and the analytics ingest proxy
+(BotHarness `packages/market`, `packages/ingest`) must allow the site's origin for CORS.
 
 Recommended: connect this repository in Cloudflare (Workers & Pages → Create → Import a
 repository) with build command `pnpm build` and deploy command `npx wrangler deploy`. Pushes to
