@@ -10,6 +10,6 @@ allowBuilds:
 
 # Our own BotPixel packages are trusted the day they are published.
 minimumReleaseAgeExclude:
-  - '@botharness/pixel-avatar@0.1.0'
+  - '@botharness/pixel-avatar@0.10.0'
   - '@botharness/pixel-morph@0.1.0 || 0.2.0'
   - '@botharness/pixel-banner@0.1.0'

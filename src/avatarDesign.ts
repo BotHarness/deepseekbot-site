@@ -7,7 +7,7 @@ const NAMES = ['Mira', 'Theo', 'Nova', 'Juno', 'Kai', 'Lumi', 'Orion', 'Pixel', 
 export function useAvatarDesign() {
   const [name, setName] = useState('DeepSeekBot');
   const seed = useDeferredValue(name.trim() || 'DeepSeekBot');
-  const named = useMemo(() => recipeFor(seed), [seed]);
+  const named = useMemo(() => recipeFor(seed, 2), [seed]);
   const [custom, setCustom] = useState<PixelAvatarRecipe | null>(null);
   return {
     name,
