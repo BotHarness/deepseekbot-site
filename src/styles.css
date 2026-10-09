@@ -1537,6 +1537,14 @@ a:where(:not(.astryx-button)) {
 .face-ranges input {
   accent-color: var(--accent);
 }
+/* the editor's controls draw their frame with outline, which hides the global focus ring */
+.face-tab:focus-visible,
+.face-option:focus-visible,
+.face-swatch:focus-visible,
+.face-color-reset:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
 @media (max-width: 860px) {
   .playground-stage {
     position: static;
