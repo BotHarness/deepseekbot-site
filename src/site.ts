@@ -29,6 +29,7 @@ export const initialMode = (): Mode => {
 
 export const homePath = (lang: Lang) => (lang === 'zh' ? '/' : '/en/');
 export const marketPath = (lang: Lang) => (lang === 'zh' ? '/market' : '/en/market');
+export const avatarPath = (lang: Lang) => (lang === 'zh' ? '/avatar' : '/en/avatar');
 export const guidePath = (lang: Lang, slug: string) =>
   `${lang === 'zh' ? '' : '/en'}/docs/${slug}/`;
 export const docsPath = (lang: Lang) => guidePath(lang, 'overview');

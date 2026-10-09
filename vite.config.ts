@@ -17,6 +17,8 @@ const PAGES = [
   'en/index.html',
   'market.html',
   'en/market.html',
+  'avatar.html',
+  'en/avatar.html',
   ...renderDocs(),
   ...renderChangelog(),
 ];
@@ -96,6 +98,8 @@ ${[
   ['/en/', '/', '/en/'],
   ['/market', '/market', '/en/market'],
   ['/en/market', '/market', '/en/market'],
+  ['/avatar', '/avatar', '/en/avatar'],
+  ['/en/avatar', '/avatar', '/en/avatar'],
   [changelogPath('zh'), changelogPath('zh'), changelogPath('en')],
   [changelogPath('en'), changelogPath('zh'), changelogPath('en')],
   ['/privacy/', '/privacy/', '/en/privacy/'],

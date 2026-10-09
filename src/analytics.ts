@@ -27,7 +27,7 @@ export function pageKind(pathname: string) {
   const path = pathname.replace(/^\/en(?=\/|$)/, '') || '/';
   if (path === '/') return 'home';
   const first = path.split('/')[1] ?? '';
-  return ['market', 'docs', 'privacy', 'changelog'].includes(first) ? first : 'other';
+  return ['market', 'avatar', 'docs', 'privacy', 'changelog'].includes(first) ? first : 'other';
 }
 
 const siteProperties = () => ({
@@ -71,7 +71,7 @@ export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, un
     const kind = pageKind(url.pathname);
     // moving around within the marketplace or the docs is not a way in
     if (kind === pageKind(location.pathname)) return null;
-    if (kind === 'market' || kind === 'docs' || kind === 'changelog')
+    if (kind === 'market' || kind === 'avatar' || kind === 'docs' || kind === 'changelog')
       return [`${kind}_clicked`, { target: url.pathname, placement: at }];
     return null;
   }

@@ -53,6 +53,7 @@ const UI = {
       features: '能力',
       install: '安装',
       market: 'Bot 市场',
+      avatar: '头像工坊',
       changelog: '更新日志',
       docs: '文档',
       community: '社区',
@@ -92,6 +93,7 @@ const UI = {
       features: 'Features',
       install: 'Install',
       market: 'Marketplace',
+      avatar: 'Avatar Studio',
       changelog: 'Changelog',
       docs: 'Docs',
       community: 'Community',
@@ -288,6 +290,7 @@ function page(lang: Lang, releases: Release[]) {
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market">${icon('market')}${t.nav.market}</a>
+        <a href="${home(lang)}avatar">${icon('avatar')}${t.nav.avatar}</a>
         <a href="${home(lang)}docs/overview/">${icon('docs')}${t.nav.docs}</a>
         <a class="nav-changelog" href="${changelogPath(lang)}" aria-current="page">${icon('changelog')}${t.nav.changelog}</a>
         ${searchButton(lang)}

@@ -1,5 +1,5 @@
 import { type Copy, type Lang } from '../content';
-import { changelogPath, docsPath, homePath, marketPath, type Mode } from '../site';
+import { avatarPath, changelogPath, docsPath, homePath, marketPath, type Mode } from '../site';
 import { navIconSvg, type NavIcon } from '../navIcons';
 import { HeaderCommunity } from './HeaderCommunity';
 
@@ -13,11 +13,18 @@ export function SiteHeader({
   copy: Copy;
   lang: Lang;
   mode: Mode;
-  page: 'home' | 'market';
+  page: 'home' | 'market' | 'avatar';
   onMode: (mode: Mode) => void;
 }) {
   // on the home page the sections are anchors; elsewhere they lead back to them
   const home = page === 'home' ? '' : homePath(lang);
+  // the same page in the other language (a marketplace detail keeps its ?bot=)
+  const sameIn = (to: Lang) =>
+    page === 'home'
+      ? homePath(to)
+      : page === 'avatar'
+        ? avatarPath(to)
+        : marketPath(to) + location.search;
   return (
     <>
       <a className="skip" href="#main">
@@ -37,6 +44,10 @@ export function SiteHeader({
             <Icon name="market" />
             {copy.nav.market}
           </a>
+          <a href={avatarPath(lang)} aria-current={page === 'avatar' ? 'page' : undefined}>
+            <Icon name="avatar" />
+            {copy.nav.avatar}
+          </a>
           <a href={docsPath(lang)}>
             <Icon name="docs" />
             {copy.nav.docs}
@@ -51,7 +62,7 @@ export function SiteHeader({
           <div className="toggles">
             <nav className="lang-switch" aria-label={copy.langLabel}>
               <a
-                href={page === 'home' ? '/' : marketPath('zh') + location.search}
+                href={sameIn('zh')}
                 hrefLang="zh-Hans"
                 lang="zh-Hans"
                 aria-current={lang === 'zh' ? 'page' : undefined}
@@ -59,7 +70,7 @@ export function SiteHeader({
                 中文
               </a>
               <a
-                href={page === 'home' ? '/en/' : marketPath('en') + location.search}
+                href={sameIn('en')}
                 hrefLang="en"
                 lang="en"
                 aria-current={lang === 'en' ? 'page' : undefined}
