@@ -16,25 +16,39 @@ import {
   AVATAR_STRANDS,
   AVATAR_SWATCHES,
   builtInHeadpiece,
+  customPartId,
   detailedRecipe,
+  hairPieceStart,
+  headpieceStart,
   hiddenChoices,
   isAnimalSpecies,
+  isHairPartSlot,
+  isReplacePartSlot,
+  replacePartStart,
   withBuiltInHeadpiece,
+  withCustomPart,
   withPieces,
   withSpecies,
-  type PixelAvatarRecipe,
+  wornPart,
   type AvatarSpeciesV4,
+  type PartSlot,
+  type PixelAvatarRecipe,
+  type PixelCustomPart,
+  type ReplacePartSlot,
 } from '@botharness/pixel-avatar';
 import { pixelTileSvg } from '../pixelTile';
 import { PRESETS } from '../presets';
-import { memo, useMemo, useState } from 'react';
+import { addPart, loadParts, removePart, type PartEntry } from '../partLibrary';
+import { memo, useMemo, useRef, useState } from 'react';
 import type { Copy } from '../content';
+import { PartEditor } from './PartEditor';
 
 type Fields = Record<string, string | number>;
 type Recipe = PixelAvatarRecipe;
 
 // The parts, tabs and edits mirror the pixel Avatar editor in BotHarness
-// (packages/client/src/client/avatar-appearance-editor.tsx), without the Part Library.
+// (packages/client/src/client/avatar-appearance-editor.tsx). The Part Library lives in this
+// browser (src/partLibrary.ts) and has no file import or export.
 const PIECE_COLORS = ['bangsColor', ...AVATAR_PIECE_COLORS, 'backHairColor', 'strandColor'];
 const COLORS = [...AVATAR_COLORS, ...PIECE_COLORS];
 const PARTS: Record<string, readonly string[]> = {
@@ -78,6 +92,36 @@ const SPLIT = new Set<string>([
 const V4_KEYS = new Set<string>(['strand', 'pattern', ...AVATAR_PIECE_COLORS_V4]);
 // accessories that became headpieces; a version 4 recipe offers them under Headpiece only
 const MOVED = new Set<string>(AVATAR_HEADPIECES);
+/** The tabs that can wear a drawn part, and the slot it goes in. */
+const PART_CATEGORY: Partial<Record<string, PartSlot>> = {
+  headpiece: 'headpiece',
+  pattern: 'pattern',
+  bangs: 'bangs',
+  sideHair: 'leftSideHair',
+  rightSideHair: 'rightSideHair',
+  backHair: 'backHair',
+  outfit: 'outfit',
+  accessory: 'accessory',
+  beard: 'beard',
+  glasses: 'glasses',
+  nose: 'nose',
+  cheeks: 'cheeks',
+  petals: 'petals',
+  flowerBase: 'flowerBase',
+};
+
+interface Drawing {
+  slot: PartSlot;
+  /** the recipe the drawn part is worn on */
+  base: Recipe;
+  /** the recipe to go back to when drawing stops */
+  restore: Recipe;
+  /** shown faintly behind the canvas, when it differs from `base` */
+  backdrop?: Recipe;
+  initial?: PixelCustomPart;
+  parent?: string;
+  note?: string;
+}
 const V2_ONLY = (part: string, value: string | number) =>
   (part === 'outfit' || part === 'accessory') &&
   !(AVATAR_PARTS[part] as readonly (string | number)[]).includes(value);
@@ -198,6 +242,12 @@ interface Props {
 
 export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   const [chosen, setCategory] = useState('hair');
+  const [parts, setParts] = useState<PartEntry[]>(loadParts);
+  const [started, setDrawing] = useState<Drawing>();
+  // the recipe the editor last showed; any other change (a rename, reset or preset) ends drawing
+  const drawn = useRef<Recipe>(undefined);
+  const drawing = started && drawn.current === recipe ? started : undefined;
+  const partText = copy.avatarLabels.draw;
   const t = copy.playground.editor;
   const labels = copy.avatarLabels;
   const categories = categoriesFor(recipe);
@@ -210,9 +260,138 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   const note = hiddenFor(recipe, category) ? (
     <p className="face-hidden-note">{labels.parts.hiddenNote}</p>
   ) : null;
+  const pieceSlot = PART_CATEGORY[category];
+  const pieceWorn = pieceSlot !== undefined && wornPart(recipe, pieceSlot) !== undefined;
+  /** A built-in choice, taking off any drawn part in that slot. */
+  const builtIn = (key: string, value: string): Recipe => {
+    const next = withPart(recipe, key, value);
+    const slot = PART_CATEGORY[key];
+    return slot && wornPart(next, slot) ? withCustomPart(next, slot, undefined) : next;
+  };
+  const show = (next: Recipe) => {
+    drawn.current = next;
+    onChange(next);
+  };
+  const begin = (next: Drawing) => {
+    drawn.current = recipe;
+    setDrawing(next);
+  };
+
+  const partEditor = () =>
+    drawing ? (
+      <PartEditor
+        key={`${drawing.slot}:${drawing.parent ?? 'new'}`}
+        slot={drawing.slot}
+        note={drawing.note}
+        backdrop={drawing.backdrop}
+        recipe={drawing.base}
+        initial={drawing.initial}
+        labels={labels}
+        onChange={(part) => show(withCustomPart(drawing.base, drawing.slot, part))}
+        onSave={(part, name) => {
+          const saved = addPart(parts, part, name, drawing.parent);
+          if (!saved) return false;
+          setParts(saved.entries);
+          setDrawing(undefined);
+          onChange(withCustomPart(drawing.base, drawing.slot, saved.entry.part));
+          return true;
+        }}
+        onCancel={() => {
+          setDrawing(undefined);
+          onChange(drawing.restore);
+        }}
+      />
+    ) : null;
+
+  const partActions = (slot: PartSlot) => {
+    const worn = wornPart(recipe, slot);
+    const wornId = worn && customPartId(worn);
+    const hair = isHairPartSlot(slot) || isReplacePartSlot(slot);
+    const own = parts.filter((entry) => entry.part.slot === slot);
+    const head = slot === 'headpiece' ? builtInHeadpiece(recipe) : undefined;
+    const draw = () =>
+      begin(
+        head && !worn
+          ? {
+              slot,
+              base: recipe,
+              restore: recipe,
+              backdrop: withCustomPart(recipe, slot, undefined),
+              initial: headpieceStart(recipe),
+              note: partText.flattenPartNote,
+            }
+          : hair
+            ? {
+                slot,
+                base: withCustomPart(recipe, slot, undefined),
+                restore: recipe,
+                backdrop: withCustomPart(recipe, slot, { slot, front: [], back: [] }),
+                initial: isHairPartSlot(slot)
+                  ? hairPieceStart(recipe, slot)
+                  : replacePartStart(recipe, slot as ReplacePartSlot),
+                ...(wornId
+                  ? { parent: wornId }
+                  : {
+                      note: isHairPartSlot(slot) ? partText.flattenNote : partText.flattenPartNote,
+                    }),
+              }
+            : { slot, base: recipe, restore: recipe },
+      );
+    const action = (label: string | undefined, onClick: () => void) => (
+      <button type="button" className="face-color-reset" onClick={onClick}>
+        {label}
+      </button>
+    );
+    return (
+      <>
+        <div className="part-library-actions">
+          {action(hair ? partText.drawPiece : partText.draw, draw)}
+          {worn && !hair
+            ? action(partText.edit, () =>
+                begin({ slot, base: recipe, restore: recipe, initial: worn, parent: wornId }),
+              )
+            : null}
+          {worn && hair
+            ? action(partText.removePiece, () => onChange(withCustomPart(recipe, slot, undefined)))
+            : null}
+          {wornId && own.some((entry) => entry.id === wornId)
+            ? action(partText.remove, () => setParts(removePart(parts, wornId)))
+            : null}
+        </div>
+        {hair ? null : (
+          <Tile
+            recipe={withCustomPart(recipe, slot, undefined)}
+            selected={!worn && head === undefined}
+            label={labels.parts.none!}
+            onSelect={() => onChange(withCustomPart(recipe, slot, undefined))}
+          />
+        )}
+        {own.map((entry) => (
+          <Tile
+            key={entry.id}
+            recipe={withCustomPart(recipe, slot, entry.part)}
+            selected={wornId === entry.id}
+            label={entry.name || partText.untitled!}
+            onSelect={() => onChange(withCustomPart(recipe, slot, entry.part))}
+          />
+        ))}
+        {!hair && own.length === 0 ? (
+          <p className="face-hidden-note">{partText.libraryEmpty}</p>
+        ) : null}
+      </>
+    );
+  };
 
   let panel;
-  if (category === 'presets') {
+  if (drawing && drawing.slot === pieceSlot) {
+    panel = (
+      <div className="face-drawing">
+        {note}
+        {partEditor()}
+        <p className="face-hidden-note">{partText.stored}</p>
+      </div>
+    );
+  } else if (category === 'presets') {
     panel = (
       <div className="face-options">
         {PRESETS.map((preset, i) => (
@@ -292,12 +471,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     panel = (
       <div className="face-options">
         {note}
-        <Tile
-          recipe={withBuiltInHeadpiece(recipe, undefined)}
-          selected={worn === undefined}
-          label={labels.parts.none!}
-          onSelect={() => onChange(withBuiltInHeadpiece(recipe, undefined))}
-        />
+        {partActions('headpiece')}
         {AVATAR_HEADPIECES.map((value) => (
           <Tile
             key={value}
@@ -322,13 +496,14 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     panel = (
       <div className="face-options">
         {note}
+        {pieceSlot ? partActions(pieceSlot) : null}
         {values.map((value) => (
           <Tile
             key={value}
-            recipe={withPart(recipe, category, value)}
-            selected={(fields[category] ?? 'none') === value}
+            recipe={builtIn(category, value)}
+            selected={(fields[category] ?? 'none') === value && !pieceWorn}
             label={option(category, value)}
-            onSelect={() => set(category, value)}
+            onSelect={() => onChange(builtIn(category, value))}
           />
         ))}
       </div>

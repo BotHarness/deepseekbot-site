@@ -352,7 +352,7 @@ const zh: Copy = {
     download: '下载高清头像',
     editor: {
       title: '捏脸',
-      lead: '从名字生成的脸开始，逐个换物种、发型、五官、服装、头饰和颜色，捏好直接下载。',
+      lead: '从名字生成的脸开始，逐个换物种、发型、五官、服装、头饰和颜色，也能自己画头饰、头发和其他部件，捏好直接下载。',
       parts: '部位',
       reset: '回到名字生成的脸',
       shuffle: '随机捏一个',
@@ -588,7 +588,7 @@ const en: Copy = {
     download: 'Download HD avatar',
     editor: {
       title: 'Make your own',
-      lead: 'Start from the face your name gives, swap species, hair, features, outfit, headpiece and colors, then download it.',
+      lead: 'Start from the face your name gives, swap species, hair, features, outfit, headpiece and colors, or draw your own headpiece, hair and other parts, then download it.',
       parts: 'Parts',
       reset: 'Back to the name’s face',
       shuffle: 'Surprise me',
