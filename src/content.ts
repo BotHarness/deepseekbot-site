@@ -86,6 +86,7 @@ export interface Copy {
     market: string;
     docs: string;
     changelog: string;
+    blog: string;
     community: string;
     github: string;
   };
@@ -238,6 +239,7 @@ const zh: Copy = {
     market: 'Bot 市场',
     docs: '文档',
     changelog: '更新日志',
+    blog: '博客',
     community: '社区',
     github: 'GitHub',
   },
@@ -502,6 +504,7 @@ const en: Copy = {
     market: 'Marketplace',
     docs: 'Docs',
     changelog: 'Changelog',
+    blog: 'Blog',
     community: 'Community',
     github: 'GitHub',
   },

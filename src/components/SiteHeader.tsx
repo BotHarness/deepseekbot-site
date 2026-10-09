@@ -1,5 +1,13 @@
 import { type Copy, type Lang } from '../content';
-import { avatarPath, changelogPath, docsPath, homePath, marketPath, type Mode } from '../site';
+import {
+  avatarPath,
+  blogPath,
+  changelogPath,
+  docsPath,
+  homePath,
+  marketPath,
+  type Mode,
+} from '../site';
 import { navIconSvg, type NavIcon } from '../navIcons';
 import { HeaderCommunity } from './HeaderCommunity';
 
@@ -13,7 +21,7 @@ export function SiteHeader({
   copy: Copy;
   lang: Lang;
   mode: Mode;
-  page: 'home' | 'market' | 'avatar';
+  page: 'home' | 'market' | 'avatar' | 'blog';
   onMode: (mode: Mode) => void;
 }) {
   // on the home page the sections are anchors; elsewhere they lead back to them
@@ -55,6 +63,10 @@ export function SiteHeader({
           <a className="nav-changelog" href={changelogPath(lang)}>
             <Icon name="changelog" />
             {copy.nav.changelog}
+          </a>
+          <a href={blogPath(lang)} aria-current={page === 'blog' ? 'page' : undefined}>
+            <Icon name="blog" />
+            {copy.nav.blog}
           </a>
         </nav>
         <div className="header-actions">

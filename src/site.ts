@@ -34,3 +34,5 @@ export const guidePath = (lang: Lang, slug: string) =>
   `${lang === 'zh' ? '' : '/en'}/docs/${slug}/`;
 export const docsPath = (lang: Lang) => guidePath(lang, 'overview');
 export const changelogPath = (lang: Lang) => (lang === 'zh' ? '/changelog/' : '/en/changelog/');
+export const blogPath = (lang: Lang) => (lang === 'zh' ? '/blog/' : '/en/blog/');
+export const blogPostPath = (lang: Lang, slug: string) => `${blogPath(lang)}${slug}/`;
