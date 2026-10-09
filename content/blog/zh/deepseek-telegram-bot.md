@@ -2,7 +2,8 @@
 {
   "title": "DeepSeek Telegram Bot：现状、风险与开源替代路线",
   "description": "想在 Telegram 上用 DeepSeek？先看清第三方 Bot 的现状与风险，再看 DeepSeekBot 的多平台开源路线。",
-  "date": "2026-10-10"
+  "date": "2026-10-10",
+  "tags": ["Telegram", "指南"]
 }
 ---
 

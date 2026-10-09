@@ -1,7 +1,7 @@
 // Renders content/blog/{zh,en}/*.md into /blog/ and /blog/<slug>/ (Chinese) plus the
 // /en/ mirrors. Each post carries {title, description, date} frontmatter; the slug is the
 // filename. The pages are generated, not committed; content/blog is the source.
-import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Marked } from 'marked';
 import { headerCommunityMarkup } from '../src/headerCommunity.ts';
@@ -18,6 +18,7 @@ export interface Post {
   title: string;
   description: string;
   date: string;
+  tags: string[];
   body: string;
 }
 
@@ -31,6 +32,13 @@ const UI = {
     lead: '把机器人用好的实战文章：指南、对比与复盘。',
     posts: '文章',
     back: '返回博客',
+    readMore: '阅读全文',
+    allPosts: '全部文章',
+    toc: '本页内容',
+    minRead: (n: number) => `${n} 分钟阅读`,
+    copyUrl: '复制链接',
+    copied: '已复制',
+    byTeam: 'DeepSeekBot 团队',
     nav: {
       features: '能力',
       install: '安装',
@@ -60,6 +68,13 @@ const UI = {
     lead: 'Hands-on writing about getting the most out of bots: guides, comparisons and retrospectives.',
     posts: 'Posts',
     back: 'Back to the blog',
+    readMore: 'Read more',
+    allPosts: 'All posts',
+    toc: 'On this page',
+    minRead: (n: number) => `${n} MIN READ`,
+    copyUrl: 'Copy URL',
+    copied: 'Copied',
+    byTeam: 'DeepSeekBot Team',
     nav: {
       features: 'Features',
       install: 'Install',
@@ -91,7 +106,12 @@ export const blogPostPath = (lang: Lang, slug: string) => `${blogPath(lang)}${sl
 function parsePost(slug: string, markdown: string): Post {
   const match = markdown.replaceAll('\r\n', '\n').match(/^---\n(\{[\s\S]*?\})\n---\n/);
   if (!match) throw new Error(`post ${slug} is missing JSON frontmatter`);
-  const meta = JSON.parse(match[1]) as { title?: string; description?: string; date?: string };
+  const meta = JSON.parse(match[1]) as {
+    title?: string;
+    description?: string;
+    date?: string;
+    tags?: string[];
+  };
   if (!meta.title || !meta.description || !meta.date)
     throw new Error(`post ${slug} needs title, description and date`);
   return {
@@ -99,6 +119,7 @@ function parsePost(slug: string, markdown: string): Post {
     title: meta.title,
     description: meta.description,
     date: meta.date,
+    tags: meta.tags ?? [],
     body: markdown.slice(match[0].length),
   };
 }
@@ -116,7 +137,51 @@ export function readPosts(lang: Lang): Post[] {
     .toSorted((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-const md = new Marked({ gfm: true });
+/** Minutes to read: ~400 CJK characters or ~200 English words per minute. */
+export function readMinutes(lang: Lang, text: string): number {
+  const units =
+    lang === 'zh'
+      ? text.replace(/\s/g, '').length / 400
+      : text.split(/\s+/).filter(Boolean).length / 200;
+  return Math.max(1, Math.ceil(units));
+}
+
+/** Cover art for a post, or null when it has not been generated yet. */
+export function coverFor(lang: Lang, slug: string): string | null {
+  return existsSync(`public/blog-covers/${slug}-${lang}.png`)
+    ? `/blog-covers/${slug}-${lang}.png`
+    : null;
+}
+
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .trim()
+    .replace(/\s+/g, '-');
+
+/** Renders a post body, tagging h2s with ids and collecting them for the TOC. */
+function renderBody(body: string): { html: string; toc: { id: string; text: string }[] } {
+  const toc: { id: string; text: string }[] = [];
+  const seen = new Map<string, number>();
+  const md = new Marked({ gfm: true });
+  md.use({
+    renderer: {
+      heading({ tokens, depth }) {
+        const text = this.parser.parseInline(tokens);
+        const plain = text.replace(/<[^>]+>/g, '');
+        if (depth !== 2) return `<h${depth}>${text}</h${depth}>\n`;
+        const base = slugify(plain) || 'section';
+        const n = seen.get(base) ?? 0;
+        seen.set(base, n + 1);
+        const id = n === 0 ? base : `${base}-${n}`;
+        toc.push({ id, text: plain });
+        return `<h2 id="${escape(id)}">${text}</h2>\n`;
+      },
+    },
+  });
+  return { html: md.parse(body, { async: false }) as string, toc };
+}
 
 function topnav(lang: Lang) {
   const t = UI[lang];
@@ -140,9 +205,10 @@ function shell(
   description: string,
   main: string,
   enUrl?: string,
+  cover?: string,
 ) {
   const t = UI[lang];
-  const image = `${SITE}/og-${lang}-v2.png`;
+  const image = cover ? `${SITE}${cover}` : `${SITE}/og-${lang}-v2.png`;
   // Without an English mirror, alternates point at the Chinese page, never a 404.
   const en = enUrl ?? url.replace(SITE + '/', SITE + '/en/');
   return `<!doctype html>
@@ -219,14 +285,26 @@ function shell(
 `;
 }
 
+function card(lang: Lang, post: Post) {
+  const cover = coverFor(lang, post.slug);
+  return `<li class="blog-card"><a href="${blogPostPath(lang, post.slug)}">${
+    cover
+      ? `<img src="${cover}" alt="" loading="lazy" />`
+      : `<span class="blog-card-fallback" aria-hidden="true"></span>`
+  }<time datetime="${post.date}">${post.date}</time><strong>${escape(post.title)}</strong><span>${escape(post.description)}</span></a></li>`;
+}
+
 function indexMain(lang: Lang, posts: Post[]) {
   const t = UI[lang];
-  const items = posts
-    .map(
-      (p) =>
-        `<li><time datetime="${p.date}">${p.date}</time> · <a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a><p>${escape(p.description)}</p></li>`,
-    )
-    .join('');
+  const [hero, ...rest] = posts;
+  const heroCover = hero ? coverFor(lang, hero.slug) : null;
+  const heroBlock = hero
+    ? `<section class="blog-hero"><div><time datetime="${hero.date}">${hero.date}</time><h2><a href="${blogPostPath(lang, hero.slug)}">${escape(hero.title)}</a></h2><p>${escape(hero.description)}</p><p><a class="blog-readmore" href="${blogPostPath(lang, hero.slug)}">${t.readMore} →</a></p></div>${
+        heroCover
+          ? `<a href="${blogPostPath(lang, hero.slug)}"><img src="${heroCover}" alt="" /></a>`
+          : ''
+      }</section>`
+    : '';
   const nav = posts
     .map((p) => `<li><a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a></li>`)
     .join('');
@@ -237,7 +315,15 @@ function indexMain(lang: Lang, posts: Post[]) {
           <p class="kicker">DeepSeekBot</p>
           <h1>${t.title}</h1>
           <p class="docs-lead">${t.lead}</p>
-          <ul class="blog-index">${items}</ul>
+          ${heroBlock}
+          ${rest.length > 0 ? `<ul class="blog-cards">${rest.map((p) => card(lang, p)).join('')}</ul>` : ''}
+          <h2>${t.allPosts}</h2>
+          <ul class="blog-index">${posts
+            .map(
+              (p) =>
+                `<li><time datetime="${p.date}">${p.date}</time> · <a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a><p>${escape(p.description)}</p></li>`,
+            )
+            .join('')}</ul>
         </article>
       </main>
     </div>`;
@@ -245,7 +331,10 @@ function indexMain(lang: Lang, posts: Post[]) {
 
 function postMain(lang: Lang, post: Post, posts: Post[]) {
   const t = UI[lang];
-  const html = md.parse(post.body, { async: false }) as string;
+  const { html, toc } = renderBody(post.body);
+  const cover = coverFor(lang, post.slug);
+  const minutes = readMinutes(lang, post.body);
+  const tags = post.tags.map((tag) => `<span class="blog-tag">${escape(tag)}</span>`).join('');
   const nav = posts
     .map(
       (p) =>
@@ -257,15 +346,34 @@ function postMain(lang: Lang, post: Post, posts: Post[]) {
       <nav class="docs-nav" aria-label="${t.posts}"><details open><summary>${t.posts}</summary><p class="docs-nav-title">${t.posts}</p><ul>${nav}</ul></details></nav>
       <main id="main" class="docs-main">
         <article class="docs-article frame">
-          <p class="kicker">DeepSeekBot</p>
+          <p class="blog-crumb"><a href="${blogPath(lang)}">${t.title}</a>${tags}</p>
+          <time datetime="${post.date}">${post.date}</time>
           <h1>${escape(post.title)}</h1>
+          <p class="blog-byline">${t.byTeam} · ${t.minRead(minutes)} · <button type="button" data-copy-url data-label="${t.copyUrl}" data-ok="${t.copied}">${t.copyUrl}</button></p>
+          ${cover ? `<img class="blog-cover" src="${cover}" alt="" />` : ''}
           <p class="docs-lead">${escape(post.description)}</p>
-          <p><time datetime="${post.date}">${post.date}</time> · <a href="${blogPath(lang)}">${t.back}</a></p>
+          ${toc.length > 0 ? `<details class="blog-toc"><summary>${t.toc}</summary><ul>${toc.map((h) => `<li><a href="#${h.id}">${escape(h.text)}</a></li>`).join('')}</ul></details>` : ''}
           <div class="docs-body">${html}</div>
         </article>
         <p class="docs-source"><a href="${source}" target="_blank" rel="noreferrer">${t.source}</a></p>
       </main>
-    </div>`;
+    </div>
+    <script>
+      (function () {
+        var b = document.querySelector('[data-copy-url]');
+        if (!b) return;
+        b.addEventListener('click', function () {
+          var ok = function (good) {
+            b.textContent = good ? b.dataset.ok : b.dataset.label;
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText)
+            navigator.clipboard.writeText(location.href).then(
+              function () { ok(true); },
+              function () { ok(false); },
+            );
+        });
+      })();
+    </script>`;
 }
 
 /** Writes the blog index and every post page and returns their paths, for Vite's inputs. */
@@ -302,6 +410,7 @@ export function renderBlog(): string[] {
           post.description,
           postMain(lang, post, posts),
           lang === 'zh' && !mirror.has(post.slug) ? postUrl : undefined,
+          coverFor(lang, post.slug) ?? undefined,
         ),
       );
       written.push(file);
