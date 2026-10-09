@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 import subsetFont from 'subset-font';
 import { defineConfig, type Plugin } from 'vite';
 import { changelogPath, renderChangelog } from './scripts/changelog.ts';
+import { blogPath, blogSitemap, renderBlog } from './scripts/blog.ts';
 import { docsSitemap, renderDocs, searchIndex } from './scripts/docs.ts';
 
 const require = createRequire(import.meta.url);
@@ -21,6 +22,7 @@ const PAGES = [
   'en/avatar.html',
   ...renderDocs(),
   ...renderChangelog(),
+  ...renderBlog(),
 ];
 const fontFile = () =>
   readFileSync(
@@ -102,6 +104,8 @@ ${[
   ['/en/avatar', '/avatar', '/en/avatar'],
   [changelogPath('zh'), changelogPath('zh'), changelogPath('en')],
   [changelogPath('en'), changelogPath('zh'), changelogPath('en')],
+  [blogPath('zh'), blogPath('zh'), blogPath('en')],
+  [blogPath('en'), blogPath('zh'), blogPath('en')],
   ['/privacy/', '/privacy/', '/en/privacy/'],
   ['/en/privacy/', '/privacy/', '/en/privacy/'],
 ]
@@ -115,6 +119,7 @@ ${[
   )
   .join('\n')}
 ${docsSitemap()}
+${blogSitemap()}
 </urlset>
 `;
 
