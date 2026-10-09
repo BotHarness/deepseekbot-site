@@ -339,8 +339,11 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
         const saved = parts.find((entry) => entry.id === id);
         const file = saved ? fileOf(saved) : { part, name: '' };
         saveFile(partFileName(file), await encodePartFile(file), 'image/png');
-      } else
+        track('avatar_part_exported', { scope: 'part', slot: part.slot, count: 1 });
+      } else {
         saveFile('part-library.zip', await encodePartLibrary(parts.map(fileOf)), 'application/zip');
+        track('avatar_part_exported', { scope: 'library', count: parts.length });
+      }
     } catch {
       setLibraryNote(partText.exportFailed);
     }
@@ -348,6 +351,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   const importFiles = async (file: File | undefined) => {
     if (!file) return;
     if (file.size > MAX_PART_LIBRARY_FILE_BYTES) {
+      track('avatar_part_import_failed', { reason: 'too-large' });
       setLibraryNote(partText.importTooLarge);
       return;
     }
@@ -358,6 +362,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
       result = 'not-png' as const;
     }
     if (typeof result === 'string') {
+      track('avatar_part_import_failed', { reason: result });
       setLibraryNote(
         result === 'too-large'
           ? partText.importTooLarge
@@ -369,9 +374,16 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     }
     const saved = addParts(parts, result.files);
     if (!saved) {
+      track('avatar_part_import_failed', { reason: 'storage' });
       setLibraryNote(partText.saveFailed);
       return;
     }
+    track('avatar_part_imported', {
+      count: result.files.length,
+      added: saved.added,
+      refused: result.refused,
+      zip: !file.name.toLowerCase().endsWith('.png'),
+    });
     setParts(saved.entries);
     setLibraryNote(
       (result.refused ? partText.importedRefused! : partText.imported!)
