@@ -124,3 +124,41 @@ test('invalid scoped slug fails before touching existing guides or media', () =>
     f.clean();
   }
 });
+
+test('full and scoped sync preserve site-owned screenshots rather than replacing them with upstream media', () => {
+  const f = fixture();
+  try {
+    for (const lang of ['zh', 'en'])
+      put(
+        join(f.site, 'content/site-guides', lang, 'capabilities.md'),
+        '# Site-owned guide\n\n![Phone](/guides/qq/mobile-permissions.png)\n',
+      );
+    put(join(f.site, 'public/guides/qq/mobile-permissions.png'), 'Human-supplied screenshot');
+    put(join(f.site, 'public/guides/fixture.png'), 'Site-owned shared screenshot');
+    put(
+      join(f.site, 'content/site-guides/en/qq-connection.md'),
+      '# QQ\n\n![Shared](/guides/fixture.png)\n',
+    );
+    f.run([]);
+    assert.equal(
+      readFileSync(join(f.site, 'public/guides/qq/mobile-permissions.png'), 'utf8'),
+      'Human-supplied screenshot',
+    );
+    assert.equal(
+      readFileSync(join(f.site, 'public/guides/fixture.png'), 'utf8'),
+      'Site-owned shared screenshot',
+    );
+    f.run(['--only', 'capabilities,qq-connection']);
+    assert.equal(
+      readFileSync(join(f.site, 'public/guides/qq/mobile-permissions.png'), 'utf8'),
+      'Human-supplied screenshot',
+    );
+    assert.ok(
+      readFileSync(join(f.site, 'content/docs/en/qq-connection.md'), 'utf8').includes(
+        '/guides/fixture.png',
+      ),
+    );
+  } finally {
+    f.clean();
+  }
+});

@@ -188,6 +188,22 @@ export const DOC_PAGES = [
     },
   },
   {
+    slug: 'qq-connection',
+    siteSource: true,
+    order: 25,
+    en: {
+      source: 'content/site-guides/en/qq-connection.md',
+      title: 'QQ group permissions',
+      description:
+        'Open Bot settings in mobile QQ and choose the message-reception scope and proactive group-speech permission.',
+    },
+    zh: {
+      source: 'content/site-guides/zh/qq-connection.md',
+      title: 'QQ 群聊权限配置',
+      description: '从手机 QQ 进入机器人设置，选择群消息接收范围并开启主动发言。',
+    },
+  },
+  {
     slug: 'model-setup',
     order: 13,
     en: {

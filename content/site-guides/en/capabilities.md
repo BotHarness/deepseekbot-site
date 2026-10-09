@@ -15,7 +15,7 @@ Verify a real local Bot DM reply before connecting an app. Platform scopes diffe
 | Discord | The bound Bot app; server, channel and message-content permissions constrain intake, with no promise to read arbitrary channels | [Identity and conversation management](/docs/channel-sidebar/external-identities) · [Discord qualification](https://github.com/BotHarness/BotHarness/pull/1125) |
 | Personal WeChat | DMs between the QR-scanning owner and the WeChat Bot; excludes groups, other contacts and Enterprise WeChat | [Personal WeChat](/docs/wechat-connection) |
 
-**QQ Bot integration has not shipped.** Track [#1149](https://github.com/BotHarness/DeepSeekBot/issues/1149); the QQ community group at the bottom is a separate community entry.
+**QQ group integration is being delivered in slices and is not a complete stable-release feature yet.** See [QQ group permissions in mobile QQ](/docs/qq-connection) for message reception and proactive speech, and [#1149](https://github.com/BotHarness/DeepSeekBot/issues/1149) for delivery status. The QQ community group at the bottom is a separate community entry.
 
 ## Bind an app in newer builds
 

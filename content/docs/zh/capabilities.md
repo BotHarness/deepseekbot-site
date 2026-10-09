@@ -22,7 +22,7 @@
 | Discord | 绑定的 Bot 应用；接收范围受服务器、频道权限及消息内容权限影响，不承诺任意频道可读 | [身份绑定与会话管理](/docs/channel-sidebar/external-identities) · [Discord 接入验证](https://github.com/BotHarness/BotHarness/pull/1125) |
 | 个人微信 | 扫码者与微信 Bot 的私聊；不包括微信群、其他联系人或企业微信 | [个人微信](/docs/wechat-connection) |
 
-**QQ Bot 接入尚未交付。** 请关注[接入票 #1149](https://github.com/BotHarness/DeepSeekBot/issues/1149)，不要把底部 QQ 社区群当成已支持的 Bot IM 平台。
+**QQ 群聊接入正在分片交付，尚未作为完整能力发布到正式版。** 可先查看[手机 QQ 群聊权限配置](/docs/qq-connection)，了解接收范围与主动发言开关；交付进度见[接入票 #1149](https://github.com/BotHarness/DeepSeekBot/issues/1149)。底部 QQ 社区群是独立的社区入口。
 
 ## 新版如何绑定应用
 

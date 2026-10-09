@@ -37,8 +37,9 @@ test('all generated guides, privacy and changelog pages use the shared header an
     const paths = [...renderDocs(), ...renderChangelog()];
     assert.ok(paths.length > 10);
     for (const path of paths) {
-      const lang = path.startsWith('en/') ? 'en' : 'zh';
+      const lang = path.split(/[\\/]/)[0] === 'en' ? 'en' : 'zh';
       const html = readFileSync(path, 'utf8');
+      assert.doesNotMatch(html, /href="[^"]*\\/, path);
       const header = html.match(/<header class="topbar">([\s\S]*?)<\/header>/)?.[1];
       assert.ok(header, path);
       assert.ok(header.includes(headerCommunityMarkup(lang)), path);

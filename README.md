@@ -38,7 +38,7 @@ pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
   to `public/guides`). To update a bounded set without replacing other guides or media, use
   `BOTHARNESS=../BotHarness pnpm docs:sync --only capabilities,channel-sidebar/external-identities,lark-connection,slack-connection,wechat-connection,daily-browser,settings,installation`.
   Site-owned copy lives in `content/site-guides/{zh,en}` and is included via `siteSource` in
-  `scripts/docs-pages.mjs`; both full and scoped syncs preserve its authored source. Current-source
+  `scripts/docs-pages.mjs`; both full and scoped syncs preserve its authored source and referenced site-owned screenshots. Current-source
   guides carry a release notice and the copied upstream SHA. `editorialBody` in the sync script
   corrects historical pre-release installation statements without discarding qualification records.
   The build renders them into static pages at `/docs/<slug>/` and
