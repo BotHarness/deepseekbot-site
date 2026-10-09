@@ -36,6 +36,7 @@ const UI = {
       features: '能力',
       install: '安装',
       market: 'Bot 市场',
+      avatar: '头像工坊',
       changelog: '更新日志',
       community: '社区',
     },
@@ -65,6 +66,7 @@ const UI = {
       features: 'Features',
       install: 'Install',
       market: 'Marketplace',
+      avatar: 'Avatar Studio',
       changelog: 'Changelog',
       community: 'Community',
     },
@@ -320,6 +322,7 @@ function page(
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
+        <a href="${home(lang)}avatar"><span class="nav-icon-wrap">${navIconSvg('avatar')}</span>${t.nav.avatar}</a>
         <a href="${docPath(lang, 'overview')}"${guide ? ' aria-current="page"' : ''}><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
         <a class="nav-changelog" href="${home(lang)}changelog/"><span class="nav-icon-wrap">${navIconSvg('changelog')}</span>${t.nav.changelog}</a>
         ${searchButton(lang)}

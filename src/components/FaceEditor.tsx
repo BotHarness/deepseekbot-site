@@ -86,8 +86,6 @@ const CATEGORIES = [
   ...Object.keys(AVATAR_PARTS).filter((part) => part !== 'backdrop' && part !== 'hair'),
   'beard',
   'headpiece',
-  'shape',
-  'colors',
 ];
 const DETAIL = new Set<string>([...Object.keys(AVATAR_HAIR_PARTS), ...Object.keys(AVATAR_RANGES)]);
 const EXTRAS = new Set<string>(Object.keys(AVATAR_EXTRA_PARTS));
@@ -550,6 +548,72 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     );
   };
 
+  const skin = AVATAR_SPECIES_SWATCHES[recipe.species ?? 'human'];
+  const colorsPanel = (
+    <div className="face-colors">
+      {COLORS.filter((key) => colorShown(recipe, fields, key)).map((key) => (
+        <div key={key} className="face-color-row">
+          <span>{labels.parts[key]}</span>
+          <div className="face-swatches">
+            {(key === 'skinColor'
+              ? skin
+              : (AVATAR_SWATCHES[key as keyof typeof AVATAR_SWATCHES] ?? AVATAR_SWATCHES.hairColor)
+            ).map((value) => (
+              <button
+                key={value}
+                type="button"
+                className="face-swatch"
+                style={{ background: value }}
+                aria-pressed={String(fields[key]).toLowerCase() === value}
+                aria-label={`${labels.parts[key]} ${value}`}
+                onClick={() => set(key, value)}
+              />
+            ))}
+            <input
+              type="color"
+              aria-label={labels.parts[key]}
+              value={String(fields[key] ?? fields.hairColor)}
+              onChange={(event) => set(key, event.currentTarget.value)}
+            />
+            {fields[key] !== undefined && PIECE_COLORS.includes(key) ? (
+              <button
+                type="button"
+                className="face-color-reset"
+                onClick={() => onChange(without(recipe, key))}
+              >
+                {labels.parts.followHairColor}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+  const shapePanel = (
+    <div className="face-ranges">
+      {Object.entries(AVATAR_RANGES)
+        // a slider shows only where it moves something (hair length needs longer hair, say)
+        .filter(
+          ([key, [min, max]]) =>
+            Number(fields[key] ?? 0) !== 0 ||
+            pixelTileSvg(withPart(recipe, key, min)) !== pixelTileSvg(withPart(recipe, key, max)),
+        )
+        .map(([key, [min, max]]) => (
+          <label key={key}>
+            <span>{labels.parts[key]}</span>
+            <input
+              type="range"
+              min={min}
+              max={max}
+              step={1}
+              value={Number(fields[key] ?? 0)}
+              onChange={(event) => set(key, Number(event.currentTarget.value))}
+            />
+          </label>
+        ))}
+    </div>
+  );
+
   let panel;
   if (drawing && drawing.slot === pieceSlot) {
     panel = (
@@ -574,74 +638,6 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             }}
           />
         ))}
-      </div>
-    );
-  } else if (category === 'colors') {
-    const skin = AVATAR_SPECIES_SWATCHES[recipe.species ?? 'human'];
-    panel = (
-      <div className="face-colors">
-        {COLORS.filter((key) => colorShown(recipe, fields, key)).map((key) => (
-          <div key={key} className="face-color-row">
-            <span>{labels.parts[key]}</span>
-            <div className="face-swatches">
-              {(key === 'skinColor'
-                ? skin
-                : (AVATAR_SWATCHES[key as keyof typeof AVATAR_SWATCHES] ??
-                  AVATAR_SWATCHES.hairColor)
-              ).map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  className="face-swatch"
-                  style={{ background: value }}
-                  aria-pressed={String(fields[key]).toLowerCase() === value}
-                  aria-label={`${labels.parts[key]} ${value}`}
-                  onClick={() => set(key, value)}
-                />
-              ))}
-              <input
-                type="color"
-                aria-label={labels.parts[key]}
-                value={String(fields[key] ?? fields.hairColor)}
-                onChange={(event) => set(key, event.currentTarget.value)}
-              />
-              {fields[key] !== undefined && PIECE_COLORS.includes(key) ? (
-                <button
-                  type="button"
-                  className="face-color-reset"
-                  onClick={() => onChange(without(recipe, key))}
-                >
-                  {labels.parts.followHairColor}
-                </button>
-              ) : null}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  } else if (category === 'shape') {
-    panel = (
-      <div className="face-ranges">
-        {Object.entries(AVATAR_RANGES)
-          // a slider shows only where it moves something (hair length needs longer hair, say)
-          .filter(
-            ([key, [min, max]]) =>
-              Number(fields[key] ?? 0) !== 0 ||
-              pixelTileSvg(withPart(recipe, key, min)) !== pixelTileSvg(withPart(recipe, key, max)),
-          )
-          .map(([key, [min, max]]) => (
-            <label key={key}>
-              <span>{labels.parts[key]}</span>
-              <input
-                type="range"
-                min={min}
-                max={max}
-                step={1}
-                value={Number(fields[key] ?? 0)}
-                onChange={(event) => set(key, Number(event.currentTarget.value))}
-              />
-            </label>
-          ))}
       </div>
     );
   } else if (category === 'headpiece') {
@@ -700,35 +696,40 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   }
 
   return (
-    <section className="face-editor frame" aria-labelledby="face-editor-title">
-      <div className="face-editor-head">
-        <div>
-          <h3 id="face-editor-title">{t.title}</h3>
-          <p>{t.lead}</p>
+    <>
+      <section className="studio-parts frame" aria-labelledby="face-editor-title">
+        <div className="face-editor-head">
+          <h2 id="face-editor-title">{t.parts}</h2>
+          <div className="face-editor-actions">
+            <Button label={t.shuffle} onClick={() => onChange(shuffled(recipe))} />
+            <Button label={t.reset} isDisabled={!edited} onClick={onReset} />
+          </div>
         </div>
-        <div className="face-editor-actions">
-          <Button label={t.shuffle} onClick={() => onChange(shuffled(recipe))} />
-          <Button label={t.reset} isDisabled={!edited} onClick={onReset} />
+        <div className="face-tabs" role="group" aria-label={t.parts}>
+          {categories.map((key) => (
+            <button
+              key={key}
+              type="button"
+              className="face-tab"
+              aria-pressed={category === key}
+              onClick={() => {
+                if (key !== category)
+                  track('avatar_tab_selected', { tab: key, species: recipe.species ?? 'human' });
+                setCategory(key);
+              }}
+            >
+              {labels.parts[key] ?? key}
+            </button>
+          ))}
         </div>
-      </div>
-      <div className="face-tabs" role="group" aria-label={t.parts}>
-        {categories.map((key) => (
-          <button
-            key={key}
-            type="button"
-            className="face-tab"
-            aria-pressed={category === key}
-            onClick={() => {
-              if (key !== category)
-                track('avatar_tab_selected', { tab: key, species: recipe.species ?? 'human' });
-              setCategory(key);
-            }}
-          >
-            {labels.parts[key] ?? key}
-          </button>
-        ))}
-      </div>
-      {panel}
-    </section>
+        {panel}
+      </section>
+      <aside className="studio-side frame" aria-labelledby="face-colors-title">
+        <h2 id="face-colors-title">{labels.parts.colors}</h2>
+        {colorsPanel}
+        <h2>{labels.parts.shape}</h2>
+        {shapePanel}
+      </aside>
+    </>
   );
 }

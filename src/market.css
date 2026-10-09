@@ -365,3 +365,105 @@ a.bot-card {
     padding: 16px;
   }
 }
+
+/* Avatar Studio (/avatar): stage, part editor and colors side by side */
+.studio-page {
+  max-width: 1480px;
+  min-height: 70vh;
+  padding-top: 56px;
+}
+.studio {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr) 300px;
+  grid-template-areas:
+    'left parts side'
+    'tools parts side';
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-top: 28px;
+}
+.studio-left {
+  grid-area: left;
+}
+.studio-parts {
+  grid-area: parts;
+}
+.studio-side {
+  grid-area: side;
+}
+.studio-tools {
+  grid-area: tools;
+  display: grid;
+  gap: 20px;
+}
+.studio-left,
+.studio-side {
+  position: sticky;
+  top: 84px;
+}
+.studio-left {
+  display: grid;
+  gap: 20px;
+}
+.studio-left .playground-stage {
+  position: static;
+}
+.studio-tools .tool-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.studio-parts,
+.studio-side {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 14px 16px 16px;
+}
+.studio-side {
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.studio-parts h2,
+.studio-side h2 {
+  margin: 0;
+  font-family: var(--pixel-font);
+  font-weight: 400;
+  font-size: 22px;
+  -webkit-font-smoothing: none;
+}
+.studio-parts .face-options {
+  max-height: none;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+}
+.studio-side .face-colors {
+  max-height: none;
+  overflow: visible;
+}
+.studio-side .face-ranges label {
+  grid-template-columns: 5em minmax(0, 1fr);
+}
+@media (max-width: 1240px) {
+  .studio {
+    grid-template-columns: 280px minmax(0, 1fr);
+    grid-template-areas:
+      'left parts'
+      'tools parts'
+      'tools side';
+    grid-template-rows: auto auto 1fr;
+  }
+  .studio-side {
+    position: static;
+    max-height: none;
+  }
+}
+@media (max-width: 860px) {
+  .studio {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'left' 'parts' 'side' 'tools';
+    grid-template-rows: none;
+  }
+  .studio-left,
+  .studio-side {
+    position: static;
+  }
+}

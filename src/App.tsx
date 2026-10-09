@@ -129,7 +129,7 @@ export function App() {
               </span>
             </a>
           </p>
-          <Playground copy={copy} design={design} />
+          <Playground copy={copy} lang={lang} design={design} />
         </section>
 
         <section className="section" id="install" aria-labelledby="install-title">

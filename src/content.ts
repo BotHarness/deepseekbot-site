@@ -127,6 +127,12 @@ export interface Copy {
     label: string;
     play: string;
   };
+  studio: {
+    pageTitle: string;
+    kicker: string;
+    title: string;
+    lead: string;
+  };
   market: {
     pageTitle: string;
     kicker: string;
@@ -176,6 +182,8 @@ export interface Copy {
     editor: { title: string; lead: string; parts: string; reset: string; shuffle: string };
     caption: string;
     botpixel: { ask: string; link: string; tip: string };
+    /** the home page's way into the Avatar Studio, which holds the full editor */
+    studio: { title: string; body: string; cta: string };
   };
   avatarLabels: AvatarLabels;
   install: {
@@ -213,7 +221,7 @@ const zh: Copy = {
   pageTitle: 'DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness',
   nav: {
     features: '能力',
-    avatar: '像素头像',
+    avatar: '头像工坊',
     install: '安装',
     market: 'Bot 市场',
     docs: '文档',
@@ -320,6 +328,12 @@ const zh: Copy = {
     label: 'DeepSeekBot 宣传片（中文）',
     play: '播放宣传片',
   },
+  studio: {
+    pageTitle: '头像工坊 · DeepSeekBot',
+    kicker: 'BotPixel',
+    title: '头像工坊',
+    lead: '换物种、发型、五官和颜色，或者自己画头饰、头发和其他部件，画好直接下载。设计保存在这个浏览器里，首页的小伙伴也会换上它。',
+  },
   market: {
     pageTitle: 'Bot 市场 · DeepSeekBot',
     kicker: 'Bot 市场',
@@ -385,6 +399,11 @@ const zh: Copy = {
       ask: '想在自己的项目里用像素头像？',
       link: 'BotPixel 开源在 GitHub',
       tip: '同一个名字生成同一张脸，还能变成工具图标。npm i @botharness/pixel-avatar',
+    },
+    studio: {
+      title: '想细细捏一张脸？',
+      body: '头像工坊里有全部物种、部件、颜色和绘制工具，画好的部件还能导出。设计会保存在这个浏览器里。',
+      cta: '打开头像工坊',
     },
   },
   avatarLabels: ZH_AVATAR_LABELS,
@@ -459,7 +478,7 @@ const en: Copy = {
   pageTitle: 'DeepSeekBot: the open-source Grok Bot alternative for DeepSeek Harness',
   nav: {
     features: 'Features',
-    avatar: 'Avatars',
+    avatar: 'Avatar Studio',
     install: 'Install',
     market: 'Marketplace',
     docs: 'Docs',
@@ -567,6 +586,12 @@ const en: Copy = {
     label: 'DeepSeekBot promo video (English)',
     play: 'Play the video',
   },
+  studio: {
+    pageTitle: 'Avatar Studio · DeepSeekBot',
+    kicker: 'BotPixel',
+    title: 'Avatar Studio',
+    lead: 'Swap species, hair, features and colors, or draw your own headpiece, hair and other parts, then download it. Your design is saved in this browser, and the companion on the home page wears it too.',
+  },
   market: {
     pageTitle: 'Bot Marketplace · DeepSeekBot',
     kicker: 'Marketplace',
@@ -633,6 +658,11 @@ const en: Copy = {
       ask: 'Want pixel avatars in your own project?',
       link: 'BotPixel is open source on GitHub',
       tip: 'The same name always gives the same face, and it morphs into tool icons. npm i @botharness/pixel-avatar',
+    },
+    studio: {
+      title: 'Want to get every detail right?',
+      body: 'The Avatar Studio has every species, part, color and drawing tool, and drawn parts can be exported. Your design is saved in this browser.',
+      cta: 'Open the Avatar Studio',
     },
   },
   avatarLabels: EN_AVATAR_LABELS,
