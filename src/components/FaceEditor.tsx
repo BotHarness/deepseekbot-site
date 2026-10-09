@@ -42,6 +42,7 @@ import { addPart, loadParts, removePart, type PartEntry } from '../partLibrary';
 import { memo, useMemo, useRef, useState } from 'react';
 import type { Copy } from '../content';
 import { PartEditor } from './PartEditor';
+import { track } from '../analytics';
 
 type Fields = Record<string, string | number>;
 type Recipe = PixelAvatarRecipe;
@@ -272,7 +273,8 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     drawn.current = next;
     onChange(next);
   };
-  const begin = (next: Drawing) => {
+  const begin = (next: Drawing, start: 'new' | 'edit' | 'piece') => {
+    track('avatar_part_draw_started', { slot: next.slot, start });
     drawn.current = recipe;
     setDrawing(next);
   };
@@ -291,12 +293,14 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
         onSave={(part, name) => {
           const saved = addPart(parts, part, name, drawing.parent);
           if (!saved) return false;
+          track('avatar_part_saved', { slot: drawing.slot, derived: drawing.parent !== undefined });
           setParts(saved.entries);
           setDrawing(undefined);
           onChange(withCustomPart(drawing.base, drawing.slot, saved.entry.part));
           return true;
         }}
         onCancel={() => {
+          track('avatar_part_draw_cancelled', { slot: drawing.slot });
           setDrawing(undefined);
           onChange(drawing.restore);
         }}
@@ -336,6 +340,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
                     }),
               }
             : { slot, base: recipe, restore: recipe },
+        hair || head ? 'piece' : 'new',
       );
     const action = (label: string | undefined, onClick: () => void) => (
       <button type="button" className="face-color-reset" onClick={onClick}>
@@ -348,14 +353,20 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
           {action(hair ? partText.drawPiece : partText.draw, draw)}
           {worn && !hair
             ? action(partText.edit, () =>
-                begin({ slot, base: recipe, restore: recipe, initial: worn, parent: wornId }),
+                begin(
+                  { slot, base: recipe, restore: recipe, initial: worn, parent: wornId },
+                  'edit',
+                ),
               )
             : null}
           {worn && hair
             ? action(partText.removePiece, () => onChange(withCustomPart(recipe, slot, undefined)))
             : null}
           {wornId && own.some((entry) => entry.id === wornId)
-            ? action(partText.remove, () => setParts(removePart(parts, wornId)))
+            ? action(partText.remove, () => {
+                track('avatar_part_deleted', { slot });
+                setParts(removePart(parts, wornId));
+              })
             : null}
         </div>
         {hair ? null : (
@@ -372,7 +383,10 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             recipe={withCustomPart(recipe, slot, entry.part)}
             selected={wornId === entry.id}
             label={entry.name || partText.untitled!}
-            onSelect={() => onChange(withCustomPart(recipe, slot, entry.part))}
+            onSelect={() => {
+              track('avatar_part_worn', { slot });
+              onChange(withCustomPart(recipe, slot, entry.part));
+            }}
           />
         ))}
         {!hair && own.length === 0 ? (
@@ -400,7 +414,10 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             recipe={preset}
             selected={JSON.stringify(preset) === JSON.stringify(recipe)}
             label={`${labels.parts.presets} ${i + 1}`}
-            onSelect={() => onChange(preset)}
+            onSelect={() => {
+              track('avatar_preset_selected', { index: i, species: preset.species ?? 'human' });
+              onChange(preset);
+            }}
           />
         ))}
       </div>
@@ -478,7 +495,10 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             recipe={withBuiltInHeadpiece(recipe, value)}
             selected={worn === value}
             label={option('headpiece', value)}
-            onSelect={() => onChange(withBuiltInHeadpiece(recipe, value))}
+            onSelect={() => {
+              track('avatar_headpiece_selected', { headpiece: value });
+              onChange(withBuiltInHeadpiece(recipe, value));
+            }}
           />
         ))}
       </div>
@@ -503,7 +523,10 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             recipe={builtIn(category, value)}
             selected={(fields[category] ?? 'none') === value && !pieceWorn}
             label={option(category, value)}
-            onSelect={() => onChange(builtIn(category, value))}
+            onSelect={() => {
+              if (category === 'species') track('avatar_species_selected', { species: value });
+              onChange(builtIn(category, value));
+            }}
           />
         ))}
       </div>
