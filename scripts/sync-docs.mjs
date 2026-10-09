@@ -2,7 +2,7 @@
 // and their screenshots into public/guides. Run after the guides change upstream:
 //   BOTHARNESS=../BotHarness pnpm docs:sync
 import { execFileSync } from 'node:child_process';
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, posix, resolve } from 'node:path';
 import { DOC_PAGES } from './docs-pages.mjs';
 
@@ -20,6 +20,7 @@ const revision = execFileSync('git', ['-C', ROOT, 'rev-parse', 'HEAD'], {
   encoding: 'utf8',
 }).trim();
 const media = new Set();
+const siteMedia = new Map();
 const GITHUB_BLOB = 'https://github.com/BotHarness/BotHarness/blob/main/';
 
 const frontmatterOf = (text) => {
@@ -154,11 +155,14 @@ for (const page of pages) {
         : '> **Version scope: current-source guide.** These steps include UI updates absent from npm v1.1.0; older test packages and screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and component boundaries.\n\n'
       : '';
     writeFileSync(file, `---\n${JSON.stringify(head, null, 2)}\n---\n\n${notice}${body}`);
-    if (!page.siteSource) {
-      for (const match of body.matchAll(
-        /\/guides\/[^\s"')<>]+\.(?:webp|png|jpe?g|gif|svg|mp4|webm|vtt)(?=[\s"')<>]|$)/g,
-      ))
-        media.add(match[0]);
+    for (const match of body.matchAll(
+      /\/guides\/[^\s"')<>]+\.(?:webp|png|jpe?g|gif|svg|mp4|webm|vtt)(?=[\s"')<>]|$)/g,
+    )) {
+      if (!page.siteSource) media.add(match[0]);
+      else {
+        const source = join('public', match[0]);
+        if (existsSync(source)) siteMedia.set(match[0], readFileSync(source));
+      }
     }
   }
 }
@@ -171,5 +175,10 @@ if (!requested) {
     mkdirSync(dirname(target), { recursive: true });
     cpSync(join(ROOT, 'apps/docs/public', path), target);
   }
+}
+for (const [path, bytes] of siteMedia) {
+  const target = join('public', path);
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, bytes);
 }
 console.log(`synced ${pages.length} guides × 2 languages from ${ROOT} at ${revision}`);

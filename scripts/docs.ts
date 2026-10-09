@@ -2,7 +2,7 @@
 // /en/docs/<slug>/ (English), each a full HTML entry for Vite with the site's header, a guide
 // sidebar and the article. The pages are generated, not committed; content/docs is the source.
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 import { Marked, type Tokens } from 'marked';
 import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg } from '../src/navIcons.ts';
@@ -110,7 +110,7 @@ function read(lang: Lang): Doc[] {
         const match = text.match(/^---\n([\s\S]*?)\n---\n/);
         if (!match) throw new Error(`${path}: missing front matter`);
         const meta = JSON.parse(match[1]!) as Omit<Doc, 'slug' | 'body'>;
-        const slug = relative(join(CONTENT, lang), path).replace(/\.md$/, '');
+        const slug = relative(join(CONTENT, lang), path).split(sep).join('/').replace(/\.md$/, '');
         docs.push({ ...meta, slug, body: text.slice(match[0].length) });
       }
     }
