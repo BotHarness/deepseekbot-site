@@ -224,7 +224,7 @@ function indexMain(lang: Lang, posts: Post[]) {
   const items = posts
     .map(
       (p) =>
-        `<li><a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a><time datetime="${p.date}">${p.date}</time><p>${escape(p.description)}</p></li>`,
+        `<li><time datetime="${p.date}">${p.date}</time> · <a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a><p>${escape(p.description)}</p></li>`,
     )
     .join('');
   const nav = posts
