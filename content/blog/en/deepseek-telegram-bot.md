@@ -2,7 +2,8 @@
 {
   "title": "DeepSeek Telegram Bot: the Landscape, the Risks, and the Open-Source Path",
   "description": "Want DeepSeek inside Telegram? Start with how third-party bots actually work and where the open-source path leads.",
-  "date": "2026-10-10"
+  "date": "2026-10-10",
+  "tags": ["Telegram", "Guide"]
 }
 ---
 

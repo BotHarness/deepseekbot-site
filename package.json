@@ -19,6 +19,7 @@
     "deploy:preview": "pnpm build && wrangler versions upload",
     "frames": "node scripts/frame-svg.mjs",
     "og": "node scripts/og-image.mjs",
+    "blog:covers": "node scripts/blog-covers.mjs",
     "test:docs-sync": "node --test scripts/sync-docs.test.mjs",
     "test:community": "node --test scripts/community.test.mjs",
     "test:header": "node --test scripts/header.test.mjs",
