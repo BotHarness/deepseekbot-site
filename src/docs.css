@@ -891,7 +891,7 @@
 }
 .blog-rail-sticky {
   position: sticky;
-  top: 40px;
+  top: 150px;
 }
 .blog-rail ul {
   list-style: square;
@@ -962,6 +962,7 @@
 }
 .blog-post-layout .docs-body h2 {
   margin-top: 40px;
+  scroll-margin-top: 150px;
 }
 .blog-post-layout .docs-body p,
 .blog-post-layout .docs-body ul,
