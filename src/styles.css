@@ -1537,11 +1537,172 @@ a:where(:not(.astryx-button)) {
 .face-ranges input {
   accent-color: var(--accent);
 }
+/* Part Library actions and the part editor, ported from BotHarness's custom-part-editor */
+.part-library-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.face-tab:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.face-drawing,
+.part-editor {
+  display: grid;
+  gap: 10px;
+}
+.part-toolbar,
+.part-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+.part-options {
+  gap: 6px 14px;
+  font-size: 13px;
+}
+.part-options > span,
+.part-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.part-options small,
+.part-preview small {
+  color: var(--ink-soft);
+}
+.part-hint {
+  flex-basis: 100%;
+}
+.part-workspace {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-start;
+}
+.part-canvas {
+  position: relative;
+  flex: none;
+  max-width: 100%;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  outline: 2px solid var(--px-ink);
+}
+.part-backdrop {
+  position: absolute;
+  inset: 0;
+  opacity: 0.38;
+  pointer-events: none;
+}
+.part-backdrop svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.part-grid {
+  position: absolute;
+  inset: 0 0 auto 0;
+  display: grid;
+  outline: 2px dashed var(--ink-soft);
+  outline-offset: -1px;
+}
+.part-cell {
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--ink) 18%, transparent);
+  cursor: crosshair;
+}
+.part-cell[data-other] {
+  opacity: 0.45;
+}
+.part-cursor {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  box-shadow: 0 0 0 1px var(--bg);
+  pointer-events: none;
+}
+.part-draw {
+  align-self: stretch;
+  min-width: 88px;
+  padding: 0 14px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 0;
+  outline: 2px solid var(--px-ink);
+  outline-offset: -2px;
+  touch-action: none;
+  user-select: none;
+}
+.part-side {
+  display: grid;
+  gap: 10px;
+}
+.part-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.part-preview svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+.part-palette {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 4px 10px;
+}
+.part-palette-row {
+  display: flex;
+  gap: 2px;
+}
+.part-swatch {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  outline: 1px solid var(--px-ink);
+  outline-offset: -1px;
+  cursor: pointer;
+}
+.part-swatch[aria-pressed='true'] {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.part-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.part-name input {
+  flex: 1;
+  min-height: 32px;
+  padding: 0 8px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 2px solid var(--px-ink);
+}
+.part-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 /* the editor's controls draw their frame with outline, which hides the global focus ring */
 .face-tab:focus-visible,
 .face-option:focus-visible,
 .face-swatch:focus-visible,
-.face-color-reset:focus-visible {
+.face-color-reset:focus-visible,
+.part-swatch:focus-visible,
+.part-draw:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
