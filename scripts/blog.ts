@@ -38,7 +38,7 @@ const UI = {
     minRead: (n: number) => `${n} 分钟阅读`,
     copyUrl: '复制链接',
     copied: '已复制',
-    byTeam: 'DeepSeekBot 团队',
+    byTeam: 'DoodleBear（BotHarness 团队）',
     nav: {
       features: '能力',
       install: '安装',
@@ -74,7 +74,7 @@ const UI = {
     minRead: (n: number) => `${n} MIN READ`,
     copyUrl: 'Copy URL',
     copied: 'Copied',
-    byTeam: 'DeepSeekBot Team',
+    byTeam: 'DoodleBear (BotHarness Team)',
     nav: {
       features: 'Features',
       install: 'Install',
@@ -308,8 +308,8 @@ function indexMain(lang: Lang, posts: Post[]) {
   const nav = posts
     .map((p) => `<li><a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a></li>`)
     .join('');
-  return `<div class="docs-layout">
-      <nav class="docs-nav" aria-label="${t.posts}"><details open><summary>${t.posts}</summary><p class="docs-nav-title">${t.posts}</p><ul>${nav}</ul></details></nav>
+  void nav;
+  return `<div class="blog-index-layout">
       <main id="main" class="docs-main">
         <article class="docs-article frame">
           <p class="kicker">DeepSeekBot</p>
@@ -335,15 +335,9 @@ function postMain(lang: Lang, post: Post, posts: Post[]) {
   const cover = coverFor(lang, post.slug);
   const minutes = readMinutes(lang, post.body);
   const tags = post.tags.map((tag) => `<span class="blog-tag">${escape(tag)}</span>`).join('');
-  const nav = posts
-    .map(
-      (p) =>
-        `<li><a href="${blogPostPath(lang, p.slug)}"${p.slug === post.slug ? ' aria-current="page"' : ''}>${escape(p.title)}</a></li>`,
-    )
-    .join('');
+  const tocItems = toc.map((h) => `<li><a href="#${h.id}">${escape(h.text)}</a></li>`).join('');
   const source = `https://github.com/BotHarness/deepseekbot-site/blob/main/content/blog/${lang}/${post.slug}.md`;
-  return `<div class="docs-layout">
-      <nav class="docs-nav" aria-label="${t.posts}"><details open><summary>${t.posts}</summary><p class="docs-nav-title">${t.posts}</p><ul>${nav}</ul></details></nav>
+  return `<div class="blog-post-layout">
       <main id="main" class="docs-main">
         <article class="docs-article frame">
           <p class="blog-crumb"><a href="${blogPath(lang)}">${t.title}</a>${tags}</p>
@@ -352,11 +346,12 @@ function postMain(lang: Lang, post: Post, posts: Post[]) {
           <p class="blog-byline">${t.byTeam} · ${t.minRead(minutes)} · <button type="button" data-copy-url data-label="${t.copyUrl}" data-ok="${t.copied}">${t.copyUrl}</button></p>
           ${cover ? `<img class="blog-cover" src="${cover}" alt="" />` : ''}
           <p class="docs-lead">${escape(post.description)}</p>
-          ${toc.length > 0 ? `<details class="blog-toc"><summary>${t.toc}</summary><ul>${toc.map((h) => `<li><a href="#${h.id}">${escape(h.text)}</a></li>`).join('')}</ul></details>` : ''}
+          ${toc.length > 0 ? `<details class="blog-toc blog-toc-mobile"><summary>${t.toc}</summary><ul>${tocItems}</ul></details>` : ''}
           <div class="docs-body">${html}</div>
         </article>
         <p class="docs-source"><a href="${source}" target="_blank" rel="noreferrer">${t.source}</a></p>
       </main>
+      ${toc.length > 0 ? `<aside class="blog-rail" aria-label="${t.toc}"><div class="blog-rail-sticky"><p class="toc-label">${t.toc}</p><ul>${tocItems}</ul></div></aside>` : ''}
     </div>
     <script>
       (function () {
