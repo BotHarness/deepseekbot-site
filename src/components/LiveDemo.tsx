@@ -1,13 +1,46 @@
 import type { PixelSymbol } from '@botharness/pixel-avatar';
+import {
+  AlarmClock,
+  ArrowUp,
+  BellOff,
+  ChevronRight,
+  CirclePlus,
+  Files,
+  FolderLock,
+  GitCommitVertical,
+  MessagesSquare,
+  PanelRightClose,
+  PanelRightOpen,
+  Plus,
+  Puzzle,
+  RotateCcw,
+  ShieldCheck,
+  Users,
+  type LucideIcon,
+} from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { track } from '../analytics';
 import type { Copy } from '../content';
-import type { DemoChannel, DemoStep, PanelSection } from '../demoCopy';
+import type { DemoChannel, DemoIcon, DemoStep, PanelSection } from '../demoCopy';
 import { recipeFor } from '../mascot';
 import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
-import { SymbolIcon } from './SymbolIcon';
 
 const TOOL_MS = 1100;
+
+const ICONS: Record<DemoIcon, LucideIcon> = {
+  members: Users,
+  sessions: MessagesSquare,
+  files: Files,
+  history: GitCommitVertical,
+  schedules: AlarmClock,
+  workspace: FolderLock,
+  asleep: BellOff,
+};
+
+function Icon({ name }: { name: DemoIcon }) {
+  const Svg = ICONS[name];
+  return <Svg className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />;
+}
 
 /** A message the visitor typed after the script finished, and the Bot's canned answer. */
 type Extra = { kind: 'user'; text: string } | { kind: 'fallback'; bot: string };
@@ -121,7 +154,7 @@ function Message({
     case 'event':
       return (
         <li className="app-event">
-          <SymbolIcon symbol={step.icon} color="currentColor" size={16} />
+          <Icon name={step.icon} />
           <span>
             {step.text}
             {step.strong ? <strong> {step.strong}</strong> : null}
@@ -134,7 +167,7 @@ function Message({
           <Avatar name={step.bot} size={32} />
           <div className="app-approval" data-answer={answer}>
             <p className="app-approval-title">
-              <SymbolIcon symbol="approval" color="currentColor" size={16} />
+              <ShieldCheck className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
               {step.text}
             </p>
             <code>{step.detail}</code>
@@ -189,6 +222,9 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   const [done, setDone] = useState(false);
   const [extra, setExtra] = useState<Extra[]>([]);
   const [seen, setSeen] = useState<Set<string>>(() => new Set());
+  const [panelOpen, setPanelOpen] = useState(true);
+  // sidebar sections the visitor folded, by section id; they stay folded across chats
+  const [folded, setFolded] = useState<Set<string>>(() => new Set());
 
   const channel = channels[active]!;
   const panel = useMemo(() => panelAt(channel, shown), [channel, shown]);
@@ -356,15 +392,17 @@ export function LiveDemo({ copy }: { copy: Copy }) {
             {t.app} · {t.botMode}
           </span>
         </div>
-        <div className="app-body">
+        <div className="app-body" data-panel={panelOpen ? undefined : 'closed'}>
           <nav className="app-side" aria-label={t.messages}>
             <p className="app-brand" aria-hidden="true">
               deepseek <span>HARNESS</span>
             </p>
             <span className="app-side-btn app-side-btn--new" aria-hidden="true">
-              ⊕ {t.newChat}
+              <CirclePlus className="app-icon" size={16} strokeWidth={1.75} />
+              {t.newChat}
             </span>
             <span className="app-side-btn" aria-hidden="true">
+              <Puzzle className="app-icon" size={16} strokeWidth={1.75} />
               {t.plugins}
             </span>
             <span className="app-side-btn app-side-btn--on" aria-hidden="true">
@@ -374,7 +412,7 @@ export function LiveDemo({ copy }: { copy: Copy }) {
             </span>
             <p className="app-side-head">
               <span>{t.messages}</span>
-              <span aria-hidden="true">＋</span>
+              <Plus className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
             </p>
             <ul className="app-channels">
               {channels.map((c, index) => (
@@ -418,6 +456,23 @@ export function LiveDemo({ copy }: { copy: Copy }) {
                 )}
                 {channel.title}
               </span>
+              <button
+                type="button"
+                className="app-icon-btn app-panel-toggle"
+                aria-expanded={panelOpen}
+                aria-label={panelOpen ? t.hideSidebar : t.showSidebar}
+                title={panelOpen ? t.hideSidebar : t.showSidebar}
+                onClick={() => {
+                  touched.current = true;
+                  setPanelOpen((open) => !open);
+                }}
+              >
+                {panelOpen ? (
+                  <PanelRightClose size={16} strokeWidth={1.75} aria-hidden="true" />
+                ) : (
+                  <PanelRightOpen size={16} strokeWidth={1.75} aria-hidden="true" />
+                )}
+              </button>
             </header>
             <div className="app-feed" ref={feed}>
               <ol className="app-msgs">
@@ -460,16 +515,20 @@ export function LiveDemo({ copy }: { copy: Copy }) {
                 {done && extra.length === 0 ? (
                   <li className="app-event app-event--replay">
                     <button type="button" className="app-btn" onClick={() => open(active)}>
-                      ↻ {t.replay}
+                      <RotateCcw
+                        className="app-icon"
+                        size={14}
+                        strokeWidth={1.75}
+                        aria-hidden="true"
+                      />
+                      {t.replay}
                     </button>
                   </li>
                 ) : null}
               </ol>
             </div>
             <form className="app-composer" onSubmit={send} data-typing={typing ? '' : undefined}>
-              <span className="app-composer-plus" aria-hidden="true">
-                ＋
-              </span>
+              <Plus className="app-composer-plus" size={18} strokeWidth={1.75} aria-hidden="true" />
               <input
                 value={draft}
                 readOnly={!done}
@@ -479,44 +538,67 @@ export function LiveDemo({ copy }: { copy: Copy }) {
                 maxLength={200}
               />
               <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
-                <span aria-hidden="true">↑</span>
+                <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
                 <span className="visually-hidden">{t.send}</span>
               </button>
             </form>
           </section>
 
-          <aside className="app-panel" aria-label={t.sidebar}>
-            {panel.map((section) => (
-              <section key={section.id} className="app-panel-section">
-                <h4>
-                  <span aria-hidden="true">⌄</span>
-                  <SymbolIcon symbol={section.icon} color="currentColor" size={16} />
-                  {section.title}
-                  {section.items.length ? (
-                    <span className="app-count">{section.items.length}</span>
-                  ) : null}
-                </h4>
-                <ul>
-                  {section.items.map((item) => (
-                    // keyed by its badge too, so a status change flashes the row
-                    <li
-                      key={`${item.id}-${item.badge ?? ''}`}
-                      className="app-panel-item"
-                      data-tone={item.tone}
+          <aside className="app-panel" aria-label={t.sidebar} hidden={!panelOpen}>
+            {panel.map((section) => {
+              const open = !folded.has(section.id);
+              return (
+                <section key={section.id} className="app-panel-section">
+                  <h4>
+                    <button
+                      type="button"
+                      className="app-panel-head"
+                      aria-expanded={open}
+                      onClick={() => {
+                        touched.current = true;
+                        setFolded((prev) => {
+                          const next = new Set(prev);
+                          if (open) next.add(section.id);
+                          else next.delete(section.id);
+                          return next;
+                        });
+                      }}
                     >
-                      {section.id === 'members' && item.id !== 'h' ? (
-                        <Avatar name={item.title} size={22} />
+                      <ChevronRight
+                        className="app-chevron"
+                        size={14}
+                        strokeWidth={2}
+                        aria-hidden="true"
+                      />
+                      <Icon name={section.icon} />
+                      <span className="app-panel-title">{section.title}</span>
+                      {section.items.length ? (
+                        <span className="app-count">{section.items.length}</span>
                       ) : null}
-                      <span className="app-panel-text">
-                        <span>{item.title}</span>
-                        {item.meta ? <small>{item.meta}</small> : null}
-                      </span>
-                      {item.badge ? <span className="app-badge">{item.badge}</span> : null}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))}
+                    </button>
+                  </h4>
+                  <ul hidden={!open}>
+                    {section.items.map((item) => (
+                      // keyed by its badge too, so a status change flashes the row
+                      <li
+                        key={`${item.id}-${item.badge ?? ''}`}
+                        className="app-panel-item"
+                        data-tone={item.tone}
+                      >
+                        {section.id === 'members' && item.id !== 'h' ? (
+                          <Avatar name={item.title} size={22} />
+                        ) : null}
+                        <span className="app-panel-text">
+                          <span>{item.title}</span>
+                          {item.meta ? <small>{item.meta}</small> : null}
+                        </span>
+                        {item.badge ? <span className="app-badge">{item.badge}</span> : null}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              );
+            })}
           </aside>
         </div>
       </div>
