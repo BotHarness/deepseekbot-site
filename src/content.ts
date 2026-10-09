@@ -343,7 +343,7 @@ const zh: Copy = {
   playground: {
     kicker: 'BotPixel',
     title: '输入名字，得到一张脸',
-    lead: '每个 Bot 的默认头像都由名字生成：同一个名字，在哪里都是同一张脸。Bot 工作时，头像会一颗像素一颗像素地变成它正在用的工具。',
+    lead: '每个 Bot 的默认头像都由名字生成，同一个名字总是生成同一张脸。Bot 工作时，头像会一颗像素一颗像素地变成它正在用的工具。',
     nameLabel: 'Bot 名字',
     namePlaceholder: '比如 Mira',
     toolsLabel: '让它用一个工具',
@@ -352,7 +352,7 @@ const zh: Copy = {
     download: '下载高清头像',
     editor: {
       title: '捏脸',
-      lead: '从名字生成的脸开始，逐个换发型、五官、服装和颜色，捏好直接下载。',
+      lead: '从名字生成的脸开始，逐个换物种、发型、五官、服装、头饰和颜色，捏好直接下载。',
       parts: '部位',
       reset: '回到名字生成的脸',
       shuffle: '随机捏一个',
@@ -579,7 +579,7 @@ const en: Copy = {
   playground: {
     kicker: 'BotPixel',
     title: 'Type a name, get a face',
-    lead: 'Every Bot’s default avatar is generated from its name: the same name gives the same face everywhere. While a Bot works, its avatar turns into the tool it is using, pixel by pixel.',
+    lead: 'Every Bot’s default avatar is generated from its name, and the same name always gives the same face. While a Bot works, its avatar turns into the tool it is using, pixel by pixel.',
     nameLabel: 'Bot name',
     namePlaceholder: 'e.g. Mira',
     toolsLabel: 'Hand it a tool',
@@ -588,7 +588,7 @@ const en: Copy = {
     download: 'Download HD avatar',
     editor: {
       title: 'Make your own',
-      lead: 'Start from the face your name gives, swap hair, features, outfit and colors, then download it.',
+      lead: 'Start from the face your name gives, swap species, hair, features, outfit, headpiece and colors, then download it.',
       parts: 'Parts',
       reset: 'Back to the name’s face',
       shuffle: 'Surprise me',

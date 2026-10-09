@@ -1473,6 +1473,28 @@ a:where(:not(.astryx-button)) {
   display: grid;
   gap: 12px;
 }
+.face-colors {
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.face-hidden-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.face-color-reset {
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 8px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 0;
+  outline: 2px solid var(--px-ink);
+  outline-offset: -2px;
+  cursor: pointer;
+}
 .face-color-row {
   display: grid;
   gap: 6px;
@@ -1514,6 +1536,14 @@ a:where(:not(.astryx-button)) {
 }
 .face-ranges input {
   accent-color: var(--accent);
+}
+/* the editor's controls draw their frame with outline, which hides the global focus ring */
+.face-tab:focus-visible,
+.face-option:focus-visible,
+.face-swatch:focus-visible,
+.face-color-reset:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 @media (max-width: 860px) {
   .playground-stage {
