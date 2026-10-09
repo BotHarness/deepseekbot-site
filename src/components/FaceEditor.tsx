@@ -38,7 +38,15 @@ import {
 } from '@botharness/pixel-avatar';
 import { pixelTileSvg } from '../pixelTile';
 import { PRESETS } from '../presets';
-import { addPart, loadParts, removePart, type PartEntry } from '../partLibrary';
+import { addPart, addParts, loadParts, removePart, type PartEntry } from '../partLibrary';
+import {
+  MAX_PART_LIBRARY_FILE_BYTES,
+  decodePartFiles,
+  encodePartFile,
+  encodePartLibrary,
+  partFileName,
+  type PartFile,
+} from '../partFile';
 import { memo, useMemo, useRef, useState } from 'react';
 import type { Copy } from '../content';
 import { PartEditor } from './PartEditor';
@@ -202,6 +210,15 @@ const categoriesFor = (recipe: Recipe) => {
   );
 };
 
+function saveFile(fileName: string, bytes: Uint8Array, type: string) {
+  const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function hiddenFor(recipe: Recipe, category: string): boolean {
   const hidden = hiddenChoices(recipe);
   return hidden.includes(category) || (category === 'hair' && hidden.includes('bangs'));
@@ -245,6 +262,8 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   const [chosen, setCategory] = useState('hair');
   const [parts, setParts] = useState<PartEntry[]>(loadParts);
   const [started, setDrawing] = useState<Drawing>();
+  const [libraryNote, setLibraryNote] = useState<string>();
+  const picker = useRef<HTMLInputElement>(null);
   // the recipe the editor last showed; any other change (a rename, reset or preset) ends drawing
   const drawn = useRef<Recipe>(undefined);
   const drawing = started && drawn.current === recipe ? started : undefined;
@@ -307,6 +326,72 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
       />
     ) : null;
 
+  const fileOf = (entry: PartEntry): PartFile => ({
+    part: entry.part,
+    name: entry.name,
+    ...(entry.author ? { author: entry.author } : {}),
+  });
+  /** One part as a part PNG, or the whole library as a zip of them, importable into DeepSeekBot. */
+  const exportParts = async (part?: PixelCustomPart) => {
+    try {
+      if (part) {
+        const id = customPartId(part);
+        const saved = parts.find((entry) => entry.id === id);
+        const file = saved ? fileOf(saved) : { part, name: '' };
+        saveFile(partFileName(file), await encodePartFile(file), 'image/png');
+        track('avatar_part_exported', { scope: 'part', slot: part.slot, count: 1 });
+      } else {
+        saveFile('part-library.zip', await encodePartLibrary(parts.map(fileOf)), 'application/zip');
+        track('avatar_part_exported', { scope: 'library', count: parts.length });
+      }
+    } catch {
+      setLibraryNote(partText.exportFailed);
+    }
+  };
+  const importFiles = async (file: File | undefined) => {
+    if (!file) return;
+    if (file.size > MAX_PART_LIBRARY_FILE_BYTES) {
+      track('avatar_part_import_failed', { reason: 'too-large' });
+      setLibraryNote(partText.importTooLarge);
+      return;
+    }
+    let result;
+    try {
+      result = await decodePartFiles(new Uint8Array(await file.arrayBuffer()));
+    } catch {
+      result = 'not-png' as const;
+    }
+    if (typeof result === 'string') {
+      track('avatar_part_import_failed', { reason: result });
+      setLibraryNote(
+        result === 'too-large'
+          ? partText.importTooLarge
+          : result === 'invalid-part'
+            ? partText.invalidPart
+            : partText.notPartFile,
+      );
+      return;
+    }
+    const saved = addParts(parts, result.files);
+    if (!saved) {
+      track('avatar_part_import_failed', { reason: 'storage' });
+      setLibraryNote(partText.saveFailed);
+      return;
+    }
+    track('avatar_part_imported', {
+      count: result.files.length,
+      added: saved.added,
+      refused: result.refused,
+      zip: !file.name.toLowerCase().endsWith('.png'),
+    });
+    setParts(saved.entries);
+    setLibraryNote(
+      (result.refused ? partText.importedRefused! : partText.imported!)
+        .replace('{count}', String(result.files.length))
+        .replace('{refused}', String(result.refused)),
+    );
+  };
+
   const partActions = (slot: PartSlot) => {
     const worn = wornPart(recipe, slot);
     const wornId = worn && customPartId(worn);
@@ -362,12 +447,34 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
           {worn && hair
             ? action(partText.removePiece, () => onChange(withCustomPart(recipe, slot, undefined)))
             : null}
+          {worn ? action(partText.exportPart, () => void exportParts(worn)) : null}
           {wornId && own.some((entry) => entry.id === wornId)
             ? action(partText.remove, () => {
                 track('avatar_part_deleted', { slot });
                 setParts(removePart(parts, wornId));
               })
             : null}
+        </div>
+        <div className="part-library-actions">
+          {action(partText.import, () => picker.current?.click())}
+          <input
+            ref={picker}
+            type="file"
+            accept=".png,.zip,image/png,application/zip"
+            hidden
+            onChange={(event) => {
+              const input = event.currentTarget;
+              void importFiles(input.files?.[0]).finally(() => {
+                input.value = '';
+              });
+            }}
+          />
+          {parts.length > 0 ? action(partText.exportLibrary, () => void exportParts()) : null}
+          {libraryNote ? (
+            <span className="face-hidden-note" role="status">
+              {libraryNote}
+            </span>
+          ) : null}
         </div>
         {hair ? null : (
           <Tile
