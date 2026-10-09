@@ -1,10 +1,10 @@
-import { Button } from '@astryxdesign/core/Button';
 import { Theme } from '@astryxdesign/core/theme';
 import { useEffect, useState } from 'react';
 import { BotCompanion } from './components/BotCompanion';
 import { useAvatarDesign } from './avatarDesign';
 import { Community } from './components/Community';
 import { Crew } from './components/Crew';
+import { HeroLinks } from './components/HeroLinks';
 import { QuickInstall } from './components/QuickInstall';
 import { Install } from './components/Install';
 import { PromoVideo } from './components/PromoVideo';
@@ -59,16 +59,7 @@ export function App() {
               ))}
             </ul>
             <QuickInstall copy={copy} />
-            <div className="cta">
-              <Button label={copy.hero.ctaInstall} variant="primary" size="lg" href="#install" />
-              <Button
-                label={copy.hero.ctaGithub}
-                size="lg"
-                href={LINKS.github}
-                target="_blank"
-                rel="noreferrer"
-              />
-            </div>
+            <HeroLinks copy={copy} />
           </div>
           <Crew copy={copy} lang={lang} />
           <div className="ground" aria-hidden="true" />

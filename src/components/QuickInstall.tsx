@@ -6,12 +6,21 @@ import { Command } from './Install';
 
 type Way = 'desktop' | 'dev';
 
-/** One line to copy in the Hero, for people who already run DSH: the npm package or the CLI step. */
+/**
+ * One line to copy in the Hero for people who already run DSH (the npm package or the CLI step),
+ * after a link to DeepSeek's DSH page for those who don't.
+ */
 export function QuickInstall({ copy }: { copy: Copy }) {
   const [way, setWay] = useState<Way>('desktop');
   const t = copy.hero.quick;
   return (
     <div className="quick-install" data-placement="hero_quick_install">
+      <p className="quick-install-get">
+        {t.noDsh}{' '}
+        <a href={copy.install.desktop.downloadUrl} target="_blank" rel="noreferrer">
+          {t.getDsh} ↗
+        </a>
+      </p>
       <SegmentedControl
         label={t.label}
         size="sm"

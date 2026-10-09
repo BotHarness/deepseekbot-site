@@ -49,8 +49,8 @@ function placement(element: Element) {
 }
 
 /**
- * Outbound GitHub and Discord links, the language switch, and the header links to the marketplace,
- * docs and changelog appear on every page, including the static docs, so they are tracked by one
+ * Outbound GitHub, Discord and DeepSeek Harness download links, the language switch, the in-page
+ * install buttons, and the header links to the marketplace, docs and changelog appear on every page, including the static docs, so they are tracked by one
  * delegated listener instead of in each component.
  */
 export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, unknown>] | null {
@@ -66,6 +66,8 @@ export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, un
     return null;
   }
   if (url.origin === location.origin) {
+    if (url.pathname === location.pathname && url.hash === '#install')
+      return ['install_cta_clicked', { placement: at }];
     const kind = pageKind(url.pathname);
     // moving around within the marketplace or the docs is not a way in
     if (kind === pageKind(location.pathname)) return null;
@@ -77,6 +79,8 @@ export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, un
     return ['github_clicked', { target: url.pathname, placement: at }];
   if (url.hostname === 'discord.gg' || url.hostname.endsWith('discord.com'))
     return ['discord_clicked', { placement: at }];
+  if (url.hostname === 'www.deepseek.com' && url.pathname.includes('/harness'))
+    return ['dsh_download_clicked', { placement: at }];
   return null;
 }
 

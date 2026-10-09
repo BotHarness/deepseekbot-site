@@ -457,6 +457,47 @@ a:where(:not(.astryx-button)) {
   width: 100%;
   text-align: left;
 }
+.quick-install-get {
+  margin: 0;
+  font-size: 14px;
+}
+.quick-install-get a {
+  color: var(--ink);
+  font-weight: 600;
+}
+.hero-actions {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+/* the main call to action, a size up from the community row */
+.hero-actions .hero-install {
+  min-width: 240px;
+  min-height: 56px;
+  font-size: 20px;
+}
+.hero-community {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hero-community .community-icon-wrap {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+}
+.hero-community .community-icon-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+.hero-community-status {
+  min-height: 1em;
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
 .quick-install-hint {
   margin: 0;
   font-size: 14px;
@@ -1322,10 +1363,6 @@ a:where(:not(.astryx-button)) {
   background: var(--bubble);
   outline: 3px solid var(--px-ink);
   -webkit-font-smoothing: none;
-}
-.chips li:first-child {
-  color: var(--accent-ink);
-  background: var(--accent);
 }
 
 /* One shared icon-only mode control for React and generated pages. */
