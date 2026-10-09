@@ -289,7 +289,7 @@ function shell(
 
 function card(lang: Lang, post: Post) {
   const cover = coverFor(lang, post.slug);
-  return `<li class="blog-card frame"><a href="${blogPostPath(lang, post.slug)}">${
+  return `<li><a class="blog-card frame" href="${blogPostPath(lang, post.slug)}">${
     cover
       ? `<img src="${cover}" alt="" loading="lazy" />`
       : `<span class="blog-card-fallback" aria-hidden="true"></span>`
@@ -301,11 +301,9 @@ function indexMain(lang: Lang, posts: Post[]) {
   const [hero, ...rest] = posts;
   const heroCover = hero ? coverFor(lang, hero.slug) : null;
   const heroBlock = hero
-    ? `<section class="blog-hero frame"><div><time datetime="${hero.date}">${hero.date}</time><h2><a href="${blogPostPath(lang, hero.slug)}">${escape(hero.title)}</a></h2><p>${escape(hero.description)}</p><p><a class="blog-readmore" href="${blogPostPath(lang, hero.slug)}">${t.readMore} →</a></p></div>${
-        heroCover
-          ? `<a href="${blogPostPath(lang, hero.slug)}"><img src="${heroCover}" alt="" /></a>`
-          : ''
-      }</section>`
+    ? `<a class="blog-hero frame" href="${blogPostPath(lang, hero.slug)}"><span><time datetime="${hero.date}">${hero.date}</time><span class="blog-hero-title">${escape(hero.title)}</span><span>${escape(hero.description)}</span><span class="blog-readmore">${t.readMore} →</span></span>${
+        heroCover ? `<img src="${heroCover}" alt="" />` : ''
+      }</a>`
     : '';
   const nav = posts
     .map((p) => `<li><a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a></li>`)
@@ -323,7 +321,7 @@ function indexMain(lang: Lang, posts: Post[]) {
           <ul class="blog-index">${posts
             .map(
               (p) =>
-                `<li class="frame blog-index-row"><time datetime="${p.date}">${p.date}</time> · <a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a><p>${escape(p.description)}</p></li>`,
+                `<li><a class="frame blog-index-row" href="${blogPostPath(lang, p.slug)}"><time datetime="${p.date}">${p.date}</time> · <span class="blog-index-title">${escape(p.title)}</span><p>${escape(p.description)}</p></a></li>`,
             )
             .join('')}</ul>
         </article>
