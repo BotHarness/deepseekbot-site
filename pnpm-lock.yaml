@@ -173,8 +173,8 @@ importers:
         specifier: ^0.6.5
         version: 0.6.5(@astryxdesign/core@0.6.5(@stylexjs/stylex@0.19.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react@19.3.0)
       '@botharness/pixel-avatar':
-        specifier: ^0.10.0
-        version: 0.10.0
+        specifier: ^0.10.2
+        version: 0.10.2
       '@botharness/pixel-banner':
         specifier: ^0.1.0
         version: 0.1.0
@@ -451,8 +451,8 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@botharness/pixel-avatar@0.10.0':
-    resolution: {integrity: sha512-U3RLvVmrQwROvch7y7kaq/r4tHZTHt6hocf3PReVSRKj7gsZiAupU2nhOUeT7o3GrRtkyGHic0ZboZ8uIpTGoA==}
+  '@botharness/pixel-avatar@0.10.2':
+    resolution: {integrity: sha512-05HcqaiVOsKss4DHNn2eTsN8KdcmYNhPxCupvomSILqKtBWNSxov8OSMaRhvbvb+p8lEHCscE2zNLqiS+LBPGw==}
 
   '@botharness/pixel-banner@0.1.0':
     resolution: {integrity: sha512-2qzZK8O73u9m97sCeQh9s/4QaRsMwCTM42n2HLxCHQNiQp7dYYhulYiYNviasr/9eAGR4ARZr3B06yOCD/Ge1A==}
@@ -2314,7 +2314,7 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
-  '@botharness/pixel-avatar@0.10.0':
+  '@botharness/pixel-avatar@0.10.2':
     dependencies:
       '@botharness/pixel-morph': 0.2.0
 

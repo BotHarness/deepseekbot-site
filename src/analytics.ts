@@ -26,7 +26,8 @@ export function normalizeRef(url: URL): URL | null {
 export function pageKind(pathname: string) {
   const path = pathname.replace(/^\/en(?=\/|$)/, '') || '/';
   if (path === '/') return 'home';
-  const first = path.split('/')[1] ?? '';
+  // dev and direct links may name the file (/avatar.html) where the site serves /avatar
+  const first = (path.split('/')[1] ?? '').replace(/\.html$/, '');
   return ['market', 'avatar', 'docs', 'privacy', 'changelog'].includes(first) ? first : 'other';
 }
 
@@ -116,8 +117,8 @@ function consentBar(posthog: PostHog, register: () => void) {
       posthog.capture('$pageview', utm, { $set_once: initial });
     },
   );
-  // The React homepage asks through its Bot; generated pages retain their consent region.
-  if (status !== 'pending' || pageKind(location.pathname) === 'home') return;
+  // The home page and the Avatar Studio ask through their Bot; other pages keep the consent bar.
+  if (status !== 'pending' || ['home', 'avatar'].includes(pageKind(location.pathname))) return;
   const t = CONSENT_COPY[pathLang()];
   const bar = document.createElement('div');
   bar.className = 'consent-bar frame';
