@@ -1,4 +1,4 @@
-// Renders the share cards (public/og-{zh,en}-v3.png, 1200×630; bump the suffix when the
+// Renders the share cards (public/og-{zh,en}-v4.png, 1200×630; bump the suffix when the
 // design changes so social caches refetch) and the
 // apple-touch-icon from the same BotPixel avatars and pixel font as the site.
 // Run `pnpm og` after changing the copy below. Needs a Chromium: Playwright's own
@@ -86,7 +86,7 @@ ${card.extra ? `<p class="tag tag--yellow">${card.extra}</p>` : ''}
 <div class="chips">${card.chips.map((c) => `<span>${c}</span>`).join('')}</div>
 <div class="ground"></div>
 <div class="crew">${CREW.map(tile).join('')}</div>
-<p class="url">deepseekbot.botharness.ai</p>
+<p class="url">deepseekbot.app</p>
 </body></html>`;
 
 const browser = await chromium.launch(
@@ -96,7 +96,7 @@ const tab = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 for (const [key, card] of Object.entries(CARDS)) {
   await tab.setContent(page(card), { waitUntil: 'load' });
   await tab.evaluate(() => document.fonts.ready);
-  await tab.screenshot({ path: `public/og-${key}-v3.png` });
+  await tab.screenshot({ path: `public/og-${key}-v4.png` });
 }
 await tab.setViewportSize({ width: 180, height: 180 });
 await tab.setContent(
@@ -104,4 +104,4 @@ await tab.setContent(
 );
 await tab.screenshot({ path: 'public/apple-touch-icon.png' });
 await browser.close();
-console.log('wrote public/og-zh-v3.png, public/og-en-v3.png, public/apple-touch-icon.png');
+console.log('wrote public/og-zh-v4.png, public/og-en-v4.png, public/apple-touch-icon.png');

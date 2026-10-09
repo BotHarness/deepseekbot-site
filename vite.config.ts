@@ -9,7 +9,7 @@ import { docsSitemap, renderDocs, searchIndex } from './scripts/docs.ts';
 
 const require = createRequire(import.meta.url);
 const FONT_URL = '/fonts/pixel.woff2';
-const SITE = 'https://deepseekbot.botharness.ai';
+const SITE = 'https://deepseekbot.app';
 // the Chinese entry at / and the English one at /en/, each with its own share card, plus the
 // guides rendered from content/docs and the changelog from content/changelog
 const PAGES = [

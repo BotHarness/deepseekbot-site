@@ -8,7 +8,7 @@ import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg } from '../src/navIcons.ts';
 
 type Lang = 'zh' | 'en';
-const SITE = 'https://deepseekbot.botharness.ai';
+const SITE = 'https://deepseekbot.app';
 const UPSTREAM = 'https://botharness.ai';
 const CONTENT = 'content/docs';
 export const DOCS_OUT = ['docs', 'en/docs'];

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://deepseekbot.botharness.ai/sitemap.xml
+Sitemap: https://deepseekbot.app/sitemap.xml

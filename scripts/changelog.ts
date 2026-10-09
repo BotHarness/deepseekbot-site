@@ -10,7 +10,7 @@ import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { privacyPath, searchButton } from './docs.ts';
 
 type Lang = 'zh' | 'en';
-const SITE = 'https://deepseekbot.botharness.ai';
+const SITE = 'https://deepseekbot.app';
 const GITHUB_BLOB = 'https://github.com/BotHarness/BotHarness/blob/main/';
 export const CHANGELOG_OUT = ['changelog', 'en/changelog'];
 const SECTION_ORDER = [
