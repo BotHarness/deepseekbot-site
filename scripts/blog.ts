@@ -134,7 +134,9 @@ export function readPosts(lang: Lang): Post[] {
   }
   return files
     .map((f) => parsePost(f.replace(/\.md$/, ''), readFileSync(`${dir}/${f}`, 'utf8')))
-    .toSorted((a, b) => (a.date < b.date ? 1 : -1));
+    .toSorted((a, b) =>
+      a.date !== b.date ? (a.date < b.date ? 1 : -1) : a.slug.localeCompare(b.slug),
+    );
 }
 
 /** Minutes to read: ~400 CJK characters or ~200 English words per minute. */
@@ -287,7 +289,7 @@ function shell(
 
 function card(lang: Lang, post: Post) {
   const cover = coverFor(lang, post.slug);
-  return `<li class="blog-card"><a href="${blogPostPath(lang, post.slug)}">${
+  return `<li class="blog-card frame"><a href="${blogPostPath(lang, post.slug)}">${
     cover
       ? `<img src="${cover}" alt="" loading="lazy" />`
       : `<span class="blog-card-fallback" aria-hidden="true"></span>`
@@ -299,7 +301,7 @@ function indexMain(lang: Lang, posts: Post[]) {
   const [hero, ...rest] = posts;
   const heroCover = hero ? coverFor(lang, hero.slug) : null;
   const heroBlock = hero
-    ? `<section class="blog-hero"><div><time datetime="${hero.date}">${hero.date}</time><h2><a href="${blogPostPath(lang, hero.slug)}">${escape(hero.title)}</a></h2><p>${escape(hero.description)}</p><p><a class="blog-readmore" href="${blogPostPath(lang, hero.slug)}">${t.readMore} →</a></p></div>${
+    ? `<section class="blog-hero frame"><div><time datetime="${hero.date}">${hero.date}</time><h2><a href="${blogPostPath(lang, hero.slug)}">${escape(hero.title)}</a></h2><p>${escape(hero.description)}</p><p><a class="blog-readmore" href="${blogPostPath(lang, hero.slug)}">${t.readMore} →</a></p></div>${
         heroCover
           ? `<a href="${blogPostPath(lang, hero.slug)}"><img src="${heroCover}" alt="" /></a>`
           : ''
@@ -311,7 +313,7 @@ function indexMain(lang: Lang, posts: Post[]) {
   void nav;
   return `<div class="blog-index-layout">
       <main id="main" class="docs-main">
-        <article class="docs-article frame">
+        <article class="docs-article">
           <p class="kicker">DeepSeekBot</p>
           <h1>${t.title}</h1>
           <p class="docs-lead">${t.lead}</p>
@@ -321,7 +323,7 @@ function indexMain(lang: Lang, posts: Post[]) {
           <ul class="blog-index">${posts
             .map(
               (p) =>
-                `<li><time datetime="${p.date}">${p.date}</time> · <a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a><p>${escape(p.description)}</p></li>`,
+                `<li class="frame blog-index-row"><time datetime="${p.date}">${p.date}</time> · <a href="${blogPostPath(lang, p.slug)}">${escape(p.title)}</a><p>${escape(p.description)}</p></li>`,
             )
             .join('')}</ul>
         </article>

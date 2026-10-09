@@ -917,3 +917,11 @@
   text-transform: uppercase;
   margin: 0 0 10px;
 }
+.blog-hero.frame,
+.blog-card.frame,
+.blog-index-row.frame {
+  padding: 20px 24px;
+}
+.blog-cards .blog-card a {
+  gap: 10px;
+}
