@@ -120,6 +120,16 @@ export interface Copy {
   };
   symbols: SymbolLabels;
   features: { kicker: string; title: string; lead: string; items: Feature[] };
+  faq: {
+    kicker: string;
+    title: string;
+    items: {
+      id: string;
+      question: string;
+      answer: string;
+      links?: { label: string; href: string }[];
+    }[];
+  };
   demo: DemoCopy;
   featureDemos: FeatureDemoCopy;
   dsh: { title: string; body: string; issues: string };
@@ -335,6 +345,61 @@ const zh: Copy = {
         body: '可用 macOS 本机电脑、授权的日常 Chrome 页面 / Profile、本机或 Docker 受管浏览器，以及 Docker Bot Computer。浏览器只读分享不能点击或导航，各模式权限不同。需从源码安装可选组件，npm 主包尚未包含。',
         tag: '可选组件',
         guide: { slug: 'capabilities', label: '选择操作目标与配置' },
+      },
+    ],
+  },
+  faq: {
+    kicker: 'FAQ',
+    title: '常见问题',
+    items: [
+      {
+        id: 'affiliation',
+        question: 'DeepSeekBot 和 DeepSeek 有什么关系？',
+        answer:
+          'DeepSeekBot 是独立的开源项目，与 DeepSeek 公司没有隶属关系，也不是其官方产品。它基于 DeepSeek Harness（DSH），以插件形式提供 Bot 的身份、人格、记忆与协作能力。',
+      },
+      {
+        id: 'capabilities',
+        question: 'DeepSeekBot 能帮我做什么？',
+        answer:
+          '你可以创建负责研究、设计或实现的 Bot，分别私聊，或让它们在 Group 中协作。每个 Bot 保留自己的身份和记忆，可以在授权的文件夹中开展工作，也能设置定时任务。定时任务需要应用保持运行。',
+      },
+      {
+        id: 'getting-started',
+        question: '如何安装并开始使用？',
+        answer:
+          '先安装 DeepSeek Harness，在「插件 → 添加插件」中输入 deepseekbot，安装并启用。然后配置模型提供商，进入「Bot 模式」创建 Bot、选择模型，发送第一条消息即可开始。',
+        links: [{ label: '安装教程', href: '/docs/installation/' }],
+      },
+      {
+        id: 'models',
+        question: '只能使用 DeepSeek 模型吗？',
+        answer:
+          '不限于 DeepSeek。DeepSeekBot 使用你在 DSH 中配置的模型提供商，也支持通过 DSH 配置兼容 API 或自部署服务。能否使用某个模型取决于接口支持、凭据和模型配置。',
+        links: [{ label: '模型配置', href: '/docs/model-setup/' }],
+      },
+      {
+        id: 'cost',
+        question: '使用 DeepSeekBot 需要付费吗？',
+        answer:
+          'DeepSeekBot 采用 MIT 许可开源，可免费使用。模型服务需要自行配置凭据，调用可能产生服务商费用；开源软件不等于免费的模型额度。',
+      },
+      {
+        id: 'data-and-access',
+        question: '我的数据存在哪里？Bot 能访问哪些文件？',
+        answer:
+          'Bot 的记忆和聊天记录保存在运行 DSH 的设备上；调用模型时，相关上下文会发送给你配置的模型服务。文件夹访问由你授权，执行操作受权限与批准设置约束。插件的匿名统计不收集对话或记忆内容，也可以关闭。',
+        links: [
+          { label: '文件夹权限', href: '/docs/channel-sidebar/workspaces/' },
+          { label: '隐私说明', href: '/privacy/' },
+        ],
+      },
+      {
+        id: 'chat-platforms',
+        question: '可以连接哪些聊天平台？',
+        answer:
+          '可连接飞书 / Lark、Slack、Discord 和个人微信，需要先配置相应的平台应用或账号。个人微信目前仅支持扫码者私聊；其他平台的收发范围受平台权限和会话设置约束。QQ 群聊接入尚未作为完整能力发布到正式版。',
+        links: [{ label: '接入与可选能力', href: '/docs/capabilities/' }],
       },
     ],
   },
@@ -601,6 +666,61 @@ const en: Copy = {
         body: 'Choose a local macOS computer, an authorized daily Chrome document / Profile, a local or Docker managed browser, or a Docker Bot Computer. Read-only sharing cannot click or navigate; tools differ by mode. Optional components require a source setup and are absent from the npm product.',
         tag: 'Optional components',
         guide: { slug: 'capabilities', label: 'Choose a target and set it up' },
+      },
+    ],
+  },
+  faq: {
+    kicker: 'FAQ',
+    title: 'Frequently asked questions',
+    items: [
+      {
+        id: 'affiliation',
+        question: 'Is DeepSeekBot affiliated with DeepSeek?',
+        answer:
+          'DeepSeekBot is an independent open-source project. It is not affiliated with DeepSeek and is not an official DeepSeek product. It runs as a plugin on DeepSeek Harness (DSH), giving Bots their own identity, persona, memory and collaboration tools.',
+      },
+      {
+        id: 'capabilities',
+        question: 'What can DeepSeekBot help me do?',
+        answer:
+          'Create Bots for research, design or implementation, chat with them individually, or bring them together in a Group. Each Bot keeps its own identity and memory, can work in folders you authorize, and can run scheduled tasks. Scheduled tasks require the app to keep running.',
+      },
+      {
+        id: 'getting-started',
+        question: 'How do I install it and get started?',
+        answer:
+          'Install DeepSeek Harness first. In Plugins → Add plugin, enter deepseekbot, then install and enable it. Configure a model provider, open Bot mode, create a Bot and choose its models. Send your first message to get started.',
+        links: [{ label: 'Installation guide', href: '/en/docs/installation/' }],
+      },
+      {
+        id: 'models',
+        question: 'Can I use models other than DeepSeek?',
+        answer:
+          'Yes. DeepSeekBot uses the model providers you configure in DSH, including compatible APIs or self-hosted services configured through DSH. Whether a model works depends on interface support, credentials and model configuration.',
+        links: [{ label: 'Model setup', href: '/en/docs/model-setup/' }],
+      },
+      {
+        id: 'cost',
+        question: 'Does DeepSeekBot cost money to use?',
+        answer:
+          'DeepSeekBot is open source under the MIT license and free to use. You supply your own model credentials, and model calls may incur charges from your provider. Open-source software does not include free model credits.',
+      },
+      {
+        id: 'data-and-access',
+        question: 'Where is my data stored, and which files can Bots access?',
+        answer:
+          'Bot memory and chat history are stored on the device running DSH. When you call a model, relevant context is sent to the model service you configured. You authorize folder access, and actions are governed by permission and approval settings. The plugin’s anonymous analytics do not collect conversations or memory content and can be disabled.',
+        links: [
+          { label: 'Folder permissions', href: '/en/docs/channel-sidebar/workspaces/' },
+          { label: 'Privacy', href: '/en/privacy/' },
+        ],
+      },
+      {
+        id: 'chat-platforms',
+        question: 'Which chat platforms can I connect?',
+        answer:
+          'Connect Feishu / Lark, Slack, Discord or personal WeChat by setting up the relevant platform app or account. Personal WeChat currently supports only the QR owner’s DMs; other platforms’ message scope depends on platform permissions and conversation settings. QQ group chat is not yet a complete feature in the official release.',
+        links: [{ label: 'Connections and optional tools', href: '/en/docs/capabilities/' }],
       },
     ],
   },

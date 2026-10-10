@@ -1163,6 +1163,80 @@ a:where(:not(.astryx-button)) {
   color: var(--ink-soft);
 }
 
+/* ---- frequently asked questions ---- */
+.faq-list {
+  margin-top: 32px;
+}
+.faq-item + .faq-item {
+  border-top: 2px solid var(--px-ink);
+}
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 56px;
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  list-style: none;
+  cursor: pointer;
+}
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+.faq-question:hover {
+  background: var(--bg-alt);
+}
+.faq-question:focus-visible {
+  outline-offset: -3px;
+}
+.faq-toggle {
+  position: relative;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+.faq-toggle::before,
+.faq-toggle::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+}
+.faq-toggle::before {
+  top: 6px;
+  left: 0;
+  width: 16px;
+  height: 4px;
+}
+.faq-toggle::after {
+  top: 0;
+  left: 6px;
+  width: 4px;
+  height: 16px;
+}
+.faq-item[open] .faq-toggle::after {
+  display: none;
+}
+.faq-answer {
+  padding: 0 20px 20px;
+  max-width: 80ch;
+  overflow-wrap: anywhere;
+}
+.faq-answer p {
+  margin: 0;
+}
+.faq-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
 /* ---- footer ---- */
 .footer {
   padding: 32px 24px 48px;

@@ -5,6 +5,7 @@ import { useAvatarDesign } from './avatarDesign';
 import { Community } from './components/Community';
 import { Crew } from './components/Crew';
 import { FeatureDemo } from './components/FeatureDemos';
+import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
 import { LiveDemo } from './components/LiveDemo';
 import { QuickInstall } from './components/QuickInstall';
@@ -184,6 +185,8 @@ export function App() {
           <p className="section-lead">{copy.community.lead}</p>
           <Community copy={copy} />
         </section>
+
+        <Faq copy={copy} />
       </main>
 
       <BotCompanion lang={lang} design={design} />
