@@ -212,7 +212,7 @@ function shell(
   const t = UI[lang];
   const image = cover ? `${SITE}${cover}` : `${SITE}/og-${lang}-v2.png`;
   // Without an English mirror, alternates point at the Chinese page, never a 404.
-  const en = enUrl ?? url.replace(SITE + '/', SITE + '/en/');
+  const en = enUrl ?? (lang === 'en' ? url : url.replace(SITE + '/', SITE + '/en/'));
   return `<!doctype html>
 <html lang="${t.htmlLang}">
   <head>
