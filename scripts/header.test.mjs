@@ -80,18 +80,27 @@ test('localized controls retain destinations, hidden descriptions and click-only
   }
 });
 
-test('all generated guides, privacy and changelog pages use the shared header and retain search, locale and current-page links', () => {
+test('all generated guides, privacy, changelog and blog pages retain the shared header and correct locale links', () => {
   const cwd = process.cwd();
   const fixture = mkdtempSync(join(tmpdir(), 'site-header-test-'));
   try {
     cpSync(join(cwd, 'content'), join(fixture, 'content'), { recursive: true });
     process.chdir(fixture);
-    const paths = [...renderDocs(), ...renderChangelog()];
+    const paths = [...renderDocs(), ...renderChangelog(), ...renderBlog()];
     assert.ok(paths.length > 10);
     for (const path of paths) {
       const lang = path.split(/[\\/]/)[0] === 'en' ? 'en' : 'zh';
       const html = readFileSync(path, 'utf8');
       assert.doesNotMatch(html, /href="[^"]*\\/, path);
+      if (lang === 'en' && path.includes('blog')) {
+        const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+        assert.ok(canonical, path);
+        assert.ok(
+          html.includes(`<link rel="alternate" hreflang="en" href="${canonical}"`),
+          `${path}: English alternate must point to the page itself`,
+        );
+        assert.doesNotMatch(html, /\/en\/en\//, path);
+      }
       const header = html.match(/<header class="topbar">([\s\S]*?)<\/header>/)?.[1];
       assert.ok(header, path);
       assert.ok(header.includes(headerCommunityMarkup(lang)), path);
