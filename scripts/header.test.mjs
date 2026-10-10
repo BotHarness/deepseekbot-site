@@ -48,6 +48,11 @@ test('bilingual blog pages keep self-canonicals and reciprocal locale alternates
       assert.ok(
         readFileSync(`${prefix}blog/index.html`, 'utf8').includes('tailscale-remote-ai-workspace'),
       );
+      for (const imageName of ['greeting', 'readonly-commands', 'workspace-result']) {
+        const imagePath = `/blog-images/tailscale-remote-ai-workspace/${imageName}.png`;
+        assert.ok(html.includes(`src="${imagePath}"`), `${lang}: ${imageName}`);
+        assert.ok(readFileSync(`public${imagePath}`).length > 0);
+      }
     }
   } finally {
     process.chdir(cwd);

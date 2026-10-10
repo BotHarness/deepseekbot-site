@@ -101,9 +101,23 @@ The client was an experimental CLI facade, not a shipped `deepseekbot remote` co
 
 ## What did the trial prove?
 
+Before reading a real project, we submitted a minimal greeting from the VPS: reply with “你好” (hello), without calling tools. That confirmed the session-and-model response path, but not access to workspace files.
+
+![Original VPS greeting session: the task forbids tool calls and the T3 executor on the Mac replies with hello](/blog-images/tailscale-remote-ai-workspace/greeting.png)
+
+*Figure 1: verify that a task reaches the executor and gets an answer before testing a real directory. These process screenshots were captured afterward from the original completed session records, cropped to remove private device information and paths. We did not rerun the tasks or recreate an approval dialog.*
+
 On October 11, 2026, Japan time, the actual VPS created one session bound to an existing BotHarness project on the Mac. The task could confirm the working directory and OS, read only the root `AGENTS.md`, and return its byte count and SHA-256. It could not edit files, install dependencies, run tests or inspect other project files.
 
+![Original read-only task history showing pwd, waiting for input, AGENTS.md inspection and the shasum command](/blog-images/tailscale-remote-ai-workspace/readonly-commands.png)
+
+*Figure 2: the expanded task history shows `pwd` and file-inspection commands. “Waiting for next input” is a historical event, not an outstanding approval when the screenshot was taken. It is not a substitute for evidence of the approval dialog itself.*
+
 The web UI first requested approval for `pwd`. After human approval, the executor completed the task: the directory matched, the OS was `Darwin 25.6.0 arm64`, and the file was **16,687 bytes**, with a hash matching the pre-recorded local evidence. VPS readback showed `completed`, one run and zero pending approvals. The web UI displayed the final answer too.
+
+![Original workspace result showing Darwin, the AGENTS.md byte count and SHA-256, with Supervised mode still selected](/blog-images/tailscale-remote-ai-workspace/workspace-result.png)
+
+*Figure 3: the original file-reading result and Supervised mode. The full local path is cropped out; the project name, OS, byte count and hash remain. VPS completion was confirmed by separate API readback, not inferred from this web screenshot.*
 
 Before-and-after Git status and tracked-file diff snapshots were unchanged. That is a bounded check, not a full audit proving that nothing anywhere on the computer changed. The sanitized result is recorded in [qualification issue #1364](https://github.com/BotHarness/DeepSeekBot/issues/1364#issuecomment-6101294251).
 

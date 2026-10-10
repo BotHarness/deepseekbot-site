@@ -101,9 +101,23 @@ HTTPS 和 MagicDNS 等前提按 [Serve 官方说明](https://tailscale.com/docs/
 
 ## 我们实际验证了什么？
 
+真正读取项目前，我们先从 VPS 发起一个最小问候任务，要求执行器只回复“你好”，不调用工具。这一步确认了会话与模型回答的链路，但还不能证明工作区文件访问。
+
+![VPS 发起的原始问候会话：任务要求不调用工具，Mac 上的 T3 执行器回复“你好”](/blog-images/tailscale-remote-ai-workspace/greeting.png)
+
+*图 1：先确认任务能抵达执行器并得到回答，再验证真实目录。下面的过程截图均从原会话记录完成后补采，仅裁去私人设备信息和路径；没有重跑任务，也没有重建审批弹窗。*
+
 2026 年 10 月 11 日，日本时间，我们从真正的 VPS 创建了一次会话，绑定 Mac 上已有的 BotHarness 项目。任务只允许确认工作目录和系统、读取根目录 `AGENTS.md`，并计算字节数与 SHA-256；不允许修改文件、安装依赖、跑测试或读取其他项目文件。
 
+![原始只读任务的工具历史：pwd、等待输入、读取 AGENTS.md 前三行与 shasum 命令](/blog-images/tailscale-remote-ai-workspace/readonly-commands.png)
+
+*图 2：展开原任务的执行历史，可以看到 `pwd` 和文件检查命令。列表中的 “Waiting for next input” 是历史事件，不是截图时仍待审批；它也不能替代审批弹窗本身的证据。*
+
 网页首先出现了 `pwd` 的审批。人批准后，执行器完成任务，报告系统为 `Darwin 25.6.0 arm64`，工作目录匹配，文件为 **16,687 字节**，哈希与预先记录的本地证据一致。VPS 读回的最终状态为 `completed`，执行次数为 1，待审批数为 0；网页也显示了最终回答。
+
+![原始工作区任务的最终回答：Darwin 系统、AGENTS.md 字节数和 SHA-256，底部仍为 Supervised 模式](/blog-images/tailscale-remote-ai-workspace/workspace-result.png)
+
+*图 3：原会话里的文件读取结果与 Supervised 模式。完整本机路径已裁去，保留项目名称、系统、文件大小与哈希；VPS 的完成状态由独立接口读回确认，不从这张网页截图推断。*
 
 我们还比较了执行前后的 Git 状态与已跟踪文件 diff，结果保持不变。这是有范围的检查，不是“整台电脑没有任何文件变化”的证明。完整脱敏记录见 [资格验证 Issue #1364](https://github.com/BotHarness/DeepSeekBot/issues/1364#issuecomment-6101294251)。
 
