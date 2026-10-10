@@ -1,6 +1,6 @@
 ---
 {
-  "title": "AI Agent Permissions for Shared Bots",
+  "title": "Shared AI Bot Permissions: On-Demand Role Lookup",
   "description": "Design permissions for a bot serving many people: trusted identity, on-demand natural-language roles, pairing, tool approvals and execution boundaries.",
   "date": "2026-10-11",
   "tags": ["Permissions", "Design"]
@@ -9,7 +9,7 @@
 
 An AI bot joins a company chat. Everyone can mention it. It can read company email through a CLI and modify code through its shell. That raises a question: **Alice may query project emails; Bob should only discuss code. If they make the same mail request, how does the bot know whom to help and whom to refuse?**
 
-Permissions for a shared AI agent need to answer four questions:
+AI agent permissions in shared chats need to answer four questions:
 
 1. **Who may initiate work?** Identify the actual requester and check whether they may talk to the bot.
 2. **How should the bot handle this person's request?** Read the role's behavior policy.
