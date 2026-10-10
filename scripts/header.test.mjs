@@ -9,6 +9,57 @@ import { renderBlog } from './blog.ts';
 import { COMMUNITY_LINKS, QQ_GROUP } from '../src/communityLinks.ts';
 import { HEADER_COMMUNITY_COPY, headerCommunityMarkup } from '../src/headerCommunity.ts';
 
+test('bilingual blog pages keep self-canonicals and reciprocal locale alternates', () => {
+  const cwd = process.cwd();
+  const fixture = mkdtempSync(join(tmpdir(), 'site-blog-seo-test-'));
+  try {
+    cpSync(join(cwd, 'content'), join(fixture, 'content'), { recursive: true });
+    cpSync(join(cwd, 'public'), join(fixture, 'public'), { recursive: true });
+    process.chdir(fixture);
+    const paths = renderBlog();
+    for (const path of paths) {
+      const html = readFileSync(path, 'utf8');
+      const pathname = `/${path.replace(/index\.html$/, '')}`;
+      const chinesePath = pathname.replace(/^\/en\//, '/');
+      assert.ok(
+        html.includes(`<link rel="canonical" href="https://deepseekbot.app${pathname}"`),
+        path,
+      );
+      assert.ok(
+        html.includes(`hreflang="zh-Hans" href="https://deepseekbot.app${chinesePath}"`),
+        path,
+      );
+      assert.ok(
+        html.includes(`hreflang="en" href="https://deepseekbot.app/en${chinesePath}"`),
+        path,
+      );
+      assert.doesNotMatch(html, /\/en\/en\//, path);
+    }
+    for (const prefix of ['', 'en/']) {
+      const html = readFileSync(`${prefix}blog/tailscale-remote-ai-workspace/index.html`, 'utf8');
+      const lang = prefix ? 'en' : 'zh';
+      assert.equal([...html.matchAll(/<h1[ >]/g)].length, 1);
+      assert.match(html, /<meta name="description" content="[^"]+"/);
+      assert.ok(
+        html.includes(
+          `https://deepseekbot.app/blog-covers/tailscale-remote-ai-workspace-${lang}.png`,
+        ),
+      );
+      assert.ok(
+        readFileSync(`${prefix}blog/index.html`, 'utf8').includes('tailscale-remote-ai-workspace'),
+      );
+      for (const imageName of ['greeting', 'readonly-commands', 'workspace-result']) {
+        const imagePath = `/blog-images/tailscale-remote-ai-workspace/${imageName}.png`;
+        assert.ok(html.includes(`src="${imagePath}"`), `${lang}: ${imageName}`);
+        assert.ok(readFileSync(`public${imagePath}`).length > 0);
+      }
+    }
+  } finally {
+    process.chdir(cwd);
+    rmSync(fixture, { recursive: true, force: true });
+  }
+});
+
 test('localized controls retain destinations, hidden descriptions and click-only QQ copying', () => {
   for (const lang of ['zh', 'en']) {
     const markup = headerCommunityMarkup(lang);
