@@ -1,0 +1,174 @@
+{
+  "base": "d6c6bedbc725369cf607e0e74f620834f853b4f1",
+  "method": "T3 collaborative browser; actual live Before and built dist After, matched section anchor, light theme and CSS viewports",
+  "files": [
+    {
+      "file": "before-zh-desktop.png",
+      "url": "https://deepseekbot.app/docs/capabilities/",
+      "phase": "before",
+      "lang": "zh",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "7f1a740a34b89474f9e03a84885139a8e76f49e53689ff897bf4cbec2b2cb450",
+      "facts": null
+    },
+    {
+      "file": "before-zh-mobile.png",
+      "url": "https://deepseekbot.app/docs/capabilities/",
+      "phase": "before",
+      "lang": "zh",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "27507843894fc50e4733093cbdd70957f9003997130562fa463b8073d5e325bd",
+      "facts": null
+    },
+    {
+      "file": "before-en-desktop.png",
+      "url": "https://deepseekbot.app/en/docs/capabilities/",
+      "phase": "before",
+      "lang": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "4ef1c00d08c57a5f2929cc181556febd8279020e007ce0159050715216a22716",
+      "facts": null
+    },
+    {
+      "file": "before-en-mobile.png",
+      "url": "https://deepseekbot.app/en/docs/capabilities/",
+      "phase": "before",
+      "lang": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "d5f935c29bf49c56ef27623f9463afce55d8eff505a4d3ade4871c3bd5f51136",
+      "facts": null
+    },
+    {
+      "file": "after-zh-desktop.png",
+      "url": "http://localhost:31975/docs/capabilities/",
+      "phase": "after",
+      "lang": "zh",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "fcc9f86b05fee67d28c99c02c53550578bc593f6cbb26dec888728962afed323",
+      "facts": {
+        "overflow": false,
+        "platforms": [
+          "QQ",
+          "\u98de\u4e66 / Lark",
+          "Slack",
+          "Discord",
+          "\u4e2a\u4eba\u5fae\u4fe1"
+        ],
+        "qqGuide": "/docs/qq-connection/",
+        "theme": "light",
+        "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
+        "viewport": {
+          "height": 1000,
+          "width": 1440
+        }
+      }
+    },
+    {
+      "file": "after-zh-mobile.png",
+      "url": "http://localhost:31975/docs/capabilities/",
+      "phase": "after",
+      "lang": "zh",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "d7ef16d5bcea420d093915a2583db17341cb4ea6f65dd7edb9a5ab2ceeab2ccb",
+      "facts": {
+        "overflow": false,
+        "platforms": [
+          "QQ",
+          "\u98de\u4e66 / Lark",
+          "Slack",
+          "Discord",
+          "\u4e2a\u4eba\u5fae\u4fe1"
+        ],
+        "qqGuide": "/docs/qq-connection/",
+        "theme": "light",
+        "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
+        "viewport": {
+          "height": 844,
+          "width": 390
+        }
+      }
+    },
+    {
+      "file": "after-en-desktop.png",
+      "url": "http://localhost:31975/en/docs/capabilities/",
+      "phase": "after",
+      "lang": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "3c052ca5b1c3d84af73a914f4e82464d504266a377c7ffb8c67e4cabce454872",
+      "facts": {
+        "overflow": false,
+        "platforms": [
+          "QQ",
+          "Lark / Feishu",
+          "Slack",
+          "Discord",
+          "Personal WeChat"
+        ],
+        "qqGuide": "/en/docs/qq-connection/",
+        "theme": "light",
+        "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
+        "viewport": {
+          "height": 1000,
+          "width": 1440
+        }
+      }
+    },
+    {
+      "file": "after-en-mobile.png",
+      "url": "http://localhost:31975/en/docs/capabilities/",
+      "phase": "after",
+      "lang": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "3744a2824ae672b41dd9958e808c60244adae0887dd15587bfe6bb7ede10b43a",
+      "facts": {
+        "overflow": false,
+        "platforms": [
+          "QQ",
+          "Lark / Feishu",
+          "Slack",
+          "Discord",
+          "Personal WeChat"
+        ],
+        "qqGuide": "/en/docs/qq-connection/",
+        "theme": "light",
+        "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
+        "viewport": {
+          "height": 844,
+          "width": 390
+        }
+      }
+    }
+  ]
+}
