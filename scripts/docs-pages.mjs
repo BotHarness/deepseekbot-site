@@ -2,6 +2,22 @@
 // descriptions come from BotHarness scripts/sync-docs.mjs, or the .mdx frontmatter when absent.
 export const DOC_PAGES = [
   {
+    slug: 'vps-qq-tutorial',
+    order: 13,
+    en: {
+      source: 'docs/vps-qq-tutorial.md',
+      title: 'Deploy on a 2-core / 4 GB VPS with Tailscale and QQ',
+      description:
+        'Install an exact source candidate, keep the Host private and persistent, and verify real QQ group replies after restart.',
+    },
+    zh: {
+      source: 'docs/vps-qq-tutorial.zh.md',
+      title: '2 核 4GB VPS 部署：Tailscale 与 QQ 机器人',
+      description:
+        '安装精确源码候选构建，配置私有持久运行的 Host，并验证重启后的 QQ 原群真实回复。',
+    },
+  },
+  {
     slug: 'capabilities',
     order: 11,
     siteSource: true,
@@ -193,14 +209,14 @@ export const DOC_PAGES = [
     order: 25,
     en: {
       source: 'content/site-guides/en/qq-connection.md',
-      title: 'QQ group permissions',
+      title: 'Connect a QQ Bot: registration to group replies',
       description:
-        'Open Bot settings in mobile QQ and choose the message-reception scope and proactive group-speech permission.',
+        'Register an official QQ application, connect and bind it in DeepSeekBot, set mobile permissions and verify real group replies.',
     },
     zh: {
       source: 'content/site-guides/zh/qq-connection.md',
-      title: 'QQ 群聊权限配置',
-      description: '从手机 QQ 进入机器人设置，选择群消息接收范围并开启主动发言。',
+      title: 'QQ 机器人接入：申请、配置与群聊验收',
+      description: '从腾讯认证、创建官方 QQ 机器人，到 DeepSeekBot 接入、手机权限与真实群聊验收。',
     },
   },
   {

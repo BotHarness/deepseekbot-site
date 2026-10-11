@@ -1,0 +1,143 @@
+{
+  "checkedAt": "2026-10-12",
+  "runtimeSource": "031a14db43af5b3bf52e76b01c30e27828e6e9c9",
+  "files": [
+    {
+      "file": "03-subject-type.png",
+      "source": "https://qq-ai.cdn-go.cn/web/bot-docs/-/v1.35.0/assets/img/open_platform_choose_business.596358a6.png",
+      "kind": "Tencent official public documentation example, not task account capture",
+      "privacy": "Visually inspected; no credential, personal data, or authorization QR visible.",
+      "bytes": 608492,
+      "sha256": "713e46250870a24f919f9eabb7ea88fc1c366d5df8433813b8c65988dfe2099d"
+    },
+    {
+      "file": "04-create-app.png",
+      "source": "https://qq-ai.cdn-go.cn/web/bot-docs/-/v1.35.0/assets/img/open_platform_create_app.fac45242.png",
+      "kind": "Tencent official public documentation example, not task account capture",
+      "privacy": "Visually inspected; no credential, personal data, or authorization QR visible.",
+      "bytes": 362336,
+      "sha256": "0320e62f1b3a4a2c39433d4ab8734990195b23dd9b9ec62201d4c79113aacf54"
+    },
+    {
+      "file": "05-bot-details.png",
+      "source": "https://qq-ai.cdn-go.cn/web/bot-docs/-/v1.35.0/assets/img/open_platform_robot_info_231017.457a7ce0.png",
+      "kind": "Tencent official public documentation example, not task account capture",
+      "privacy": "Visually inspected; no credential, personal data, or authorization QR visible.",
+      "bytes": 248123,
+      "sha256": "fe7592b5fb4cd5d941051eaaba460e35236369fdb0ddb58e249c57d5b8c1c14e"
+    },
+    {
+      "file": "06-sandbox.png",
+      "source": "https://qq-ai.cdn-go.cn/web/bot-docs/-/v1.35.0/assets/img/bot_sandbox_set.26edce09.png",
+      "kind": "Tencent official public documentation example, not task account capture",
+      "privacy": "Visually inspected; no credential, personal data, or authorization QR visible.",
+      "bytes": 421751,
+      "sha256": "251aa0fc68083d0ccdffe8ad9d877d8941d7a5b17758ec16721bbd0a43d1cf71"
+    },
+    {
+      "file": "07-app-bound.png",
+      "source": "BotHarness/DeepSeekBot#1438; runtime source 031a14db43af5b3bf52e76b01c30e27828e6e9c9",
+      "kind": "Actual task evidence",
+      "privacy": "Reviewed; no authentication material. Group image cropped and personal mentions covered; message text unchanged.",
+      "bytes": 257833,
+      "sha256": "baa38bc120008315ebab93f829ed17ec7faad900efc851101cea7e1e669445e0"
+    },
+    {
+      "file": "08-group-before-after.png",
+      "source": "BotHarness/DeepSeekBot#1438; runtime source 031a14db43af5b3bf52e76b01c30e27828e6e9c9",
+      "kind": "Actual task evidence",
+      "privacy": "Reviewed; no authentication material. Group image cropped and personal mentions covered; message text unchanged.",
+      "bytes": 54551,
+      "sha256": "b4901a4c579efc409ff187b704cab0c3726987c0148e53362abd6dc4a5792525"
+    },
+    {
+      "file": "qq-binding.mp4",
+      "source": "BotHarness/DeepSeekBot#1438; runtime source 031a14db43af5b3bf52e76b01c30e27828e6e9c9",
+      "kind": "Actual task evidence",
+      "privacy": "Reviewed; no authentication material. Group image cropped and personal mentions covered; message text unchanged.",
+      "bytes": 2068685,
+      "sha256": "fd4246feb5df8790b1a915c07473e2c6d402a589f06453e38e0af1640bdda949"
+    },
+    {
+      "file": "qq-binding.zh.vtt",
+      "source": "BotHarness/DeepSeekBot#1438; runtime source 031a14db43af5b3bf52e76b01c30e27828e6e9c9",
+      "kind": "Actual task evidence",
+      "privacy": "Reviewed; no authentication material. Group image cropped and personal mentions covered; message text unchanged.",
+      "bytes": 403,
+      "sha256": "368ae04bc66bb12518eefa7a4ce4b2cc30938a0a9462b6de690c7ee56089425e"
+    },
+    {
+      "file": "qq-binding.en.vtt",
+      "source": "BotHarness/DeepSeekBot#1438; runtime source 031a14db43af5b3bf52e76b01c30e27828e6e9c9",
+      "kind": "Actual task evidence",
+      "privacy": "Reviewed; no authentication material. Group image cropped and personal mentions covered; message text unchanged.",
+      "bytes": 449,
+      "sha256": "e7da6f41624981ef319ffc219cae8939d5a14e5d65d141569c334e0a10bf9ee2"
+    },
+    {
+      "file": "01-mobile-bot-profile-settings.png",
+      "kind": "Original mobile screenshot preserved unchanged",
+      "source": "Existing site guide, 2026-10-09",
+      "bytes": 199773,
+      "sha256": "4de59ef95ae66b5637868e03ebc1702c0bbaf7d27a15ca3e4777149bccebab21"
+    },
+    {
+      "file": "02-mobile-group-permissions.jpg",
+      "kind": "Original mobile screenshot preserved unchanged",
+      "source": "Existing site guide, 2026-10-09",
+      "bytes": 137453,
+      "sha256": "3250ca8d42220f01eef9ea9665fcfeb18b0fa0f898e2dac6a01e624c968cc854"
+    },
+    {
+      "file": "09-manual-setup.png",
+      "source": "Actual supplemental native Web Client capture; see manual-setup-manifest.json",
+      "bytes": 130949,
+      "sha256": "a90a1135cf93ac226a8b78a3afd87dfc95fa4cc519dfb2976195328609c9d1f1"
+    },
+    {
+      "file": "qq-manual-setup.mp4",
+      "source": "Actual supplemental native Web Client capture; see manual-setup-manifest.json",
+      "bytes": 289183,
+      "sha256": "1d6aac39226d7103191c3e850dcdc1c6db6b8942e0ff42084a7060bffaf4c597"
+    },
+    {
+      "file": "qq-manual-setup.zh.vtt",
+      "source": "Actual supplemental native Web Client capture; see manual-setup-manifest.json",
+      "bytes": 343,
+      "sha256": "f0df43a85195e0340d4e79b19f657dfaf60db9ee6de7076ed275072a49231b13"
+    },
+    {
+      "file": "qq-manual-setup.en.vtt",
+      "source": "Actual supplemental native Web Client capture; see manual-setup-manifest.json",
+      "bytes": 362,
+      "sha256": "0939cc53c1224913418f99ac93002207a1e2455e2dc7140a35d147999b258831"
+    }
+  ],
+  "groupImageProcessing": {
+    "source": "Human-supplied original QQ group screenshot, received 2026-10-12 JST",
+    "originalSha256": "8bbf06d833f02017e563feaf3c3c128cff2de33db01c727c667ff19e5f1d1843",
+    "publicSha256": "b4901a4c579efc409ff187b704cab0c3726987c0148e53362abd6dc4a5792525",
+    "publicFile": "04-qq-group-before-after.png",
+    "processing": "Lossless PNG crop only (x=20,y=290,width=930,height=424) plus three opaque black privacy rectangles. Header, unrelated member list and Human avatars are outside the crop; sender alias and reply @mentions are obscured. Original request/reply text and both A/B markers are unchanged; no synthetic UI or generated content.",
+    "privacyRectanglesAfterCrop": [
+      {
+        "x": 95,
+        "y": 138,
+        "width": 108,
+        "height": 31
+      },
+      {
+        "x": 805,
+        "y": 215,
+        "width": 125,
+        "height": 27
+      },
+      {
+        "x": 95,
+        "y": 370,
+        "width": 108,
+        "height": 32
+      }
+    ]
+  }
+}

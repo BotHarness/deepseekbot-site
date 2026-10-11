@@ -134,6 +134,10 @@ test('full and scoped sync preserve site-owned screenshots rather than replacing
         '# Site-owned guide\n\n![Phone](/guides/qq/mobile-permissions.png)\n',
       );
     put(join(f.site, 'public/guides/qq/mobile-permissions.png'), 'Human-supplied screenshot');
+    put(join(f.site, 'public/guides/qq/transcript.md'), 'Equivalent instructions');
+    put(join(f.site, 'public/guides/qq/video.srt'), 'Original captions');
+    put(join(f.site, 'public/guides/qq/manifest.json'), '{"source":"actual capture"}');
+    put(join(f.site, 'public/guides/qq/terminal/recording.timing'), '0.4 128');
     put(join(f.site, 'public/guides/fixture.png'), 'Site-owned shared screenshot');
     put(
       join(f.site, 'content/site-guides/en/qq-connection.md'),
@@ -149,6 +153,13 @@ test('full and scoped sync preserve site-owned screenshots rather than replacing
       'Site-owned shared screenshot',
     );
     f.run(['--only', 'capabilities,qq-connection']);
+    for (const [name, text] of [
+      ['transcript.md', 'Equivalent instructions'],
+      ['video.srt', 'Original captions'],
+      ['manifest.json', '{"source":"actual capture"}'],
+      ['terminal/recording.timing', '0.4 128'],
+    ])
+      assert.equal(readFileSync(join(f.site, 'public/guides/qq', name), 'utf8'), text);
     assert.equal(
       readFileSync(join(f.site, 'public/guides/qq/mobile-permissions.png'), 'utf8'),
       'Human-supplied screenshot',

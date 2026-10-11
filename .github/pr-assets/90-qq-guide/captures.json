@@ -1,0 +1,347 @@
+{
+  "before": [
+    {
+      "url": "https://deepseekbot.app/docs/qq-connection/",
+      "status": 200,
+      "title": "QQ 群聊权限配置 · DeepSeekBot 文档",
+      "slug": "qq-connection",
+      "lang": "zh",
+      "size": "desktop",
+      "capturedAt": "2026-10-11T20:08:37.360Z"
+    },
+    {
+      "url": "https://deepseekbot.app/docs/vps-qq-tutorial/",
+      "status": 200,
+      "title": "DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness",
+      "slug": "vps-qq-tutorial",
+      "lang": "zh",
+      "size": "desktop",
+      "capturedAt": "2026-10-11T20:08:38.599Z"
+    },
+    {
+      "url": "https://deepseekbot.app/docs/qq-connection/",
+      "status": 200,
+      "title": "QQ 群聊权限配置 · DeepSeekBot 文档",
+      "slug": "qq-connection",
+      "lang": "zh",
+      "size": "mobile",
+      "capturedAt": "2026-10-11T20:08:39.921Z"
+    },
+    {
+      "url": "https://deepseekbot.app/docs/vps-qq-tutorial/",
+      "status": 200,
+      "title": "DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness",
+      "slug": "vps-qq-tutorial",
+      "lang": "zh",
+      "size": "mobile",
+      "capturedAt": "2026-10-11T20:08:41.129Z"
+    },
+    {
+      "url": "https://deepseekbot.app/en/docs/qq-connection/",
+      "status": 200,
+      "title": "QQ group permissions · DeepSeekBot docs",
+      "slug": "qq-connection",
+      "lang": "en",
+      "size": "desktop",
+      "capturedAt": "2026-10-11T20:08:42.688Z"
+    },
+    {
+      "url": "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+      "status": 200,
+      "title": "DeepSeekBot: the open-source Grok Bot alternative for DeepSeek Harness",
+      "slug": "vps-qq-tutorial",
+      "lang": "en",
+      "size": "desktop",
+      "capturedAt": "2026-10-11T20:08:43.980Z"
+    },
+    {
+      "url": "https://deepseekbot.app/en/docs/qq-connection/",
+      "status": 200,
+      "title": "QQ group permissions · DeepSeekBot docs",
+      "slug": "qq-connection",
+      "lang": "en",
+      "size": "mobile",
+      "capturedAt": "2026-10-11T20:08:45.631Z"
+    },
+    {
+      "url": "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+      "status": 200,
+      "title": "DeepSeekBot: the open-source Grok Bot alternative for DeepSeek Harness",
+      "slug": "vps-qq-tutorial",
+      "lang": "en",
+      "size": "mobile",
+      "capturedAt": "2026-10-11T20:08:47.307Z"
+    }
+  ],
+  "after": [
+    {
+      "lang": "zh",
+      "size": "desktop",
+      "slug": "qq-connection",
+      "title": "QQ 机器人接入：申请、配置与群聊验收 · DeepSeekBot 文档",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/docs/qq-connection/",
+      "alternates": [
+        "https://deepseekbot.app/docs/qq-connection/",
+        "https://deepseekbot.app/en/docs/qq-connection/",
+        "https://deepseekbot.app/docs/qq-connection/"
+      ]
+    },
+    {
+      "lang": "zh",
+      "size": "desktop",
+      "slug": "vps-qq-tutorial",
+      "title": "2 核 4GB VPS 部署：Tailscale 与 QQ 机器人 · DeepSeekBot 文档",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/docs/vps-qq-tutorial/",
+      "alternates": [
+        "https://deepseekbot.app/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/docs/vps-qq-tutorial/"
+      ]
+    },
+    {
+      "lang": "zh",
+      "size": "mobile",
+      "slug": "qq-connection",
+      "title": "QQ 机器人接入：申请、配置与群聊验收 · DeepSeekBot 文档",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/docs/qq-connection/",
+      "alternates": [
+        "https://deepseekbot.app/docs/qq-connection/",
+        "https://deepseekbot.app/en/docs/qq-connection/",
+        "https://deepseekbot.app/docs/qq-connection/"
+      ]
+    },
+    {
+      "lang": "zh",
+      "size": "mobile",
+      "slug": "vps-qq-tutorial",
+      "title": "2 核 4GB VPS 部署：Tailscale 与 QQ 机器人 · DeepSeekBot 文档",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/docs/vps-qq-tutorial/",
+      "alternates": [
+        "https://deepseekbot.app/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/docs/vps-qq-tutorial/"
+      ]
+    },
+    {
+      "lang": "en",
+      "size": "desktop",
+      "slug": "qq-connection",
+      "title": "Connect a QQ Bot: registration to group replies · DeepSeekBot docs",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/en/docs/qq-connection/",
+      "alternates": [
+        "https://deepseekbot.app/docs/qq-connection/",
+        "https://deepseekbot.app/en/docs/qq-connection/",
+        "https://deepseekbot.app/docs/qq-connection/"
+      ]
+    },
+    {
+      "lang": "en",
+      "size": "desktop",
+      "slug": "vps-qq-tutorial",
+      "title": "Deploy on a 2-core / 4 GB VPS with Tailscale and QQ · DeepSeekBot docs",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+      "alternates": [
+        "https://deepseekbot.app/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/docs/vps-qq-tutorial/"
+      ]
+    },
+    {
+      "lang": "en",
+      "size": "mobile",
+      "slug": "qq-connection",
+      "title": "Connect a QQ Bot: registration to group replies · DeepSeekBot docs",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/en/docs/qq-connection/",
+      "alternates": [
+        "https://deepseekbot.app/docs/qq-connection/",
+        "https://deepseekbot.app/en/docs/qq-connection/",
+        "https://deepseekbot.app/docs/qq-connection/"
+      ]
+    },
+    {
+      "lang": "en",
+      "size": "mobile",
+      "slug": "vps-qq-tutorial",
+      "title": "Deploy on a 2-core / 4 GB VPS with Tailscale and QQ · DeepSeekBot docs",
+      "overflow": false,
+      "brokenImages": [],
+      "canonical": "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+      "alternates": [
+        "https://deepseekbot.app/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/en/docs/vps-qq-tutorial/",
+        "https://deepseekbot.app/docs/vps-qq-tutorial/"
+      ]
+    }
+  ],
+  "theme": "light",
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 1000
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "siteBase": "76822491c8e50bdd2cbd98f3090e2e2cfd9a5624",
+  "productDocSource": "8b7114afa23c0d603f4ef7c9a4720fd10c62b082",
+  "runtimeSource": "031a14db43af5b3bf52e76b01c30e27828e6e9c9",
+  "newRouteBefore": "Live missing VPS docs route returns HTTP 200 home fallback, rather than 404. Captures retain that actual behavior.",
+  "files": [
+    {
+      "file": "after-qq-connection-en-desktop-full.png",
+      "bytes": 1100544,
+      "sha256": "47a1276d06fbe8bad872c900acd8f9270e82b5090b2f00de8e04af6444ac8c01"
+    },
+    {
+      "file": "after-qq-connection-en-desktop.png",
+      "bytes": 169396,
+      "sha256": "55eb52848faa4f9c00fa9bc8bc48d04ea6c9e8b550ca437ef03398e8c7530e09"
+    },
+    {
+      "file": "after-qq-connection-en-mobile-full.png",
+      "bytes": 605337,
+      "sha256": "56ff35ad4285359d8f543b3dcb39119fe7762e3f81c0677c4e446c6ec720dab9"
+    },
+    {
+      "file": "after-qq-connection-en-mobile.png",
+      "bytes": 30116,
+      "sha256": "d989b37fd15a6ec6abb76de8b6274cda0b13b185ba21937c1081ab9c3c7fb15a"
+    },
+    {
+      "file": "after-qq-connection-zh-desktop-full.png",
+      "bytes": 1093519,
+      "sha256": "e5f7d911a9bba3fab024609128003216a169ac12a758c2c4fed8b1ad89351c2c"
+    },
+    {
+      "file": "after-qq-connection-zh-desktop.png",
+      "bytes": 214126,
+      "sha256": "aeb2e59c889a76b2a8aac27c3e94085a661a8bfc4e513add440fe2d9761e63f1"
+    },
+    {
+      "file": "after-qq-connection-zh-mobile-full.png",
+      "bytes": 585509,
+      "sha256": "a8f65c78858c3c699d859e2e8c48afcc7b7fad5949e55b6276a26760618b894a"
+    },
+    {
+      "file": "after-qq-connection-zh-mobile.png",
+      "bytes": 44041,
+      "sha256": "fa17ff8e05d587211ed247b1a44f067258c45235322bcd618e0d91aa8a6a25b3"
+    },
+    {
+      "file": "after-qq-group-en-desktop.png",
+      "bytes": 147724,
+      "sha256": "c7a1183382fff1c734d5d17d32310cdc4a1cce54fbda30f0a837a10ff864250a"
+    },
+    {
+      "file": "after-qq-group-en-mobile.png",
+      "bytes": 44095,
+      "sha256": "687c1529076384455d5f69fd11758da9d5860ab2749c47fb76b9ec0cfefd5df2"
+    },
+    {
+      "file": "after-qq-group-zh-desktop.png",
+      "bytes": 206737,
+      "sha256": "6a02bfc9d972bce0721be40598157cf48522fa0177a2cf742443d411e2777c36"
+    },
+    {
+      "file": "after-qq-group-zh-mobile.png",
+      "bytes": 68196,
+      "sha256": "80f850c95f910f3392053a43bc1f8521ea6faf05d6c7521e6e823acc6e2b788e"
+    },
+    {
+      "file": "after-vps-qq-tutorial-en-desktop-full.png",
+      "bytes": 1586871,
+      "sha256": "749ad35bf9f3f51ff56c74df1acd15e9c7c2ea7526e0ad8d74b91d2f6ca2ba2b"
+    },
+    {
+      "file": "after-vps-qq-tutorial-en-desktop.png",
+      "bytes": 183053,
+      "sha256": "903218b15665255d122ba5b4f91b7483a26932c3369637dd359d63e155c40bae"
+    },
+    {
+      "file": "after-vps-qq-tutorial-en-mobile-full.png",
+      "bytes": 901551,
+      "sha256": "0a940a342134ddfe8e77108d4560e582ead1e66e922a6b3467a80d12104d8f84"
+    },
+    {
+      "file": "after-vps-qq-tutorial-en-mobile.png",
+      "bytes": 33093,
+      "sha256": "c92f59c76b11794b276724f4d03b10d49f31975056bd2973c7a7f62cba8cd21c"
+    },
+    {
+      "file": "after-vps-qq-tutorial-zh-desktop-full.png",
+      "bytes": 1541909,
+      "sha256": "58317923f68d7f2bec64b44ab9e8888444ec346ff1367499f7f8d5dbe7f766a6"
+    },
+    {
+      "file": "after-vps-qq-tutorial-zh-desktop.png",
+      "bytes": 193876,
+      "sha256": "616c8337d9e0f3791c7a65939a3c557d001602f3ad3ba7f25801eaf6fed73d3b"
+    },
+    {
+      "file": "after-vps-qq-tutorial-zh-mobile-full.png",
+      "bytes": 935114,
+      "sha256": "b9fec2b44e64a4b1b16bdc58bcc4e86bc379df1d1f4dd2256805015faf591e54"
+    },
+    {
+      "file": "after-vps-qq-tutorial-zh-mobile.png",
+      "bytes": 45734,
+      "sha256": "0e5e83422b8ab1c6fd4a24f855016691bf53ea3bdadf6eb746f91965ed4f1533"
+    },
+    {
+      "file": "before-qq-connection-en-desktop.png",
+      "bytes": 169163,
+      "sha256": "658e441b404535fc97219ada29c8f6c59e9a39c98f792e0594533d8201855f2c"
+    },
+    {
+      "file": "before-qq-connection-en-mobile.png",
+      "bytes": 35433,
+      "sha256": "d27a3e63f3a2ae2b29832eacd1ba8a189f3ca407e83c11f3d0c941acfa4350d7"
+    },
+    {
+      "file": "before-qq-connection-zh-desktop.png",
+      "bytes": 190917,
+      "sha256": "45d42e3df38a4125507926aa11adfbe89db565dd663e081880e6346e8fffc949"
+    },
+    {
+      "file": "before-qq-connection-zh-mobile.png",
+      "bytes": 46511,
+      "sha256": "85644538165c0ec16df0fa1af108b1913f184542bde0371478f27a507300a1e0"
+    },
+    {
+      "file": "before-vps-qq-tutorial-en-desktop.png",
+      "bytes": 93079,
+      "sha256": "14ecb1500acb7a50163d43692149ca2e5327e4bfd70587f753f52682faf08bda"
+    },
+    {
+      "file": "before-vps-qq-tutorial-en-mobile.png",
+      "bytes": 67377,
+      "sha256": "4b475f357157331d68359d9dfde410fbb76723f6dad0e3c04595d33f8884f990"
+    },
+    {
+      "file": "before-vps-qq-tutorial-zh-desktop.png",
+      "bytes": 103543,
+      "sha256": "706c7f8672ea38537d0043459dc077641a625f69163ec64853b98859fe11b2d5"
+    },
+    {
+      "file": "before-vps-qq-tutorial-zh-mobile.png",
+      "bytes": 71443,
+      "sha256": "00d7131ee98bb1446c3c51d09b1aeb9ea0fb66cf86ac034a42c2d9cf280c28ef"
+    }
+  ]
+}

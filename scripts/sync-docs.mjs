@@ -2,7 +2,15 @@
 // and their screenshots into public/guides. Run after the guides change upstream:
 //   BOTHARNESS=../BotHarness pnpm docs:sync
 import { execFileSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join, posix, resolve } from 'node:path';
 import { DOC_PAGES } from './docs-pages.mjs';
 
@@ -21,6 +29,16 @@ const revision = execFileSync('git', ['-C', ROOT, 'rev-parse', 'HEAD'], {
 }).trim();
 const media = new Set();
 const siteMedia = new Map();
+// A site-owned asset directory also owns its transcripts, manifests and caption
+// sidecars. Keep those together when a full sync replaces upstream guides.
+const preserveSiteDirectory = (path) => {
+  for (const entry of readdirSync(join('public', path), { withFileTypes: true })) {
+    const child = posix.join(path, entry.name);
+    if (entry.isDirectory()) preserveSiteDirectory(child);
+    else if (entry.isFile()) siteMedia.set(child, readFileSync(join('public', child)));
+  }
+};
+const preservedDirectories = new Set();
 const GITHUB_BLOB = 'https://github.com/BotHarness/BotHarness/blob/main/';
 
 const frontmatterOf = (text) => {
@@ -156,12 +174,17 @@ for (const page of pages) {
       : '';
     writeFileSync(file, `---\n${JSON.stringify(head, null, 2)}\n---\n\n${notice}${body}`);
     for (const match of body.matchAll(
-      /\/guides\/[^\s"')<>]+\.(?:webp|png|jpe?g|gif|svg|mp4|webm|vtt)(?=[\s"')<>]|$)/g,
+      /\/guides\/[^\s"')<>]+\.(?:webp|png|jpe?g|gif|svg|mp4|webm|vtt|srt|md|json|typescript|timing)(?=[\s"')<>]|$)/g,
     )) {
       if (!page.siteSource) media.add(match[0]);
       else {
         const source = join('public', match[0]);
         if (existsSync(source)) siteMedia.set(match[0], readFileSync(source));
+        const directory = posix.dirname(match[0]);
+        if (directory !== '/guides' && !preservedDirectories.has(directory)) {
+          if (existsSync(join('public', directory))) preserveSiteDirectory(directory);
+          preservedDirectories.add(directory);
+        }
       }
     }
   }
