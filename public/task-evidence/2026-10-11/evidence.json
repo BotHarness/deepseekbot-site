@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-11",
+  "runtime": {
+    "product": "DeepSeekBot",
+    "kind": "release-tag source checkout, not npm artifact qualification",
+    "tag": "v1.2.0",
+    "commit": "271e056aecd7f10bd71128a78d2ac9acbea898ea",
+    "dsh": "0.2.0-rc.1",
+    "platform": "Windows",
+    "optionalComputerBrowser": false
+  },
+  "briefing": {
+    "input": "Exactly three pinned public README excerpts; includes editorial support/limitation notes",
+    "original": {
+      "requestedCharactersApprox": 700,
+      "actualUTF16Length": 1672,
+      "model": "deepseek-official/deepseek-flash",
+      "status": "committed private DM; requires editorial shortening"
+    },
+    "goVerification": {
+      "requestedCharactersMax": 200,
+      "actualUTF16Length": 264,
+      "model": "opencode-go/deepseek-v4-flash",
+      "observedModelSource": true,
+      "status": "committed private DM; length limit exceeded",
+      "screenshot": {
+        "file": "go-briefing-dm.png",
+        "viewport": [1920, 1080],
+        "theme": "light",
+        "shellLocale": "English",
+        "replyLanguage": "Chinese",
+        "captureDate": "2026-10-11"
+      }
+    }
+  },
+  "coding": {
+    "baselineCommit": "6f89c3d",
+    "branch": "bot/add-duration-tests",
+    "scope": "duration.test.mjs only",
+    "actualGeneratedTests": 9,
+    "nativeExecution": {
+      "command": "node --test duration.test.mjs",
+      "exitCode": 1,
+      "error": "spawn EPERM",
+      "status": "failed"
+    },
+    "operatorExecution": {
+      "command": "node --test duration.test.mjs",
+      "exitCode": 0,
+      "passed": 9,
+      "failed": 0,
+      "context": "ordinary operator shell, outside Bot confinement"
+    },
+    "deviation": "Bot additionally wrote an ACL probe file; operator preserved it privately and removed that exact file after stopping the Host",
+    "recovery": "Memory ACL restore verification failed; fixture restore pending. Repair workflow stopped."
+  },
+  "modelBudget": {
+    "capUSD": 1,
+    "requests": 22,
+    "reservedUpperBoundUSD": 0.8002419,
+    "estimatedOffPeakUSD": 0.019728162,
+    "scope": "original DeepSeek API task/diagnostic requests; estimated, not billed cost; Go verification separate configured route"
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "owner": "BotHarness",
+      "repo": "DeepSeekBot",
+      "commit": "fe84f5fd952ca7bf2d7232b8beda590eb38971ec",
+      "license": "MIT"
+    },
+    {
+      "id": "S2",
+      "owner": "FeiZhuLulu",
+      "repo": "DeepSeek-Bot",
+      "commit": "f87575d76e0d9d807cec17fd6964c9be6d9dca17",
+      "license": "Apache-2.0"
+    },
+    {
+      "id": "S3",
+      "owner": "deepseek-ai",
+      "repo": "deepseek-harness",
+      "commit": "d743267388641bc76f17c45ce8b4c231aed1d32c",
+      "license": "MIT"
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "briefing-go.txt",
+      "sha256": "dcdba62d2b19788fa6c95d11e995fa86974cedbf64c99ecb8d89f5267b8c94af"
+    },
+    {
+      "file": "briefing-original.txt",
+      "sha256": "8dd981e2130a254b32a7cdd937b68527d2a35d3e19fedd0922a321f84abffc5f"
+    },
+    {
+      "file": "duration-tests.patch",
+      "sha256": "554cba40ef04ec1efcc023ae7d2cdf806830010ba7a8413ab79aac8921ba64f4"
+    },
+    {
+      "file": "duration.mjs",
+      "sha256": "21ecebcc54e3951fb085b4c40a2eed1edaf33875c1fea4f7e30af5ec9c56cc5c"
+    },
+    {
+      "file": "duration.test.mjs.txt",
+      "sha256": "77d530c1586c7c80229f095248bdfe22a821c95adaad75d71ff68d46760286ec"
+    },
+    {
+      "file": "go-briefing-dm.png",
+      "sha256": "67d2cf5efaaca7c3266959bb0c539f0b76cf58a52cf02732ca131c62b84c4a9f"
+    },
+    {
+      "file": "LICENSE",
+      "sha256": "7438242e6d4292b87c3696bb9c6d48ad7b455aaeff09926a5f2770aa23f0a099"
+    },
+    {
+      "file": "operator-test-output.txt",
+      "sha256": "b080c8eedc21e359e3e546a3199c388a2c466f1c47be198593c9b36e28d39696"
+    }
+  ]
+}
