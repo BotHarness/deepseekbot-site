@@ -1,0 +1,4 @@
+public/guides/vps-source/terminal/*.typescript -text -diff
+public/guides/vps-source/terminal/*.timing -text -diff
+public/guides/qq/*.vtt -text whitespace=cr-at-eol
+public/guides/qq/*.srt -text whitespace=cr-at-eol
