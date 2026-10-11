@@ -60,6 +60,72 @@ test('bilingual blog pages keep self-canonicals and reciprocal locale alternates
   }
 });
 
+test('personal memory article keeps paired metadata, covers and existing guide destinations', () => {
+  const cwd = process.cwd();
+  const fixture = mkdtempSync(join(tmpdir(), 'site-memory-article-test-'));
+  try {
+    cpSync(join(cwd, 'content'), join(fixture, 'content'), { recursive: true });
+    cpSync(join(cwd, 'public'), join(fixture, 'public'), { recursive: true });
+    process.chdir(fixture);
+    renderDocs();
+    renderBlog();
+    for (const lang of ['zh', 'en']) {
+      const prefix = lang === 'en' ? '/en' : '';
+      const articlePath = `${prefix}/blog/personal-ai-agent-memory/`;
+      const html = readFileSync(`.${articlePath}index.html`, 'utf8');
+      const source = readFileSync(`content/blog/${lang}/personal-ai-agent-memory.md`, 'utf8');
+      const metadata = JSON.parse(source.match(/^---\n(\{[\s\S]*?\})\n---/)[1]);
+      assert.equal([...html.matchAll(/<h1[ >]/g)].length, 1);
+      for (const attribute of ['property="og:title"', 'name="twitter:title"']) {
+        assert.ok(html.includes(`<meta ${attribute} content="${metadata.title} · DeepSeekBot"`));
+      }
+      for (const attribute of [
+        'name="description"',
+        'property="og:description"',
+        'name="twitter:description"',
+      ]) {
+        assert.ok(html.includes(`<meta ${attribute} content="${metadata.description}"`));
+      }
+      const cover = `/blog-covers/personal-ai-agent-memory-${lang}.png`;
+      assert.ok(html.includes(`content="https://deepseekbot.app${cover}"`));
+      assert.ok(readFileSync(`public${cover}`).length > 0);
+      assert.ok(readFileSync(`.${prefix}/blog/index.html`, 'utf8').includes(articlePath));
+      for (const destination of [
+        'docs/installation',
+        'docs/channel-sidebar/memory-files',
+        'docs/channel-sidebar/memory-evolution',
+        'docs/capabilities',
+        'blog/first-agent-briefing',
+        'blog/personal-ai-agents-comparison',
+      ]) {
+        const path = `${prefix}/${destination}/`;
+        assert.ok(html.includes(`href="${path}"`));
+        assert.ok(readFileSync(`.${path}index.html`).length > 0);
+      }
+      assert.doesNotMatch(source, /Grok Bot|grok-bot/);
+      assert.match(source, /1\.2\.0/);
+      assert.match(source, /SOUL\.md/);
+      assert.match(source, /MEMORY\.md/);
+      assert.match(source, /MIT/);
+      for (const figureId of ['bot-conversations', 'bot-group']) {
+        assert.ok(html.includes(`id="${figureId}"`));
+      }
+      for (const imagePath of [
+        `/blog-figures/first-task/product-overview-${lang}.jpg`,
+        `/blog-figures/personal-agent-memory/group-${lang}.jpg`,
+      ]) {
+        assert.ok(html.includes(`src="${imagePath}" width="2880" height="1800"`));
+        const imageBytes = readFileSync(`public${imagePath}`);
+        assert.deepEqual([...imageBytes.subarray(0, 3)], [255, 216, 255]);
+      }
+      assert.ok(html.includes('viewBox="560 170 1680 920"'));
+    }
+  } finally {
+    process.chdir(cwd);
+    rmSync(fixture, { recursive: true, force: true });
+  }
+});
+
 test('localized controls retain destinations, hidden descriptions and click-only QQ copying', () => {
   for (const lang of ['zh', 'en']) {
     const markup = headerCommunityMarkup(lang);
