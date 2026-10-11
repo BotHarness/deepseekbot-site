@@ -1,9 +1,5 @@
-// The site is static assets; this Worker only sends the product's other hostnames to the
-// canonical one, keeping the path and query, so old links and shared cards keep working.
-// Everything else (the canonical host and Workers preview URLs) is served from the assets.
-
-export const CANONICAL_HOST = 'deepseekbot.app';
-export const REDIRECT_HOSTS: ReadonlySet<string> = new Set([
+const CANONICAL_HOST = 'deepseekbot.app';
+const REDIRECT_HOSTS: ReadonlySet<string> = new Set([
   'www.deepseekbot.app',
   'deepseekbot.dev',
   'www.deepseekbot.dev',
@@ -15,7 +11,7 @@ interface Env {
 }
 
 /** The canonical URL for a request on another product hostname, or `undefined`. */
-export function canonicalRedirect(url: URL): string | undefined {
+function canonicalRedirect(url: URL): string | undefined {
   if (!REDIRECT_HOSTS.has(url.hostname)) return undefined;
   const next = new URL(url);
   next.protocol = 'https:';
@@ -24,9 +20,48 @@ export function canonicalRedirect(url: URL): string | undefined {
   return next.toString();
 }
 
+function releaseRedirect(url: URL): string | undefined {
+  const match =
+    /^\/r\/v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:alpha|beta|rc)\.(?:0|[1-9]\d*))?)(\/install(?:\/en)?)?\/?$/.exec(
+      url.pathname,
+    );
+  if (!match) return undefined;
+  const [, version, destination] = match;
+  const page =
+    destination === '/install/en'
+      ? '/en/docs/installation/'
+      : destination
+        ? '/docs/installation/'
+        : '/';
+  const content =
+    destination === '/install/en' ? 'install_en' : destination ? 'install_zh' : 'website';
+  const next = new URL(page, `https://${CANONICAL_HOST}`);
+  next.searchParams.set('utm_source', 'github');
+  next.searchParams.set('utm_medium', 'release');
+  next.searchParams.set('utm_campaign', `deepseekbot_v${version}`);
+  next.searchParams.set('utm_content', content);
+  return next.toString();
+}
+
 export default {
   fetch(request: Request, env: Env): Promise<Response> | Response {
-    const target = canonicalRedirect(new URL(request.url));
-    return target ? Response.redirect(target, 301) : env.ASSETS.fetch(request);
+    const url = new URL(request.url);
+    const canonical = canonicalRedirect(url);
+    if (canonical) return Response.redirect(canonical, 301);
+    const target = releaseRedirect(url);
+    if (target) {
+      if (!['GET', 'HEAD'].includes(request.method)) {
+        return new Response(null, { status: 405, headers: { Allow: 'GET, HEAD' } });
+      }
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: target,
+          'Cache-Control': 'no-store',
+          'X-Robots-Tag': 'noindex, nofollow',
+        },
+      });
+    }
+    return env.ASSETS.fetch(request);
   },
 };

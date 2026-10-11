@@ -66,6 +66,29 @@ For repeatable local model setup across product worktrees, see the
 
 Anonymous PostHog analytics, as decided in BotHarness ADR-0132 (`src/analytics.ts`). A build sends nothing unless `VITE_POSTHOG_KEY` (the project's public `phc_…` key) is set, for example in `.env.production`; `VITE_POSTHOG_HOST` overrides the ingest proxy (default `https://t.botharness.ai`). Visitors get a consent box: accepting keeps an anonymous ID for cross-day attribution, declining falls back to PostHog's cookieless mode, which must also be enabled in the PostHog project settings. `?ref=<x>` is rewritten to `utm_source=<x>` before PostHog starts. `/privacy/` and `/en/privacy/` render from `content/privacy/{zh,en}.md`.
 
+### GitHub Release short links
+
+Every product Release can use its own versioned URLs; the Worker expands them with fixed campaign parameters:
+
+| Short path             | Destination              | `utm_content` |
+| ---------------------- | ------------------------ | ------------- |
+| `/r/v1.2.1`            | `/`                      | `website`     |
+| `/r/v1.2.1/install`    | `/docs/installation/`    | `install_zh`  |
+| `/r/v1.2.1/install/en` | `/en/docs/installation/` | `install_en`  |
+
+All destinations carry `utm_source=github`, `utm_medium=release`, and `utm_campaign=deepseekbot_v1.2.1`.
+Replace the version for each release; stable and `alpha.N`, `beta.N`, `rc.N` versions are supported.
+`ref` remains compatible for existing links, but Release attribution uses UTMs to separate source,
+version and entry point. Incoming query parameters cannot override attribution or choose another
+destination. GET/HEAD redirects are 302, `no-store` and `noindex, nofollow`; no per-click server
+analytics, cookies, project settings or consent behavior are added.
+
+Deploy the Site short-link support before publishing short URLs in the product Release template.
+Until then, use direct destination URLs with the same UTMs. Redirect tests prove routing and
+campaign parameters, not ingested events or installation conversions. Use the existing analytics
+consent boundary and group actual pageviews by source, campaign and content when reviewing traffic.
+See [PostHog UTM segmentation](https://posthog.com/docs/data/utm-segmentation) for field semantics.
+
 Every event carries `source: site`, `lang` and `page` (`home`, `market`, `avatar`, `docs`, `privacy`, `changelog`). Named events go through `track()` in the component that owns the control: `install_tab_switched` and `install_command_copied` (`tab`; with `placement: hero` from the Hero's one-line install), `qq_group_copied` (`placement: hero` from the Hero's QQ button), `video_played`, in the live demo under the Hero `demo_channel_opened` (`channel`), `demo_approval_answered` (`channel`, `answer`: `allow` or `deny`) and `demo_message_sent` (`channel`; the typed text is never sent), `feature_demo_used` (`feature`: `identity`, `memory`, `groups`, `folders` or `schedules`; `action`) from the demos beside each feature, `avatar_downloaded` (`edited`, `species`, `drawn_parts`), `avatar_restored` (`edited`, `species`; once per page load when a saved Playground design comes back), in the Playground editor `avatar_tab_selected` (`tab`, `species`), `avatar_preset_selected` (`index`, `species`), `avatar_species_selected`, `avatar_headpiece_selected`, `avatar_part_draw_started` (`slot`, `start`: `new`, `edit` or `piece`), `avatar_part_saved` (`slot`, `derived`), `avatar_part_draw_cancelled`, `avatar_part_worn` and `avatar_part_deleted` (`slot`), `avatar_part_exported` (`scope`: `part` or `library`, `count`), `avatar_part_imported` (`count`, `added`, `refused`, `zip`), `avatar_part_import_failed` (`reason`), `market_bot_opened`, `market_install_clicked`, and on the docs and changelog pages `docs_search_opened` (`via`: `shortcut` or `button`), `docs_search_queried` (`query`, `results`; sent once typing pauses for a second) and `docs_search_result_opened` (`query`, `position`, `target`). Outbound GitHub, Discord and DeepSeek Harness download links, in-page install buttons, links into the marketplace, docs and changelog, and the language switch are caught by one delegated click listener in `src/analytics.ts`, so they also work on the static docs pages: `github_clicked` (`target` path), `discord_clicked`, `dsh_download_clicked`, `install_cta_clicked` (buttons to `#install`), `market_clicked`, `avatar_clicked`, `docs_clicked`, `changelog_clicked` (`target` path; not fired for links within the same page family) and `language_switched` (`to`), each with a `placement`: a `data-placement` on the link or an ancestor (`hero`, `hero_quick_install`, `hero_signpost`, `install_desktop`, `install_dev`), else `header`, `footer`, or the section id.
 
 ## Deploy
