@@ -1,15 +1,15 @@
 ---
 {
   "title": "A DeepSeekBot test-writing handoff: passing patch, blocked Windows execution",
-  "description": "Review nine generated unit tests, distinguish the operator’s passing run from native sandbox failure, and learn what a coding handoff needs to prove.",
+  "description": "Inspect eight tests added by DeepSeekBot: nine pass in an operator terminal, while the native Windows sandbox fails with spawn EPERM. Includes patch and logs.",
   "date": "2026-10-11",
   "tags": ["Hands-on", "Coding handoff"]
 }
 ---
 
-Start a coding handoff with a result you can inspect: tests for one function. A unit test pairs an input with an expected result, such as converting `1:30` to 90 minutes or rejecting `24:00`.
+Evaluate a coding agent with tests for one function. Each test pairs an input with an expected result—converting `1:30` to 90 minutes, for example, or rejecting `24:00`—so you can inspect what the patch checks.
 
-DeepSeekBot’s Assignment generated nine tests, and an operator ran them successfully in an ordinary terminal. The Bot’s own Windows sandbox run failed with `spawn EPERM`. **The generated patch passed review and operator execution; the Bot’s edit–run–report loop did not complete successfully.** Both facts matter.
+DeepSeekBot kept one existing test and added eight, leaving the function unchanged. All nine passed in an operator’s ordinary terminal; the Bot’s own Windows sandbox run failed with `spawn EPERM`. **The patch passed review and operator execution, while native Bot execution failed.** Record those stages separately when accepting a handoff.
 
 ## Use a disposable demonstration repository
 
@@ -30,7 +30,7 @@ No production repository, customer files or account credentials were supplied. T
 
 The runtime was a [source checkout at DeepSeekBot’s v1.2.0 release tag](https://github.com/BotHarness/DeepSeekBot/commit/271e056aecd7f10bd71128a78d2ac9acbea898ea), DSH 0.2.0-rc.1, an isolated Windows Profile, and `deepseek-official/deepseek-flash`. Optional Computer/Browser components were absent. This was not an npm-artifact qualification.
 
-After authorizing the demonstration workspace, we requested:
+An Assignment is a delegated task with its own Session and report. This run used one Bot and one coding Assignment. After authorizing the demonstration workspace, we specified what it could change:
 
 ```text
 Use one Assignment. Read the fixture and existing tests first.
@@ -43,16 +43,16 @@ Do not install dependencies, browse, push, commit, change branches or other file
 Report only in the current private DM.
 ```
 
-This is a concise English rendering of the original Chinese requirements. The [evidence manifest](/task-evidence/2026-10-11/evidence.json) records the actual outcome. The [Workspace Grants guide](/en/docs/channel-sidebar/workspaces/) explains directory authorization: a path in a message is not a Grant, and a Grant does not approve every tool operation.
+This is a concise English rendering of the original Chinese request. The [evidence manifest](/task-evidence/2026-10-11/evidence.json) records its outcome. Workspace Grants set directory access scope: a path in chat grants no access, and a directory Grant does not approve every tool operation. See the [Grants guide](/en/docs/channel-sidebar/workspaces/).
 
-An Assignment is DeepSeekBot’s task-delegation mechanism. We used one Bot and one coding Assignment, not a multi-Bot team. We did not test newer DSH experimental Agent Teams or Git Worktrees plugins.
+This was not a multi-Bot team experiment. DSH’s experimental Agent Teams and Git Worktrees plugins were outside the test.
 
 <figure class="evidence-figure" id="workspace-guide">
 <div class="evidence-heading"><span class="evidence-kicker">PERMISSION GUIDE · 01</span><strong>Find Workspace Grants in the right sidebar</strong></div>
 <div class="evidence-zoom evidence-zoom-panel" role="region" aria-label="English sidebar controls" tabindex="0"><svg viewBox="2250 1240 620 300" role="img" aria-label="English sidebar showing Sessions, Bot Inbox, Schedules and Workspace Grants"><image href="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800"></image></svg></div>
-<div class="evidence-notes"><div><b>01</b><strong>Open Workspace Grants</strong><span>The sidebar entry is a place to inspect or request access. A path in chat is not a Grant.</span></div><div><b>02</b><strong>Check scope and operations</strong><span>A directory Grant and approval for an individual tool operation are separate. This crop shows the entry, not its expanded settings.</span></div></div>
+<div class="evidence-notes"><div><b>01</b><strong>Open Workspace Grants</strong><span>Use this entry to inspect or request directory access. Naming a path in chat does not grant it.</span></div><div><b>02</b><strong>Check scope and operations</strong><span>A directory Grant and approval for an individual tool operation are separate. This crop shows the entry, not its expanded settings.</span></div></div>
 <details class="evidence-detail"><summary>Show the full English interface · 2880 × 1800</summary><a href="/blog-figures/first-task/product-overview-en.jpg"><img src="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800" alt="Native English product README interface with Workspace Grants in the right sidebar; scripted demo conversation" loading="lazy" decoding="async"></a></details>
-<figcaption>Native English product README screenshot, reused as an interface guide. Its conversation is a scripted fictional observatory demo, not this coding-task result; no Grant was added for this illustration. <a href="/blog-figures/first-task/provenance.json">Source and version scope</a> · <a href="/en/docs/channel-sidebar/workspaces/">Read the Grants guide</a>.</figcaption>
+<figcaption>Native English product interface, reused from the README. The full view contains a scripted observatory demo, not this task’s result. This crop shows the sidebar entry only; no Grant was added for the illustration. <a href="/blog-figures/first-task/provenance.json">Source and version scope</a> · <a href="/en/docs/channel-sidebar/workspaces/">Read the Grants guide</a>.</figcaption>
 </figure>
 
 ## Inspect the generated patch
@@ -77,7 +77,7 @@ Download the [actual patch](/task-evidence/2026-10-11/duration-tests.patch) and 
 <figcaption>This typeset excerpt preserves the generated code; it is not an IDE screenshot or a new execution result. <a href="/task-evidence/2026-10-11/duration.test.mjs.txt">Complete test file</a> · <a href="/task-evidence/2026-10-11/duration-tests.patch">Actual diff</a></figcaption>
 </figure>
 
-These are examples against a fixed contract. Nine passes do not establish a bug-free project, measured coverage, fuzz-testing results or mutation-testing quality.
+These assertions check a fixed function contract. Nine passes establish that they passed in the operator terminal, not that the project is bug-free. Coverage, fuzz testing and mutation testing were not measured.
 
 ## Keep Bot execution and operator execution separate
 
@@ -89,11 +89,11 @@ Error: spawn EPERM
 EXITCODE=1
 ```
 
-A tool transport result without an error does not mean the tests passed. Inspect the exit code and actual output.
+Inspect the command’s exit code and output. A tool can return its result successfully even when the command it ran failed.
 
-The reverse recovery workflow then attempted the memory-directory rollback. Its ACL verification differed from the backup, so it stopped before restoring the fixture. Both directories are temporary test scope, and the task Host is stopped. We did not continue adding permissions, change ownership or inheritance, or bypass the sandbox.
+DSH’s recovery workflow then attempted to restore directory permissions in reverse order. The memory-directory ACL check differed from the backup, so recovery stopped before restoring the fixture. Both directories are temporary test scope, and the task Host is stopped. Permissions were not expanded further and the sandbox was not bypassed.
 
-The Bot also wrote an extra ACL probe file, violating the test-file-only request. The operator preserved the evidence privately and removed that exact file. A clean final patch alone would conceal this scope deviation.
+The Bot also wrote an extra ACL probe, violating the test-file-only request. The operator retained its evidence privately and removed that file. Review extra writes as well as the final diff; a clean patch alone would hide this deviation.
 
 The operator separately ran the generated tests in an ordinary terminal:
 
@@ -104,7 +104,7 @@ fail 0
 exit code 0
 ```
 
-[Download the full operator log](/task-evidence/2026-10-11/operator-test-output.txt). This checks known demonstration code in a different execution context. It neither fixes the confined failure nor proves that the Bot ran the tests successfully.
+[Download the full operator log](/task-evidence/2026-10-11/operator-test-output.txt). This confirms that the generated tests passed in an ordinary terminal. The Bot’s confined execution failure remained unresolved.
 
 <figure class="evidence-figure" id="execution-results">
 <div class="evidence-heading"><span class="evidence-kicker">READ EACH RESULT · 03</span><strong>One command, two execution contexts</strong></div>
@@ -120,6 +120,6 @@ exit code 0
 3. **Execution:** require the command, exit code, full output and environment; code generation and execution are separate stages.
 4. **Recovery:** retain the first failure and any manual corrections. Repeated permission expansion does not establish success.
 
-This run is useful for learning to inspect a patch and distinguish stages of delivery. It does not meet a requirement for unattended coding completion on this Windows environment. It also establishes no speed or reliability advantage over Grok Bot, Cue or another product.
+For your own first task, choose code with a clear contract and review its diff, extra files and actual execution log. This Windows run did not meet an unattended-delivery requirement. It establishes no speed or reliability advantage over Grok Bot, Cue or another product.
 
 Self-hosting still requires installation and updates, an available host, Node/Git and model quota. The briefing, coding task and diagnostics shared a US$1 DeepSeek API ceiling; their 22 requests cost an estimated US$0.0197. That is neither a fixed task price nor the account bill. Try the [three-source briefing](/en/blog/first-agent-briefing/) next, or consult [installation](/en/docs/installation/) and the [Assignment Session guide](/en/docs/channel-sidebar/sessions/).

@@ -4,7 +4,7 @@ Prepared copy, not published. Complements the [three-layer distribution package]
 
 ## 1. Developer post — Chinese
 
-**Title:** 给 DeepSeekBot 一个小编码任务：九项测试通过，但自动交付还差一步
+**Title:** DeepSeekBot 写测试实测：人工运行九项通过，Bot 沙箱失败
 
 我是 BotHarness 的开发者，正在维护开源 DeepSeekBot。这次分享一个真实失败边界：让 Bot 在可丢弃的演示仓库中，为 parseDuration 函数补测试。
 
@@ -22,7 +22,7 @@ AI assisted the draft; the patch and run results above come from recorded execut
 
 ## 1. Developer post — English
 
-**Title:** DeepSeekBot wrote nine tests; the Windows sandbox run still failed
+**Title:** DeepSeekBot added eight tests; its Windows sandbox run failed
 
 I maintain DeepSeekBot at BotHarness. We tried a small coding handoff in a disposable repository: add tests for one duration parser without changing its implementation, then run node --test.
 
@@ -42,7 +42,7 @@ Disclosure: project maintainer; AI-assisted writing, recorded task outcomes and 
 
 **Subject:** 选题建议：开源 AI 助手的第一次任务，怎样判断它真的完成了？
 
-编辑您好，我是 BotHarness 的项目开发者。想提供一个以验收方法为主的实操选题，而不是新的“最强 Agent”发布稿：用 DeepSeekBot 分别完成三来源简报和单函数测试交接。
+编辑您好，我是 BotHarness 的项目开发者。想提供一个围绕 AI 助手任务验收的实操选题，材料是 DeepSeekBot 的三来源简报与单函数测试交接记录。
 
 可供核对的材料包括三个固定 README 来源、原始简报、来源核对表、生成的测试补丁和完整人工运行日志。简报能交回有来源标记的草稿，但超过篇幅要求；编码补丁在人工终端九项全过，Bot 的 Windows 原生执行仍失败，并出现一个额外文件的范围偏差。报道可以围绕“生成产物、成功执行与人工验收为何必须分开”展开。
 
@@ -60,7 +60,7 @@ Disclosure: project maintainer; AI-assisted writing, recorded task outcomes and 
 
 拿我们维护的 DeepSeekBot 做例子。第一项任务是整理三份公开 README：它给出了带来源标记的简报，但要求约 700 字，回复达到 1,672 个字符。内容可用，仍需核对来源与压缩。输入已经由我们挑选并附编辑说明，所以不能据此说它擅长自动找资料。
 
-第二项是给一个函数补测试。Bot 的 Assignment 生成九项测试，人工终端全部通过；Bot 自己在 Windows 沙箱中运行却报 spawn EPERM，还额外写了一个不在任务范围内的探针文件。于是结论只能是“补丁经人工复核可用”，不能变成“自动完成编码任务”。
+第二项是给一个函数补测试。Bot 保留一项测试并新增八项，人工终端九项全部通过；Bot 自己在 Windows 沙箱中运行却报 spawn EPERM，还额外写了一个不在任务范围内的探针文件。于是结论只能是“补丁经人工复核可用”，不能变成“自动完成编码任务”。
 
 我会检查四件事：来源是否支持结论、diff 是否符合范围、日志里有没有实际退出码、结果在哪个环境运行。错误和人工补救也属于交付记录。一个任务的通过，不足以证明通用成功率或产品排名。
 

@@ -1,19 +1,19 @@
 ---
 {
   "title": "让 DeepSeekBot 给一个函数补测试：补丁通过，Windows 执行受阻",
-  "description": "一次真实编码交接：审阅 DeepSeekBot 生成的九项测试，区分人工运行通过与原生沙箱失败，理解验收和授权边界。",
+  "description": "让 DeepSeekBot 为一个函数新增八项测试，检查实际补丁和日志：人工终端九项通过，Windows 原生沙箱仍报 spawn EPERM。",
   "date": "2026-10-11",
   "tags": ["实测", "编码交接"]
 }
 ---
 
-让智能体帮忙改代码，先选一项你能看懂结果的小任务：为一个函数补测试。测试是具体的输入和预期结果，例如 `1:30` 应换算为 90 分钟，`24:00` 应被拒绝。
+评估智能体的编码交付，可以先让它给一个函数补测试。每项测试都有明确输入和预期，例如把 `1:30` 换算为 90 分钟，或拒绝 `24:00`，你能逐条检查它测了什么。
 
-这次 DeepSeekBot 的 Assignment 生成了九项测试，人工在普通终端运行时全部通过。但 Bot 在 Windows 原生沙箱中执行同一命令失败，错误是 `spawn EPERM`。**生成补丁已验证；Bot 自己完成“修改—运行—回报”的闭环没有验证成功。**这两个结果需要同时看。
+DeepSeekBot 保留原有一项测试，新增八项；人工在普通终端运行九项全过，函数实现未改。Bot 自己在 Windows 原生沙箱中运行同一命令却报 `spawn EPERM`。**补丁通过了人工审阅和运行，Bot 的自主执行仍失败。**验收时要把这两步分别记录。
 
 ## 先准备一个可丢弃的演示仓库
 
-本次 fixture 只有一个 `parseDuration` 函数：接受 `H:MM` 或 `HH:MM` 格式的字符串，范围为 `0:00` 到 `23:59`，返回整数分钟。非字符串或格式错误抛出 `TypeError`，时间越界抛出 `RangeError`。
+演示仓库（fixture）只有一个 `parseDuration` 函数：接受 `H:MM` 或 `HH:MM` 格式的字符串，范围为 `0:00` 到 `23:59`，返回整数分钟。非字符串或格式错误抛出 `TypeError`，时间越界抛出 `RangeError`。
 
 ```js
 parseDuration('1:30');  // 90
@@ -30,7 +30,7 @@ parseDuration('24:00'); // RangeError
 
 本次使用 DeepSeekBot v1.2.0 发布标签的[源码 checkout](https://github.com/BotHarness/DeepSeekBot/commit/271e056aecd7f10bd71128a78d2ac9acbea898ea)，DSH 0.2.0-rc.1、Windows 隔离 Profile，模型为 `deepseek-official/deepseek-flash`。没有启用可选 Computer/Browser，也不是 npm 安装包资格验证。
 
-授予工作区以后，原始请求要求：
+Assignment 是 DeepSeekBot 委派的独立任务，保留自己的 Session 与报告。本次只运行一个 Bot 的一项编码 Assignment。授予演示工作区后，请求明确限定了修改范围：
 
 ```text
 使用一个 Assignment 执行。先读演示 fixture 的文件与现有测试。
@@ -43,16 +43,16 @@ parseDuration('24:00'); // RangeError
 只在当前私人 DM 回报。
 ```
 
-上面是原始要求的简洁整理，完整验收事实见[证据清单](/task-evidence/2026-10-11/evidence.json)。[工作区授权指南](/docs/channel-sidebar/workspaces/)解释目录授权；给出路径不等于授予访问，工作区授权也不等于批准每一次工具操作。
+上面是原始要求的简洁整理，验收记录见[证据清单](/task-evidence/2026-10-11/evidence.json)。Workspace Grants（工作区授权）决定目录访问范围：聊天里给出路径并未授予访问，目录授权也不等于批准每次工具操作。详见[授权指南](/docs/channel-sidebar/workspaces/)。
 
-这里的 Assignment 是 DeepSeekBot 的任务委派机制。本次只有一个 Bot 和一个编码 Assignment，没有运行多 Bot 团队实验，也没有测试 DSH 较新版本的实验性 Agent Teams 或 Git Worktrees 插件。
+本次没有运行多 Bot 团队实验，也未测试 DSH 的实验性 Agent Teams 或 Git Worktrees 插件。
 
 <figure class="evidence-figure" id="workspace-guide">
-<div class="evidence-heading"><span class="evidence-kicker">授权导览 · 01</span><strong>先看工作区授权，再交接代码任务</strong></div>
+<div class="evidence-heading"><span class="evidence-kicker">授权导览 · 01</span><strong>找到授权入口，核对访问范围</strong></div>
 <div class="evidence-zoom evidence-zoom-panel" role="region" aria-label="工作区授权面板：Memory Repository、添加文件夹与新事项允许所有文件访问开关" tabindex="0"><svg viewBox="918 190 306 208" role="img" aria-label="工作区授权面板：Memory Repository、添加文件夹与新事项允许所有文件访问开关"><image href="/guides/channel-sidebar/06-workspaces-zh.webp" width="1230" height="820"></image></svg></div>
-<div class="evidence-notes"><div><b>01</b><strong>文件夹授权有明确范围</strong><span>“添加文件夹”是授权入口；聊天里写路径不等于授权。</span></div><div><b>02</b><strong>区分范围与单次操作</strong><span>工作区可访问，不等于每个工具操作都已批准。图中开关未开启。</span></div></div>
+<div class="evidence-notes"><div><b>01</b><strong>文件夹授权有明确范围</strong><span>“添加文件夹”是授权入口；聊天里写路径不等于授权。</span></div><div><b>02</b><strong>区分范围与单次操作</strong><span>目录访问与单次工具操作的批准是两件事；图中的广泛文件访问开关未开启。</span></div></div>
 <details class="evidence-detail"><summary>展开完整界面参考 · 1230 × 820</summary><a href="/guides/channel-sidebar/06-workspaces-zh.webp"><img src="/guides/channel-sidebar/06-workspaces-zh.webp" width="1230" height="820" alt="隔离教程环境中的真实工作区授权界面，不是本次编码任务截图" loading="lazy" decoding="async"></a></details>
-<figcaption>复用原生教程截图：DSH 0.2.0-rc.1 / deepseekbot 0.1.0-alpha.1，中文、深色主题，仅说明入口位置；不是本次 v1.2.0 编码结果，也未为配图新增授权。 <a href="/docs/channel-sidebar/workspaces/">阅读授权指南</a></figcaption>
+<figcaption>原生教程截图，中文、深色主题：DSH 0.2.0-rc.1 / deepseekbot 0.1.0-alpha.1。仅作授权界面导览，不是本次 v1.2.0 任务结果；没有为配图新增授权。 <a href="/docs/channel-sidebar/workspaces/">阅读授权指南</a></figcaption>
 </figure>
 
 ## 补丁增加了什么
@@ -77,7 +77,7 @@ Bot 保留原测试，新增八项；总计九项测试：
 <figcaption>这是原始生成代码的排版节选，不是 IDE 截图或新的运行结果。 <a href="/task-evidence/2026-10-11/duration.test.mjs.txt">完整测试文件</a> · <a href="/task-evidence/2026-10-11/duration-tests.patch">实际 diff</a></figcaption>
 </figure>
 
-这些断言检查固定契约；九项通过不能证明整个项目没有 bug，也没有测到覆盖率、模糊测试或变异测试结果。
+这些断言针对固定函数契约。九项通过说明它们在人工终端中通过了检查，不能推出整个项目没有 bug；本次没有测量覆盖率，也没有做模糊测试或变异测试。
 
 ## 运行结果：分别记录 Bot 与人工
 
@@ -89,11 +89,11 @@ Error: spawn EPERM
 EXITCODE=1
 ```
 
-工具返回本身没有报传输错误，不代表测试通过；退出码和测试输出才是这一步的结果。
+检查工具结果时，要读命令的退出码和输出；工具成功返回结果，并不意味着其中的测试命令成功。
 
-DSH 的恢复流程随后尝试逆序回滚。memory 目录恢复校验发现 ACL 与备份不一致，流程停止；fixture 的恢复尚未执行。两处都是临时测试范围，测试 Host 已停止。本次没有继续加权限、修改所有者、改变继承或绕过沙箱。
+随后按 DSH 流程逆序恢复目录权限。memory 目录的 ACL 校验与备份不一致，流程因此停止，fixture 目录尚未恢复。两处都在临时测试范围内，测试 Host 已停止；没有继续扩大权限或绕过沙箱。
 
-任务期间 Bot 还额外写了一个权限探针文件，违反了“只修改测试文件”的要求。人工保留记录并清理该文件。这个偏差也影响验收，不能只看最终 diff 就宣称全程遵守范围。
+任务期间，Bot 还额外写了一个权限探针文件，违反“只修改测试文件”的要求。人工保留记录并清理了该文件。因此，审阅最终 diff 时还要检查过程中的额外写入，不能把干净补丁当作全程遵守范围的证明。
 
 人工在普通终端对生成的测试文件另行运行同一命令：
 
@@ -104,7 +104,7 @@ fail 0
 exit code 0
 ```
 
-[下载完整人工运行日志](/task-evidence/2026-10-11/operator-test-output.txt)。这是已知演示代码的人工复核，执行环境与 Bot 原生沙箱不同；它没有修复 Bot 的失败，也不是 Bot 自己完成了测试。
+[下载完整人工运行日志](/task-evidence/2026-10-11/operator-test-output.txt)。这次复核发生在普通终端中，确认生成的测试在那里通过；Bot 原生沙箱的失败仍未解决。
 
 <figure class="evidence-figure" id="execution-results">
 <div class="evidence-heading"><span class="evidence-kicker">结果分开看 · 03</span><strong>同一命令，两个执行环境</strong></div>
@@ -122,6 +122,6 @@ exit code 0
 3. **在哪里运行：** 要求命令、退出码、完整日志和执行环境；生成代码与成功运行是不同阶段。
 4. **失败怎么办：** 保留首个错误和人工修正记录。操作系统拒绝不能靠不断加权限来证明任务成功。
 
-这次适合拿来学习如何审阅补丁和区分阶段结果；如果你需要 Bot 无人值守完成编码交付，本次 Windows 结果还达不到这个要求。它也不能证明 DeepSeekBot 比 Grok Bot、Cue 或其他产品更快、更稳。
+准备在自己的代码里试用时，先给出一段有明确契约、可复核的小任务，再分别检查 diff、额外文件与实际运行日志。本次 Windows 结果还不能满足无人值守交付要求，也不足以比较 DeepSeekBot 与 Grok Bot、Cue 等产品的速度或可靠性。
 
 自托管仍需要安装与更新、宿主在线、Node/Git 环境和模型额度。三来源简报与本次任务及诊断共用 US$1 DeepSeek API 上限，22 次请求估算约 US$0.0197；不是单函数任务的固定价格或实际账单。下一步可以先完成[三来源简报](/blog/first-agent-briefing/)，或阅读[安装指南](/docs/installation/)和[任务 Session 指南](/docs/channel-sidebar/sessions/)。

@@ -1,0 +1,140 @@
+{
+  "captures": [
+    {
+      "file": "before-first-agent-briefing-zh-desktop-light.png",
+      "url": "http://127.0.0.1:4176/blog/first-agent-briefing/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "zh",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from pre-edit article backups at 5b07fef",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    },
+    {
+      "file": "before-agent-unit-test-handoff-zh-desktop-light.png",
+      "url": "http://127.0.0.1:4176/blog/agent-unit-test-handoff/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "zh",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from pre-edit article backups at 5b07fef",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    },
+    {
+      "file": "before-first-agent-briefing-en-desktop-light.png",
+      "url": "http://127.0.0.1:4176/en/blog/first-agent-briefing/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "en",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from pre-edit article backups at 5b07fef",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    },
+    {
+      "file": "before-agent-unit-test-handoff-en-desktop-light.png",
+      "url": "http://127.0.0.1:4176/en/blog/agent-unit-test-handoff/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "en",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from pre-edit article backups at 5b07fef",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    },
+    {
+      "file": "after-first-agent-briefing-zh-desktop-light.png",
+      "url": "http://127.0.0.1:4176/blog/first-agent-briefing/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "zh",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from revised article content",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    },
+    {
+      "file": "after-agent-unit-test-handoff-zh-desktop-light.png",
+      "url": "http://127.0.0.1:4176/blog/agent-unit-test-handoff/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "zh",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from revised article content",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    },
+    {
+      "file": "after-first-agent-briefing-en-desktop-light.png",
+      "url": "http://127.0.0.1:4176/en/blog/first-agent-briefing/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "en",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from revised article content",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    },
+    {
+      "file": "after-agent-unit-test-handoff-en-desktop-light.png",
+      "url": "http://127.0.0.1:4176/en/blog/agent-unit-test-handoff/",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "theme": "light",
+      "locale": "en",
+      "actualPixels": {
+        "width": 1280,
+        "height": 1000
+      },
+      "focus": "article introduction and interface guide",
+      "source": "dist built from revised article content",
+      "captureMethod": "T3 collaborative browser (Playwright)"
+    }
+  ]
+}

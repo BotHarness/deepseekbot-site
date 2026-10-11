@@ -45,3 +45,11 @@ Product overviews preserve the 2880×1800 README originals and disclose scripted
 `pnpm verify` passed again with all 36 tests. The three new public assets match their SHA-256 records and build copies; all eight original evidence hashes remain unchanged. The typeset test excerpt matches the original generated file. Native coding failure, scope deviation and recovery stop remain visible.
 
 Sixteen real browser captures against `dist/` are in `.github/pr-assets/first-task-figures/`: matched Chinese desktop Before views, paired Chinese/English desktop figures in light theme, and both articles/locales on mobile in dark theme. Desktop viewport is 1280×1000; mobile is 390×844. `captures.json` records actual saved pixel dimensions separately. All figure assets returned 200, no document overflow was observed, and full-image expansion and contained mobile scrolling were exercised.
+
+## Copy reconciliation
+
+The user-supplied Gemini rewrite was reconciled against the original sources and outputs rather than copied wholesale. [copy-review.md](copy-review.md) records the corrected source/model mix-ups, fabricated verbatim excerpts and unsupported conclusions. Four article files and the external drafts now use clearer introductions, task definitions and captions while retaining the factual limits.
+
+`pnpm verify` passed with all 36 tests, formatting, lint, both typechecks and build. The original title/date/tags, code blocks, figure IDs/classes/viewBoxes/resource links, eight evidence artifact hashes and three native image hashes match their pre-edit versions. A final production rebuild after capturing the pre-edit views also passed.
+
+Eight matched 1280×1000 light-theme Before/After screenshots, covering both articles and locales, are under `.github/pr-assets/first-task-copy/`; actual saved pixels are recorded separately in `captures.json`. All four revised pages were checked at 390×844 in dark theme with one H1 and no document overflow. The English article's original Chinese reply detail was expanded, its mobile horizontal scroll stayed contained, and referenced native assets returned HTTP 200. Screenshot capture was retried after a preview timeout and after waiting for lazy images to load. The original tasks were not rerun, and no new model or SEO charges were incurred.
