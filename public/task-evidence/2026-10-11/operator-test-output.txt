@@ -1,0 +1,18 @@
+Operator ordinary shell verification — NOT confined Bot execution
+✔ converts a normal work duration to minutes (3.1573ms)
+✔ converts other normal durations to minutes (0.5375ms)
+✔ returns an integer number of minutes (2.4028ms)
+✔ converts the lower boundary 0:00 to 0 minutes (0.1924ms)
+✔ converts the upper boundary 23:59 to 1439 minutes (0.1729ms)
+✔ throws RangeError when minutes are out of range (0.6469ms)
+✔ throws RangeError when hours are out of range (0.2551ms)
+✔ throws TypeError for non-string input (0.2908ms)
+✔ throws TypeError for malformed formats (2.6993ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 656.1282

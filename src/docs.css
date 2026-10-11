@@ -988,6 +988,187 @@
   padding-top: 120px;
   font-family: var(--pixel-font);
 }
+
+/* Article evidence: flat annotations, unchanged native captures and readable zooms. */
+.blog-post-layout .evidence-figure {
+  margin: 28px 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ink-soft) 35%, transparent);
+  background: var(--bubble);
+  image-rendering: auto;
+}
+.blog-post-layout .evidence-heading {
+  display: grid;
+  gap: 6px;
+  padding: 18px 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink-soft) 25%, transparent);
+}
+.blog-post-layout .evidence-kicker {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.blog-post-layout .evidence-heading strong {
+  font-size: 19px;
+  line-height: 1.5;
+}
+.blog-post-layout .evidence-figure img {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  image-rendering: auto;
+}
+.blog-post-layout .evidence-zoom {
+  overflow-x: auto;
+  background: #fff;
+  scrollbar-color: var(--ink-soft) var(--bg-alt);
+}
+.blog-post-layout .evidence-zoom svg {
+  display: block;
+  width: 100%;
+  min-width: 570px;
+  height: auto;
+}
+.blog-post-layout .evidence-zoom-panel svg {
+  min-width: 306px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.blog-post-layout .evidence-zoom-model svg {
+  min-width: 410px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.blog-post-layout .evidence-notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 18px;
+  padding: 20px;
+}
+.blog-post-layout .evidence-notes > div {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.blog-post-layout .evidence-notes b {
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+.blog-post-layout .evidence-notes span,
+.blog-post-layout .evidence-figure figcaption {
+  color: var(--ink-soft);
+}
+.blog-post-layout .evidence-detail {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border-top: 1px solid color-mix(in srgb, var(--ink-soft) 25%, transparent);
+}
+.blog-post-layout .evidence-detail summary {
+  padding: 14px 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+.blog-post-layout .evidence-figure figcaption {
+  padding: 16px 20px;
+  border-top: 1px solid color-mix(in srgb, var(--ink-soft) 25%, transparent);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.blog-post-layout .evidence-subheading {
+  padding: 12px 20px;
+  background: var(--bg-alt);
+  font-size: 12px;
+  font-weight: 700;
+}
+.blog-post-layout .evidence-scroll-hint {
+  display: none;
+  padding: 8px 20px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.blog-post-layout .evidence-stats,
+.blog-post-layout .evidence-outcomes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.blog-post-layout .evidence-stats > div,
+.blog-post-layout .evidence-outcomes > div {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 20px;
+}
+.blog-post-layout .evidence-stats > div + div,
+.blog-post-layout .evidence-outcomes > div + div {
+  border-left: 1px solid color-mix(in srgb, var(--ink-soft) 25%, transparent);
+}
+.blog-post-layout .evidence-stats strong {
+  overflow-wrap: anywhere;
+  font-size: 18px;
+}
+.blog-post-layout .evidence-stats span,
+.blog-post-layout .evidence-status {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.blog-post-layout .evidence-outcomes strong {
+  font-size: 24px;
+}
+.blog-post-layout .evidence-outcomes p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.blog-post-layout .evidence-command {
+  padding: 12px 20px;
+  overflow-x: auto;
+  background: var(--bg-alt);
+  font-size: 13px;
+}
+.blog-post-layout .evidence-terminal {
+  background: var(--code-bg);
+  color: var(--code-ink);
+}
+.blog-post-layout .evidence-terminal-title {
+  padding: 12px 20px 0;
+  font-size: 12px;
+}
+.blog-post-layout .evidence-terminal pre {
+  margin: 0;
+  padding: 16px 20px 20px;
+  font-size: 14px;
+  line-height: 1.9;
+  box-shadow: none;
+}
+.blog-post-layout .evidence-zoom:focus-visible,
+.blog-post-layout .evidence-detail summary:focus-visible,
+.blog-post-layout .evidence-figure a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+@media (max-width: 600px) {
+  .blog-post-layout .evidence-scroll-hint {
+    display: block;
+    margin: 0;
+  }
+  .blog-post-layout .evidence-stats,
+  .blog-post-layout .evidence-outcomes {
+    grid-template-columns: 1fr;
+  }
+  .blog-post-layout .evidence-stats > div + div,
+  .blog-post-layout .evidence-outcomes > div + div {
+    border-left: none;
+    border-top: 1px solid color-mix(in srgb, var(--ink-soft) 25%, transparent);
+  }
+}
 @media (max-width: 900px) {
   .blog-post-layout {
     grid-template-columns: 1fr;

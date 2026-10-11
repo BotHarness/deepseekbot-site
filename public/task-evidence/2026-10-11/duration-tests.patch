@@ -1,0 +1,84 @@
+diff --git a/duration.test.mjs b/duration.test.mjs
+index 7183f9d..ab9ca65 100644
+--- a/duration.test.mjs
++++ b/duration.test.mjs
+@@ -5,3 +5,79 @@ import { parseDuration } from './duration.mjs';
+ test('converts a normal work duration to minutes', () => {
+   assert.equal(parseDuration('1:30'), 90);
+ });
++
++test('converts other normal durations to minutes', () => {
++  assert.equal(parseDuration('0:45'), 45);
++  assert.equal(parseDuration('12:05'), 725);
++  assert.equal(parseDuration('23:00'), 1380);
++});
++
++test('returns an integer number of minutes', () => {
++  assert.equal(Number.isInteger(parseDuration('2:15')), true);
++});
++
++test('converts the lower boundary 0:00 to 0 minutes', () => {
++  assert.equal(parseDuration('0:00'), 0);
++  assert.equal(parseDuration('00:00'), 0);
++});
++
++test('converts the upper boundary 23:59 to 1439 minutes', () => {
++  assert.equal(parseDuration('23:59'), 1439);
++});
++
++test('throws RangeError when minutes are out of range', () => {
++  assert.throws(() => parseDuration('0:60'), RangeError);
++  assert.throws(() => parseDuration('1:60'), RangeError);
++  assert.throws(() => parseDuration('0:99'), RangeError);
++  assert.throws(() => parseDuration('23:60'), RangeError);
++});
++
++test('throws RangeError when hours are out of range', () => {
++  assert.throws(() => parseDuration('24:00'), RangeError);
++  assert.throws(() => parseDuration('24:59'), RangeError);
++  assert.throws(() => parseDuration('99:00'), RangeError);
++});
++
++test('throws TypeError for non-string input', () => {
++  for (const value of [90, 0, null, undefined, true, {}, [], ['1:30']]) {
++    assert.throws(
++      () => parseDuration(value),
++      TypeError,
++      `expected TypeError for ${String(value)}`,
++    );
++  }
++});
++
++test('throws TypeError for malformed formats', () => {
++  const malformed = [
++    '1:5',
++    '1:234',
++    '01:2',
++    'a:bc',
++    '1:30:00',
++    '',
++    ' 1:30',
++    '1:30 ',
++    '1: 30',
++    '1 :30',
++    '-1:30',
++    '+1:30',
++    '1.5:30',
++    '1:30.5',
++    '1',
++    ':',
++    '1:',
++    ':30',
++    '123:30',
++    '1:30pm',
++    'one:thirty',
++    '\uFF11:\uFF13\uFF10',
++  ];
++  for (const value of malformed) {
++    assert.throws(
++      () => parseDuration(value),
++      TypeError,
++      `expected TypeError for ${JSON.stringify(value)}`,
++    );
++  }
++});

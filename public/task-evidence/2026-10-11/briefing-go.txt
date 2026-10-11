@@ -1,0 +1,7 @@
+简报（≤200字）
+
+事实1：DeepSeekBot 与 FeiZhuLulu 的 DS Bot 是两个独立项目（包名 deepseekbot / ds-bot），均基于 DSH，且均声明非 DeepSeek 官方产品。【S1-E2】
+
+事实2：DSH 处于 developer preview，README 警告可能有不兼容变更，并要求运行前阅读 SAFETY.md。【S3-E1】
+
+不能据此判断：三份 README 均未提供实际可用性、成功率或成本对比；具体模型兼容性、Group 协作效果与数据外发范围，公开资料未核验。
