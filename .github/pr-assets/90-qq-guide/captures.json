@@ -199,7 +199,7 @@
     }
   },
   "siteBase": "76822491c8e50bdd2cbd98f3090e2e2cfd9a5624",
-  "productDocSource": "8b7114afa23c0d603f4ef7c9a4720fd10c62b082",
+  "productDocSource": "69ae154a23c7e21d3dffcbda4f575c3ae2dcc79e",
   "runtimeSource": "031a14db43af5b3bf52e76b01c30e27828e6e9c9",
   "newRouteBefore": "Live missing VPS docs route returns HTTP 200 home fallback, rather than 404. Captures retain that actual behavior.",
   "files": [
@@ -215,8 +215,8 @@
     },
     {
       "file": "after-qq-connection-en-mobile-full.png",
-      "bytes": 605337,
-      "sha256": "56ff35ad4285359d8f543b3dcb39119fe7762e3f81c0677c4e446c6ec720dab9"
+      "bytes": 605376,
+      "sha256": "518572b7dbffb47a0f22f9bbd858a2841ae0f9826db901f45ee0fb4c6a7c8ade"
     },
     {
       "file": "after-qq-connection-en-mobile.png",
@@ -225,8 +225,8 @@
     },
     {
       "file": "after-qq-connection-zh-desktop-full.png",
-      "bytes": 1093519,
-      "sha256": "e5f7d911a9bba3fab024609128003216a169ac12a758c2c4fed8b1ad89351c2c"
+      "bytes": 1093482,
+      "sha256": "51e60d721c9becc9bb065ab8c5b6dcd4f7a63b0f52869266a18f903747469e3b"
     },
     {
       "file": "after-qq-connection-zh-desktop.png",
@@ -245,8 +245,8 @@
     },
     {
       "file": "after-qq-group-en-desktop.png",
-      "bytes": 147724,
-      "sha256": "c7a1183382fff1c734d5d17d32310cdc4a1cce54fbda30f0a837a10ff864250a"
+      "bytes": 146553,
+      "sha256": "9b64cbb960746652c588263200f99f2a62c52361dc5eeb21942adcd38614c81e"
     },
     {
       "file": "after-qq-group-en-mobile.png",
@@ -255,8 +255,8 @@
     },
     {
       "file": "after-qq-group-zh-desktop.png",
-      "bytes": 206737,
-      "sha256": "6a02bfc9d972bce0721be40598157cf48522fa0177a2cf742443d411e2777c36"
+      "bytes": 147192,
+      "sha256": "22fbfdf0fd0c8505936bbd4092c11dee484e4515ebcda4f37257ecdb3b67482e"
     },
     {
       "file": "after-qq-group-zh-mobile.png",
@@ -265,8 +265,8 @@
     },
     {
       "file": "after-vps-qq-tutorial-en-desktop-full.png",
-      "bytes": 1586871,
-      "sha256": "749ad35bf9f3f51ff56c74df1acd15e9c7c2ea7526e0ad8d74b91d2f6ca2ba2b"
+      "bytes": 1602885,
+      "sha256": "69771010b3b0f3903356498029e4fc289065a8b2a8ac692b9733e08aa3119093"
     },
     {
       "file": "after-vps-qq-tutorial-en-desktop.png",
@@ -275,8 +275,8 @@
     },
     {
       "file": "after-vps-qq-tutorial-en-mobile-full.png",
-      "bytes": 901551,
-      "sha256": "0a940a342134ddfe8e77108d4560e582ead1e66e922a6b3467a80d12104d8f84"
+      "bytes": 904712,
+      "sha256": "e7062774d15e2e00240bb0becb0f4181e85f19a3e9b8c953845ee36153b197e8"
     },
     {
       "file": "after-vps-qq-tutorial-en-mobile.png",
@@ -285,8 +285,8 @@
     },
     {
       "file": "after-vps-qq-tutorial-zh-desktop-full.png",
-      "bytes": 1541909,
-      "sha256": "58317923f68d7f2bec64b44ab9e8888444ec346ff1367499f7f8d5dbe7f766a6"
+      "bytes": 1559734,
+      "sha256": "8ef9e6df177cd941d0e65a6881c30fb94c48be63f67c3f35f0fbf2f12be57f49"
     },
     {
       "file": "after-vps-qq-tutorial-zh-desktop.png",
@@ -295,8 +295,8 @@
     },
     {
       "file": "after-vps-qq-tutorial-zh-mobile-full.png",
-      "bytes": 935114,
-      "sha256": "b9fec2b44e64a4b1b16bdc58bcc4e86bc379df1d1f4dd2256805015faf591e54"
+      "bytes": 1008393,
+      "sha256": "0e7b1b59834e0a858a1a55773de8e98e0f58d9630678b2df658a461c855f2789"
     },
     {
       "file": "after-vps-qq-tutorial-zh-mobile.png",
