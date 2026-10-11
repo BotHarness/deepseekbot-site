@@ -20,6 +20,8 @@ pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 
 ## Pull requests
 
+- Before SEO-driven blog work, channel adaptation, or tracking, read [the SEO AX editorial workflow](planning/seo-comparison-series/seo-ax-workflow.md). Use the shared VPS project, independent Chinese/English market slices, and human-reviewed evidence; preserve active observation cooldowns.
+
 - Never push to `main` directly; ship through PRs for maintainer review.
 - For UI changes, capture real screenshots (Playwright against `dist/`, matched viewport/theme/locale) into `.github/pr-assets/<topic>/` and embed them in the PR body via `raw.githubusercontent` branch URLs. New section with no predecessor: screenshot the live absence (404) as Before.
 - PR body shape: Why / Special things to note (merge risk: reversibility, blast radius, review focus) / Change outline with the evidence next to each view. `pnpm verify` must be green; say so with the test count.
