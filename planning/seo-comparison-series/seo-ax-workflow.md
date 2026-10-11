@@ -46,7 +46,7 @@ Completion: an evidence ledger distinguishes official documentation, author repo
 
 Answer “which should I choose and why?” early with conditional recommendations. Prefer concise tradeoff tables and concrete task steps; remove repetitive editorial-process warnings but retain limitations that affect selection. Be explicit about DeepSeekBot maintenance cost, without forcing it to win.
 
-Keep JSON frontmatter, slug, publication date, language paths and the comparison keyword `personal AI agents comparison` for the existing article. No body H1 or generated HTML edits. If changing a title/share card, follow README's cover-generation pipeline and inspect both languages. No new category/navigation is implied.
+Keep JSON frontmatter, slug, publication date, language paths and the comparison keyword `personal AI agents comparison` for the existing article. No body H1 or generated HTML edits. For article-title changes, update the JSON frontmatter in both locale files, run `pnpm blog:covers`, and inspect both article covers. For site-entry share-card changes, follow README's separate `pnpm og` pipeline and inspect both entries. No new category/navigation is implied.
 
 Human review checks reader utility, source strength, native phrasing, paired factual promises, image readability and platform suitability. Run `pnpm verify` before delivery; report actual tests/checks and exact head separately from CI, human QA, merge and production publication.
 
