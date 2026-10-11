@@ -773,8 +773,14 @@
   padding: 0;
   list-style: none;
 }
+.blog-cards > li {
+  display: flex;
+  min-width: 0;
+}
 .blog-card {
   display: flex;
+  flex: 1;
+  min-width: 0;
   flex-direction: column;
   gap: 10px;
   color: var(--ink);

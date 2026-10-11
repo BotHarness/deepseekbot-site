@@ -23,3 +23,15 @@ day/night palette in `src/styles.css`.
 Success means the affiliation answer is visible by default, all seven questions can be
 operated independently with pointer or keyboard, Chinese and English links resolve, and
 desktop/mobile views remain readable in both themes.
+
+## Blog index grid contract
+
+- Readers scan article covers, dates, titles and summaries before choosing an article.
+- Stretch each card's wooden frame to the height of its grid row, so cards with shorter
+  summaries share the same bottom edge as their neighbors.
+- Let the longest content determine each row's height. Keep full titles and summaries
+  visible, with natural card heights when the grid becomes a single column.
+- Preserve the existing cover ratio, spacing, typography, day/night palette and link focus.
+
+Success means the Chinese and English grids align card bottoms within each row at desktop
+and tablet widths, while mobile cards stay readable without clipping or horizontal overflow.
