@@ -16,12 +16,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "\u98de\u4e66 / Lark",
-          "Slack",
-          "Discord",
-          "\u4e2a\u4eba\u5fae\u4fe1"
-        ],
+        "platforms": ["\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
         "theme": "light",
         "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
         "viewport": {
@@ -44,12 +39,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "\u98de\u4e66 / Lark",
-          "Slack",
-          "Discord",
-          "\u4e2a\u4eba\u5fae\u4fe1"
-        ],
+        "platforms": ["\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
         "theme": "light",
         "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
         "viewport": {
@@ -72,12 +62,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "Lark / Feishu",
-          "Slack",
-          "Discord",
-          "Personal WeChat"
-        ],
+        "platforms": ["Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
         "theme": "light",
         "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
         "viewport": {
@@ -100,12 +85,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "Lark / Feishu",
-          "Slack",
-          "Discord",
-          "Personal WeChat"
-        ],
+        "platforms": ["Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
         "theme": "light",
         "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
         "viewport": {
@@ -128,13 +108,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "QQ",
-          "\u98de\u4e66 / Lark",
-          "Slack",
-          "Discord",
-          "\u4e2a\u4eba\u5fae\u4fe1"
-        ],
+        "platforms": ["QQ", "\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
         "qqGuide": "/docs/qq-connection/",
         "theme": "light",
         "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
@@ -158,13 +132,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "QQ",
-          "\u98de\u4e66 / Lark",
-          "Slack",
-          "Discord",
-          "\u4e2a\u4eba\u5fae\u4fe1"
-        ],
+        "platforms": ["QQ", "\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
         "qqGuide": "/docs/qq-connection/",
         "theme": "light",
         "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
@@ -188,13 +156,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "QQ",
-          "Lark / Feishu",
-          "Slack",
-          "Discord",
-          "Personal WeChat"
-        ],
+        "platforms": ["QQ", "Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
         "qqGuide": "/en/docs/qq-connection/",
         "theme": "light",
         "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
@@ -218,13 +180,7 @@
       "facts": {
         "consentVisible": false,
         "overflow": false,
-        "platforms": [
-          "QQ",
-          "Lark / Feishu",
-          "Slack",
-          "Discord",
-          "Personal WeChat"
-        ],
+        "platforms": ["QQ", "Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
         "qqGuide": "/en/docs/qq-connection/",
         "theme": "light",
         "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
