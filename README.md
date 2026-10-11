@@ -1,7 +1,8 @@
 # deepseekbot.app
 
-The product site for [DeepSeekBot](https://www.npmjs.com/package/deepseekbot), the first
-[BotHarness](https://github.com/BotHarness/BotHarness) product. A single pixel-art page in Chinese
+The bilingual product website for [DeepSeekBot](https://www.npmjs.com/package/deepseekbot),
+maintained by [BotHarness](https://github.com/BotHarness/DeepSeekBot) at [deepseekbot.app](https://deepseekbot.app).
+It includes the homepage, guides, changelog, blog, marketplace and avatar studio in Chinese
 and English, with day and night palettes. Every face on it is a
 [BotPixel](https://github.com/BotHarness/BotPixel) avatar seeded from a Bot's name, morphing into
 the tool it is using.

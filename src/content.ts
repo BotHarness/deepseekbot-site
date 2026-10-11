@@ -14,7 +14,7 @@ export { QQ_GROUP };
 
 export type Lang = 'zh' | 'en';
 
-export const VERSION = '1.1.0';
+export const VERSION = '1.2.0';
 export const DSH_VERSION = '0.2.0-rc.1';
 
 export const LINKS = {
@@ -23,10 +23,10 @@ export const LINKS = {
   npm: 'https://www.npmjs.com/package/deepseekbot',
   botpixel: 'https://github.com/BotHarness/BotPixel',
   dsh: 'https://github.com/deepseek-ai/deepseek-harness',
-  issues: 'https://github.com/BotHarness/BotHarness/issues',
+  issues: 'https://github.com/BotHarness/DeepSeekBot/issues',
   discord: COMMUNITY_LINKS.discord,
-  lark: 'https://github.com/BotHarness/BotHarness/blob/main/docs/lark-connection.md',
-  slack: 'https://github.com/BotHarness/BotHarness/blob/main/docs/slack-connection.md',
+  lark: 'https://github.com/BotHarness/DeepSeekBot/blob/main/docs/lark-connection.md',
+  slack: 'https://github.com/BotHarness/DeepSeekBot/blob/main/docs/slack-connection.md',
 } as const;
 
 /** What to type into the desktop app's "Add plugin" field. */
@@ -261,7 +261,7 @@ const zh: Copy = {
     badge: `v${VERSION} 正式版`,
     title: 'DeepSeekBot',
     tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
-    lead: 'DeepSeekBot 是 BotHarness 的首个产品，以一个 npm 包装进 DeepSeek Harness（DSH）：Bot 名册、私聊与 Group、看得见的 Git Memory、跨文件夹工作与定时任务，以及 Bot 自己的 IM 身份。',
+    lead: 'DeepSeekBot 是 BotHarness 开发的个人 AI 智能体协作工具，作为 deepseekbot 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord 和微信。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
     crewLabel: '一组正在工作的 PersonaBots，头像会变成它们正在使用的工具',
@@ -300,7 +300,7 @@ const zh: Copy = {
   features: {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
-    lead: '核心能力随 v1.1.0 提供。下方另有最新源码的接入流程与可选组件；外部账号和操作权限由你开启。',
+    lead: '正式 npm v1.2.0 提供身份、记忆、协作与 IM 接入。Computer 与 Browser 的操作能力属于下方标注的源码组件，不在该正式包内；外部账号和权限由你开启。',
     items: [
       {
         icon: 'present',
@@ -357,6 +357,13 @@ const zh: Copy = {
         question: 'DeepSeekBot 和 DeepSeek 有什么关系？',
         answer:
           'DeepSeekBot 是独立的开源项目，与 DeepSeek 公司没有隶属关系，也不是其官方产品。它基于 DeepSeek Harness（DSH），以插件形式提供 Bot 的身份、人格、记忆与协作能力。',
+      },
+      {
+        id: 'project-identity',
+        question: '这是哪个 DeepSeek Bot？和 DS Bot 是同一个项目吗？',
+        answer:
+          '这里是 BotHarness 的 DeepSeekBot，正式品牌连写，安装包为 deepseekbot，官网为 deepseekbot.app。FeiZhuLulu 的 DS Bot 使用 ds-bot，是另一个独立项目。两者都基于 DSH，均非 DeepSeek 官方产品；安装前请核对作者与包名。',
+        links: [{ label: 'DeepSeekBot 与 DS Bot 怎么选', href: '/blog/deepseekbot-vs-ds-bot/' }],
       },
       {
         id: 'capabilities',
@@ -581,7 +588,7 @@ const en: Copy = {
     badge: `v${VERSION} is out`,
     title: 'DeepSeekBot',
     tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
-    lead: 'DeepSeekBot is the first BotHarness product, installed into DeepSeek Harness (DSH) as one npm package: a Bot roster, DMs and Groups, Git Memory you can see, work across folders, scheduled tasks, and IM identities of the Bots’ own.',
+    lead: 'DeepSeekBot is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the deepseekbot plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord and WeChat.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
     crewLabel: 'A crew of working PersonaBots whose avatars turn into the tool each one is using',
@@ -621,7 +628,7 @@ const en: Copy = {
   features: {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
-    lead: 'Core features come with v1.1.0. Current-source setup and optional components are labelled below; you enable external accounts and action permissions.',
+    lead: 'The npm v1.2.0 release provides identity, memory, collaboration and IM connections. Computer and Browser actions require the source components labelled below, which are not in that release; you enable external accounts and permissions.',
     items: [
       {
         icon: 'present',
@@ -678,6 +685,15 @@ const en: Copy = {
         question: 'Is DeepSeekBot affiliated with DeepSeek?',
         answer:
           'DeepSeekBot is an independent open-source project. It is not affiliated with DeepSeek and is not an official DeepSeek product. It runs as a plugin on DeepSeek Harness (DSH), giving Bots their own identity, persona, memory and collaboration tools.',
+      },
+      {
+        id: 'project-identity',
+        question: 'Which DeepSeek Bot is this? Is it the same as DS Bot?',
+        answer:
+          'This is DeepSeekBot by BotHarness: brand name DeepSeekBot, npm package deepseekbot, website deepseekbot.app. DS Bot by FeiZhuLulu uses ds-bot and is a separate project. Both run on DSH and are independent of DeepSeek. Check the author and package before installing.',
+        links: [
+          { label: 'Compare DeepSeekBot and DS Bot', href: '/en/blog/deepseekbot-vs-ds-bot/' },
+        ],
       },
       {
         id: 'capabilities',

@@ -290,6 +290,13 @@
   border-collapse: collapse;
   font-size: 14px;
 }
+.comparison-table table {
+  min-width: 560px;
+}
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+  min-width: 120px;
+}
 .docs-body th,
 .docs-body td {
   padding: 8px 12px;
@@ -906,7 +913,7 @@
   border: calc(var(--px) * 2) solid transparent;
   border-image: var(--frame) 2 / calc(var(--px) * 2) stretch;
   image-rendering: pixelated;
-  filter: drop-shadow(var(--px) var(--px) 0 var(--px-shadow));
+  box-shadow: var(--px) var(--px) 0 var(--px-shadow);
 }
 .blog-rail li {
   margin: 0 0 10px;
