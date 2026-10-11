@@ -1,19 +1,22 @@
 ---
 {
   "title": "A DeepSeekBot test-writing handoff: passing patch, blocked Windows execution",
-  "description": "Inspect eight tests added by DeepSeekBot: nine pass in an operator terminal, while the native Windows sandbox fails with spawn EPERM. Includes patch and logs.",
+  "description": "DeepSeekBot added eight tests to one small function. All nine passed in our manual run, while its own run failed. Here is what we learned.",
   "date": "2026-10-11",
-  "tags": ["Hands-on", "Coding handoff"]
+  "tags": [
+    "Hands-on",
+    "Coding handoff"
+  ]
 }
 ---
 
-Evaluate a coding agent with tests for one function. Each test pairs an input with an expected result—converting `1:30` to 90 minutes, for example, or rejecting `24:00`—so you can inspect what the patch checks.
+Before handing an agent an entire repository, we chose one small function: turn a time string such as `1:30` into minutes. Its rules were simple enough for us to read the tests and judge the changes ourselves.
 
-DeepSeekBot kept one existing test and added eight, leaving the function unchanged. All nine passed in an operator’s ordinary terminal; the Bot’s own Windows sandbox run failed with `spawn EPERM`. **The patch passed review and operator execution, while native Bot execution failed.** Record those stages separately when accepting a handoff.
+We wanted to see which missing cases DeepSeekBot would add, and whether it could run them. It kept the existing test, added eight and left the function unchanged. All nine passed when we ran them manually. The Bot’s own Windows sandbox run failed, so we still had to take over.
 
-## Use a disposable demonstration repository
+## Make the first task small and clear
 
-The fixture contains one function, `parseDuration`. It accepts `H:MM` or `HH:MM` strings from `0:00` through `23:59` and returns integer minutes. Non-string or malformed input throws `TypeError`; out-of-range time throws `RangeError`.
+Our demonstration project contained one `parseDuration` function. It accepts `H:MM` or `HH:MM` strings from `0:00` to `23:59` and returns the total minutes:
 
 ```js
 parseDuration('1:30');  // 90
@@ -22,66 +25,54 @@ parseDuration('23:59'); // 1439
 parseDuration('24:00'); // RangeError
 ```
 
-The starting repository had one normal-input test. Its isolated branch was `bot/add-duration-tests`, with local baseline commit `6f89c3d`. This is a demonstration-repository pin, not a public product release. The reproducible [initial fixture](https://github.com/BotHarness/deepseekbot-site/tree/blog/first-task-evidence/planning/task-evidence/fixture) uses the MIT license.
+There was one test for an ordinary input. We put the [demonstration project](https://github.com/BotHarness/deepseekbot-site/tree/blog/first-task-evidence/planning/task-evidence/fixture) on a separate branch, allowed the Bot access to its folder, and asked it to add tests without changing the function. Any implementation bug should be reported.
 
-No production repository, customer files or account credentials were supplied. The task did not request a commit, push, PR or merge.
-
-## Give one Assignment a bounded job
-
-The runtime was a [source checkout at DeepSeekBot’s v1.2.0 release tag](https://github.com/BotHarness/DeepSeekBot/commit/271e056aecd7f10bd71128a78d2ac9acbea898ea), DSH 0.2.0-rc.1, an isolated Windows Profile, and `deepseek-official/deepseek-flash`. Optional Computer/Browser components were absent. This was not an npm-artifact qualification.
-
-An Assignment is a delegated task with its own Session and report. This run used one Bot and one coding Assignment. After authorizing the demonstration workspace, we specified what it could change:
+DeepSeekBot calls a delegated task an Assignment. Here is a short version of the instructions to adapt:
 
 ```text
-Use one Assignment. Read the fixture and existing tests first.
-Change only duration.test.mjs. Preserve the original test and add normal inputs,
-0:00, 23:59, minute/hour overflow, non-string and malformed-input cases.
-Report implementation bugs without changing the function.
-Run node --test duration.test.mjs.
-Return the actual diff, full command, exit code, output and unverified behavior.
-Do not install dependencies, browse, push, commit, change branches or other files.
-Report only in the current private DM.
+Read duration.mjs and the existing tests. Change only duration.test.mjs.
+Keep the original test and add normal inputs, minimum and maximum values,
+out-of-range values and malformed inputs.
+Report any function bugs without changing the implementation.
+Run node --test duration.test.mjs and report the changes and result.
+Do not install dependencies, browse, commit, push or change other files.
 ```
 
-This is a concise English rendering of the original Chinese request. The [evidence manifest](/task-evidence/2026-10-11/evidence.json) records its outcome. Workspace Grants set directory access scope: a path in chat grants no access, and a directory Grant does not approve every tool operation. See the [Grants guide](/en/docs/channel-sidebar/workspaces/).
-
-This was not a multi-Bot team experiment. DSH’s experimental Agent Teams and Git Worktrees plugins were outside the test.
+Mentioning a path in chat does not give the Bot access. Choose the folder in Workspace Grants first, then review any operations that ask for your approval.
 
 <figure class="evidence-figure" id="workspace-guide">
-<div class="evidence-heading"><span class="evidence-kicker">PERMISSION GUIDE · 01</span><strong>Find Workspace Grants in the right sidebar</strong></div>
+<div class="evidence-heading"><span class="evidence-kicker">BEFORE THE TASK · 01</span><strong>Choose which folder the Bot can access</strong></div>
 <div class="evidence-zoom evidence-zoom-panel" role="region" aria-label="English sidebar controls" tabindex="0"><svg viewBox="2250 1240 620 300" role="img" aria-label="English sidebar showing Sessions, Bot Inbox, Schedules and Workspace Grants"><image href="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800"></image></svg></div>
-<div class="evidence-notes"><div><b>01</b><strong>Open Workspace Grants</strong><span>Use this entry to inspect or request directory access. Naming a path in chat does not grant it.</span></div><div><b>02</b><strong>Check scope and operations</strong><span>A directory Grant and approval for an individual tool operation are separate. This crop shows the entry, not its expanded settings.</span></div></div>
-<details class="evidence-detail"><summary>Show the full English interface · 2880 × 1800</summary><a href="/blog-figures/first-task/product-overview-en.jpg"><img src="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800" alt="Native English product README interface with Workspace Grants in the right sidebar; scripted demo conversation" loading="lazy" decoding="async"></a></details>
-<figcaption>Native English product interface, reused from the README. The full view contains a scripted observatory demo, not this task’s result. This crop shows the sidebar entry only; no Grant was added for the illustration. <a href="/blog-figures/first-task/provenance.json">Source and version scope</a> · <a href="/en/docs/channel-sidebar/workspaces/">Read the Grants guide</a>.</figcaption>
+<div class="evidence-notes"><div><b>01</b><strong>Find the folder controls</strong><span>Open Workspace Grants in the sidebar to manage folder access.</span></div><div><b>02</b><strong>Review each operation</strong><span>Access to a folder does not approve every operation the Bot might request.</span></div></div>
+<details class="evidence-detail"><summary>View the full interface</summary><a href="/blog-figures/first-task/product-overview-en.jpg"><img src="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800" alt="Native English product README interface with Workspace Grants in the right sidebar; scripted demo conversation" loading="lazy" decoding="async"></a></details>
+<figcaption>Find Workspace Grants in the right sidebar. The full interface shows a sample conversation. <a href="/en/docs/channel-sidebar/workspaces/">See the setup guide</a>.</figcaption>
 </figure>
 
-## Inspect the generated patch
+## What the new tests added
 
-The Bot kept the original test and added eight, for nine in total:
+The Bot kept one test and added eight, leaving nine in total. We read the generated code without changing its tests or the function implementation.
 
-| Coverage | Examples | Expected result |
-| --- | --- | --- |
-| Normal inputs and integer output | `0:45`, `12:05`, `2:15` | Correct integer minutes |
-| Boundaries | `0:00`, `00:00`, `23:59` | 0 or 1439 |
-| Minute and hour overflow | `0:60`, `24:00`, `99:00` | `RangeError` |
-| Non-string input | Numbers, null, objects, arrays | `TypeError` |
-| Malformed input | Missing digits, spaces, signs, decimals, full-width digits | `TypeError` |
+| Input | Expected result |
+| --- | --- |
+| `0:45`, `12:05`, `2:15` | Correct integer minutes |
+| `0:00`, `00:00`, `23:59` | 0 or 1439 |
+| `0:60`, `24:00`, `99:00` | An out-of-range error (`RangeError`) |
+| Numbers, null, objects, arrays | A type error (`TypeError`) |
+| Missing digits, spaces, signs, decimals, full-width digits | A format error (`TypeError`) |
 
-Download the [actual patch](/task-evidence/2026-10-11/duration-tests.patch) and [complete generated test file](/task-evidence/2026-10-11/duration.test.mjs.txt). The implementation remained unchanged. The operator checked the contract, assertions and added scope without editing the generated test code.
+The cases were a useful reminder to look beyond a few ordinary numbers. Minimum and maximum values, along with inputs a user might get wrong, reveal more of the function’s rules. Two of the new tests make the boundaries explicit:
 
 <figure class="evidence-figure" id="patch-detail">
-<div class="evidence-heading"><span class="evidence-kicker">PATCH DETAIL · 02</span><strong>Turn boundaries into inspectable assertions</strong></div>
+<div class="evidence-heading"><span class="evidence-kicker">THE NEW TESTS · 02</span><strong>Check the smallest and largest values</strong></div>
 <div class="evidence-stats"><div><strong>1 → 9</strong><span>One existing test, eight added</span></div><div><strong>duration.test.mjs</strong><span>Function implementation unchanged</span></div></div>
-<div class="evidence-terminal"><div class="evidence-terminal-title">Verbatim excerpt from the generated file</div><pre><code>test('converts the lower boundary 0:00 to 0 minutes', () =&gt; {&#10;  assert.equal(parseDuration('0:00'), 0);&#10;  assert.equal(parseDuration('00:00'), 0);&#10;});&#10;&#10;test('converts the upper boundary 23:59 to 1439 minutes', () =&gt; {&#10;  assert.equal(parseDuration('23:59'), 1439);&#10;});</code></pre></div>
+<div class="evidence-terminal"><div class="evidence-terminal-title">Two tests from the generated file</div><pre><code>test('converts the lower boundary 0:00 to 0 minutes', () =&gt; {&#10;  assert.equal(parseDuration('0:00'), 0);&#10;  assert.equal(parseDuration('00:00'), 0);&#10;});&#10;&#10;test('converts the upper boundary 23:59 to 1439 minutes', () =&gt; {&#10;  assert.equal(parseDuration('23:59'), 1439);&#10;});</code></pre></div>
 <div class="evidence-notes"><div><b>01</b><strong>Both lower-boundary formats</strong><span>Both 0:00 and 00:00 should return 0.</span></div><div><b>02</b><strong>An explicit upper-boundary result</strong><span>23:59 should return 1439; separate assertions check error types for invalid values.</span></div></div>
-<figcaption>This typeset excerpt preserves the generated code; it is not an IDE screenshot or a new execution result. <a href="/task-evidence/2026-10-11/duration.test.mjs.txt">Complete test file</a> · <a href="/task-evidence/2026-10-11/duration-tests.patch">Actual diff</a></figcaption>
+<figcaption>Two of the added tests. <a href="/task-evidence/2026-10-11/duration.test.mjs.txt">Full test file</a> · <a href="/task-evidence/2026-10-11/duration-tests.patch">See the changes</a></figcaption>
 </figure>
 
-These assertions check a fixed function contract. Nine passes establish that they passed in the operator terminal, not that the project is bug-free. Coverage, fuzz testing and mutation testing were not measured.
+## Running them was where the task got stuck
 
-## Keep Bot execution and operator execution separate
-
-The original native tool failed while provisioning Windows directory permissions. With Human approval, DSH’s supplied script backed up and granted current-user FullControl on two temporary test directories. The same confined command then started, but Node’s test runner still failed to create its child process:
+The Bot encountered directory permissions trouble in its Windows sandbox. After we addressed permissions on the temporary directories, the test runner still failed to create a child process:
 
 ```text
 node --test duration.test.mjs
@@ -89,37 +80,37 @@ Error: spawn EPERM
 EXITCODE=1
 ```
 
-Inspect the command’s exit code and output. A tool can return its result successfully even when the command it ran failed.
-
-DSH’s recovery workflow then attempted to restore directory permissions in reverse order. The memory-directory ACL check differed from the backup, so recovery stopped before restoring the fixture. Both directories are temporary test scope, and the task Host is stopped. Permissions were not expanded further and the sandbox was not bypassed.
-
-The Bot also wrote an extra ACL probe, violating the test-file-only request. The operator retained its evidence privately and removed that file. Review extra writes as well as the final diff; a clean patch alone would hide this deviation.
-
-The operator separately ran the generated tests in an ordinary terminal:
-
-```text
-tests 9
-pass 9
-fail 0
-exit code 0
-```
-
-[Download the full operator log](/task-evidence/2026-10-11/operator-test-output.txt). This confirms that the generated tests passed in an ordinary terminal. The Bot’s confined execution failure remained unresolved.
+To check whether the generated tests could run, we executed the same command manually in a regular terminal. All nine passed. That confirmed the manual run; it left the Bot’s execution problem unresolved.
 
 <figure class="evidence-figure" id="execution-results">
-<div class="evidence-heading"><span class="evidence-kicker">READ EACH RESULT · 03</span><strong>One command, two execution contexts</strong></div>
+<div class="evidence-heading"><span class="evidence-kicker">RUNNING THE TESTS · 03</span><strong>Written successfully; the Bot’s run failed</strong></div>
 <div class="evidence-command"><code>node --test duration.test.mjs</code></div>
-<div class="evidence-outcomes"><div><span class="evidence-status">NATIVE BOT SANDBOX · FAILED</span><strong>spawn EPERM</strong><p>Exit code 1; autonomous execution did not complete.</p></div><div><span class="evidence-status">OPERATOR TERMINAL · PASSED</span><strong>9 / 9</strong><p>Nine passed, zero failed, exit code 0.</p></div></div>
-<figcaption>Editorial presentation of the recorded results, not a terminal screenshot. Operator success does not replace Bot execution; the extra probe file and failed ACL rollback verification still affect acceptance. <a href="/task-evidence/2026-10-11/operator-test-output.txt">Full operator log</a> · <a href="/task-evidence/2026-10-11/evidence.json">Evidence manifest</a></figcaption>
+<div class="evidence-outcomes"><div><span class="evidence-status">BOT RUN · FAILED</span><strong>spawn EPERM</strong><p>The test command failed with exit code 1.</p></div><div><span class="evidence-status">OUR MANUAL RUN · PASSED</span><strong>9 / 9</strong><p>Nine passed, zero failed, exit code 0.</p></div></div>
+<figcaption>The same tests failed in the Bot’s Windows sandbox and passed in a regular terminal. <a href="/task-evidence/2026-10-11/operator-test-output.txt">Read the manual run log</a>.</figcaption>
 </figure>
 
-## What to require from your next handoff
+There was another wrinkle: the Bot wrote an extra file to investigate permissions, despite the instruction to change only the test file. We retained its record and removed it. Cleanup also failed to restore all directory permissions to the backed-up state, so recovery stopped and the test service was shut down. The [detailed record](/task-evidence/2026-10-11/evidence.json) retains those problems.
 
-1. **Changes:** read the diff and look for extra files; check implementation and directory scope.
-2. **Assertions:** compare each test with the contract; inspect normal, boundary and invalid inputs.
-3. **Execution:** require the command, exit code, full output and environment; code generation and execution are separate stages.
-4. **Recovery:** retain the first failure and any manual corrections. Repeated permission expansion does not establish success.
+## Three things we would check next time
 
-For your own first task, choose code with a clear contract and review its diff, extra files and actual execution log. This Windows run did not meet an unattended-delivery requirement. It establishes no speed or reliability advantage over Grok Bot, Cue or another product.
+This attempt separated writing code from finishing a task. We could review the new tests one by one, but the environment, extra writes and failure handling also mattered.
 
-Self-hosting still requires installation and updates, an available host, Node/Git and model quota. The briefing, coding task and diagnostics shared a US$1 DeepSeek API ceiling; their 22 requests cost an estimated US$0.0197. That is neither a fixed task price nor the account bill. Try the [three-source briefing](/en/blog/first-agent-briefing/) next, or consult [installation](/en/docs/installation/) and the [Assignment Session guide](/en/docs/channel-sidebar/sessions/).
+1. **Read the changes.** What else was touched? Did the original function change?
+2. **Read the tests.** Why is each input worth testing, and does its expected result follow the function’s rules?
+3. **Read the run log.** Who ran the command, where did it run, and did it actually pass?
+
+Nine passes do not tell us whether an entire project is bug-free. A small function with clear rules is enough for a first attempt to show what the agent wrote, what it missed and where you need to step in.
+
+For a document task instead, read [our three-source briefing experience](/en/blog/first-agent-briefing/). Start with [installation](/en/docs/installation/) if you have not set up the Bot, or see the [task guide](/en/docs/channel-sidebar/sessions/) for the controls.
+
+<details class="evidence-detail"><summary>Run details and original files</summary>
+
+We used the [DeepSeekBot v1.2.0 source release](https://github.com/BotHarness/DeepSeekBot/commit/271e056aecd7f10bd71128a78d2ac9acbea898ea), DSH 0.2.0-rc.1, an isolated Windows environment and `deepseek-official/deepseek-flash`. No desktop or browser operation components or production repository were used. The demonstration branch was `bot/add-duration-tests`, starting at local commit `6f89c3d`.
+
+DSH scripts backed up and adjusted permissions on two temporary directories. During recovery, the memory directory’s permissions did not match the backup, so recovery stopped before restoring the demonstration directory. The test service remains stopped, and permissions were not expanded further.
+
+The briefing, test-writing task and diagnostics together made 22 DeepSeek API requests at an estimated US$0.0197, rather than a separate price for this task.
+
+[Original patch](/task-evidence/2026-10-11/duration-tests.patch) · [Full test code](/task-evidence/2026-10-11/duration.test.mjs.txt) · [Manual run log](/task-evidence/2026-10-11/operator-test-output.txt) · [Full run record](/task-evidence/2026-10-11/evidence.json) · [Image sources](/blog-figures/first-task/provenance.json)
+
+</details>
