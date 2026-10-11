@@ -1,0 +1,194 @@
+{
+  "base": "d6c6bedbc725369cf607e0e74f620834f853b4f1",
+  "method": "T3 collaborative browser; actual live Before and built dist After, fonts ready, instant matched section anchor with 110px header clearance, consent declined, light theme and matched CSS viewports",
+  "files": [
+    {
+      "file": "before-zh-desktop.png",
+      "url": "https://deepseekbot.app/docs/capabilities/",
+      "phase": "before",
+      "lang": "zh",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "69b4b0006553d25e845ddf8fe6e2253507bdc9c197fda2adf64a8dbd99be5482",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
+        "theme": "light",
+        "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
+        "viewport": {
+          "height": 1000,
+          "width": 1440
+        }
+      }
+    },
+    {
+      "file": "before-zh-mobile.png",
+      "url": "https://deepseekbot.app/docs/capabilities/",
+      "phase": "before",
+      "lang": "zh",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "166cd9719f793c02cd5ccae1a4ce3bb40d7c2f35f2a6e89c271f509a863b7de0",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
+        "theme": "light",
+        "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
+        "viewport": {
+          "height": 844,
+          "width": 390
+        }
+      }
+    },
+    {
+      "file": "before-en-desktop.png",
+      "url": "https://deepseekbot.app/en/docs/capabilities/",
+      "phase": "before",
+      "lang": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "9ed3578bcaab9f96b9fd3ed95b84a1a561b2da6cac0bd8ab27d289aacda41fbe",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
+        "theme": "light",
+        "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
+        "viewport": {
+          "height": 1000,
+          "width": 1440
+        }
+      }
+    },
+    {
+      "file": "before-en-mobile.png",
+      "url": "https://deepseekbot.app/en/docs/capabilities/",
+      "phase": "before",
+      "lang": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "1f772a5abb9591a44861de412f138d26ea730264ef97f2df1810ec31fa098b0b",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
+        "theme": "light",
+        "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
+        "viewport": {
+          "height": 844,
+          "width": 390
+        }
+      }
+    },
+    {
+      "file": "after-zh-desktop.png",
+      "url": "http://localhost:31975/docs/capabilities/",
+      "phase": "after",
+      "lang": "zh",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "932ce2d63f5747fbde7822cd58dfeea85021850201fcd176d1e5080d61da27c3",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["QQ", "\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
+        "qqGuide": "/docs/qq-connection/",
+        "theme": "light",
+        "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
+        "viewport": {
+          "height": 1000,
+          "width": 1440
+        }
+      }
+    },
+    {
+      "file": "after-zh-mobile.png",
+      "url": "http://localhost:31975/docs/capabilities/",
+      "phase": "after",
+      "lang": "zh",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "8485423731c14cbd55fb13814abf02227243d0364950d3ed4599431829c31b67",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["QQ", "\u98de\u4e66 / Lark", "Slack", "Discord", "\u4e2a\u4eba\u5fae\u4fe1"],
+        "qqGuide": "/docs/qq-connection/",
+        "theme": "light",
+        "title": "\u63a5\u5165\u4e0e\u53ef\u9009\u80fd\u529b \u00b7 DeepSeekBot \u6587\u6863",
+        "viewport": {
+          "height": 844,
+          "width": 390
+        }
+      }
+    },
+    {
+      "file": "after-en-desktop.png",
+      "url": "http://localhost:31975/en/docs/capabilities/",
+      "phase": "after",
+      "lang": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "theme": "light",
+      "sha256": "903afc4e53e50d83d5fa56092499dd70891bf4d20df589a70750fd541fbcfe20",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["QQ", "Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
+        "qqGuide": "/en/docs/qq-connection/",
+        "theme": "light",
+        "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
+        "viewport": {
+          "height": 1000,
+          "width": 1440
+        }
+      }
+    },
+    {
+      "file": "after-en-mobile.png",
+      "url": "http://localhost:31975/en/docs/capabilities/",
+      "phase": "after",
+      "lang": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "sha256": "3d3d34173ee14e33ecd956d9d4c11f681decbadcf962b2edf81813c35a396fdd",
+      "facts": {
+        "consentVisible": false,
+        "overflow": false,
+        "platforms": ["QQ", "Lark / Feishu", "Slack", "Discord", "Personal WeChat"],
+        "qqGuide": "/en/docs/qq-connection/",
+        "theme": "light",
+        "title": "Connections and optional tools \u00b7 DeepSeekBot docs",
+        "viewport": {
+          "height": 844,
+          "width": 390
+        }
+      }
+    }
+  ]
+}
