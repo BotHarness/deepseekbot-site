@@ -19,13 +19,13 @@ These are candidate intent hypotheses, not confirmed search opportunities. Natur
 
 The qualitative reader gap comes from the existing page inventory and documented product mechanisms. OpenMuse shows that another project uses personal-agent positioning; it does not establish demand or DeepSeekBot feature parity. See [the pinned evidence ledger](issue-85-product-evidence.md).
 
-## Shared authority and pending persistence
+## Shared authority and persistence
 
 Read the site's SEO AX workflow, the canonical bot-seo shared-VPS runbook, keyword-research, seo-report and content-review skills, and the product adapter. Authorized machine-local SSH reached the existing shared OpenSEO deployment; live discovery returned 76 tools. Selected the existing deepseekbot.app project and read its context, reports and brand report. No second project was created; defaults and trackers remain unchanged.
 
-A later refresh attempt timed out at the SSH connection. No alternate credential, service restart or connection bypass was attempted. Prior reads are from this task on October 12, not a successful later refresh. New shared-report/log persistence remains **pending task-specific write authorization and a fresh read/reconciliation**. This GitHub artifact is a sanitized handoff, not the shared SEO authority or a saved OpenSEO report. Proposed unique report subject: `Personal Agent Memory Content Brief — Oct 12, 2026`.
+A later refresh attempt initially timed out at the SSH connection. No alternate credential, service restart or connection bypass was attempted. On October 12 the Human explicitly authorized report/log persistence, followed by merge and deployment. Fresh authorized SSH discovery returned 76 tools; the existing project context and all three reports were reread before saving the unique private report `Personal Agent Memory Content Brief — Oct 12, 2026`. Its complete 12,360-byte HTML was read back byte for byte, and the task-specific append-only research-log entry was independently reread. No prior report or shared context section was replaced. Internal IDs, endpoint and connection values remain private.
 
-No paid provider calls, keyword saves, shared writes, posting or schedules occurred. The coordinator is the sole proposed shared writer; product evidence was a separate read-only research slice. Future authorized persistence must follow the complete HTML seo-report workflow and confirm readback without overwriting another report.
+No paid provider calls, keyword saves, posting or schedules occurred. The coordinator was the sole shared writer for this report and log; product evidence was a separate read-only research slice. The report records unknown baselines, release pending at save time and independent locale filters; it is not proof of search demand, publication or SEO improvement.
 
 ## Protected scope
 
@@ -39,7 +39,7 @@ The build adds the new article to both existing blog indexes, search data and si
 
 Real browser screenshots and limitations are recorded in [the capture notes](../../.github/pr-assets/personal-agent-memory/README.md). Covers are 1200×630; they are illustrations, not runtime proof. Browser evidence concerns article rendering, not product execution, physical mobile/Safari, SEO rank or activation.
 
-Delivery stops at PR and Human QA. Shared report save/readback is pending; CI is separate from local verification. Nothing is merged, deployed or posted by this task.
+The original delivery stopped at PR and Human QA. The Human subsequently authorized merge/deploy; report/log persistence is confirmed. Local verification, exact-head CI, Human authorization, merge and confirmed production publication remain separate gates. CodeRabbit's success status reflects a review-rate-limit comment, not a completed automated review; no review success is claimed. Release evidence will be recorded on the issue after publication is actually verified.
 
 Human screenshot follow-up: each locale now includes its native Bot-mode private-conversation/roster capture and a native Group capture showing Mira, Theo and Nova under distinct identities. Original 2880×1800 product README JPEGs are reused from product commit `25a9b0cde7616351acde8d1a2e9a5e1cb7d8cd32`; hashes, source paths and the scripted-fictional-dialogue boundary are in `public/blog-figures/personal-agent-memory/provenance.json`. The overview reuses existing site assets; only the Group pair is new. Captions label the dialogue as examples, not a reading-notes result. No new product session, model call, credential setup or runtime qualification.
 
