@@ -1,0 +1,34 @@
+{
+  "reusedAt": "2026-10-12",
+  "productSourceCommit": "25a9b0cde7616351acde8d1a2e9a5e1cb7d8cd32",
+  "sourceRepository": "https://github.com/BotHarness/DeepSeekBot",
+  "scope": "Native product README v2 screenshots with scripted fictional observatory conversations. These show the actual UI, not execution of the article's proposed reading-notes task or a new qualification of the current npm release.",
+  "localePolicy": "Chinese article uses native Chinese UI; English article uses native English UI. Screenshot pixels are not translated or altered.",
+  "presentation": "Original JPEG bytes are retained. Article labels and an optional SVG zoom are separate from the UI; no synthetic controls or replies are added. Optional Browser/Computer controls visible in overview captures do not establish npm 1.2.0 default capabilities.",
+  "images": [
+    {
+      "file": "group-zh.jpg",
+      "sourcePath": "docs/assets/readme/v2/zh/group.jpg",
+      "dimensions": [2880, 1800],
+      "sha256": "1039c756e56ca3c012d6f984b2cfabdcf36c32c0140d0ec0eb2098ba419cac32"
+    },
+    {
+      "file": "group-en.jpg",
+      "sourcePath": "docs/assets/readme/v2/en/group.jpg",
+      "dimensions": [2880, 1800],
+      "sha256": "c22752c6257a94a4234f795fde6ea874b187740adf8a3bbd777aec1ae1074c16"
+    },
+    {
+      "file": "../first-task/product-overview-zh.jpg",
+      "sourcePath": "docs/assets/readme/v2/zh/hero.jpg",
+      "dimensions": [2880, 1800],
+      "sha256": "1e570820fa5891494486bb517ab2d87c45aa364ca33dbcc3fcb89bbfe2121408"
+    },
+    {
+      "file": "../first-task/product-overview-en.jpg",
+      "sourcePath": "docs/assets/readme/v2/en/hero.jpg",
+      "dimensions": [2880, 1800],
+      "sha256": "8feaef1c8ab4759cf9e288bf70cd10c5b119796597ae3441fba8ce1cddb97adc"
+    }
+  ]
+}

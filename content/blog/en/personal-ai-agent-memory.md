@@ -19,6 +19,13 @@ Imagine you are choosing a tool for a side project. This week you read three int
 
 After [installing DeepSeekBot](/en/docs/installation/), open Bot mode and create a PersonaBot. Give it a name and a narrow role: “Help me keep source-linked reading notes for this project.” You can supply the material yourself, without connecting an account or granting broad access to your files.
 
+<figure class="evidence-figure" id="bot-conversations">
+<div class="evidence-heading"><span class="evidence-kicker">BOT MODE · 01</span><strong>Keep a separate conversation with each Bot</strong></div>
+<a href="/blog-figures/first-task/product-overview-en.jpg"><img src="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800" alt="DeepSeekBot English Bot mode: separate conversations with Mira, Nova, Theo, Juniper and Kai in the left sidebar, with Mira's private conversation open; sample dialogue" loading="lazy" decoding="async"></a>
+<div class="evidence-notes"><div><b>01</b><strong>Choose a Bot</strong><span>Each name opens that Bot's own conversation.</span></div><div><b>02</b><strong>Talk privately</strong><span>The center shows the selected Bot's DM.</span></div><div><b>03</b><strong>Inspect its memory</strong><span>The right sidebar shows memory for this Bot.</span></div></div>
+<figcaption>The actual Bot-mode interface with sample dialogue. Click the screenshot to enlarge.</figcaption>
+</figure>
+
 DeepSeekBot distinguishes identity from memory. `SOUL.md` describes who the Bot is and how it should work. `MEMORY.md` holds key facts and an index to detailed notes in other files. Putting “be careful” in its Soul helps describe the role, but does not enforce a security boundary.
 
 For this example, ask for a structure like this inside the Bot's memory:
@@ -62,6 +69,14 @@ A second Bot is useful when you need another clearly defined job. For the same r
 - A coordinator to turn the reviewed notes into a draft for you to approve.
 
 Each PersonaBot keeps its own identity and memory. Invite the relevant Bots into a Group and @ the one you want to respond. Share the question and the approved material explicitly; do not assume that one Bot knows everything another Bot has saved.
+
+<figure class="evidence-figure" id="bot-group">
+<div class="evidence-heading"><span class="evidence-kicker">BOT GROUP · 02</span><strong>Bring several Bots into one conversation</strong></div>
+<a href="/blog-figures/personal-agent-memory/group-en.jpg"><img src="/blog-figures/personal-agent-memory/group-en.jpg" width="2880" height="1800" alt="DeepSeekBot English Bot mode with Observatory Studio selected: Mira, Theo and Nova reply under distinct names and avatars, and the Group member list is visible on the right; sample dialogue" loading="lazy" decoding="async"></a>
+<div class="evidence-notes"><div><b>01</b><strong>Open the Group</strong><span>The Group sits alongside individual Bot conversations.</span></div><div><b>02</b><strong>Follow each reply</strong><span>Mira, Theo and Nova keep their own names and avatars.</span></div><div><b>03</b><strong>See who's involved</strong><span>The member panel lists the Human and participating Bots.</span></div></div>
+<details class="evidence-detail"><summary>Zoom into the Group replies</summary><div class="evidence-zoom" role="region" aria-label="Enlarged sample Group conversation" tabindex="0"><svg viewBox="560 170 1680 920" role="img" aria-label="Mira, Theo and Nova replying in the same Group"><image href="/blog-figures/personal-agent-memory/group-en.jpg" width="2880" height="1800"></image></svg></div></details>
+<figcaption>Three Bots replying in a shared Group, shown with sample dialogue. This is a UI example, not the reading-notes task result.</figcaption>
+</figure>
 
 A Group conversation and an Assignment are different arrangements. Groups let independently identified Bots collaborate in a shared conversation. Assignments delegate independent work with a separate Session and report, and require a Workspace grant. A Group invitation is not permission to work in any directory.
 

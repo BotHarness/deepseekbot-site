@@ -107,6 +107,18 @@ test('personal memory article keeps paired metadata, covers and existing guide d
       assert.match(source, /SOUL\.md/);
       assert.match(source, /MEMORY\.md/);
       assert.match(source, /MIT/);
+      for (const figureId of ['bot-conversations', 'bot-group']) {
+        assert.ok(html.includes(`id="${figureId}"`));
+      }
+      for (const imagePath of [
+        `/blog-figures/first-task/product-overview-${lang}.jpg`,
+        `/blog-figures/personal-agent-memory/group-${lang}.jpg`,
+      ]) {
+        assert.ok(html.includes(`src="${imagePath}" width="2880" height="1800"`));
+        const imageBytes = readFileSync(`public${imagePath}`);
+        assert.deepEqual([...imageBytes.subarray(0, 3)], [255, 216, 255]);
+      }
+      assert.ok(html.includes('viewBox="560 170 1680 920"'));
     }
   } finally {
     process.chdir(cwd);
