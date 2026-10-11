@@ -19,6 +19,9 @@ pnpm dev      # http://localhost:5173
 pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 ```
 
+For repeatable local model setup across product worktrees, see the
+[shared model wizard](planning/task-evidence/README.md).
+
 - **Live demo**: the simulated Bot mode window under the Hero and the demos beside each feature
   (`src/components/LiveDemo.tsx`, `src/components/FeatureDemos.tsx`) play scripts from
   `src/demoCopy.ts`; nothing talks to a model. Keep the scripts to what the copy already claims.
