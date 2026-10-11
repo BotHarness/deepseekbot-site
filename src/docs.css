@@ -290,6 +290,13 @@
   border-collapse: collapse;
   font-size: 14px;
 }
+.comparison-table table {
+  min-width: 560px;
+}
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+  min-width: 120px;
+}
 .docs-body th,
 .docs-body td {
   padding: 8px 12px;
