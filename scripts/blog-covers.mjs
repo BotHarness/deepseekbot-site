@@ -85,6 +85,20 @@ for (const lang of ['zh', 'en']) {
       waitUntil: 'load',
     });
     await tab.evaluate(() => document.fonts.ready);
+    // Long titles must leave the tags clear of the fixed avatar row.
+    await tab.evaluate(() => {
+      const title = document.querySelector('.mark');
+      const chips = document.querySelector('.chips');
+      const crew = document.querySelector('.crew');
+      let size = 72;
+      while (
+        chips.getBoundingClientRect().bottom + 16 > crew.getBoundingClientRect().top &&
+        size > 36
+      ) {
+        size -= 2;
+        title.style.fontSize = `${size}px`;
+      }
+    });
     await tab.screenshot({ path: out });
     written.push(out);
   }
