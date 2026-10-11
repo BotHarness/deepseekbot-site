@@ -11,6 +11,14 @@
 
 这次 DeepSeekBot 确实交回了简报，三个核心观察和两个未解决问题都有来源标记。但要求约 700 字，原始回复长度达到 1,672 个字符；换用已配置的 Go 模型做短版核验，要求不超过 200 字，仍交回 264 个字符。引用可核查，篇幅需要编辑。这是一次资料整理任务，不是自动追踪新闻或五产品跑分。
 
+<figure class="evidence-figure" id="product-overview">
+<div class="evidence-heading"><span class="evidence-kicker">界面导览 · 01</span><strong>先认清三个工作区域</strong></div>
+<a href="/blog-figures/first-task/product-overview-zh.jpg"><img src="/blog-figures/first-task/product-overview-zh.jpg" width="2880" height="1800" alt="DeepSeekBot 中文界面全景：左侧 Bot 与群组，中间私聊，右侧 Git 记忆面板；演示对话" loading="lazy" decoding="async"></a>
+<div class="evidence-notes"><div><b>01</b><strong>选择 Bot 或群组</strong><span>左侧切换对话；本次简报使用私人 DM。</span></div><div><b>02</b><strong>在私聊里审阅交付</strong><span>中间读草稿，追问来源与遗漏。</span></div><div><b>03</b><strong>分开查看记忆与任务</strong><span>右侧提供相关入口；本次没有写入记忆或创建调度。</span></div></div>
+<details class="evidence-detail"><summary>放大右侧 Git 记忆面板</summary><div class="evidence-zoom evidence-zoom-panel" role="region" aria-label="放大的演示 Git 记忆面板" tabindex="0"><svg viewBox="2240 105 640 1100" role="img" aria-label="放大的演示 Git 记忆面板"><image href="/blog-figures/first-task/product-overview-zh.jpg" width="2880" height="1800"></image></svg></div></details>
+<figcaption>2880 × 1800 原图，点击查看。复用产品 README 的真实界面截图，对话为虚构观测站演示，不是本次简报结果。图中的 Computer／Browser 入口也不代表 npm 1.2.0 默认包含这些组件。 <a href="/blog-figures/first-task/provenance.json">图片来源与版本</a></figcaption>
+</figure>
+
 ## 先把任务限制在三份公开资料内
 
 我们选了三份固定版本的 README：
@@ -62,9 +70,16 @@ C：[原文与选定摘录]
 
 我们另用 Go 模型做了一条短简报核验。界面里可以看到实际提交的结果，原生模型记录确认路由为 `opencode-go/deepseek-v4-flash`。下面这张图属于这次 **Go 核验**，并非上面 1,672 字符原稿的截图。
 
-![Go 模型在真实 DeepSeekBot 私聊中交回带来源编号的短简报](/task-evidence/2026-10-11/go-briefing-dm.png)
-
-截图：2026-10-11，Windows，英文界面、中文回复，浅色主题，1920 × 1080 原图。[短版原始回复](/task-evidence/2026-10-11/briefing-go.txt)仍超过 200 字要求；服务可用不等于所有格式约束都通过。
+<figure class="evidence-figure" id="briefing-result">
+<div class="evidence-heading"><span class="evidence-kicker">真实交付 · 02</span><strong>放大读：事实引用与未核验项</strong></div>
+<div class="evidence-zoom " role="region" aria-label="Go 核验实际中文回复：来源标记 S1-E2、S3-E1 以及不能据此判断的事项" tabindex="0"><svg viewBox="326 54 570 272" role="img" aria-label="Go 核验实际中文回复：来源标记 S1-E2、S3-E1 以及不能据此判断的事项"><image href="/blog-figures/first-task/go-briefing-native.png" width="1280" height="900"></image></svg></div>
+<p class="evidence-scroll-hint">小屏可左右滑动，读清原文。</p>
+<div class="evidence-notes"><div><b>01</b><strong>沿标记回到来源</strong><span>【S1-E2】与【S3-E1】指向选定摘录，不是网页自动抓取的证明。</span></div><div><b>02</b><strong>保留“不能据此判断”</strong><span>没有统一成功率与成本实测；未知项不能改成不支持。</span></div></div>
+<div class="evidence-subheading">同一画面中的模型选择卡片</div>
+<div class="evidence-zoom evidence-zoom-model" role="region" aria-label="模型选择卡片显示 DeepSeek V4 Flash · opencode-go" tabindex="0"><svg viewBox="304 707 390 69" role="img" aria-label="模型选择卡片显示 DeepSeek V4 Flash · opencode-go"><image href="/blog-figures/first-task/go-briefing-native.png" width="1280" height="900"></image></svg></div>
+<details class="evidence-detail"><summary>展开完整实拍 · 1280 × 900</summary><a href="/blog-figures/first-task/go-briefing-native.png"><img src="/blog-figures/first-task/go-briefing-native.png" width="1280" height="900" alt="同一条已提交 Go 简报回复的完整真实界面截图" loading="lazy" decoding="async"></a></details>
+<figcaption>2026-10-11，Windows，英文界面、中文回复，浅色主题；1280 × 900 实际像素。仅重新拍摄已存在的回复，没有重跑任务。原生 Assistant 记录核验了路由；模型卡片仅作界面说明。 <a href="/task-evidence/2026-10-11/briefing-go.txt">短版原始回复</a>为 264 字符，仍超过 200 字要求。旧截图保存为 1280 × 720，1920 × 1080 是当时的浏览器视口。</figcaption>
+</figure>
 
 ## 把草稿改成你真正需要的简报
 

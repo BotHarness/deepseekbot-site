@@ -11,6 +11,14 @@ A useful first job for a DeepSeek agent is small enough to check: turn three pub
 
 DeepSeekBot returned three observations and two open questions with source markers. It also missed the requested length: roughly 700 Chinese characters became a 1,672-character response. A short verification through the configured Go model requested at most 200 characters and returned 264. The citations can be checked; the draft still needs editing. We did not test automatic news monitoring or benchmark five products.
 
+<figure class="evidence-figure" id="product-overview">
+<div class="evidence-heading"><span class="evidence-kicker">INTERFACE GUIDE · 01</span><strong>Find your way around the workspace</strong></div>
+<a href="/blog-figures/first-task/product-overview-en.jpg"><img src="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800" alt="DeepSeekBot English interface: Bots and Groups at left, a private DM in the center and Git memory at right; demo conversation" loading="lazy" decoding="async"></a>
+<div class="evidence-notes"><div><b>01</b><strong>Choose a Bot or Group</strong><span>Switch conversations at left; this briefing used a private DM.</span></div><div><b>02</b><strong>Review in the private DM</strong><span>Read the draft in the center and question its sources and omissions.</span></div><div><b>03</b><strong>Inspect memory and tasks</strong><span>The right sidebar contains these controls; this run wrote no memory and created no schedule.</span></div></div>
+<details class="evidence-detail"><summary>Zoom into the Git memory panel</summary><div class="evidence-zoom evidence-zoom-panel" role="region" aria-label="Zoomed demo Git memory panel" tabindex="0"><svg viewBox="2240 105 640 1100" role="img" aria-label="Zoomed demo Git memory panel"><image href="/blog-figures/first-task/product-overview-en.jpg" width="2880" height="1800"></image></svg></div></details>
+<figcaption>Click for the 2880 × 1800 original. Reused native product README screenshot with scripted fictional observatory conversations; this is not the briefing result. Computer/Browser controls do not establish that npm 1.2.0 includes those components by default. <a href="/blog-figures/first-task/provenance.json">Image provenance and versions</a></figcaption>
+</figure>
+
 ## Start with three fixed public sources
 
 | Source | Question it helps answer | Pinned original |
@@ -60,9 +68,14 @@ Lengths count the original string, including Latin text, punctuation and line br
 
 We also verified the configured Go route with a short briefing. Native Assistant metadata identified `opencode-go/deepseek-v4-flash`, and the actual reply appeared in the Client. This screenshot is from the **Go verification**, not the original 1,672-character response.
 
-![The actual Go-model briefing with source markers in a DeepSeekBot private DM](/task-evidence/2026-10-11/go-briefing-dm.png)
-
-Captured October 11, 2026: Windows, English shell, Chinese reply, light theme, original 1920 × 1080 image. The [unaltered short response](/task-evidence/2026-10-11/briefing-go.txt) exceeded the 200-character limit. Model access passed; the length constraint did not.
+<figure class="evidence-figure" id="briefing-result">
+<div class="evidence-heading"><span class="evidence-kicker">ACTUAL DELIVERY · 02</span><strong>Check the model route, then inspect the reply</strong></div>
+<div class="evidence-zoom evidence-zoom-model" role="region" aria-label="Native English model selector" tabindex="0"><svg viewBox="304 707 390 69" role="img" aria-label="English model selector showing DeepSeek V4 Flash · opencode-go"><image href="/blog-figures/first-task/go-briefing-native.png" width="1280" height="900"></image></svg></div>
+<div class="evidence-notes"><div><b>01</b><strong>Route verified in native metadata</strong><span>The selector shows the configured model. Separately, the Assistant record identifies opencode-go/deepseek-v4-flash.</span></div><div><b>02</b><strong>The length check still failed</strong><span>The actual reply contains 264 characters against a maximum of 200. Access worked; the delivery constraint did not.</span></div></div>
+<details class="evidence-detail"><summary>Inspect the original reply · Chinese</summary><div class="evidence-zoom" role="region" aria-label="Original Chinese Go reply; scroll sideways on small screens" tabindex="0"><svg viewBox="326 54 570 272" role="img" aria-label="Unaltered Chinese reply with S1-E2 and S3-E1 citations and unresolved questions"><image href="/blog-figures/first-task/go-briefing-native.png" width="1280" height="900"></image></svg></div><p class="evidence-scroll-hint">Scroll sideways on a small screen. The task requested a Chinese reply; these pixels have not been translated.</p><div class="evidence-notes"><div><b>03</b><strong>Follow the citations</strong><span>【S1-E2】 and 【S3-E1】 point to prepared source excerpts. They do not prove autonomous web retrieval.</span></div><div><b>04</b><strong>Keep the unresolved questions</strong><span>The reply leaves success rate, cost, model compatibility and collaboration performance unverified. Unknown does not mean unsupported.</span></div></div></details>
+<details class="evidence-detail"><summary>Show the full native capture · 1280 × 900</summary><a href="/blog-figures/first-task/go-briefing-native.png"><img src="/blog-figures/first-task/go-briefing-native.png" width="1280" height="900" alt="Full native English interface with the actual Chinese Go verification reply" loading="lazy" decoding="async"></a></details>
+<figcaption>Captured October 11, 2026: Windows, English interface, Chinese task output, light theme, 1280 × 900 actual pixels. The English interface is shown first; the original Chinese evidence is expandable. This is a read-only recapture, not a task rerun. <a href="/task-evidence/2026-10-11/briefing-go.txt">Unaltered short response</a>. The earlier PNG saved 1280 × 720 pixels from a 1920 × 1080 browser viewport.</figcaption>
+</figure>
 
 ## Edit the draft for your decision
 

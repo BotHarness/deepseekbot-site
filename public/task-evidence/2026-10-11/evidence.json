@@ -29,7 +29,15 @@
         "theme": "light",
         "shellLocale": "English",
         "replyLanguage": "Chinese",
-        "captureDate": "2026-10-11"
+        "captureDate": "2026-10-11",
+        "savedImageDimensions": [1280, 720]
+      },
+      "additionalCapture": {
+        "file": "/blog-figures/first-task/go-briefing-native.png",
+        "viewport": [1280, 900],
+        "savedImageDimensions": [1280, 900],
+        "captureDate": "2026-10-11",
+        "scope": "Read-only recapture of the same committed reply; no model call"
       }
     }
   },

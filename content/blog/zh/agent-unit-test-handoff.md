@@ -47,6 +47,14 @@ parseDuration('24:00'); // RangeError
 
 这里的 Assignment 是 DeepSeekBot 的任务委派机制。本次只有一个 Bot 和一个编码 Assignment，没有运行多 Bot 团队实验，也没有测试 DSH 较新版本的实验性 Agent Teams 或 Git Worktrees 插件。
 
+<figure class="evidence-figure" id="workspace-guide">
+<div class="evidence-heading"><span class="evidence-kicker">授权导览 · 01</span><strong>先看工作区授权，再交接代码任务</strong></div>
+<div class="evidence-zoom evidence-zoom-panel" role="region" aria-label="工作区授权面板：Memory Repository、添加文件夹与新事项允许所有文件访问开关" tabindex="0"><svg viewBox="918 190 306 208" role="img" aria-label="工作区授权面板：Memory Repository、添加文件夹与新事项允许所有文件访问开关"><image href="/guides/channel-sidebar/06-workspaces-zh.webp" width="1230" height="820"></image></svg></div>
+<div class="evidence-notes"><div><b>01</b><strong>文件夹授权有明确范围</strong><span>“添加文件夹”是授权入口；聊天里写路径不等于授权。</span></div><div><b>02</b><strong>区分范围与单次操作</strong><span>工作区可访问，不等于每个工具操作都已批准。图中开关未开启。</span></div></div>
+<details class="evidence-detail"><summary>展开完整界面参考 · 1230 × 820</summary><a href="/guides/channel-sidebar/06-workspaces-zh.webp"><img src="/guides/channel-sidebar/06-workspaces-zh.webp" width="1230" height="820" alt="隔离教程环境中的真实工作区授权界面，不是本次编码任务截图" loading="lazy" decoding="async"></a></details>
+<figcaption>复用原生教程截图：DSH 0.2.0-rc.1 / deepseekbot 0.1.0-alpha.1，中文、深色主题，仅说明入口位置；不是本次 v1.2.0 编码结果，也未为配图新增授权。 <a href="/docs/channel-sidebar/workspaces/">阅读授权指南</a></figcaption>
+</figure>
+
 ## 补丁增加了什么
 
 Bot 保留原测试，新增八项；总计九项测试：
@@ -60,6 +68,14 @@ Bot 保留原测试，新增八项；总计九项测试：
 | 格式错误 | 缺位、空格、负号、小数、全角数字 | `TypeError` |
 
 可以下载[实际补丁](/task-evidence/2026-10-11/duration-tests.patch)和[完整测试文件](/task-evidence/2026-10-11/duration.test.mjs.txt)。函数实现没有改动。人工核对了契约、断言和新增范围，未修改生成的测试代码。
+
+<figure class="evidence-figure" id="patch-detail">
+<div class="evidence-heading"><span class="evidence-kicker">补丁细读 · 02</span><strong>把边界值写成可检查的断言</strong></div>
+<div class="evidence-stats"><div><strong>1 → 9</strong><span>原有一项，新增八项</span></div><div><strong>duration.test.mjs</strong><span>函数实现未修改</span></div></div>
+<div class="evidence-terminal"><div class="evidence-terminal-title">生成文件原文节选</div><pre><code>test('converts the lower boundary 0:00 to 0 minutes', () =&gt; {&#10;  assert.equal(parseDuration('0:00'), 0);&#10;  assert.equal(parseDuration('00:00'), 0);&#10;});&#10;&#10;test('converts the upper boundary 23:59 to 1439 minutes', () =&gt; {&#10;  assert.equal(parseDuration('23:59'), 1439);&#10;});</code></pre></div>
+<div class="evidence-notes"><div><b>01</b><strong>下边界包含两种格式</strong><span>0:00 与 00:00 都应返回 0。</span></div><div><b>02</b><strong>上边界有明确预期</strong><span>23:59 应返回 1439；越界输入另有错误类型断言。</span></div></div>
+<figcaption>这是原始生成代码的排版节选，不是 IDE 截图或新的运行结果。 <a href="/task-evidence/2026-10-11/duration.test.mjs.txt">完整测试文件</a> · <a href="/task-evidence/2026-10-11/duration-tests.patch">实际 diff</a></figcaption>
+</figure>
 
 这些断言检查固定契约；九项通过不能证明整个项目没有 bug，也没有测到覆盖率、模糊测试或变异测试结果。
 
@@ -89,6 +105,13 @@ exit code 0
 ```
 
 [下载完整人工运行日志](/task-evidence/2026-10-11/operator-test-output.txt)。这是已知演示代码的人工复核，执行环境与 Bot 原生沙箱不同；它没有修复 Bot 的失败，也不是 Bot 自己完成了测试。
+
+<figure class="evidence-figure" id="execution-results">
+<div class="evidence-heading"><span class="evidence-kicker">结果分开看 · 03</span><strong>同一命令，两个执行环境</strong></div>
+<div class="evidence-command"><code>node --test duration.test.mjs</code></div>
+<div class="evidence-outcomes"><div><span class="evidence-status">Bot 原生沙箱 · 失败</span><strong>spawn EPERM</strong><p>退出码 1；未完成自主执行。</p></div><div><span class="evidence-status">人工普通终端 · 通过</span><strong>9 / 9</strong><p>九项通过、零失败，退出码 0。</p></div></div>
+<figcaption>按实测记录整理的结果说明，不是终端截图。人工通过不能替代 Bot 执行；额外探针文件与 ACL 回滚校验失败仍影响验收。 <a href="/task-evidence/2026-10-11/operator-test-output.txt">人工完整日志</a> · <a href="/task-evidence/2026-10-11/evidence.json">实测清单</a></figcaption>
+</figure>
 
 ## 你该如何验收下一次交接
 

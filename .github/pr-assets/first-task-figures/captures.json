@@ -1,0 +1,130 @@
+[
+  {
+    "file": "before-briefing-zh-desktop.png",
+    "url": "http://127.0.0.1:4176/blog/first-agent-briefing/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "010bda6287d3bb6526cd38a5e0a5f13f080fa12577c9d6717b7218e3924d9ba4"
+  },
+  {
+    "file": "before-workspace-zh-desktop.png",
+    "url": "http://127.0.0.1:4176/blog/agent-unit-test-handoff/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "1262cefd10d5e55c73f2392273538ca76c5db29a27f8e9dfb06f727f2bd17fc8"
+  },
+  {
+    "file": "product-overview-zh-desktop-light.png",
+    "url": "http://127.0.0.1:4176/blog/first-agent-briefing/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "7399cdf0dc55ddf8c48a68093785ac930b3a7366c2ebf1fdd659e043e8ea1633"
+  },
+  {
+    "file": "briefing-result-zh-desktop-light.png",
+    "url": "http://127.0.0.1:4176/blog/first-agent-briefing/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "e754dba1ba9e357dad2e77157be26b8a72b55ac2d9f1f414ca0b4371ca8c65af"
+  },
+  {
+    "file": "briefing-result-zh-mobile-dark.png",
+    "url": "http://127.0.0.1:4176/blog/first-agent-briefing/",
+    "viewport": [390, 844],
+    "savedPixels": [556, 1203],
+    "theme": "dark",
+    "sha256": "cc267f5af72179f8001cc0eea4db50734ea990c9a89a5b1ab07437be48be1e5d"
+  },
+  {
+    "file": "workspace-guide-zh-desktop-light.png",
+    "url": "http://127.0.0.1:4176/blog/agent-unit-test-handoff/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "fc4541cf6f1429d210393853b383211a1597063a3919c3f97beeaf8505606956"
+  },
+  {
+    "file": "patch-detail-zh-desktop-light.png",
+    "url": "http://127.0.0.1:4176/blog/agent-unit-test-handoff/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "3c4369886d7ebb8f012a7628d92a0a3373fc80e4ce44cb0196908fdc854b14ea"
+  },
+  {
+    "file": "execution-results-zh-desktop-light.png",
+    "url": "http://127.0.0.1:4176/blog/agent-unit-test-handoff/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "278ceedb821aa26cd6bb1c73d4d1c5886ab36ef6f38e135898b58543b4dd0f21"
+  },
+  {
+    "file": "workspace-guide-zh-mobile-dark.png",
+    "url": "http://127.0.0.1:4176/blog/agent-unit-test-handoff/",
+    "viewport": [390, 844],
+    "savedPixels": [556, 1203],
+    "theme": "dark",
+    "sha256": "fbaad41fd4d1c572981c227b0c16c06fe95ff3202b918a761c0b9409753641ae"
+  },
+  {
+    "file": "product-overview-en-desktop-light.png",
+    "url": "http://127.0.0.1:4176/en/blog/first-agent-briefing/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "e069cb79e6c65e5a2207d5a6e35019840e6276285270bfa96c1284f279504390"
+  },
+  {
+    "file": "briefing-result-en-desktop-light.png",
+    "url": "http://127.0.0.1:4176/en/blog/first-agent-briefing/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "094402d70426e4c3ab7f3c898fcef7b00695e3541f0d7f12fe64dc0162a6bd19"
+  },
+  {
+    "file": "briefing-result-en-mobile-dark.png",
+    "url": "http://127.0.0.1:4176/en/blog/first-agent-briefing/",
+    "viewport": [390, 844],
+    "savedPixels": [556, 1203],
+    "theme": "dark",
+    "sha256": "3a02ac71e999c7c487e44dcbb739886c032843c592fdef293de08a7a0714dea4"
+  },
+  {
+    "file": "workspace-guide-en-desktop-light.png",
+    "url": "http://127.0.0.1:4176/en/blog/agent-unit-test-handoff/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "eb50a18aaee0a4d14a52083299a599b29e983601c670652da2d5cb4fa941229d"
+  },
+  {
+    "file": "patch-detail-en-desktop-light.png",
+    "url": "http://127.0.0.1:4176/en/blog/agent-unit-test-handoff/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "2a4954e7e19300cb8829905750e493e382854e4f975493158e559b289dc79630"
+  },
+  {
+    "file": "execution-results-en-desktop-light.png",
+    "url": "http://127.0.0.1:4176/en/blog/agent-unit-test-handoff/",
+    "viewport": [1280, 1000],
+    "savedPixels": [1280, 1000],
+    "theme": "light",
+    "sha256": "a5c7dcbeb4f72a07076a5cd81c7f869e02c6788c28397eda4a12e7b7f661cbf2"
+  },
+  {
+    "file": "workspace-guide-en-mobile-dark.png",
+    "url": "http://127.0.0.1:4176/en/blog/agent-unit-test-handoff/",
+    "viewport": [390, 844],
+    "savedPixels": [556, 1203],
+    "theme": "dark",
+    "sha256": "dabe646337f15f6e043bd406c239076faf396c760e54011b3d29d8729ef16767"
+  }
+]

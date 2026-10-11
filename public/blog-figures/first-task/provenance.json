@@ -1,0 +1,26 @@
+{
+  "reusedAt": "2026-10-11",
+  "productSourceCommit": "25a9b0cde7616351acde8d1a2e9a5e1cb7d8cd32",
+  "productOverview": "Native UI from product README v2; scripted fictional observatory conversations, not task performance evidence. Optional Computer/Browser controls do not qualify npm 1.2.0 default capabilities.",
+  "goScreenshot": "New native capture of the previously committed Go verification reply; Windows, English shell/Chinese reply, light theme, 1280x900 viewport and saved image. No model call or task retry.",
+  "workspaceReference": "Chinese article: /guides/channel-sidebar/06-workspaces-zh.webp, isolated DSH 0.2.0-rc.1 / deepseekbot 0.1.0-alpha.1. English article: native English product README overview, cropped to the Workspace Grants sidebar entry; scripted demo only. Neither is a coding-task result or a new Grant.",
+  "presentation": "Annotations and zooms are inline SVG/HTML/CSS over unchanged image bytes; editorial explanations remain separate from product UI.",
+  "images": [
+    {
+      "file": "go-briefing-native.png",
+      "dimensions": [1280, 900],
+      "sha256": "dc694859322463cbfc6ef008412137b2952504c282f030de254a2d851e1a1310"
+    },
+    {
+      "file": "product-overview-zh.jpg",
+      "dimensions": [2880, 1800],
+      "sha256": "1e570820fa5891494486bb517ab2d87c45aa364ca33dbcc3fcb89bbfe2121408"
+    },
+    {
+      "file": "product-overview-en.jpg",
+      "dimensions": [2880, 1800],
+      "sha256": "8feaef1c8ab4759cf9e288bf70cd10c5b119796597ae3441fba8ce1cddb97adc"
+    }
+  ],
+  "localePolicy": "Chinese tutorials prefer Chinese UI; English tutorials prefer English UI; English is the fallback if a corresponding capture is unavailable. Never translate screenshot pixels. Original Chinese task evidence is labelled and expandable in the English briefing."
+}
