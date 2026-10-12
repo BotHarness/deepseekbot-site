@@ -1,8 +1,37 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import worker from '../worker/index.ts';
 
 const assets = { fetch: async (request) => new Response(`asset ${new URL(request.url).pathname}`) };
+
+test('static asset routing does not fall back to the homepage for missing URLs', () => {
+  const config = readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
+  assert.match(config, /"not_found_handling"\s*:\s*"none"/);
+  assert.doesNotMatch(config, /"not_found_handling"\s*:\s*"single-page-application"/);
+});
+
+test('missing pages and files preserve asset 404 responses for GET and HEAD', async () => {
+  for (const path of [
+    '/missing-page',
+    '/en/missing-page',
+    '/blog/missing-post/',
+    '/en/docs/missing-guide/',
+    '/missing-script.js',
+    '/r/v1.2.1/install/fr',
+  ]) {
+    for (const method of ['GET', 'HEAD']) {
+      const notFound = new Response(null, { status: 404 });
+      const response = await worker.fetch(
+        new Request(`https://deepseekbot.app${path}`, { method }),
+        { ASSETS: { fetch: async () => notFound } },
+      );
+      assert.equal(response, notFound);
+      assert.equal(response.status, 404);
+      assert.equal(response.headers.get('location'), null);
+    }
+  }
+});
 
 test('Release short links carry fixed version and entry-point attribution', async () => {
   for (const version of ['1.2.1', '1.3.0-alpha.1', '1.3.0-beta.2', '1.3.0-rc.1']) {
@@ -108,6 +137,25 @@ test('the other product hostnames 301 to the same path on deepseekbot.app', asyn
 
 test('Worker entrypoint exports only the supported default handler', async () => {
   assert.deepEqual(Object.keys(await import('../worker/index.ts')), ['default']);
+});
+
+test('HTTP requests on the canonical product host permanently redirect to HTTPS', async () => {
+  for (const path of ['/', '/en/', '/docs/concepts/', '/r/v1.2.1/install']) {
+    for (const method of ['GET', 'HEAD']) {
+      const response = await worker.fetch(
+        new Request(`http://deepseekbot.app:8080${path}?ref=gsc`, { method }),
+        {
+          ASSETS: {
+            fetch: () => {
+              throw new Error('HTTP product requests must redirect before fetching assets');
+            },
+          },
+        },
+      );
+      assert.equal(response.status, 301);
+      assert.equal(response.headers.get('location'), `https://deepseekbot.app${path}?ref=gsc`);
+    }
+  }
 });
 
 test('deepseekbot.app, preview URLs and local dev are served from the assets', async () => {

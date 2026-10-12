@@ -10,9 +10,13 @@ interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
 }
 
-/** The canonical URL for a request on another product hostname, or `undefined`. */
+/** The HTTPS canonical URL for a noncanonical product request, or `undefined`. */
 function canonicalRedirect(url: URL): string | undefined {
-  if (!REDIRECT_HOSTS.has(url.hostname)) return undefined;
+  if (
+    !REDIRECT_HOSTS.has(url.hostname) &&
+    !(url.hostname === CANONICAL_HOST && url.protocol === 'http:')
+  )
+    return undefined;
   const next = new URL(url);
   next.protocol = 'https:';
   next.hostname = CANONICAL_HOST;
