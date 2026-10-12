@@ -1,6 +1,6 @@
 ---
 {
-  "title": "DeepSeekBot 与 DS Bot：两个 DeepSeek Harness 插件怎么选",
+  "title": "DeepSeekBot（DSB）与 DS Bot（ds-bot）有什么区别：两个 DeepSeek Harness 插件怎么选",
   "description": "DeepSeekBot 和 DS Bot 是两个独立的 DeepSeek Harness 插件。对比安装包、Git 记忆、群组协作、任务委派、编码、IM 接入与维护成本，找到适合自己的 DeepSeek Bot。",
   "date": "2026-10-11",
   "tags": ["对比", "选型"]
@@ -11,7 +11,7 @@
 
 先认清名字：**DeepSeekBot 由 BotHarness 维护，npm 包是 `deepseekbot`；DS Bot 由 FeiZhuLulu 维护，npm 包是 `ds-bot`。** 搜索“DeepSeek Bot”可能看到其中任意一个，也可能看到其他聊天机器人。DS Bot 不是 DeepSeekBot 的简称，两款都是独立社区产品，不是 DeepSeek 公司官方产品。
 
-本文由 BotHarness 团队撰写，核查日期为 **2026-10-11**，比较基线是正式 npm **DeepSeekBot 1.2.0** 与 **DS Bot 0.1.0**。依据发行元数据和发布文档比较机制，没有在同一环境运行两者，因此不提供成功率、速度或 token 节省的跑分结论。
+本文由 BotHarness 团队撰写，核查日期为 **2026-10-11**，比较基线是正式 npm **DeepSeekBot 1.2.0** 与 **DS Bot 0.1.0**。依据发行元数据和发布文档比较机制，没有在同一环境运行两者，因此不提供成功率、速度或 token 节省的跑分结论。截至 2026-10-12，DS Bot 在 npm 上已更新到 0.1.3，仓库地址改为 [Fei2411/DeepSeek-Bot](https://github.com/Fei2411/DeepSeek-Bot)；下文对它的描述以 0.1.0 为准，新版本请看其 [CHANGELOG](https://github.com/Fei2411/DeepSeek-Bot/blob/main/CHANGELOG.md)。DeepSeekBot 简称 DSB。
 
 ## 快速比较：共同底座与不同工作机制
 
