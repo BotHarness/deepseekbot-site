@@ -102,6 +102,16 @@ the canonical domain: canonical links, share cards, the sitemap and `SITE` in `v
 the assets; preview URLs are served directly). The Marketplace API and the analytics ingest proxy
 (BotHarness `packages/market`, `packages/ingest`) must allow the site's origin for CORS.
 
+Missing pages and files return HTTP 404 (`assets.not_found_handling: "none"`). The site uses
+build-generated pages, not a client-side router: do not enable the SPA homepage fallback,
+which serves unrelated URLs as HTTP 200 with the homepage canonical. Keep Cloudflare's default
+HTML handling so existing extensionless URLs and directory index pages still resolve.
+HTTP requests on the canonical product hostname also 301 to HTTPS, preserving the path and
+query. Local HTTP development and Workers preview hostnames still serve assets directly.
+For local Worker asset checks, use `pnpm exec wrangler dev --local --local-upstream localhost`;
+Wrangler otherwise defaults its upstream hostname to the product route and rewrites redirects
+back to its development address.
+
 Recommended: connect this repository in Cloudflare (Workers & Pages → Create → Import a
 repository) with build command `pnpm build` and deploy command `npx wrangler deploy`. Pushes to
 `main` go live; other branches get preview URLs (`npx wrangler versions upload`).
