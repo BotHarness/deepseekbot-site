@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness</title>
+    <title>DeepSeekBot（DSB）：开源的 GrokBot 平替，基于 DeepSeek Harness</title>
     <meta
       name="description"
-      content="DeepSeekBot 是 BotHarness 开发的开源 GrokBot 平替：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主。"
+      content="DeepSeekBot（DSB）是 BotHarness 开发的开源 GrokBot 平替，npm 包 deepseekbot：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主；与 DS Bot（ds-bot）是不同项目。"
     />
     <meta
       name="keywords"
-      content="DeepSeekBot, DeepSeek Harness, DSH 插件, GrokBot 平替, AI agent, 开源, 飞书机器人, Slack bot, Discord bot, 微信机器人, BotHarness"
+      content="DeepSeekBot, DSB, DeepSeek Bot, DeepSeek Harness, DSH 插件, GrokBot 平替, AI agent, 开源, 飞书机器人, Slack bot, Discord bot, 微信机器人, BotHarness"
     />
     <link rel="canonical" href="https://deepseekbot.app/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://deepseekbot.app/" />
@@ -21,10 +21,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="DeepSeekBot" />
     <meta property="og:url" content="https://deepseekbot.app/" />
-    <meta property="og:title" content="DeepSeekBot：开源的 GrokBot 平替" />
+    <meta property="og:title" content="DeepSeekBot（DSB）：开源的 GrokBot 平替" />
     <meta
       property="og:description"
-      content="DeepSeekBot 是 BotHarness 开发的开源 GrokBot 平替：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主。"
+      content="DeepSeekBot（DSB）是 BotHarness 开发的开源 GrokBot 平替，npm 包 deepseekbot：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主；与 DS Bot（ds-bot）是不同项目。"
     />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en_US" />
@@ -37,10 +37,10 @@
       content="DeepSeekBot 像素 Bot 团队：GrokBot 开源平替，基于 DeepSeek Harness，MIT 开源；持久身份、跨文件夹工作与定时任务"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="DeepSeekBot：开源的 GrokBot 平替" />
+    <meta name="twitter:title" content="DeepSeekBot（DSB）：开源的 GrokBot 平替" />
     <meta
       name="twitter:description"
-      content="DeepSeekBot 是 BotHarness 开发的开源 GrokBot 平替：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主。"
+      content="DeepSeekBot（DSB）是 BotHarness 开发的开源 GrokBot 平替，npm 包 deepseekbot：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主；与 DS Bot（ds-bot）是不同项目。"
     />
     <meta name="twitter:image" content="https://deepseekbot.app/og-zh-v4.png" />
     <meta
@@ -52,16 +52,23 @@
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "DeepSeekBot",
+        "alternateName": ["DSB", "DeepSeek Bot by BotHarness"],
         "url": "https://deepseekbot.app/",
-        "description": "DeepSeekBot 是 BotHarness 开发的开源 GrokBot 平替：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主。",
+        "description": "DeepSeekBot（DSB）是 BotHarness 开发的开源 GrokBot 平替，npm 包 deepseekbot：基于 DeepSeek Harness 的个人 AI 智能体团队，提供独立身份、Git 记忆、群组协作、任务委派与 IM 接入。MIT 开源，自配模型与宿主；与 DS Bot（ds-bot）是不同项目。",
+        "disambiguatingDescription": "DeepSeekBot（DSB，npm 包 deepseekbot，MIT，BotHarness 维护）与 DS Bot（npm 包 ds-bot，Apache-2.0，仓库 Fei2411/DeepSeek-Bot）是两个独立项目。DeepSeekBot 的重心是让 Bot 走出 DSH 窗口：Git 记忆、飞书 / Slack / Discord / 微信身份、定时任务、任务委派与 Bot 市场；DS Bot 的重心是在 DSH 内由主 Bot 管理团队、群管理员统筹回复与用量统计。两者都不是 DeepSeek 官方产品。",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "macOS, Linux, Windows (Node.js 22+)",
-        "softwareVersion": "1.2.0",
+        "softwareVersion": "1.2.1",
         "license": "https://opensource.org/licenses/MIT",
         "isAccessibleForFree": true,
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
         "image": "https://deepseekbot.app/og-zh-v4.png",
         "inLanguage": "zh-Hans",
+        "author": {
+          "@type": "Organization",
+          "name": "BotHarness",
+          "url": "https://botharness.ai"
+        },
         "publisher": {
           "@type": "Organization",
           "name": "BotHarness",
@@ -69,7 +76,33 @@
         },
         "sameAs": [
           "https://github.com/BotHarness/DeepSeekBot",
-          "https://www.npmjs.com/package/deepseekbot"
+          "https://www.npmjs.com/package/deepseekbot",
+          "https://www.producthunt.com/products/deepseekbot"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "zh-Hans",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "这是哪个 DeepSeek Bot？和 DS Bot 是同一个项目吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "这里是 BotHarness 的 DeepSeekBot，简称 DSB，安装包为 deepseekbot，官网为 deepseekbot.app，MIT 开源。DS Bot 使用 ds-bot 安装，Apache-2.0，由 Fei2411/DeepSeek-Bot 维护，是另一个独立项目。两者都基于 DeepSeek Harness，都不是 DeepSeek 官方产品。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "DeepSeekBot（DSB）和 DS Bot 的重心有什么不同？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "DeepSeekBot 让每个 Bot 成为能走出 DSH 窗口的长期同事：可审阅的 Git 记忆、Bot 自己的飞书 / Slack / Discord / 微信身份、定时任务、任务委派和 Bot 市场。DS Bot 把 DSH 本身变成 Bot 聊天应用：主 Bot Chief 带你建团队，群管理员默认统筹回复，并提供按 Bot 和模型的用量统计。"
+            }
+          }
         ]
       }
     </script>
@@ -96,7 +129,25 @@
   </head>
   <body>
     <div id="root"></div>
-    <noscript>DeepSeekBot：开源的 GrokBot 平替 https://github.com/BotHarness/DeepSeekBot</noscript>
+    <noscript>
+      <h1>DeepSeekBot（DSB）：开源的 GrokBot 平替</h1>
+      <p>
+        DeepSeekBot（简称 DSB）是 BotHarness 开发的 MIT 开源 DeepSeek Harness（DSH）插件，npm 包
+        deepseekbot。它提供一组有各自身份、人格和 Git 记忆的 PersonaBots：私聊与 Group
+        协作、任务委派、定时任务、Bot 市场，并能以 Bot 自己的身份接入飞书 / Lark、Slack、Discord
+        和微信。
+      </p>
+      <p>
+        DeepSeekBot 与 DS Bot（npm 包 ds-bot，仓库 Fei2411/DeepSeek-Bot）是两个独立项目，都不是
+        DeepSeek 官方产品。
+        <a href="/blog/deepseekbot-vs-ds-bot/">两者的区别</a>
+      </p>
+      <p>
+        <a href="https://github.com/BotHarness/DeepSeekBot">GitHub</a> ·
+        <a href="https://www.npmjs.com/package/deepseekbot">npm</a> ·
+        <a href="/docs/overview/">文档</a>
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
