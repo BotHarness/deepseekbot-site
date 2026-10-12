@@ -93,6 +93,16 @@ Every event carries `source: site`, `lang` and `page` (`home`, `market`, `avatar
 
 ## Deploy
 
+### Updating public install instructions
+
+After the product stable release is published and qualified, update its `scripts/install-release.json`
+and run its `pnpm install:sync`. Then run `BOTHARNESS=<qualified-product-checkout> pnpm install:sync`
+here. This copies the stable identity and only the canonical bilingual installation guides;
+Hero copy buttons and CLI steps derive from the copied identity. `pnpm verify` detects guide/spec
+drift. Review and ship the product and Site PRs normally; the sync does not publish anything.
+Do not use development versions, bare names or `@latest` as the install identity, and never disable
+supply-chain protection globally to avoid a new-release age-policy refusal.
+
 `wrangler.jsonc` deploys `dist/` as static assets on the Worker `deepseekbot-site`, in the account
 that holds the `deepseekbot.app`, `deepseekbot.dev` and `botharness.ai` zones. **deepseekbot.app** is
 the canonical domain: canonical links, share cards, the sitemap and `SITE` in `vite.config.ts`,
