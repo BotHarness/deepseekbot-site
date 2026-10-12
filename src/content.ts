@@ -10,11 +10,12 @@ import {
   type FeatureDemoCopy,
 } from './demoCopy';
 import { QQ_GROUP } from './communityLinks';
+import { VERSION, DESKTOP_PACKAGE } from './installRelease';
 export { QQ_GROUP };
 
 export type Lang = 'zh' | 'en';
 
-export const VERSION = '1.2.0';
+export { VERSION, DESKTOP_PACKAGE };
 export const DSH_VERSION = '0.2.0-rc.1';
 
 export const LINKS = {
@@ -29,15 +30,12 @@ export const LINKS = {
   slack: 'https://github.com/BotHarness/DeepSeekBot/blob/main/docs/slack-connection.md',
 } as const;
 
-/** What to type into the desktop app's "Add plugin" field. */
-export const DESKTOP_PACKAGE = 'deepseekbot';
-
 /** Public R2 bucket for large media, served on its own domain. */
 export const MEDIA_BASE = 'https://media.botharness.ai';
 
 export const INSTALL_STEPS = [
   `npm i -g @deepseek-ai/dsh@${DSH_VERSION}`,
-  'dsh plugin --profile web add deepseekbot',
+  `dsh plugin --profile web add ${DESKTOP_PACKAGE}`,
   'dsh web',
 ] as const;
 
