@@ -4,7 +4,7 @@
   "description": "通过 DSH 导入公开 npm 插件，启用 Bot 模式并创建 PersonaBot。",
   "order": 12,
   "source": "docs/installation.zh.md",
-  "sourceRevision": "4dea90a2de2f50f985e5dbf2f2a2e5e2cd54a832"
+  "sourceRevision": "4332692dfc1680e2a8140d9630d532f091e5ff04"
 }
 ---
 
