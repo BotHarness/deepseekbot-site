@@ -1,6 +1,6 @@
 ---
 {
-  "title": "DeepSeekBot vs DS Bot: Two DeepSeek Harness Plugins Compared",
+  "title": "DeepSeekBot (DSB) vs DS Bot (ds-bot): Two DeepSeek Harness Plugins Compared",
   "description": "Compare DeepSeekBot and DS Bot, two independent DeepSeek Harness plugins: installation, Git memory, team coordination, coding, IM connections, permissions and maintenance.",
   "date": "2026-10-11",
   "tags": ["Comparison", "Guide"]
@@ -11,7 +11,7 @@
 
 First, identify the projects: **DeepSeekBot is maintained by BotHarness and uses npm package `deepseekbot`; DS Bot is maintained by FeiZhuLulu and uses `ds-bot`.** A search for “DeepSeek Bot” can find either, or an unrelated chatbot. DS Bot is not an abbreviation for DeepSeekBot. Both are independent community projects, not official DeepSeek products.
 
-This article is written by the BotHarness team. Its **October 11, 2026** baseline is the published npm **DeepSeekBot 1.2.0** and **DS Bot 0.1.0**. It compares release metadata and published documentation. We have not run both in a matched environment, so there are no claims about measured speed, success rates or token savings.
+This article is written by the BotHarness team. Its **October 11, 2026** baseline is the published npm **DeepSeekBot 1.2.0** and **DS Bot 0.1.0**. It compares release metadata and published documentation. We have not run both in a matched environment, so there are no claims about measured speed, success rates or token savings. As of October 12, 2026, DS Bot is at 0.1.3 on npm and its repository is now [Fei2411/DeepSeek-Bot](https://github.com/Fei2411/DeepSeek-Bot); this article still describes 0.1.0, so check its [CHANGELOG](https://github.com/Fei2411/DeepSeek-Bot/blob/main/CHANGELOG.md) for newer changes. DeepSeekBot is DSB for short.
 
 ## Quick comparison: shared foundation, different mechanisms
 

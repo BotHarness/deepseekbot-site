@@ -239,7 +239,7 @@ export interface Copy {
 
 const zh: Copy = {
   htmlLang: 'zh-Hans',
-  pageTitle: 'DeepSeekBot：开源的 GrokBot 平替，基于 DeepSeek Harness',
+  pageTitle: 'DeepSeekBot（DSB）：开源的 GrokBot 平替，基于 DeepSeek Harness',
   nav: {
     features: '能力',
     avatar: '头像工坊',
@@ -360,8 +360,14 @@ const zh: Copy = {
         id: 'project-identity',
         question: '这是哪个 DeepSeek Bot？和 DS Bot 是同一个项目吗？',
         answer:
-          '这里是 BotHarness 的 DeepSeekBot，正式品牌连写，安装包为 deepseekbot，官网为 deepseekbot.app。FeiZhuLulu 的 DS Bot 使用 ds-bot，是另一个独立项目。两者都基于 DSH，均非 DeepSeek 官方产品；安装前请核对作者与包名。',
+          '这里是 BotHarness 的 DeepSeekBot，简称 DSB，安装包为 deepseekbot，官网为 deepseekbot.app，MIT 开源。DS Bot 使用 ds-bot 安装，Apache-2.0，由 Fei2411/DeepSeek-Bot 维护，是另一个独立项目。两者都基于 DeepSeek Harness，都不是 DeepSeek 官方产品。',
         links: [{ label: 'DeepSeekBot 与 DS Bot 怎么选', href: '/blog/deepseekbot-vs-ds-bot/' }],
+      },
+      {
+        id: 'project-focus',
+        question: 'DeepSeekBot（DSB）和 DS Bot 的重心有什么不同？',
+        answer:
+          'DeepSeekBot 让每个 Bot 成为能走出 DSH 窗口的长期同事：可审阅的 Git 记忆、Bot 自己的飞书 / Slack / Discord / 微信身份、定时任务、任务委派和 Bot 市场。DS Bot 把 DSH 本身变成 Bot 聊天应用：主 Bot Chief 带你建团队，群管理员默认统筹回复，并提供按 Bot 和模型的用量统计。',
       },
       {
         id: 'capabilities',
@@ -566,7 +572,7 @@ const zh: Copy = {
 
 const en: Copy = {
   htmlLang: 'en',
-  pageTitle: 'DeepSeekBot: the open-source Grok Bot alternative for DeepSeek Harness',
+  pageTitle: 'DeepSeekBot (DSB): the open-source Grok Bot alternative for DeepSeek Harness',
   nav: {
     features: 'Features',
     avatar: 'Avatar Studio',
@@ -688,10 +694,16 @@ const en: Copy = {
         id: 'project-identity',
         question: 'Which DeepSeek Bot is this? Is it the same as DS Bot?',
         answer:
-          'This is DeepSeekBot by BotHarness: brand name DeepSeekBot, npm package deepseekbot, website deepseekbot.app. DS Bot by FeiZhuLulu uses ds-bot and is a separate project. Both run on DSH and are independent of DeepSeek. Check the author and package before installing.',
+          'This is DeepSeekBot by BotHarness, DSB for short: npm package deepseekbot, website deepseekbot.app, MIT licensed. DS Bot installs as ds-bot, is Apache-2.0 licensed and lives at Fei2411/DeepSeek-Bot; it is a separate project. Both run on DeepSeek Harness, and neither is an official DeepSeek product.',
         links: [
           { label: 'Compare DeepSeekBot and DS Bot', href: '/en/blog/deepseekbot-vs-ds-bot/' },
         ],
+      },
+      {
+        id: 'project-focus',
+        question: 'How do DeepSeekBot (DSB) and DS Bot differ in focus?',
+        answer:
+          "DeepSeekBot makes each Bot a long-lived colleague that works beyond the DSH window: Git memory you can review, the Bot's own Lark / Slack / Discord / WeChat identity, schedules, delegated Assignments and a Bot Marketplace. DS Bot turns DSH itself into a bot chat app: a main Bot, Chief, builds your team, a group admin answers first, and a Usage page shows tokens by Bot and model.",
       },
       {
         id: 'capabilities',

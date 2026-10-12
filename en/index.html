@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DeepSeekBot: the open-source Grok Bot alternative for DeepSeek Harness</title>
+    <title>DeepSeekBot (DSB): the open-source Grok Bot alternative for DeepSeek Harness</title>
     <meta
       name="description"
-      content="DeepSeekBot by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host."
+      content="DeepSeekBot (DSB, npm deepseekbot) by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host. Not the same project as DS Bot (ds-bot)."
     />
     <meta
       name="keywords"
-      content="DeepSeekBot, DeepSeek Harness, DSH plugin, Grok Bot alternative, AI agents, open source, Lark bot, Slack bot, Discord bot, WeChat bot, BotHarness"
+      content="DeepSeekBot, DSB, DeepSeek Bot, DeepSeek Harness, DSH plugin, Grok Bot alternative, AI agents, open source, Lark bot, Slack bot, Discord bot, WeChat bot, BotHarness"
     />
     <link rel="canonical" href="https://deepseekbot.app/en/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://deepseekbot.app/" />
@@ -21,10 +21,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="DeepSeekBot" />
     <meta property="og:url" content="https://deepseekbot.app/en/" />
-    <meta property="og:title" content="DeepSeekBot: the open-source Grok Bot alternative" />
+    <meta property="og:title" content="DeepSeekBot (DSB): the open-source Grok Bot alternative" />
     <meta
       property="og:description"
-      content="DeepSeekBot by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host."
+      content="DeepSeekBot (DSB, npm deepseekbot) by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host. Not the same project as DS Bot (ds-bot)."
     />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="zh_CN" />
@@ -37,10 +37,10 @@
       content="DeepSeekBot pixel crew: open-source Grok Bot alternative, built on DeepSeek Harness, MIT open source; lasting identity, cross-folder work and scheduled tasks"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="DeepSeekBot: the open-source Grok Bot alternative" />
+    <meta name="twitter:title" content="DeepSeekBot (DSB): the open-source Grok Bot alternative" />
     <meta
       name="twitter:description"
-      content="DeepSeekBot by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host."
+      content="DeepSeekBot (DSB, npm deepseekbot) by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host. Not the same project as DS Bot (ds-bot)."
     />
     <meta name="twitter:image" content="https://deepseekbot.app/og-en-v4.png" />
     <meta
@@ -52,16 +52,23 @@
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "DeepSeekBot",
+        "alternateName": ["DSB", "DeepSeek Bot by BotHarness"],
         "url": "https://deepseekbot.app/en/",
-        "description": "DeepSeekBot by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host.",
+        "description": "DeepSeekBot (DSB, npm deepseekbot) by BotHarness is an open-source Grok Bot alternative for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. MIT licensed; bring your own models and host. Not the same project as DS Bot (ds-bot).",
+        "disambiguatingDescription": "DeepSeekBot (DSB; npm deepseekbot; MIT; maintained by BotHarness) and DS Bot (npm ds-bot; Apache-2.0; repository Fei2411/DeepSeek-Bot) are two independent projects. DeepSeekBot focuses on Bots that work beyond the DSH window: Git memory, Lark / Slack / Discord / WeChat identities, schedules, delegated Assignments and a Bot Marketplace. DS Bot focuses on a team inside DSH run by a main Bot, group admins that answer first, and usage statistics. Neither is an official DeepSeek product.",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "macOS, Linux, Windows (Node.js 22+)",
-        "softwareVersion": "1.2.0",
+        "softwareVersion": "1.2.1",
         "license": "https://opensource.org/licenses/MIT",
         "isAccessibleForFree": true,
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
         "image": "https://deepseekbot.app/og-en-v4.png",
         "inLanguage": "en",
+        "author": {
+          "@type": "Organization",
+          "name": "BotHarness",
+          "url": "https://botharness.ai"
+        },
         "publisher": {
           "@type": "Organization",
           "name": "BotHarness",
@@ -69,7 +76,33 @@
         },
         "sameAs": [
           "https://github.com/BotHarness/DeepSeekBot",
-          "https://www.npmjs.com/package/deepseekbot"
+          "https://www.npmjs.com/package/deepseekbot",
+          "https://www.producthunt.com/products/deepseekbot"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "en",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Which DeepSeek Bot is this? Is it the same as DS Bot?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "This is DeepSeekBot by BotHarness, DSB for short: npm package deepseekbot, website deepseekbot.app, MIT licensed. DS Bot installs as ds-bot, is Apache-2.0 licensed and lives at Fei2411/DeepSeek-Bot; it is a separate project. Both run on DeepSeek Harness, and neither is an official DeepSeek product."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do DeepSeekBot (DSB) and DS Bot differ in focus?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "DeepSeekBot makes each Bot a long-lived colleague that works beyond the DSH window: Git memory you can review, the Bot's own Lark / Slack / Discord / WeChat identity, schedules, delegated Assignments and a Bot Marketplace. DS Bot turns DSH itself into a bot chat app: a main Bot, Chief, builds your team, a group admin answers first, and a Usage page shows tokens by Bot and model."
+            }
+          }
         ]
       }
     </script>
@@ -96,10 +129,25 @@
   </head>
   <body>
     <div id="root"></div>
-    <noscript
-      >DeepSeekBot: the open-source Grok Bot alternative
-      https://github.com/BotHarness/DeepSeekBot</noscript
-    >
+    <noscript>
+      <h1>DeepSeekBot (DSB): the open-source Grok Bot alternative</h1>
+      <p>
+        DeepSeekBot (DSB for short) is an MIT-licensed DeepSeek Harness (DSH) plugin by BotHarness,
+        npm package deepseekbot. It gives you PersonaBots with their own identity, persona and Git
+        memory: DMs and Groups, delegated Assignments, schedules, a Bot Marketplace, and Bot
+        identities in Lark, Slack, Discord and WeChat.
+      </p>
+      <p>
+        DeepSeekBot and DS Bot (npm ds-bot, repository Fei2411/DeepSeek-Bot) are two independent
+        projects, and neither is an official DeepSeek product.
+        <a href="/en/blog/deepseekbot-vs-ds-bot/">How they differ</a>
+      </p>
+      <p>
+        <a href="https://github.com/BotHarness/DeepSeekBot">GitHub</a> ·
+        <a href="https://www.npmjs.com/package/deepseekbot">npm</a> ·
+        <a href="/en/docs/overview/">Docs</a>
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
