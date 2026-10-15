@@ -87,6 +87,8 @@ button.topic-chip[aria-pressed='true'] {
 /* A profile card: banner on top, the Bot's face half over its lower edge, identity beside it. */
 .bot-card {
   flex: 1;
+  /* Let the card shrink to its grid cell so long names can ellipsize. */
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
