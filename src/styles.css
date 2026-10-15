@@ -262,6 +262,17 @@ a:where(:not(.astryx-button)) {
   width: 24px;
   height: 24px;
 }
+.header-community-control[data-header-github]:has([data-github-stars]:not([hidden])) {
+  width: auto;
+  padding-inline: 6px;
+  gap: 5px;
+}
+.header-github-stars {
+  font-family: var(--pixel-font);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
 .header-community-control:hover {
   background: var(--bg-alt);
 }
@@ -1382,7 +1393,7 @@ a:where(:not(.astryx-button)) {
     justify-self: center;
   }
 }
-@media (max-width: 520px) {
+@media (max-width: 600px) {
   .brand > span:not(.brand-logo) {
     position: absolute;
     width: 1px;
@@ -1390,6 +1401,14 @@ a:where(:not(.astryx-button)) {
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+  }
+}
+@media (max-width: 520px) {
+  .topbar {
+    grid-template-columns: 32px minmax(0, 1fr);
+  }
+  .header-actions {
+    flex-wrap: wrap;
   }
   .crew-member:not(.crew-member--hero) .pixel-avatar {
     width: 64px !important;

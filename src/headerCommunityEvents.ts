@@ -1,6 +1,7 @@
 import { copyText } from './clipboard';
 import { QQ_GROUP } from './communityLinks';
 import { HEADER_COMMUNITY_COPY } from './headerCommunity';
+import { subscribeGitHubStars } from './githubStars';
 
 /** Pointer/focus explanations and click-only copying; no scroll or automatic invitation. */
 export function initHeaderCommunity(root: ParentNode, onCopied: () => void): () => void {
@@ -9,6 +10,21 @@ export function initHeaderCommunity(root: ParentNode, onCopied: () => void): () 
     const abort = new AbortController();
     const items = [...nav.querySelectorAll<HTMLElement>('[data-community-item]')];
     const t = HEADER_COMMUNITY_COPY[nav.dataset.lang === 'en' ? 'en' : 'zh'];
+    const github = nav.querySelector<HTMLElement>('[data-header-github]');
+    const stars = github?.querySelector<HTMLElement>('[data-github-stars]');
+    if (github && stars)
+      cleanups.push(
+        subscribeGitHubStars((count) => {
+          stars.hidden = count === null;
+          stars.textContent = count === null ? '' : `★ ${count.toLocaleString(nav.dataset.lang)}`;
+          github.setAttribute(
+            'aria-label',
+            count === null
+              ? t.github
+              : `${t.github} · ${count.toLocaleString(nav.dataset.lang)} Stars`,
+          );
+        }),
+      );
     let alive = true;
     for (const item of items) {
       const tip = item.querySelector<HTMLElement>('[role="tooltip"]')!;
