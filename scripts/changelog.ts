@@ -7,11 +7,12 @@ import { dirname } from 'node:path';
 import { Marked, type Tokens } from 'marked';
 import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
+import { VERSION } from '../src/installRelease.ts';
 import { privacyPath, searchButton } from './docs.ts';
 
 type Lang = 'zh' | 'en';
 const SITE = 'https://deepseekbot.app';
-const GITHUB_BLOB = 'https://github.com/BotHarness/BotHarness/blob/main/';
+const GITHUB_BLOB = `https://github.com/BotHarness/DeepSeekBot/blob/v${VERSION}/`;
 export const CHANGELOG_OUT = ['changelog', 'en/changelog'];
 const SECTION_ORDER = [
   'Added',
@@ -166,7 +167,7 @@ function inline() {
     walkTokens(token) {
       if (token.type === 'link') {
         const link = token as Tokens.Link;
-        // relative links in the ledger point into the BotHarness repository
+        // Keep relative links on the same published snapshot as this release ledger.
         if (!/^[a-z][a-z0-9+.-]*:|^#|^\//i.test(link.href))
           link.href = GITHUB_BLOB + link.href.replace(/^\.?\//, '');
       }
