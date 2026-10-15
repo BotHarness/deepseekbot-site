@@ -1,4 +1,5 @@
 const CANONICAL_HOST = 'deepseekbot.app';
+const NAVER_VERIFICATION_PATH = '/naver2c42ccd37d36f1ee05627e66c5827ac4.html';
 const REDIRECT_HOSTS: ReadonlySet<string> = new Set([
   'www.deepseekbot.app',
   'deepseekbot.dev',
@@ -65,6 +66,10 @@ export default {
           'X-Robots-Tag': 'noindex, nofollow',
         },
       });
+    }
+    if (url.pathname === NAVER_VERIFICATION_PATH && ['GET', 'HEAD'].includes(request.method)) {
+      url.pathname = url.pathname.slice(0, -'.html'.length);
+      return env.ASSETS.fetch(new Request(url, request));
     }
     return env.ASSETS.fetch(request);
   },

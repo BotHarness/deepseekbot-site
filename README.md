@@ -118,6 +118,11 @@ which serves unrelated URLs as HTTP 200 with the homepage canonical. Keep Cloudf
 HTML handling so existing extensionless URLs and directory index pages still resolve.
 HTTP requests on the canonical product hostname also 301 to HTTPS, preserving the path and
 query. Local HTTP development and Workers preview hostnames still serve assets directly.
+Naver ownership verification uses `public/naver2c42ccd37d36f1ee05627e66c5827ac4.html`.
+The Worker internally resolves this exact GET/HEAD path to the extensionless asset URL so
+Cloudflare's HTML handling does not redirect the verification request. Other asset paths
+and canonical-host redirects are unchanged.
+
 For local Worker asset checks, use `pnpm exec wrangler dev --local --local-upstream localhost`;
 Wrangler otherwise defaults its upstream hostname to the product route and rewrites redirects
 back to its development address.
