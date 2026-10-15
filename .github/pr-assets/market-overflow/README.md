@@ -20,7 +20,7 @@ so a long, non-wrapping display name could expand the card beyond its grid cell.
 
 ## Validation
 
-- `pnpm verify`: 46 tests passed, formatting, lint, typecheck and build succeeded.
+- `pnpm verify`: 52 tests passed after integrating main at `18bc770` (46 before integration), formatting, lint, typecheck and build succeeded.
   Existing unused-parameter and bundle-size warnings remain.
 - Before: Application Security Reviewer measured 392.84px in a 341.34px desktop
   cell and 392.84px in a 328.71px mobile cell. Shortening just the display name
