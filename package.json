@@ -22,7 +22,7 @@
     "og": "node scripts/og-image.mjs",
     "blog:covers": "node scripts/blog-covers.mjs",
     "test:docs-sync": "node --test scripts/sync-docs.test.mjs scripts/install.test.mjs",
-    "test:community": "node --test scripts/community.test.mjs",
+    "test:community": "node --test scripts/community.test.mjs scripts/github-stars.test.mjs",
     "test:header": "node --test scripts/header.test.mjs",
     "test:companion": "node --test scripts/companion.test.mjs scripts/consent.test.mjs",
     "test:part-file": "node --test scripts/part-file.test.mjs",

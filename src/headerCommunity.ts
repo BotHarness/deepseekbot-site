@@ -37,7 +37,7 @@ export function headerCommunityMarkup(lang: 'zh' | 'en'): string {
     const control =
       brand === 'qq'
         ? `<button type="button" ${attributes} data-header-qq>${communityIconSvg(brand)}</button>`
-        : `<a ${attributes} href="${COMMUNITY_LINKS[brand]}" target="_blank" rel="noreferrer">${communityIconSvg(brand)}</a>`;
+        : `<a ${attributes} href="${COMMUNITY_LINKS[brand]}" target="_blank" rel="noreferrer"${brand === 'github' ? ' data-header-github' : ''}>${communityIconSvg(brand)}${brand === 'github' ? '<span class="header-github-stars" data-github-stars hidden aria-hidden="true"></span>' : ''}</a>`;
     return `<div class="header-community-item" data-community-item>
       ${control}
       <div class="header-community-tip" id="${tip}" role="tooltip" hidden>
