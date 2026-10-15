@@ -13,7 +13,7 @@ import { Install } from './components/Install';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
-import { COPY, LINKS } from './content';
+import { COPY, LINKS, VERSION } from './content';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
 import { changelogPath, guidePath, initialMode, pathLang, write, type Mode } from './site';
@@ -52,7 +52,9 @@ export function App() {
             <span className="star-field" />
           </div>
           <div className="hero-copy">
-            <p className="badge">{copy.hero.badge}</p>
+            <a className="badge" href={`${changelogPath(lang)}#v${VERSION}`}>
+              {copy.hero.badge}
+            </a>
             <h1 className="wordmark">{copy.hero.title}</h1>
             <p className="tagline">{copy.hero.tagline}</p>
             <p className="lead">{copy.hero.lead}</p>

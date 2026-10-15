@@ -16,7 +16,7 @@ export { QQ_GROUP };
 export type Lang = 'zh' | 'en';
 
 export { VERSION, DESKTOP_PACKAGE };
-export const DSH_VERSION = '0.2.0-rc.1';
+export const DSH_VERSION = '0.2.0-rc.2';
 
 export const LINKS = {
   github: COMMUNITY_LINKS.github,
@@ -259,7 +259,7 @@ const zh: Copy = {
     badge: `v${VERSION} 正式版`,
     title: 'DeepSeekBot',
     tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
-    lead: 'DeepSeekBot 是 BotHarness 开发的个人 AI 智能体协作工具，作为 deepseekbot 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord 和微信。',
+    lead: 'DeepSeekBot 是 BotHarness 开发的个人 AI 智能体协作工具，作为 deepseekbot 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
     crewLabel: '一组正在工作的 PersonaBots，头像会变成它们正在使用的工具',
@@ -271,8 +271,8 @@ const zh: Copy = {
       cliTab: '命令行',
       noDsh: '还没有 DSH？',
       getDsh: '先去 DeepSeek 官网下载 DeepSeek Harness',
-      desktopHint: '已经在用 DSH？复制这个 npm 包名，到「插件 → 添加插件」里粘贴，点「安装」。',
-      cliHint: '已经在用 DSH？在终端运行这一行，装好后用 dsh web 打开。',
+      desktopHint: `请先使用 DSH ${DSH_VERSION}。复制这个 npm 包名，到「插件 → 添加插件」里粘贴，点「安装」。`,
+      cliHint: `仅支持 DSH ${DSH_VERSION}。在终端运行这一行，装好后用 dsh web 打开。`,
     },
     qqCopied: '已复制群号',
     qqFailed: `复制失败，QQ 群号是 ${QQ_GROUP}，请手动复制。`,
@@ -298,7 +298,7 @@ const zh: Copy = {
   features: {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
-    lead: '正式 npm v1.2.0 提供身份、记忆、协作与 IM 接入。Computer 与 Browser 的操作能力属于下方标注的源码组件，不在该正式包内；外部账号和权限由你开启。',
+    lead: `v${VERSION} 已发布：命令行可配置 Host、操作浏览器和电脑、管理 IM 应用；Bot 浏览器面板随页面变化实时刷新。Browser 与 Computer 已随包附带，外部账号和操作权限由你开启。`,
     items: [
       {
         icon: 'present',
@@ -310,7 +310,7 @@ const zh: Copy = {
         icon: 'read',
         demo: 'memory',
         title: '看得见的 Git Memory',
-        body: 'Bot 的记忆是一个普通 Git 工作树。在侧栏浏览记忆文件、分支、commit 历史与 diff，也能推到 GitHub，在多台机器之间共享同一份记忆。',
+        body: 'Bot 的记忆是一个普通 Git 工作树。在侧栏浏览记忆文件、分支、commit 历史与 diff，恢复到任意历史 commit，也能推到 GitHub，在多台机器之间共享同一份记忆。',
       },
       {
         icon: 'subagent',
@@ -333,16 +333,22 @@ const zh: Copy = {
       {
         icon: 'web',
         title: '自己的 IM 身份',
-        body: '连接飞书 / Lark、Slack、Discord 或个人微信。微信仅接收扫码者私聊；其他平台按各自会话规则收件、回复。最新源码：设置连接应用 → 私聊侧栏「外部身份」绑定 → 发消息测试；新会话可自动接收或先询问。',
-        tag: '接入流程：最新源码',
+        body: '连接飞书 / Lark、Slack、Discord、QQ 或个人微信。先在设置中连接应用，再在私聊侧栏「外部身份」绑定 Bot。微信仅接收扫码者私聊；其他平台按各自权限和会话规则收件、回复，新会话可自动接收或先询问。',
+        tag: '按需连接',
         guide: { slug: 'capabilities', label: '平台范围与绑定步骤' },
       },
       {
         icon: 'bash',
         title: 'Computer 与 Browser use',
-        body: '可用 macOS 本机电脑、授权的日常 Chrome 页面 / Profile、本机或 Docker 受管浏览器，以及 Docker Bot Computer。浏览器只读分享不能点击或导航，各模式权限不同。需从源码安装可选组件，npm 主包尚未包含。',
-        tag: '可选组件',
+        body: 'Browser 与 Computer 已随正式包附带，每个 Bot 默认关闭访问，授权后才能操作。支持 macOS、Windows、Linux 本机电脑与 Docker Computer，Bot 浏览器可实时预览并由你接管；首次使用可能需要下载驱动或安装系统依赖。只读分享不能点击或导航，agent-browser 试用驱动为可选加装。',
+        tag: '随包附带 · 按需授权',
         guide: { slug: 'capabilities', label: '选择操作目标与配置' },
+      },
+      {
+        icon: 'bash',
+        title: '命令行管理 Host',
+        body: 'deepseekbot CLI 可以配置 Host、创建工作区和 Group，开启或关闭 Bot 的浏览器与电脑访问，查看运行状态并操作浏览器和 Computer；也能管理基于 token 的 IM 应用与 Bot 绑定。凭证只从标准输入读取，不会打印。',
+        tag: 'v1.3.1',
       },
     ],
   },
@@ -378,8 +384,7 @@ const zh: Copy = {
       {
         id: 'getting-started',
         question: '如何安装并开始使用？',
-        answer:
-          '先安装 DeepSeek Harness，在「插件 → 添加插件」中输入 deepseekbot，安装并启用。然后配置模型提供商，进入「Bot 模式」创建 Bot、选择模型，发送第一条消息即可开始。',
+        answer: `先安装 DeepSeek Harness ${DSH_VERSION}，在「插件 → 添加插件」中输入 ${DESKTOP_PACKAGE}，安装并启用。然后配置模型提供商，进入「Bot 模式」创建 Bot、选择模型，发送第一条消息即可开始。`,
         links: [{ label: '安装教程', href: '/docs/installation/' }],
       },
       {
@@ -409,7 +414,7 @@ const zh: Copy = {
         id: 'chat-platforms',
         question: '可以连接哪些聊天平台？',
         answer:
-          '可连接飞书 / Lark、Slack、Discord 和个人微信，需要先配置相应的平台应用或账号。个人微信目前仅支持扫码者私聊；其他平台的收发范围受平台权限和会话设置约束。QQ 群聊接入尚未作为完整能力发布到正式版。',
+          '可连接飞书 / Lark、Slack、Discord、QQ 和个人微信，需要先配置相应的平台应用或账号，并绑定到 Bot。个人微信目前仅支持扫码者私聊；其他平台的收发范围受平台权限、发送者限制和会话设置约束。',
         links: [{ label: '接入与可选能力', href: '/docs/capabilities/' }],
       },
     ],
@@ -511,7 +516,7 @@ const zh: Copy = {
     desktopTab: '桌面端',
     devTab: '开发者（命令行）',
     desktop: {
-      lead: `一句话：打开 DeepSeek Harness 桌面端，点「插件 → 添加插件」，在「包名或地址」里输入 ${DESKTOP_PACKAGE}，点「安装」。`,
+      lead: `使用 DeepSeek Harness ${DSH_VERSION} 桌面端，点「插件 → 添加插件」，在「包名或地址」里输入 ${DESKTOP_PACKAGE}，点「安装」。`,
       download: '还没装 DeepSeek Harness？先下载桌面端',
       steps: [
         '打开 DeepSeek Harness 桌面端，点左侧「插件」，再点「添加插件」',
@@ -523,7 +528,7 @@ const zh: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/harness/',
     },
-    lead: `需要 Node 22 以上。DeepSeekBot 当前支持 DSH ${DSH_VERSION} 起的 0.2 系列。`,
+    lead: `需要 Node 22 以上。DeepSeekBot v${VERSION} 仅支持 DSH ${DSH_VERSION}；请先升级宿主，0.2.0-rc.1 和 0.2.1 alpha 无法安装。`,
     steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
     next: {
       title: '装好了？选择接入方式与可选能力',
@@ -533,8 +538,8 @@ const zh: Copy = {
     copy: '复制',
     copied: '已复制',
     after:
-      '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。接入指南区分 v1.1.0 与最新源码流程；在新版中，从私聊侧栏「外部身份」绑定已连接的应用。',
-    note: '此入口安装 npm 正式版 v1.1.0，不包含可选 Computer / Browser 组件。想独立试用，可换一个新的 Profile 名字。',
+      '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。从私聊侧栏「外部身份」绑定已连接的应用；Browser 与 Computer 需为每个 Bot 显式开启访问。',
+    note: `此入口安装 npm 正式版 v${VERSION}，仅兼容 DSH ${DSH_VERSION}。Browser 与 Computer 已随包附带，首次使用按提示配置驱动。已有 Profile 升级前请备份；想独立试用，可换一个新的 Profile 名字。`,
   },
   dsh: {
     title: '站在 DeepSeek Harness 上',
@@ -592,7 +597,7 @@ const en: Copy = {
     badge: `v${VERSION} is out`,
     title: 'DeepSeekBot',
     tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
-    lead: 'DeepSeekBot is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the deepseekbot plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord and WeChat.',
+    lead: 'DeepSeekBot is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the deepseekbot plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
     crewLabel: 'A crew of working PersonaBots whose avatars turn into the tool each one is using',
@@ -604,9 +609,8 @@ const en: Copy = {
       cliTab: 'CLI',
       noDsh: 'No DSH yet?',
       getDsh: 'Get DeepSeek Harness from DeepSeek first',
-      desktopHint:
-        'Already on DSH? Copy this npm package name, paste it into Plugins → Add plugin, and click Install.',
-      cliHint: 'Already on DSH? Run this line in a terminal, then open it with dsh web.',
+      desktopHint: `Use DSH ${DSH_VERSION} first. Copy this npm package name, paste it into Plugins → Add plugin, and click Install.`,
+      cliHint: `Requires exactly DSH ${DSH_VERSION}. Run this line in a terminal, then open it with dsh web.`,
     },
     qqCopied: 'Group number copied',
     qqFailed: `Copy failed. The QQ group number is ${QQ_GROUP}; copy it by hand.`,
@@ -632,7 +636,7 @@ const en: Copy = {
   features: {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
-    lead: 'The npm v1.2.0 release provides identity, memory, collaboration and IM connections. Computer and Browser actions require the source components labelled below, which are not in that release; you enable external accounts and permissions.',
+    lead: `v${VERSION} is out: configure a Host, operate its Browser and Computer, and manage IM apps from the CLI. The Bot Browser panel now follows page changes live. Browser and Computer are bundled; you enable external accounts and action permissions.`,
     items: [
       {
         icon: 'present',
@@ -644,7 +648,7 @@ const en: Copy = {
         icon: 'read',
         demo: 'memory',
         title: 'Git Memory you can see',
-        body: 'A Bot’s memory is a plain Git working tree. Browse its files, branches, commits and diffs in the sidebar, or push it to GitHub to share the same memory across machines.',
+        body: 'A Bot’s memory is a plain Git working tree. Browse its files, branches, commits and diffs in the sidebar, restore any past commit, or push it to GitHub to share the same memory across machines.',
       },
       {
         icon: 'subagent',
@@ -667,16 +671,22 @@ const en: Copy = {
       {
         icon: 'web',
         title: 'Their own IM identity',
-        body: 'Connect Lark / Feishu, Slack, Discord or personal WeChat. WeChat accepts only the QR owner’s DMs; each platform has its own intake and reply rules. Current source: connect in Settings → bind in the DM sidebar’s External identities → send a test. New conversations can be automatic or ask first.',
-        tag: 'Setup: current source',
+        body: 'Connect Lark / Feishu, Slack, Discord, QQ or personal WeChat. Connect an app in Settings, then bind it to a Bot in the DM sidebar’s External identities. WeChat accepts only the QR owner’s DMs; other platforms follow their permissions and conversation rules. New conversations can be automatic or ask first.',
+        tag: 'Connect as needed',
         guide: { slug: 'capabilities', label: 'Platform scope and binding steps' },
       },
       {
         icon: 'bash',
         title: 'Computer and Browser use',
-        body: 'Choose a local macOS computer, an authorized daily Chrome document / Profile, a local or Docker managed browser, or a Docker Bot Computer. Read-only sharing cannot click or navigate; tools differ by mode. Optional components require a source setup and are absent from the npm product.',
-        tag: 'Optional components',
+        body: 'Browser and Computer are bundled, with access off for each Bot until you enable it. Use a local macOS, Windows or Linux computer, or Docker Computer; watch the Bot Browser live and take over when needed. First use may download drivers or require system dependencies. Read-only sharing cannot click or navigate; the agent-browser trial driver is an optional add-on.',
+        tag: 'Bundled · access by permission',
         guide: { slug: 'capabilities', label: 'Choose a target and set it up' },
+      },
+      {
+        icon: 'bash',
+        title: 'Manage a Host from the CLI',
+        body: 'The deepseekbot CLI configures a Host, creates workspaces and Groups, controls each Bot’s Browser and Computer access, and inspects and operates them. It also manages token-based IM apps and Bot bindings. Credentials are read from stdin only and never printed.',
+        tag: 'v1.3.1',
       },
     ],
   },
@@ -714,8 +724,7 @@ const en: Copy = {
       {
         id: 'getting-started',
         question: 'How do I install it and get started?',
-        answer:
-          'Install DeepSeek Harness first. In Plugins → Add plugin, enter deepseekbot, then install and enable it. Configure a model provider, open Bot mode, create a Bot and choose its models. Send your first message to get started.',
+        answer: `Install DeepSeek Harness ${DSH_VERSION} first. In Plugins → Add plugin, enter ${DESKTOP_PACKAGE}, then install and enable it. Configure a model provider, open Bot mode, create a Bot and choose its models. Send your first message to get started.`,
         links: [{ label: 'Installation guide', href: '/en/docs/installation/' }],
       },
       {
@@ -745,7 +754,7 @@ const en: Copy = {
         id: 'chat-platforms',
         question: 'Which chat platforms can I connect?',
         answer:
-          'Connect Feishu / Lark, Slack, Discord or personal WeChat by setting up the relevant platform app or account. Personal WeChat currently supports only the QR owner’s DMs; other platforms’ message scope depends on platform permissions and conversation settings. QQ group chat is not yet a complete feature in the official release.',
+          'Connect Feishu / Lark, Slack, Discord, QQ or personal WeChat by setting up the relevant platform app or account and binding it to a Bot. Personal WeChat currently supports only the QR owner’s DMs; other platforms’ message scope depends on platform permissions, sender restrictions and conversation settings.',
         links: [{ label: 'Connections and optional tools', href: '/en/docs/capabilities/' }],
       },
     ],
@@ -848,7 +857,7 @@ const en: Copy = {
     desktopTab: 'Desktop',
     devTab: 'Developers (CLI)',
     desktop: {
-      lead: `In one line: open the DeepSeek Harness desktop app, go to Plugins → Add plugin, enter ${DESKTOP_PACKAGE} as the package name or address, and click Install.`,
+      lead: `Use the DeepSeek Harness ${DSH_VERSION} desktop app, go to Plugins → Add plugin, enter ${DESKTOP_PACKAGE} as the package name or address, and click Install.`,
       download: 'No DeepSeek Harness yet? Get the desktop app',
       steps: [
         'Open the DeepSeek Harness desktop app, click Plugins in the sidebar, then Add plugin',
@@ -860,7 +869,7 @@ const en: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/en/harness/',
     },
-    lead: `Needs Node 22 or later. DeepSeekBot supports the DSH 0.2 line from ${DSH_VERSION}.`,
+    lead: `Needs Node 22 or later. DeepSeekBot v${VERSION} requires exactly DSH ${DSH_VERSION}; upgrade the Host first. DSH 0.2.0-rc.1 and 0.2.1 alphas cannot install it.`,
     steps: [
       'Install DeepSeek Harness',
       'Add DeepSeekBot to the web Profile',
@@ -874,8 +883,8 @@ const en: Copy = {
     copy: 'Copy',
     copied: 'Copied',
     after:
-      'Open Bot mode, create a PersonaBot, DM it, then invite members to a Group. The setup guide separates v1.1.0 from current source; newer builds bind connected apps in the DM sidebar’s External identities.',
-    note: 'This installs npm v1.1.0 without the optional Computer / Browser components. Use a new Profile name for a separate trial.',
+      'Open Bot mode, create a PersonaBot, DM it, then invite members to a Group. Bind connected apps in the DM sidebar’s External identities; explicitly enable Browser and Computer access for each Bot.',
+    note: `This installs npm v${VERSION} and requires exactly DSH ${DSH_VERSION}. Browser and Computer are bundled; follow the driver setup prompts on first use. Back up an existing Profile before upgrading, or use a new Profile name for a separate trial.`,
   },
   dsh: {
     title: 'Built on DeepSeek Harness',
