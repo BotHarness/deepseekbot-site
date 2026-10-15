@@ -5,6 +5,78 @@ import worker from '../worker/index.ts';
 
 const assets = { fetch: async (request) => new Response(`asset ${new URL(request.url).pathname}`) };
 
+const naverVerificationPath = '/naver2c42ccd37d36f1ee05627e66c5827ac4.html';
+
+test('Naver verification file contains the downloaded verification payload', () => {
+  assert.equal(
+    readFileSync(new URL(`../public${naverVerificationPath}`, import.meta.url), 'utf8'),
+    `naver-site-verification: ${naverVerificationPath.slice(1)}`,
+  );
+});
+
+test('Naver GET and HEAD internally resolve the HTML asset without a client redirect', async () => {
+  for (const method of ['GET', 'HEAD']) {
+    const request = new Request(`https://deepseekbot.app${naverVerificationPath}?check=1`, {
+      method,
+      headers: { 'X-Verification-Test': 'preserved' },
+    });
+    const assetResponse = new Response(method === 'HEAD' ? null : 'verification payload');
+    const response = await worker.fetch(request, {
+      ASSETS: {
+        fetch: async (assetRequest) => {
+          assert.equal(
+            assetRequest.url,
+            `https://deepseekbot.app${naverVerificationPath.slice(0, -5)}?check=1`,
+          );
+          assert.equal(assetRequest.method, method);
+          assert.equal(assetRequest.headers.get('X-Verification-Test'), 'preserved');
+          return assetResponse;
+        },
+      },
+    });
+    assert.equal(response, assetResponse);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('location'), null);
+  }
+});
+
+test('Naver verification preserves canonical redirects before resolving the asset', async () => {
+  for (const origin of ['https://www.deepseekbot.app', 'http://deepseekbot.app']) {
+    const response = await worker.fetch(new Request(`${origin}${naverVerificationPath}`), {
+      ASSETS: {
+        fetch: () => {
+          throw new Error('Canonical redirects must run before asset lookup');
+        },
+      },
+    });
+    assert.equal(response.status, 301);
+    assert.equal(
+      response.headers.get('location'),
+      `https://deepseekbot.app${naverVerificationPath}`,
+    );
+  }
+});
+
+test('Naver exception does not rewrite other paths or unsupported methods', async () => {
+  for (const [path, method] of [
+    [naverVerificationPath, 'POST'],
+    [naverVerificationPath, 'OPTIONS'],
+    [`${naverVerificationPath}/`, 'GET'],
+    ['/naver-unregistered.html', 'GET'],
+    ['/baidu_verify_codeva-ZL1kxPPyWo.html', 'GET'],
+  ]) {
+    const request = new Request(`https://deepseekbot.app${path}`, { method });
+    await worker.fetch(request, {
+      ASSETS: {
+        fetch: async (assetRequest) => {
+          assert.equal(assetRequest, request);
+          return new Response(null, { status: 404 });
+        },
+      },
+    });
+  }
+});
+
 test('static asset routing does not fall back to the homepage for missing URLs', () => {
   const config = readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
   assert.match(config, /"not_found_handling"\s*:\s*"none"/);
