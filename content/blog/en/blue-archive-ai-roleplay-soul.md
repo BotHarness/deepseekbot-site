@@ -7,6 +7,8 @@
 }
 ---
 
+*The cover is AI-generated from nine screenshots; the conversation images in the article remain unaltered originals.*
+
 “Let's go somewhere this weekend. No early start, and no rushing between attractions.” Shiroko suggests a ride, Hoshino wants the aquarium, and Yuuka worries about fares and whether the teacher has eaten. We wanted a conversation with small disagreements and ordinary care.
 
 This is Day 0 of our *Personal Agent from Zero* diary. We configured the characters and supplied the topics and follow-up prompts; the replies came from real model calls in DeepSeekBot. The original Chinese screenshots show an Android development build. This cross-school fan scenario is not official Blue Archive dialogue or a collaboration with its creators.
