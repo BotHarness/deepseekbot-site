@@ -1,0 +1,14 @@
+{
+  "kind": "curated-imagegen-cover",
+  "articleTitle": "两个 AI 同事改一篇稿：群聊协作的第一天",
+  "locale": "zh",
+  "width": 1200,
+  "height": 630,
+  "sha256": "e2afb82c55f4d6acce291b0db95178a890cd715c7a4ca44482903d3edf33de1b",
+  "tool": "Built-in image_gen; exact model version is not exposed",
+  "humanSelection": "ChatGPT-generated B variant selected on 2026-10-18",
+  "generation": "Chinese approved artwork; English cover localizes its editorial overlay. The screenshot-inspired background remains Chinese and may be redrawn by generation.",
+  "use": "Editorial cover artwork only. Original native screenshot evidence is under blog-figures/ai-bot-group-writing-workflow/.",
+  "sourceCaptureCommit": "d2529feb520ace2d773db6ac0966dc265887bdc5",
+  "normalization": "Proportional downsampling to fit a 1200x630 canvas; generation originals retained in the approved asset archive."
+}

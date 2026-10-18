@@ -7,6 +7,8 @@
 }
 ---
 
+*The cover is AI-generated from nine screenshots; the conversation images in the article remain unaltered originals.*
+
 Lin Xiaoman's first response to the titles was not praise. Some were too long, and “the fourth revision” had no factual basis. Zhou Yuheng acknowledged the problems and rewrote the copy. That specific exchange was what we wanted to see from two AI coworkers.
 
 The task was small: turn the first day of our *Personal Agent from Zero* diary into a Xiaohongshu post. Two Bots discussed the draft in one Group and produced a saved article and follow-up sheet. We supplied the task, prompts and revision direction, and the result still needs human editorial review. The captures below preserve the original Chinese conversation.
