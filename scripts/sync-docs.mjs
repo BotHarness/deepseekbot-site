@@ -27,6 +27,10 @@ const pages = requested ? DOC_PAGES.filter((page) => requested.includes(page.slu
 const revision = execFileSync('git', ['-C', ROOT, 'rev-parse', 'HEAD'], {
   encoding: 'utf8',
 }).trim();
+const installIdentityPath = join(ROOT, 'scripts/install-release.json');
+const installVersion = existsSync(installIdentityPath)
+  ? JSON.parse(readFileSync(installIdentityPath, 'utf8')).version
+  : undefined;
 const media = new Set();
 const siteMedia = new Map();
 // A site-owned asset directory also owns its transcripts, manifests and caption
@@ -101,7 +105,34 @@ const prepare = (text, source) => {
 // Keep old qualification records, but do not present their pre-release install advice
 // as today's product status. These website-only corrections survive every sync.
 const editorialBody = (body, slug, lang) => {
-  if (slug === 'installation')
+  if (slug === 'installation') {
+    // 1.4.0's install-identity sync retains older prose and screenshot records upstream.
+    // Correct only that known release; future guides must be reviewed again.
+    if (installVersion === '1.4.0') {
+      body = body
+        .replace(
+          lang === 'zh'
+            ? /^本页安装公共 npm 包.*$/m
+            : /^This guide installs the public npm package.*$/m,
+          lang === 'zh'
+            ? '本页安装公共 npm 正式包 **`deepseekbot@1.4.0`**。推荐 **DSH `0.2.1-rc.2`**；同一组发布包已在 **0.2.0-rc.2 与 0.2.1-rc.2** 验证安装、Host 启动、Bot／DM 创建和重启持久化。声明安装范围为 `>=0.2.0-rc.2 <0.3.0-0`，不代表所有版本均已运行验证。下方 DSH 0.2.0-rc.1 截图属于历史界面记录；请按当前文字步骤操作。升级前备份 Profile，回退旧版可能需要恢复升级前备份。'
+            : 'Install the stable npm package **`deepseekbot@1.4.0`**. Use **DSH `0.2.1-rc.2`**; the same released packages passed installation, Host startup, Bot/DM creation and restart persistence on **0.2.0-rc.2 and 0.2.1-rc.2**. Declared admission is `>=0.2.0-rc.2 <0.3.0-0`, not runtime qualification of every version. The DSH 0.2.0-rc.1 screenshots below are historical UI records; follow the current text. Back up the Profile before upgrading; returning to an older binary may require the pre-upgrade backup.',
+        )
+        .replace(
+          /^## 4\. [\s\S]*?(?=\n## 5\.)/m,
+          lang === 'zh'
+            ? '## 4. 跟随 Home 引导开始\n\n进入 **Bot 模式**，在 Home 配置模型，向托布发送可编辑的创建请求。跟随引导实际创建 Bot 与群聊，管理操作仍需原有审批；再学习拖动面板标题、调整大小，以及通过控制列开关面板。最后点击 **Home 标题**关闭 Home，进入原来的托布私聊。\n\n新 Bot 不再自动生成欢迎消息；你可以直接向它发送问候，收到真实回复后再确认模型可用。模型凭据仍由 DSH 管理，npm 安装不会提供凭据。模型配置见 [API 与 Bot 模型](/docs/model-setup/)，新界面介绍见 [1.4.0 更新](/blog/deepseekbot-1-4-0/)。\n'
+            : '## 4. Start with Home onboarding\n\nOpen **Bot mode**, configure a model in Home and send Tob an editable creation request. Follow the journey to create a real Bot and group, with existing management approvals, then learn to drag panel titles, resize panels and reopen them from the control rail. Finish by clicking the **Home title** to close Home and enter the original Tob DM.\n\nNew Bots no longer receive an automatic welcome message. Send your own greeting and check a real reply to verify model usability. DSH still manages credentials; npm installation does not provide them. See [API and Bot models](/en/docs/model-setup/) and the [1.4.0 introduction](/en/blog/deepseekbot-1-4-0/).\n',
+        )
+        .replace(
+          lang === 'zh'
+            ? '安装 DSH 0.2.0-rc.2 后再装；随包的 Computer 运行时只匹配这个版本。'
+            : 'Install DSH 0.2.0-rc.2 and install again; the bundled Computer runtime only matches that release.',
+          lang === 'zh'
+            ? '请使用已验证的 DSH 0.2.0-rc.2 或 0.2.1-rc.2，并确认安装的是 deepseekbot@1.4.0。'
+            : 'Use qualified DSH 0.2.0-rc.2 or 0.2.1-rc.2 and confirm the exact deepseekbot@1.4.0 package.',
+        );
+    }
     return body.replace(
       lang === 'zh'
         ? /^首次安装没有已连接的 IM 账号。.*$/m
@@ -110,6 +141,7 @@ const editorialBody = (body, slug, lang) => {
         ? '首次安装没有已连接的 IM 账号。先确认本地 DM 正常，再按[接入与可选能力](/docs/capabilities)选择平台、核对版本并绑定应用。当前源码通过私聊侧栏「外部身份」绑定；新会话可自动接收或先询问，不要求逐群在 Profile 中手工授权。'
         : 'The initial installation has no connected IM accounts. After a local DM works, use [Connections and optional tools](/docs/capabilities) to choose a platform, check your version and bind an app. Current source binds in the DM sidebar’s External identities; new conversations can be automatic or ask first, without per-group Profile authorization.',
     );
+  }
   if (slug === 'lark-connection')
     return body
       .replace(
@@ -167,11 +199,16 @@ for (const page of pages) {
     };
     const file = join('content/docs', lang, `${page.slug}.md`);
     mkdirSync(dirname(file), { recursive: true });
-    const notice = page.currentSource
-      ? lang === 'zh'
-        ? '> **版本范围：当前源码教程。** 下列步骤包含尚未进入 npm v1.1.0 的界面更新；文中的旧测试包版本和截图属于历史验证记录。正式版与可选组件的区别见[接入与可选能力](/docs/capabilities)。\n\n'
-        : '> **Version scope: current-source guide.** These steps include UI updates absent from npm v1.1.0; older test packages and screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and component boundaries.\n\n'
-      : '';
+    const notice =
+      page.slug === 'installation' && installVersion === '1.4.0'
+        ? lang === 'zh'
+          ? '> **版本范围：正式版 1.4.0。** 安装版本与双语更新日志已同步；历史截图不代表本版界面。\n\n'
+          : '> **Version scope: stable 1.4.0.** Installation identity and bilingual release notes are synchronized; historical screenshots do not show the current UI.\n\n'
+        : page.currentSource
+          ? lang === 'zh'
+            ? '> **版本范围：当前源码教程。** 下列步骤包含尚未进入 npm v1.1.0 的界面更新；文中的旧测试包版本和截图属于历史验证记录。正式版与可选组件的区别见[接入与可选能力](/docs/capabilities)。\n\n'
+            : '> **Version scope: current-source guide.** These steps include UI updates absent from npm v1.1.0; older test packages and screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and component boundaries.\n\n'
+          : '';
     writeFileSync(file, `---\n${JSON.stringify(head, null, 2)}\n---\n\n${notice}${body}`);
     for (const match of body.matchAll(
       /\/guides\/[^\s"')<>]+\.(?:webp|png|jpe?g|gif|svg|mp4|webm|vtt|srt|md|json|typescript|timing)(?=[\s"')<>]|$)/g,

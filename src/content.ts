@@ -16,7 +16,7 @@ export { QQ_GROUP };
 export type Lang = 'zh' | 'en';
 
 export { VERSION, DESKTOP_PACKAGE };
-export const DSH_VERSION = '0.2.0-rc.2';
+export const DSH_VERSION = '0.2.1-rc.2';
 
 export const LINKS = {
   github: COMMUNITY_LINKS.github,
@@ -117,7 +117,13 @@ export interface Copy {
     qqFailed: string;
   };
   symbols: SymbolLabels;
-  features: { kicker: string; title: string; lead: string; items: Feature[] };
+  features: {
+    kicker: string;
+    title: string;
+    lead: string;
+    release: { text: string; label: string; href: string };
+    items: Feature[];
+  };
   faq: {
     kicker: string;
     title: string;
@@ -272,7 +278,7 @@ const zh: Copy = {
       noDsh: '还没有 DSH？',
       getDsh: '先去 DeepSeek 官网下载 DeepSeek Harness',
       desktopHint: `请先使用 DSH ${DSH_VERSION}。复制这个 npm 包名，到「插件 → 添加插件」里粘贴，点「安装」。`,
-      cliHint: `仅支持 DSH ${DSH_VERSION}。在终端运行这一行，装好后用 dsh web 打开。`,
+      cliHint: `推荐 DSH ${DSH_VERSION}，也已验证 0.2.0-rc.2。在终端运行这一行，装好后用 dsh web 打开。`,
     },
     qqCopied: '已复制群号',
     qqFailed: `复制失败，QQ 群号是 ${QQ_GROUP}，请手动复制。`,
@@ -298,7 +304,12 @@ const zh: Copy = {
   features: {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
-    lead: `v${VERSION} 已发布：命令行可配置 Host、操作浏览器和电脑、管理 IM 应用；Bot 浏览器面板随页面变化实时刷新。Browser 与 Computer 已随包附带，外部账号和操作权限由你开启。`,
+    lead: `v${VERSION} 已发布：托布帮你创建 Bot、组建团队和调整模型；Home 展示 Token 用量与 Bot 动态，多面板工作区按你的习惯摆放。自动审批、聊天和 CLI 也一起增强。`,
+    release: {
+      text: '从模型配置到建 Bot、建群和整理布局，新的 Desktop 入门引导带你开始。',
+      label: '查看 1.4.0 更新介绍',
+      href: '/blog/deepseekbot-1-4-0/',
+    },
     items: [
       {
         icon: 'present',
@@ -345,10 +356,28 @@ const zh: Copy = {
         guide: { slug: 'capabilities', label: '选择操作目标与配置' },
       },
       {
+        icon: 'ask',
+        title: '托布总管与 Home',
+        body: '和托布对话创建带人格与记忆的 Bot、组建群聊、邀请成员和调整模型，管理操作仍经过审批。Home 用两张卡片展示 Token 历史和 Bot 活跃情况；新手引导从模型配置带你进入真实对话。',
+        tag: 'v1.4.0',
+      },
+      {
+        icon: 'present',
+        title: '按你习惯摆放的工作区',
+        body: '在适用的桌面宽屏布局中，按需开关面板、拖拽标题分割、调整大小，记忆、会话、定时任务和设备控制可在消息内展开，并按频道保存布局。macOS Desktop 的标题栏空白可拖动窗口。',
+        tag: 'v1.4.0',
+      },
+      {
+        icon: 'approval',
+        title: '可查看的自动审批',
+        body: '选择内置模板或用 Markdown 写自己的规则，也可指定审批员模型。结果保留记录，拿不准就交给你；拒绝后可放行同一次调用，连续拒绝会暂停自动审批。',
+        tag: 'v1.4.0',
+      },
+      {
         icon: 'bash',
         title: '命令行管理 Host',
-        body: 'deepseekbot CLI 可以配置 Host、创建工作区和 Group，开启或关闭 Bot 的浏览器与电脑访问，查看运行状态并操作浏览器和 Computer；也能管理基于 token 的 IM 应用与 Bot 绑定。凭证只从标准输入读取，不会打印。',
-        tag: 'v1.3.1',
+        body: 'deepseekbot CLI 可管理在线 Host 的模型、Bot、群组、Memory、定时任务、收件箱、IM 和 Bot 市场；浏览器、电脑及适用的 Bot 工具也能绕过模型直接调用，配合 bot-trace 排查问题。危险操作仍需确认，凭证不会打印。',
+        tag: 'v1.4.0',
       },
     ],
   },
@@ -384,7 +413,7 @@ const zh: Copy = {
       {
         id: 'getting-started',
         question: '如何安装并开始使用？',
-        answer: `先安装 DeepSeek Harness ${DSH_VERSION}，在「插件 → 添加插件」中输入 ${DESKTOP_PACKAGE}，安装并启用。然后配置模型提供商，进入「Bot 模式」创建 Bot、选择模型，发送第一条消息即可开始。`,
+        answer: `先安装 DeepSeek Harness ${DSH_VERSION}，在「插件 → 添加插件」中输入 ${DESKTOP_PACKAGE}，安装并启用。进入「Bot 模式」后，按 Home 引导配置模型，和托布创建 Bot、组建群聊，再学习开关与调整面板。`,
         links: [{ label: '安装教程', href: '/docs/installation/' }],
       },
       {
@@ -522,13 +551,13 @@ const zh: Copy = {
         '打开 DeepSeek Harness 桌面端，点左侧「插件」，再点「添加插件」',
         '在「包名或地址」里输入下面这一行，保持「npm 官方源」，点「安装」',
         '显示「已安装」后点「立即启用」；如果提示重启，重启当前 Profile',
-        '侧栏出现「Bot 模式」，创建你的第一个 PersonaBot',
+        '进入「Bot 模式」，跟随 Home 引导配置模型，再和托布创建第一个 Bot 与群聊',
       ],
       docs: 'DSH 官方文档：打包与安装插件',
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/harness/',
     },
-    lead: `需要 Node 22 以上。DeepSeekBot v${VERSION} 仅支持 DSH ${DSH_VERSION}；请先升级宿主，0.2.0-rc.1 和 0.2.1 alpha 无法安装。`,
+    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；1.4.0 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2 与 0.2.1-rc.2 验证。声明安装范围为 >=0.2.0-rc.2 <0.3.0-0，不代表所有后续版本均已验证。`,
     steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
     next: {
       title: '装好了？选择接入方式与可选能力',
@@ -539,7 +568,7 @@ const zh: Copy = {
     copied: '已复制',
     after:
       '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。从私聊侧栏「外部身份」绑定已连接的应用；Browser 与 Computer 需为每个 Bot 显式开启访问。',
-    note: `此入口安装 npm 正式版 v${VERSION}，仅兼容 DSH ${DSH_VERSION}。Browser 与 Computer 已随包附带，首次使用按提示配置驱动。已有 Profile 升级前请备份；想独立试用，可换一个新的 Profile 名字。`,
+    note: `此入口安装 npm 正式版 v${VERSION}。Browser 与 Computer 随包附带，首次使用按提示配置驱动。升级前请备份 Profile；回退旧版可能需要恢复升级前备份。想独立试用，可使用新的 Profile。`,
   },
   dsh: {
     title: '站在 DeepSeek Harness 上',
@@ -610,7 +639,7 @@ const en: Copy = {
       noDsh: 'No DSH yet?',
       getDsh: 'Get DeepSeek Harness from DeepSeek first',
       desktopHint: `Use DSH ${DSH_VERSION} first. Copy this npm package name, paste it into Plugins → Add plugin, and click Install.`,
-      cliHint: `Requires exactly DSH ${DSH_VERSION}. Run this line in a terminal, then open it with dsh web.`,
+      cliHint: `Use DSH ${DSH_VERSION}; 0.2.0-rc.2 is also qualified. Run this line in a terminal, then open it with dsh web.`,
     },
     qqCopied: 'Group number copied',
     qqFailed: `Copy failed. The QQ group number is ${QQ_GROUP}; copy it by hand.`,
@@ -636,7 +665,12 @@ const en: Copy = {
   features: {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
-    lead: `v${VERSION} is out: configure a Host, operate its Browser and Computer, and manage IM apps from the CLI. The Bot Browser panel now follows page changes live. Browser and Computer are bundled; you enable external accounts and action permissions.`,
+    lead: `v${VERSION} is out: Tob helps create Bots, organize groups and adjust models. Home shows Token history and Bot activity, while flexible panels make room for your work. Approvals, chat and CLI controls expand too.`,
+    release: {
+      text: 'The new Desktop onboarding takes you from model setup to creating a Bot and group, then arranging your panels.',
+      label: 'Explore 1.4.0',
+      href: '/en/blog/deepseekbot-1-4-0/',
+    },
     items: [
       {
         icon: 'present',
@@ -676,6 +710,24 @@ const en: Copy = {
         guide: { slug: 'capabilities', label: 'Platform scope and binding steps' },
       },
       {
+        icon: 'ask',
+        title: 'Tob and Home',
+        body: 'Ask Tob to create Bots with a persona and memory, organize groups, invite members and adjust models, with approvals intact. Home shows Token history and Bot activity; onboarding takes you from model setup into a real conversation.',
+        tag: 'v1.4.0',
+      },
+      {
+        icon: 'present',
+        title: 'A workspace you can arrange',
+        body: 'In supported wide desktop layouts, open panels as needed, drag titles to split them and resize them. Memory, sessions, schedules and device controls open inside a conversation, with layouts saved per channel. Header whitespace moves the macOS Desktop window.',
+        tag: 'v1.4.0',
+      },
+      {
+        icon: 'approval',
+        title: 'Inspectable automatic approvals',
+        body: 'Choose a template or write rules in Markdown, optionally with a separate reviewer model. Decisions stay visible; uncertainty returns to you. Override one exact rejected call, while repeated rejections pause automatic approval.',
+        tag: 'v1.4.0',
+      },
+      {
         icon: 'bash',
         title: 'Computer and Browser use',
         body: 'Browser and Computer are bundled, with access off for each Bot until you enable it. Use a local macOS, Windows or Linux computer, or Docker Computer; watch the Bot Browser live and take over when needed. First use may download drivers or require system dependencies. Read-only sharing cannot click or navigate; the agent-browser trial driver is an optional add-on.',
@@ -685,8 +737,8 @@ const en: Copy = {
       {
         icon: 'bash',
         title: 'Manage a Host from the CLI',
-        body: 'The deepseekbot CLI configures a Host, creates workspaces and Groups, controls each Bot’s Browser and Computer access, and inspects and operates them. It also manages token-based IM apps and Bot bindings. Credentials are read from stdin only and never printed.',
-        tag: 'v1.3.1',
+        body: 'The deepseekbot CLI manages models, Bots, groups, Memory, schedules, Inbox, IM and Marketplace on a live Host. Run Browser, Computer and applicable Bot tools directly without a model, and inspect bot-trace. Dangerous actions still require confirmation; credentials are never printed.',
+        tag: 'v1.4.0',
       },
     ],
   },
@@ -724,7 +776,7 @@ const en: Copy = {
       {
         id: 'getting-started',
         question: 'How do I install it and get started?',
-        answer: `Install DeepSeek Harness ${DSH_VERSION} first. In Plugins → Add plugin, enter ${DESKTOP_PACKAGE}, then install and enable it. Configure a model provider, open Bot mode, create a Bot and choose its models. Send your first message to get started.`,
+        answer: `Install DeepSeek Harness ${DSH_VERSION} first. In Plugins → Add plugin, enter ${DESKTOP_PACKAGE}, then install and enable it. Open Bot mode and follow Home onboarding to configure a model, ask Tob to create a Bot and group, and learn the panel controls.`,
         links: [{ label: 'Installation guide', href: '/en/docs/installation/' }],
       },
       {
@@ -863,13 +915,13 @@ const en: Copy = {
         'Open the DeepSeek Harness desktop app, click Plugins in the sidebar, then Add plugin',
         'Enter this line as the package name or address, keep the official npm registry, and click Install',
         'When it shows Installed, click Enable now; if DSH asks, restart the current Profile',
-        'Bot mode appears in the sidebar: create your first PersonaBot',
+        'Open Bot mode and follow Home onboarding: set up a model, then ask Tob to create a Bot and group',
       ],
       docs: 'DSH docs: package and install a plugin',
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/en/harness/',
     },
-    lead: `Needs Node 22 or later. DeepSeekBot v${VERSION} requires exactly DSH ${DSH_VERSION}; upgrade the Host first. DSH 0.2.0-rc.1 and 0.2.1 alphas cannot install it.`,
+    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact 1.4.0 packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2 and 0.2.1-rc.2. Declared admission is >=0.2.0-rc.2 <0.3.0-0; later versions are not all runtime-qualified.`,
     steps: [
       'Install DeepSeek Harness',
       'Add DeepSeekBot to the web Profile',
@@ -884,7 +936,7 @@ const en: Copy = {
     copied: 'Copied',
     after:
       'Open Bot mode, create a PersonaBot, DM it, then invite members to a Group. Bind connected apps in the DM sidebar’s External identities; explicitly enable Browser and Computer access for each Bot.',
-    note: `This installs npm v${VERSION} and requires exactly DSH ${DSH_VERSION}. Browser and Computer are bundled; follow the driver setup prompts on first use. Back up an existing Profile before upgrading, or use a new Profile name for a separate trial.`,
+    note: `This installs npm v${VERSION}. Browser and Computer are bundled; follow the driver setup prompts on first use. Back up the Profile before upgrading: returning to an older binary may require the pre-upgrade backup. Use a new Profile for a separate trial.`,
   },
   dsh: {
     title: 'Built on DeepSeek Harness',

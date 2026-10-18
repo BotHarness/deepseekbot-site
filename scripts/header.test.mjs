@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -8,6 +8,51 @@ import { renderChangelog } from './changelog.ts';
 import { renderBlog } from './blog.ts';
 import { COMMUNITY_LINKS, QQ_GROUP } from '../src/communityLinks.ts';
 import { HEADER_COMMUNITY_COPY, headerCommunityMarkup } from '../src/headerCommunity.ts';
+import { DESKTOP_PACKAGE } from '../src/installRelease.ts';
+
+test('rendered changelogs preserve every release-summary paragraph in both languages', () => {
+  const cwd = process.cwd();
+  const fixture = mkdtempSync(join(tmpdir(), 'site-release-summary-'));
+  try {
+    mkdirSync(join(fixture, 'content/changelog'), { recursive: true });
+    for (const lang of ['zh', 'en']) {
+      const intro = lang === 'zh' ? '托布与新的 Home。' : 'Tob and a new Home.';
+      const warning =
+        lang === 'zh'
+          ? '手机与云端仍为开发／UAT；回退前请恢复备份。'
+          : 'Mobile and Cloud remain development/UAT; restore the backup before rollback.';
+      writeFileSync(
+        join(fixture, 'content/changelog', `${lang}.md`),
+        `## [Unreleased]\n\nPending.\n\n## [1.4.0] - 2026-10-19\n\n${intro}\n\n${warning}\n\n### Added\n\n- Added Tob.\n`,
+      );
+    }
+    process.chdir(fixture);
+    renderChangelog();
+    for (const [lang, prefix] of [
+      ['zh', ''],
+      ['en', 'en/'],
+    ]) {
+      const html = readFileSync(`${prefix}changelog/index.html`, 'utf8');
+      assert.ok(html.includes(lang === 'zh' ? '托布与新的 Home。' : 'Tob and a new Home.'));
+      assert.ok(
+        html.includes(
+          lang === 'zh'
+            ? '手机与云端仍为开发／UAT；回退前请恢复备份。'
+            : 'Mobile and Cloud remain development/UAT; restore the backup before rollback.',
+        ),
+      );
+      assert.equal([...html.matchAll(/<p class="changelog-summary">/g)].length, 2);
+      assert.ok(html.includes('Added Tob.'));
+      assert.ok(!html.includes('Pending.'));
+      assert.ok(html.includes(`<code>${DESKTOP_PACKAGE}</code>`));
+      assert.ok(html.includes(`href="/${prefix}docs/installation/"`));
+      assert.ok(html.includes(lang === 'zh' ? '历史安装版本' : 'historical install versions'));
+    }
+  } finally {
+    process.chdir(cwd);
+    rmSync(fixture, { recursive: true, force: true });
+  }
+});
 
 test('bilingual blog pages keep self-canonicals and reciprocal locale alternates', () => {
   const cwd = process.cwd();

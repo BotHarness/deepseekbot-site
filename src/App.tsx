@@ -97,6 +97,10 @@ export function App() {
           <p className="kicker">{copy.features.kicker}</p>
           <h2 id="features-title">{copy.features.title}</h2>
           <p className="section-lead">{copy.features.lead}</p>
+          <p className="section-lead">
+            {copy.features.release.text}{' '}
+            <a href={copy.features.release.href}>{copy.features.release.label} →</a>
+          </p>
           <ol className="feature-rows">
             {copy.features.items
               .filter((item) => item.demo)
