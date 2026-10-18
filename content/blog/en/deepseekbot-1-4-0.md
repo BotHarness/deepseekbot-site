@@ -1,13 +1,13 @@
 ---
 {
-  "title": "DeepSeekBot 1.4.0 preview: Tob, panels and approvals",
-  "description": "What is coming after 1.3.1: easier Bot team management, a flexible workspace, and changes to chat, the CLI and the mobile development app.",
-  "date": "2026-10-18",
-  "tags": ["Release preview", "DeepSeekBot"]
+  "title": "DeepSeekBot 1.4.0: Tob, panels and approvals",
+  "description": "What changed since 1.3.1: easier Bot team management, a flexible workspace, and changes to chat, the CLI and the mobile development app.",
+  "date": "2026-10-19",
+  "tags": ["Release", "DeepSeekBot"]
 }
 ---
 
-**1.4.0 is in preparation and has not been published to npm.** This preview covers changes merged since 1.3.1; the final [changelog](/en/changelog/) will define the release. Installation links still select stable 1.3.1.
+**DeepSeekBot 1.4.0 is published on npm.** Here are the core changes since 1.3.1; see the [complete changelog](/en/changelog/#v1.4.0) for every entry. The [installation guide](/en/docs/installation/) now selects the exact `deepseekbot@1.4.0` package.
 
 The focus is making a team of Bots with persistent identities and memory easier to manage: see what is happening, handle decisions and arrange the workspace around your work.
 
@@ -17,11 +17,15 @@ Meet **Tob**, the local steward. Start a conversation from Home to create a Bot 
 
 Home keeps its composer and an editable greeting, followed by just two cards: **Token history** and **Bot activity**. They sit side by side in a wide panel and stack in a narrow one. Click a Bot to return to its existing DM. Suggested questions fill the draft first; you decide when to send.
 
+### Onboarding that ends in a real conversation
+
+The new Desktop journey covers model setup, creating a Bot and group with Tob, and arranging panels. Finish by clicking the actual Home title to close it and enter the original Tob DM. Newly created Bots no longer receive an automatic welcome message; completed or skipped onboarding stays settled for existing users.
+
 ## A workspace you can arrange
 
 In supported wide desktop layouts, open the panels you need, drag to split them, and resize messages, sessions, memory, schedules, Browser and Computer controls. Panels inside a conversation can form nested rows and columns, with layouts remembered per channel.
 
-This round also fixes clipped rounded borders on panel switches, size jumps while dragging dividers, and lost proportions after reopening panels. Toggling Home preserves the surrounding layout.
+This round also fixes clipped rounded borders on panel switches, size jumps while dragging dividers, and lost proportions after reopening panels. Toggling Home preserves the surrounding layout. On macOS Desktop, the compact icon-and-title area toggles or drags a panel; blank header and control-rail space moves the window, reducing accidental panel drags.
 
 ## Automatic approvals with rules you can read
 
@@ -47,16 +51,16 @@ Choose a memory directory when creating a Bot, or move an existing Bot's Memory 
 
 The development app adds or expands QR pairing, switching computers, native group chats, attachments, speech-to-text, approval and question cards, notifications, schedules and usage views. With permission, you can watch and take over a Browser or local Computer. Other changes address long-reply rendering, keyboard obstruction, back navigation and system text sizing.
 
-These are **mobile development app changes**. An npm update does not install the phone app, and this preview does not announce an App Store or Google Play release. Notifications and device capabilities depend on the build and configuration.
+These are **mobile development app changes**. An npm update does not install the phone app, and this npm release does not announce an App Store or Google Play release. Notifications and device capabilities depend on the build and configuration.
 
 Separately, development/UAT cloud collaboration now has workspaces, channels, invitations and guests, channel Agents and health checks. It remains a separate trial scope, rather than a public cloud-service launch.
 
 ## Compatibility and release timing
 
-The 1.4.0 candidate changes DSH admission from a single RC to `>=0.2.0-rc.2 <0.3.0-0`. Admitting a later 0.2.x version does not mean it has passed runtime qualification; use the final release notes for the verified matrix.
+1.4.0 declares DSH admission of `>=0.2.0-rc.2 <0.3.0-0`. The exact released packages passed fresh installation, Host startup, Bot/DM creation and restart persistence on **DSH 0.2.0-rc.2 and 0.2.1-rc.2**. Use 0.2.1-rc.2 as the recommended version. Admission of other 0.2.x versions does not qualify every runtime.
 
-The new Desktop onboarding journey is still in review and is not included in the merged-feature summary above. After the required PRs merge and the exact package is verified and published, the site will update its installation version and final changelog. The [installation guide](/en/docs/installation/) currently covers the existing stable release.
+Back up your Profile before upgrading. This release includes schema upgrades, so returning to an older binary may require restoring the pre-upgrade backup. Start with the [installation guide](/en/docs/installation/) or the [GitHub Release](https://github.com/BotHarness/DeepSeekBot/releases/tag/v1.4.0).
 
 ### Sources
 
-This preview uses [mainline changes since 1.3.1](https://github.com/BotHarness/DeepSeekBot/compare/v1.3.1...da9ee46aaca938924a2a3057c9b46ff18bb06977), the snapshot's [bilingual changelog fragments](https://github.com/BotHarness/DeepSeekBot/tree/da9ee46aaca938924a2a3057c9b46ff18bb06977/changes), and the still-open [onboarding PR #2200](https://github.com/BotHarness/DeepSeekBot/pull/2200). Implementation and review records do not qualify the final release package.
+This article follows the [released 1.4.0 source](https://github.com/BotHarness/DeepSeekBot/tree/df454d5cebda2a8e4c1300f939267f295571f0f9) and [canonical changelog](https://github.com/BotHarness/DeepSeekBot/blob/df454d5cebda2a8e4c1300f939267f295571f0f9/CHANGELOG.md), including the merged [onboarding #2200](https://github.com/BotHarness/DeepSeekBot/pull/2200) and [window/panel drag fix #2206](https://github.com/BotHarness/DeepSeekBot/pull/2206). Package qualification is recorded in the [successful release workflow](https://github.com/BotHarness/DeepSeekBot/actions/runs/39146814921).

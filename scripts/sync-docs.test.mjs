@@ -173,3 +173,40 @@ test('full and scoped sync preserve site-owned screenshots rather than replacing
     f.clean();
   }
 });
+
+test('1.4.0 installation sync keeps released compatibility and Tob onboarding across repeated syncs', () => {
+  const f = fixture();
+  try {
+    const upstream = join(f.site, '..', 'upstream');
+    put(join(upstream, 'scripts/install-release.json'), '{"version":"1.4.0"}');
+    const sources = {
+      zh: '# 安装\n\n本页安装公共 npm 包 **`deepseekbot`**，需要 **DSH `0.2.0-rc.2`**。\n\n## 4. 进入 Bot 模式\n\n创建第一个 PersonaBot。\n\n## 5. 连接聊天平台\n\n安装 DSH 0.2.0-rc.2 后再装；随包的 Computer 运行时只匹配这个版本。\n',
+      en: '# Install\n\nThis guide installs the public npm package **`deepseekbot`**, which requires **DSH `0.2.0-rc.2`**.\n\n## 4. Open Bot mode\n\nCreate your first PersonaBot.\n\n## 5. Connect a messaging app\n\nInstall DSH 0.2.0-rc.2 and install again; the bundled Computer runtime only matches that release.\n',
+    };
+    const page = DOC_PAGES.find((p) => p.slug === 'installation');
+    for (const lang of ['zh', 'en']) put(join(upstream, page[lang].source), sources[lang]);
+    for (let run = 0; run < 2; run++) {
+      f.run(['--only', 'installation']);
+      for (const lang of ['zh', 'en']) {
+        const guide = readFileSync(join(f.site, 'content/docs', lang, 'installation.md'), 'utf8');
+        assert.ok(guide.includes('deepseekbot@1.4.0'));
+        assert.ok(guide.includes('0.2.1-rc.2'));
+        assert.ok(guide.includes('>=0.2.0-rc.2 <0.3.0-0'));
+        assert.ok(guide.includes(lang === 'zh' ? 'Home 标题' : 'Home title'));
+        assert.ok(guide.includes(lang === 'zh' ? '升级前备份' : 'pre-upgrade backup'));
+        assert.doesNotMatch(
+          guide,
+          /只匹配这个版本|only matches that release|absent from npm v1\.1\.0/,
+        );
+      }
+    }
+    put(join(upstream, 'scripts/install-release.json'), '{"version":"1.4.1"}');
+    f.run(['--only', 'installation']);
+    assert.doesNotMatch(
+      readFileSync(join(f.site, 'content/docs/en/installation.md'), 'utf8'),
+      /stable 1\.4\.0/,
+    );
+  } finally {
+    f.clean();
+  }
+});

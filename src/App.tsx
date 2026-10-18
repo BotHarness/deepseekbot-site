@@ -98,8 +98,8 @@ export function App() {
           <h2 id="features-title">{copy.features.title}</h2>
           <p className="section-lead">{copy.features.lead}</p>
           <p className="section-lead">
-            {copy.features.upcoming.text}{' '}
-            <a href={copy.features.upcoming.href}>{copy.features.upcoming.label} →</a>
+            {copy.features.release.text}{' '}
+            <a href={copy.features.release.href}>{copy.features.release.label} →</a>
           </p>
           <ol className="feature-rows">
             {copy.features.items

@@ -1,13 +1,13 @@
 ---
 {
-  "title": "DeepSeekBot 1.4.0 更新预告",
-  "description": "从 1.3.1 到下一版：更容易管理的 Bot 团队、更自由的工作区，以及聊天、CLI 和手机开发版的变化。",
-  "date": "2026-10-18",
-  "tags": ["版本预告", "DeepSeekBot"]
+  "title": "DeepSeekBot 1.4.0 正式发布",
+  "description": "从 1.3.1 到 1.4.0：更容易管理的 Bot 团队、更自由的工作区，以及聊天、CLI 和手机开发版的变化。",
+  "date": "2026-10-19",
+  "tags": ["版本更新", "DeepSeekBot"]
 }
 ---
 
-**1.4.0 正在准备中，尚未发布到 npm。** 以下介绍来自 1.3.1 之后已合并的变更；最终内容以发布时的[更新日志](/changelog/)为准。当前安装入口仍是正式版 1.3.1。
+**DeepSeekBot 1.4.0 已正式发布到 npm。** 本文介绍从 1.3.1 到 1.4.0 的核心变化，完整条目见[更新日志](/changelog/#v1.4.0)。[安装指南](/docs/installation/)已同步精确版本 `deepseekbot@1.4.0`。
 
 这次更新的重点，是让一组有身份、有记忆的 Bot 更容易管理，也让你更方便地查看进展、处理决定和安排工作。
 
@@ -17,11 +17,15 @@
 
 Home 保留输入框和可编辑的欢迎称呼，下方只放 **Token 历史图表**与 **Bot 活跃情况**。宽面板两列，窄面板上下排列；点 Bot 就回到原来的私聊。快捷提问先填入草稿，由你决定何时发送。
 
+### 新手引导：从配置模型走到真实对话
+
+Desktop 新引导带你配置模型、和托布创建 Bot、创建群聊，再学习面板布局。最后实际点击 Home 标题关闭它，进入原来的托布私聊。新建 Bot 不再自动插入默认欢迎消息；旧用户已完成或跳过的状态也会保留。
+
 ## 工作区：按自己的方式摆放面板
 
 消息、会话、记忆、定时任务、浏览器和电脑控制，可以在适用的桌面宽屏布局里按需展开、拖拽分割和调整大小。消息内的子面板也能组成嵌套行列，按频道记住布局。
 
-这一轮还修复了面板开关的圆角边框裁切、拖动分割线时的尺寸回跳，以及关闭重开后的比例恢复。Home 开关保留周围布局，减少反复调整。
+这一轮还修复了面板开关的圆角边框裁切、拖动分割线时的尺寸回跳，以及关闭重开后的比例恢复。Home 开关保留周围布局，减少反复调整。在 macOS Desktop 中，图标加标题是面板的开关与拖拽区域；标题栏和控制列的空白用于移动窗口，减少误拖整个面板。
 
 ## 自动审批：把规则写清楚
 
@@ -53,10 +57,10 @@ Home 保留输入框和可编辑的欢迎称呼，下方只放 **Token 历史图
 
 ## 兼容性与发布安排
 
-1.4.0 候选版将 DSH 安装范围从单个 RC 放宽到 `>=0.2.0-rc.2 <0.3.0-0`。允许安装后续 0.2.x，不代表每个版本都已经完成运行验收；请以最终发布说明中的验证范围为准。
+1.4.0 声明的 DSH 安装范围是 `>=0.2.0-rc.2 <0.3.0-0`。正式发布的同一组包已在 **DSH 0.2.0-rc.2 与 0.2.1-rc.2** 完成全新安装、Host 启动、Bot／DM 创建及重启持久化验证。推荐使用 0.2.1-rc.2；允许其他 0.2.x 安装，不代表每个版本都已完成运行验收。
 
-新版 Desktop 入门引导仍在审阅，尚未算进上面的已合并介绍。待必要 PR 合并、发布包验证并正式发布后，官网才会同步新安装版本与最终更新日志。现在可以先看[安装指南](/docs/installation/)了解现有正式版。
+升级前请备份 Profile。1.4.0 包含数据结构升级，回退到旧二进制可能需要恢复升级前的备份。开始使用请看[安装指南](/docs/installation/)，或查看 [GitHub Release](https://github.com/BotHarness/DeepSeekBot/releases/tag/v1.4.0)。
 
 ### 本文依据
 
-本次整理基于 [1.3.1 之后的主线变更](https://github.com/BotHarness/DeepSeekBot/compare/v1.3.1...da9ee46aaca938924a2a3057c9b46ff18bb06977)。具体记录见该版本的[双语 changelog 与变更碎片](https://github.com/BotHarness/DeepSeekBot/tree/da9ee46aaca938924a2a3057c9b46ff18bb06977/changes)，以及待审阅的[新引导 PR #2200](https://github.com/BotHarness/DeepSeekBot/pull/2200)。这些是实现与审阅记录，不是最终发布包的验收结论。
+本文以 [1.4.0 发布源码](https://github.com/BotHarness/DeepSeekBot/tree/df454d5cebda2a8e4c1300f939267f295571f0f9)与[正式双语更新日志](https://github.com/BotHarness/DeepSeekBot/blob/df454d5cebda2a8e4c1300f939267f295571f0f9/CHANGELOG.zh.md)为依据，包括已合并的[新手引导 #2200](https://github.com/BotHarness/DeepSeekBot/pull/2200)及[窗口与面板拖拽修复 #2206](https://github.com/BotHarness/DeepSeekBot/pull/2206)。发布包验证见[正式发布流程](https://github.com/BotHarness/DeepSeekBot/actions/runs/39146814921)。

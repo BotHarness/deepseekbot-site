@@ -130,7 +130,7 @@ export const changelogPath = (lang: Lang) => `${lang === 'zh' ? '' : '/en'}/chan
 const anchor = (release: Release) =>
   release.identity === 'Development' ? 'development' : `v${release.identity}`;
 
-/** The Release Ledger shape: ## [version] - date, a summary line, ### sections of "- " entries. */
+/** The Release Ledger shape: ## [version] - date, summary paragraphs, ### sections of "- " entries. */
 export function parseLedger(markdown: string): Release[] {
   const releases: Release[] = [];
   let release: Release | undefined;
@@ -148,7 +148,7 @@ export function parseLedger(markdown: string): Release[] {
     } else if (section && line.startsWith('- ')) section.entries.push(line.slice(2));
     else if (section && /^\s{2,}\S/.test(line) && section.entries.length > 0)
       section.entries[section.entries.length - 1] += ` ${line.trim()}`;
-    else if (!section && !release.summary && line.trim()) release.summary = line.trim();
+    else if (!section) release.summary += `${line}\n`;
   }
   // Unreleased is work in progress; it appears here once it ships under a version. Sections
   // follow the ledger's reading order for users: what's new first, developer migrations after.
@@ -158,7 +158,11 @@ export function parseLedger(markdown: string): Release[] {
   };
   return releases
     .filter((r) => r.identity !== 'Unreleased' && r.date)
-    .map((r) => ({ ...r, sections: r.sections.toSorted((a, b) => rank(a.name) - rank(b.name)) }));
+    .map((r) => ({
+      ...r,
+      summary: r.summary.trim(),
+      sections: r.sections.toSorted((a, b) => rank(a.name) - rank(b.name)),
+    }));
 }
 
 function inline() {
@@ -212,7 +216,11 @@ function body(lang: Lang, releases: Release[]) {
     index === 0 ? `<span class="changelog-latest">${t.latest}</span>` : ''
   }<span class="changelog-rule" aria-hidden="true"></span><span class="changelog-count">${t.count(entries.length)}</span></summary>
   <div class="changelog-content">
-  <p class="changelog-summary">${render(release.summary)}</p>
+  ${release.summary
+    .split(/\n\s*\n/)
+    .filter(Boolean)
+    .map((paragraph) => `<p class="changelog-summary">${render(paragraph)}</p>`)
+    .join('\n')}
   ${development ? `<p class="changelog-note">${t.developmentNote}</p>` : ''}
   <ul class="changelog-entries">${entries.join('')}</ul>
   </div>

@@ -1,15 +1,14 @@
-# Website 1.4.0 preview captures
+# Website 1.4.0 release captures
 
-Real Playwright screenshots of locally served production `dist/` output, captured 2026-10-18.
-These show the website only; they are not DeepSeekBot runtime or final-package qualification.
+Real Playwright screenshots captured 2026-10-19. These show the website, not DeepSeekBot runtime or final-package qualification.
 
-- Before: site main `79ef361`; the new article URL returns HTTP 404.
-- After: this PR's website sources; both article URLs return HTTP 200.
-- Chinese: 1440 × 1000, light theme.
-- English: 390 × 844, dark theme.
-- Before/after use the same viewport, locale and theme. The homepage is scrolled to the Features introduction; the article is captured at its beginning.
-- Analytics prompts were declined through the actual local browser controls before capture. No content was painted over, fabricated or resized.
-- The paired pages have no horizontal overflow. Canonical/hreflang metadata, sitemap entries and generated local links were checked.
-- The homepage installation identity and guide copies remain at stable 1.3.1. This PR is a preview, not a 1.4.0 install announcement.
+- `before-home-*`, `before-install-*` and `before-changelog-*`: actual production at `https://deepseekbot.app`, before this deployment. Existing Cloudflare Worker version: `9bd4794f-97ca-4ee4-9b6e-43807508de7b`.
+- `before-article-*`: retained 2026-10-18 screenshots of the genuine missing article HTTP404 response from a local production build of site main `79ef361`. Direct production navigation also failed before deployment, but Chromium did not render its HTTP error body; the local404 is explicitly the captured comparison.
+- `after-*`: this PR's production `dist/`, served locally. Both article URLs, installation guides and changelogs returned HTTP200.
+- Chinese: 1440 × 1000, light. English: 390 × 844, dark. Before/after match viewport, locale and theme.
+- Homepage introduction is scrolled to Features. `after-features-*` shows the feature-card grid; article/install/changelog shots begin at the page top.
+- Analytics and welcome bubbles were dismissed using their actual local browser controls. Nothing was painted over, fabricated or resized.
+- Both languages have no horizontal overflow on the checked pages. Canonical/hreflang metadata, sitemap entries and local links were checked.
+- Installation identity is exact stable1.4.0; the canonical changelog includes both its feature summary and mobile/Cloud/rollback paragraph. Mobile app and Cloud remain development/UAT scope.
 
-Both blog covers were generated through the existing pixel-cover template. They are illustrations, not product screenshots.
+Both blog covers use the existing pixel-cover template. They are illustrations, not product screenshots.
