@@ -21,7 +21,9 @@ Fresh free GSC reads: Google Web / last 28 days / mobile, US + /en/ URL and Chin
 
 Real Android development UI at product source d2529feb520ace2d773db6ac0966dc265887bdc5; Chinese originals in both locales. Day0 existing Sessions and operator-led inputs. Avatar/fiction boundaries are disclosed in the article. Selected original PNGs are copied byte-for-byte; source dimensions/hashes and source frame names are in public/blog-figures/ai-companion-preference-memory/provenance.json. Public assets exclude raw internal timelines, credential files and private dashboard links.
 
-User requested the direct original 3×3 collage instead of decorated cover art. It is the first article image, linked to full resolution, with all ten individual originals available. No generic illustrated per-post cover is added; existing site share-card fallback remains. Article text/metadata and existing renderer supply bilingual canonical/hreflang, blog-index and sitemap entries. No renderer, navigation or observing article is changed.
+Human selected the ChatGPT-generated B cover on2026-10-18. Paired1200×630 Chinese/English artwork now supplies article covers, list thumbnails, OpenGraph and Twitter images through the existing coverFor pipeline. The English headline is localized; tiny background chat remains Chinese. Each article labels the cover as generated editorial artwork and keeps all native screenshot figures unchanged.
+
+The code cover generator preserves artwork with a matching .artwork.json title/image hash. Changed article titles, missing assets or changed pixels cause a review-required failure instead of silently replacing an approved cover. Curated-cover regeneration is smoke-tested in a sandbox containing only this paired article so observing cover assets remain untouched.
 
 ## Review and follow-up
 

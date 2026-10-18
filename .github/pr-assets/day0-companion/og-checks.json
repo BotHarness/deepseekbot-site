@@ -1,0 +1,233 @@
+{
+  "before": "Built article before selecting individual covers, combined preview at cdf01fd",
+  "after": "Actual updated PR production build",
+  "nativeSourceAssetsVerified": 12,
+  "pages": [
+    {
+      "language": "zh",
+      "viewport": [1440, 1000],
+      "mobile": [390, 844],
+      "h1": 1,
+      "cover": "/blog-covers/ai-companion-preference-memory-zh.png",
+      "og": "https://deepseekbot.app/blog-covers/ai-companion-preference-memory-zh.png",
+      "twitter": "https://deepseekbot.app/blog-covers/ai-companion-preference-memory-zh.png",
+      "images": [
+        {
+          "path": "/blog-covers/ai-companion-preference-memory-zh.png",
+          "width": 1200,
+          "height": 630,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/grid.png",
+          "width": 3240,
+          "height": 7200,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/01.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/06.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/09.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        }
+      ],
+      "overflow": false,
+      "canonical": "https://deepseekbot.app/blog/ai-companion-preference-memory/",
+      "disclosure": true,
+      "strayHeading": false,
+      "generatedArtDisclosure": true,
+      "indexCover": "/blog-covers/ai-companion-preference-memory-zh.png"
+    },
+    {
+      "language": "en",
+      "viewport": [1440, 1000],
+      "mobile": [390, 844],
+      "h1": 1,
+      "cover": "/blog-covers/ai-companion-preference-memory-en.png",
+      "og": "https://deepseekbot.app/blog-covers/ai-companion-preference-memory-en.png",
+      "twitter": "https://deepseekbot.app/blog-covers/ai-companion-preference-memory-en.png",
+      "images": [
+        {
+          "path": "/blog-covers/ai-companion-preference-memory-en.png",
+          "width": 1200,
+          "height": 630,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/grid.png",
+          "width": 3240,
+          "height": 7200,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/01.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/06.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/09.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-companion-preference-memory/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        }
+      ],
+      "overflow": false,
+      "canonical": "https://deepseekbot.app/en/blog/ai-companion-preference-memory/",
+      "disclosure": true,
+      "strayHeading": false,
+      "generatedArtDisclosure": true,
+      "indexCover": "/blog-covers/ai-companion-preference-memory-en.png"
+    }
+  ]
+}

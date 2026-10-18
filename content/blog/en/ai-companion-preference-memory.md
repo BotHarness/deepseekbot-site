@@ -7,6 +7,8 @@
 }
 ---
 
+*The cover is AI-generated from nine screenshots; the conversation images in the article remain unaltered originals.*
+
 “I'd like hot cocoa today” is very different from “I never drink coffee.” If an AI companion turns a passing remark into a permanent label, remembering more can make the next conversation worse.
 
 We started from an introduction to Shen Zhiyu, chatted for a while, then opened the file to see what he had saved. Shen is an original adult fictional character with an AI-generated avatar. Book restoration and piano playing are narrative background, not a real person's professional history. These are actual DeepSeekBot model replies to scenes and inputs we organised; the screenshots preserve the Chinese originals.
