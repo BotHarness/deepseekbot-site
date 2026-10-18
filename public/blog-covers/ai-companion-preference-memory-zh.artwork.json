@@ -1,0 +1,14 @@
+{
+  "kind": "curated-imagegen-cover",
+  "articleTitle": "AI 陪伴该记住什么？从一杯热可可聊起",
+  "locale": "zh",
+  "width": 1200,
+  "height": 630,
+  "sha256": "ca700a386466ded092af60e215378bb496a8528a1fc8f084e83ed3f61bc28e38",
+  "tool": "Built-in image_gen; exact model version is not exposed",
+  "humanSelection": "ChatGPT-generated B variant selected on 2026-10-18",
+  "generation": "Chinese approved artwork; English cover localizes its editorial overlay. The screenshot-inspired background remains Chinese and may be redrawn by generation.",
+  "use": "Editorial cover artwork only. Original native screenshot evidence is under blog-figures/ai-companion-preference-memory/.",
+  "sourceCaptureCommit": "d2529feb520ace2d773db6ac0966dc265887bdc5",
+  "normalization": "Proportional downsampling to fit a 1200x630 canvas; generation originals retained in the approved asset archive."
+}
