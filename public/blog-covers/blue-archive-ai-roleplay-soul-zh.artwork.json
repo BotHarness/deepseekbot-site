@@ -1,0 +1,14 @@
+{
+  "kind": "curated-imagegen-cover",
+  "articleTitle": "蔚蓝档案 AI 群聊：先写好 SOUL，再聊一个周末",
+  "locale": "zh",
+  "width": 1200,
+  "height": 630,
+  "sha256": "4057d75fd2696def28ee5c662b033f03c0f8f4f293b6580a3246d2ebcd9abc7e",
+  "tool": "Built-in image_gen; exact model version is not exposed",
+  "humanSelection": "ChatGPT-generated B variant selected on 2026-10-18",
+  "generation": "Chinese approved artwork; English cover localizes its editorial overlay. The screenshot-inspired background remains Chinese and may be redrawn by generation.",
+  "use": "Editorial cover artwork only. Original native screenshot evidence is under blog-figures/blue-archive-ai-roleplay-soul/.",
+  "sourceCaptureCommit": "d2529feb520ace2d773db6ac0966dc265887bdc5",
+  "normalization": "Proportional downsampling to fit a 1200x630 canvas; generation originals retained in the approved asset archive."
+}

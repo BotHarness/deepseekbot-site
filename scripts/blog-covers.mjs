@@ -3,11 +3,11 @@
 // adding or retitling a post; the PNGs are committed, blog.ts falls back to a theme block
 // when a cover is missing. Needs a Chromium: Playwright's own (PLAYWRIGHT_BROWSERS_PATH)
 // or CHROMIUM_PATH.
-import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
-import { createHash } from 'node:crypto';
+import { mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { AVATAR_PRESETS, pixelAvatarSvg } from '@botharness/pixel-avatar';
 import { chromium } from 'playwright-core';
+import { validateCuratedArtwork } from './blog-artwork.mjs';
 
 const require = createRequire(import.meta.url);
 const font = `data:font/woff2;base64,${readFileSync(
@@ -83,18 +83,7 @@ for (const lang of ['zh', 'en']) {
     const meta = frontmatter(readFileSync(`content/blog/${lang}/${file}`, 'utf8'));
     const out = `public/blog-covers/${slug}-${lang}.png`;
     // Human-selected artwork keeps its reviewed pixels until explicitly replaced.
-    const artworkPath = out.replace(/\.png$/, '.artwork.json');
-    if (existsSync(artworkPath)) {
-      const artwork = JSON.parse(readFileSync(artworkPath, 'utf8'));
-      if (
-        artwork.articleTitle !== meta.title ||
-        !existsSync(out) ||
-        createHash('sha256').update(readFileSync(out)).digest('hex') !== artwork.sha256
-      ) {
-        throw new Error(
-          'Curated cover needs review: ' + out + ' (check title, image and artwork metadata)',
-        );
-      }
+    if (validateCuratedArtwork(out, meta.title)) {
       written.push(out + ' (kept curated artwork)');
       continue;
     }

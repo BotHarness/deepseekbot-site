@@ -1,0 +1,21 @@
+{
+  "command": "pnpm build",
+  "controlledFailure": "Mismatched curated-cover articleTitle",
+  "exitStatus": 1,
+  "refusal": "Curated cover needs review: article title changed",
+  "originalMetadataRestored": true,
+  "approvedImageUnchanged": true,
+  "approvedImageSha256": "4057d75fd2696def28ee5c662b033f03c0f8f4f293b6580a3246d2ebcd9abc7e",
+  "regressionCommand": "pnpm test:blog-artwork",
+  "regressionCases": 7,
+  "scope": "Release checker accepts matching artwork; refuses title/hash/missing-image/metadata/orphan-article problems; ordinary template covers remain untouched.",
+  "fullVerify": {
+    "command": "pnpm verify",
+    "tests": 63,
+    "format": true,
+    "lint": true,
+    "typechecks": 2,
+    "build": true,
+    "curatedCoversValidated": 6
+  }
+}

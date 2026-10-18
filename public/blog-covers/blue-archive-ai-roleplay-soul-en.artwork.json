@@ -1,0 +1,14 @@
+{
+  "kind": "curated-imagegen-cover",
+  "articleTitle": "Blue Archive AI roleplay: a weekend group chat with distinct characters",
+  "locale": "en",
+  "width": 1200,
+  "height": 630,
+  "sha256": "362e7b380beb62d64a5667a434ac41c3aecb63a2d1a8257dbfac4c7fd26fe13c",
+  "tool": "Built-in image_gen; exact model version is not exposed",
+  "humanSelection": "ChatGPT-generated B variant selected on 2026-10-18",
+  "generation": "Chinese approved artwork; English cover localizes its editorial overlay. The screenshot-inspired background remains Chinese and may be redrawn by generation.",
+  "use": "Editorial cover artwork only. Original native screenshot evidence is under blog-figures/blue-archive-ai-roleplay-soul/.",
+  "sourceCaptureCommit": "d2529feb520ace2d773db6ac0966dc265887bdc5",
+  "normalization": "Proportional downsampling to fit a 1200x630 canvas; generation originals retained in the approved asset archive."
+}

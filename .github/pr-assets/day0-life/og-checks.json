@@ -1,0 +1,221 @@
+{
+  "before": "Built article before selecting individual covers, combined preview at cdf01fd",
+  "after": "Actual updated PR production build",
+  "nativeSourceAssetsVerified": 17,
+  "pages": [
+    {
+      "language": "zh",
+      "viewport": [1440, 1000],
+      "mobile": [390, 844],
+      "h1": 1,
+      "cover": "/blog-covers/blue-archive-ai-roleplay-soul-zh.png",
+      "og": "https://deepseekbot.app/blog-covers/blue-archive-ai-roleplay-soul-zh.png",
+      "twitter": "https://deepseekbot.app/blog-covers/blue-archive-ai-roleplay-soul-zh.png",
+      "images": [
+        {
+          "path": "/blog-covers/blue-archive-ai-roleplay-soul-zh.png",
+          "width": 1200,
+          "height": 630,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/grid.png",
+          "width": 3240,
+          "height": 7200,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/01.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/06.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/09.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        }
+      ],
+      "overflow": false,
+      "canonical": "https://deepseekbot.app/blog/blue-archive-ai-roleplay-soul/",
+      "disclosure": true,
+      "strayHeading": false,
+      "generatedArtDisclosure": true,
+      "indexCover": "/blog-covers/blue-archive-ai-roleplay-soul-zh.png"
+    },
+    {
+      "language": "en",
+      "viewport": [1440, 1000],
+      "mobile": [390, 844],
+      "h1": 1,
+      "cover": "/blog-covers/blue-archive-ai-roleplay-soul-en.png",
+      "og": "https://deepseekbot.app/blog-covers/blue-archive-ai-roleplay-soul-en.png",
+      "twitter": "https://deepseekbot.app/blog-covers/blue-archive-ai-roleplay-soul-en.png",
+      "images": [
+        {
+          "path": "/blog-covers/blue-archive-ai-roleplay-soul-en.png",
+          "width": 1200,
+          "height": 630,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/grid.png",
+          "width": 3240,
+          "height": 7200,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/01.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/06.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/09.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        }
+      ],
+      "overflow": false,
+      "canonical": "https://deepseekbot.app/en/blog/blue-archive-ai-roleplay-soul/",
+      "disclosure": true,
+      "strayHeading": false,
+      "generatedArtDisclosure": true,
+      "indexCover": "/blog-covers/blue-archive-ai-roleplay-soul-en.png"
+    }
+  ]
+}
