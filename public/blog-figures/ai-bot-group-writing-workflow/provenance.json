@@ -1,0 +1,112 @@
+{
+  "captured": "2026-10-18",
+  "productSource": "d2529feb520ace2d773db6ac0966dc265887bdc5",
+  "platform": "Android emulator native app; SDK 58 compatible development client",
+  "uiLanguage": "Chinese",
+  "theme": "light",
+  "inputMethod": "Operator-organized prompts sent using the production CLI/canonical channel send; actual model replies and file tools",
+  "limits": [
+    "All captures are Day 0 in existing Sessions, not a cross-day or cross-Session memory test.",
+    "Development source is not a stable-package/store-release qualification.",
+    "Authored roleplay, not an official game collaboration or a real offline meeting.",
+    "Files were saved/read back; no claim that every working-tree file is Git-committed."
+  ],
+  "ordering": "Thematic selection across the recorded task, not a continuous unedited video.",
+  "assets": [
+    {
+      "file": "01.png",
+      "sha256": "209ca748e8848c82bc2a9945768f20f365d849ed9d769289b6215182c539b83d",
+      "width": 1080,
+      "height": 2400,
+      "label": "先选标题",
+      "selectionSource": "finish-work-title-frame.png"
+    },
+    {
+      "file": "02.png",
+      "sha256": "dd9e663ae46a02945ac62e1f192a86f80090ed60ecc9f93afdc83ea34e6a7d80",
+      "width": 1080,
+      "height": 2400,
+      "label": "别光说好",
+      "selectionSource": "finish-work-critique-frame.png"
+    },
+    {
+      "file": "03.png",
+      "sha256": "aae9c0efd255d2b9b05004ac481333815e0c3090b27fb43c517d23018c46d662",
+      "width": 1080,
+      "height": 2400,
+      "label": "第一版稿",
+      "selectionSource": "round3-work-discussion.png"
+    },
+    {
+      "file": "04.png",
+      "sha256": "8e1a0411e07f16e88e7c0b37d3b0545c17cd12604863ccfcc4353eea5c8bac1f",
+      "width": 1080,
+      "height": 2400,
+      "label": "互相交接",
+      "selectionSource": "round3-work-handoff.png"
+    },
+    {
+      "file": "05.png",
+      "sha256": "45aa13ec436fde127df193f83c8e6700a05dbecc89ef0c9082c7544a6b9114d4",
+      "width": 1080,
+      "height": 2400,
+      "label": "写进文件",
+      "selectionSource": "round3-work-file.png"
+    },
+    {
+      "file": "06.png",
+      "sha256": "8f9516f9f0a171d3b9d639e80f3f91cbc92b418ec5702fb98e6139a62deec891",
+      "width": 1080,
+      "height": 2400,
+      "label": "怎么回访",
+      "selectionSource": "finish-work-01-frame.png"
+    },
+    {
+      "file": "07.png",
+      "sha256": "552392ec486eb964948e0cb5b3d78254f364eda705ffb1f90b87e660e710da5d",
+      "width": 1080,
+      "height": 2400,
+      "label": "表格太长",
+      "selectionSource": "finish-work-02-frame.png"
+    },
+    {
+      "file": "08.png",
+      "sha256": "ae9f0ba8013e61120ad4b465315a1433dd0d81c2ddcd918eb0b5a33cd1f4ffba",
+      "width": 1080,
+      "height": 2400,
+      "label": "再删两栏",
+      "selectionSource": "finish-work-03-frame.png"
+    },
+    {
+      "file": "09.png",
+      "sha256": "0297ee805b12c1cccd6a755903569bb7dc5fbed67e1563be6d25a84cb61c25ce",
+      "width": 1080,
+      "height": 2400,
+      "label": "读者提问",
+      "selectionSource": "finish-work-04-frame.png"
+    },
+    {
+      "file": "10.png",
+      "sha256": "51c6eb7e38db26cdb9d07291a40fa858cf17c5594ab95b6e6d8bd18d052cd7d8",
+      "width": 1080,
+      "height": 2400,
+      "label": "交稿确认",
+      "selectionSource": "finish-work-05-frame.png"
+    },
+    {
+      "file": "grid.png",
+      "sha256": "c8e54213af9d7667527bb2ea6b91dec3e0c53dde8868ba407a5be9668594dc4d",
+      "width": 3240,
+      "height": 7200,
+      "method": "Nine full-screen captures directly joined, without cropping, painted text or added frames."
+    },
+    {
+      "file": "workroom-day0.md",
+      "sha256": "b7d4f1bb472907a2726a464b10d8a94fc346f24a73321ae9060bf79047855176"
+    },
+    {
+      "file": "followup-day0.md",
+      "sha256": "1b5044b60e4438dbd36d594f585018b23fc400533870e4ab27c64556f360173a"
+    }
+  ]
+}

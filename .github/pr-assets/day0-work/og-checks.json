@@ -1,0 +1,221 @@
+{
+  "before": "Built article before selecting individual covers, combined preview at cdf01fd",
+  "after": "Actual updated PR production build",
+  "nativeSourceAssetsVerified": 13,
+  "pages": [
+    {
+      "language": "zh",
+      "viewport": [1440, 1000],
+      "mobile": [390, 844],
+      "h1": 1,
+      "cover": "/blog-covers/ai-bot-group-writing-workflow-zh.png",
+      "og": "https://deepseekbot.app/blog-covers/ai-bot-group-writing-workflow-zh.png",
+      "twitter": "https://deepseekbot.app/blog-covers/ai-bot-group-writing-workflow-zh.png",
+      "images": [
+        {
+          "path": "/blog-covers/ai-bot-group-writing-workflow-zh.png",
+          "width": 1200,
+          "height": 630,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/grid.png",
+          "width": 3240,
+          "height": 7200,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/01.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/06.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/09.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        }
+      ],
+      "overflow": false,
+      "canonical": "https://deepseekbot.app/blog/ai-bot-group-writing-workflow/",
+      "disclosure": true,
+      "strayHeading": false,
+      "generatedArtDisclosure": true,
+      "indexCover": "/blog-covers/ai-bot-group-writing-workflow-zh.png"
+    },
+    {
+      "language": "en",
+      "viewport": [1440, 1000],
+      "mobile": [390, 844],
+      "h1": 1,
+      "cover": "/blog-covers/ai-bot-group-writing-workflow-en.png",
+      "og": "https://deepseekbot.app/blog-covers/ai-bot-group-writing-workflow-en.png",
+      "twitter": "https://deepseekbot.app/blog-covers/ai-bot-group-writing-workflow-en.png",
+      "images": [
+        {
+          "path": "/blog-covers/ai-bot-group-writing-workflow-en.png",
+          "width": 1200,
+          "height": 630,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/grid.png",
+          "width": 3240,
+          "height": 7200,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/01.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/02.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/03.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/04.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/05.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/06.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/07.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/08.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/09.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        },
+        {
+          "path": "/blog-figures/ai-bot-group-writing-workflow/10.png",
+          "width": 1080,
+          "height": 2400,
+          "loaded": true
+        }
+      ],
+      "overflow": false,
+      "canonical": "https://deepseekbot.app/en/blog/ai-bot-group-writing-workflow/",
+      "disclosure": true,
+      "strayHeading": false,
+      "generatedArtDisclosure": true,
+      "indexCover": "/blog-covers/ai-bot-group-writing-workflow-en.png"
+    }
+  ]
+}
