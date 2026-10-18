@@ -41,6 +41,7 @@ For repeatable local model setup across product worktrees, see the
   (`scripts/assets/deepseekbot-logo.png`, from BotHarness). When the design changes, bump the
   file suffix and the meta tags in both entries so social caches refetch; old files stay so
   links already shared keep working.
+- **Reviewed blog covers**: per-post artwork lives in `public/blog-covers/<slug>-<lang>.png`, with a matching `.artwork.json` containing its article title and SHA-256. `pnpm blog:covers:check` checks these without rewriting images and runs before every `pnpm build` (including verify and both deploy commands). A retitled article, missing image or changed pixels fails the build for review; uncurated template covers are unaffected. `pnpm blog:covers` uses the same validation before retaining reviewed artwork.
 - **Docs**: the DeepSeekBot guides (formerly botharness.ai/docs) live in `content/docs/{zh,en}`,
   copied from a BotHarness checkout with `BOTHARNESS=../BotHarness pnpm docs:sync` (screenshots go
   to `public/guides`). To update a bounded set without replacing other guides or media, use

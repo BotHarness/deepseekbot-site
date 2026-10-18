@@ -14,7 +14,7 @@
 这是《从零开始的 Personal Agent》的一次 Day 0 记录。三个角色由我们配置，话题和后续提示也由我们组织，回复来自实际模型调用；画面是 DeepSeekBot 安卓开发版的真实截图。它是一场跨校同人小剧场，不是《蔚蓝档案》的官方剧情或合作。
 
 <figure class="evidence-figure">
-<a href="/blog-figures/blue-archive-ai-roleplay-soul/grid.png"><img src="/blog-figures/blue-archive-ai-roleplay-soul/grid.png" width="3240" height="7200" style="max-width:540px;display:block;margin:auto" alt="夏莱周末小群的九张原始手机截图，3×3直接排列" decoding="async"></a>
+<a href="/blog-figures/blue-archive-ai-roleplay-soul/grid.png"><img src="/blog-figures/blue-archive-ai-roleplay-soul/grid.png" width="3240" height="7200" style="max-width:540px;display:block;margin:auto" alt="白子提出骑车后缩短距离，老师纠正优香把自行车当汽车的误解，三人商量雨天公交、水族馆和群内虚构约定" decoding="async"></a>
 <figcaption>九张原始全屏截图直拼，没有重绘对话。点击可放大；下方可逐张查看。</figcaption>
 </figure>
 

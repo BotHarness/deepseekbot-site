@@ -31,6 +31,10 @@ Human reviews these paired articles and public images in the PR before merge/dep
 
 ## Local validation
 
-`pnpm verify` passed all **56 tests**, formatting, lint, both typechecks and the production build. Built Chinese/English pages were opened in Chromium at1440×1000 and390×844, with every image decoded; one H1, canonical/hreflang, blog-index/sitemap membership, internal article destinations, ten-image disclosure and real dark/light controls passed without horizontal overflow. Site search currently indexes guides rather than blog articles; this content-only change does not add blog-search support.
+`pnpm verify` passed all **63 tests**, formatting, lint, both typechecks and the production build. Built Chinese/English pages were opened in Chromium at1440×1000 and390×844, with every image decoded; one H1, canonical/hreflang, blog-index/sitemap membership, internal article destinations, ten-image disclosure and real dark/light controls passed without horizontal overflow. Site search currently indexes guides rather than blog articles; these articles do not add blog-search support.
 
 Production new-path GETs returned404. The Before browser captures show Chromium’s original error document for those empty404 responses; no404 UI was fabricated. The After captures use built dist. Analytics requests were blocked, and consent was declined using its normal control before capture. Image pixels and the original screenshot collage remain unchanged. Chinese captures in the English article are labelled as originals. CI, Human editorial review, merge and deployment are separate.
+
+## Final review fixes
+
+The paired collage alt text summarizes the ride proposal, the bicycle/car correction and the fictional group agreement. The preservation record only claims retention of the approved two images. Seven command regressions cover the shared validator; a controlled actual `pnpm build` refused a mismatched article title and restored metadata without changing the PNG. The same validation runs before the production build, verify and both deploy paths; it does not generate or modify artwork.

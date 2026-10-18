@@ -14,7 +14,7 @@
 This is Day 0 of our *Personal Agent from Zero* diary. We configured the characters and supplied the topics and follow-up prompts; the replies came from real model calls in DeepSeekBot. The original Chinese screenshots show an Android development build. This cross-school fan scenario is not official Blue Archive dialogue or a collaboration with its creators.
 
 <figure class="evidence-figure">
-<a href="/blog-figures/blue-archive-ai-roleplay-soul/grid.png"><img src="/blog-figures/blue-archive-ai-roleplay-soul/grid.png" width="3240" height="7200" style="max-width:540px;display:block;margin:auto" alt="Nine original Chinese native app screenshots in a direct three-by-three collage" decoding="async"></a>
+<a href="/blog-figures/blue-archive-ai-roleplay-soul/grid.png"><img src="/blog-figures/blue-archive-ai-roleplay-soul/grid.png" width="3240" height="7200" style="max-width:540px;display:block;margin:auto" alt="Original Chinese chat screenshots: Shiroko shortens her proposed bicycle ride, the teacher corrects Yuuka’s bicycle/car mistake, and the group discusses a bus, the aquarium and their fictional agreement" decoding="async"></a>
 <figcaption>Nine unchanged full-screen captures, directly joined. Click to enlarge; individual originals are below.</figcaption>
 </figure>
 
