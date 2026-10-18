@@ -117,7 +117,13 @@ export interface Copy {
     qqFailed: string;
   };
   symbols: SymbolLabels;
-  features: { kicker: string; title: string; lead: string; items: Feature[] };
+  features: {
+    kicker: string;
+    title: string;
+    lead: string;
+    upcoming: { text: string; label: string; href: string };
+    items: Feature[];
+  };
   faq: {
     kicker: string;
     title: string;
@@ -299,6 +305,11 @@ const zh: Copy = {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
     lead: `v${VERSION} 已发布：命令行可配置 Host、操作浏览器和电脑、管理 IM 应用；Bot 浏览器面板随页面变化实时刷新。Browser 与 Computer 已随包附带，外部账号和操作权限由你开启。`,
+    upcoming: {
+      text: '1.4.0 准备中：托布总管与 Home、多面板工作区、自动审批，以及聊天和命令行增强。',
+      label: '查看更新预告',
+      href: '/blog/deepseekbot-1-4-0/',
+    },
     items: [
       {
         icon: 'present',
@@ -637,6 +648,11 @@ const en: Copy = {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
     lead: `v${VERSION} is out: configure a Host, operate its Browser and Computer, and manage IM apps from the CLI. The Bot Browser panel now follows page changes live. Browser and Computer are bundled; you enable external accounts and action permissions.`,
+    upcoming: {
+      text: '1.4.0 is in preparation: Tob and Home, a flexible panel workspace, automatic approvals, and expanded chat and CLI controls.',
+      label: 'Read the preview',
+      href: '/en/blog/deepseekbot-1-4-0/',
+    },
     items: [
       {
         icon: 'present',
