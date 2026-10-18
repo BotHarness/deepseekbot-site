@@ -1,0 +1,110 @@
+{
+  "captured": "2026-10-18",
+  "productSource": "d2529feb520ace2d773db6ac0966dc265887bdc5",
+  "platform": "Android emulator native app; SDK 58 compatible development client",
+  "uiLanguage": "Chinese",
+  "theme": "light",
+  "inputMethod": "Operator-organized prompts sent using the production CLI/canonical channel send; actual model replies and file tools",
+  "limits": [
+    "All captures are Day 0 in existing Sessions, not a cross-day or cross-Session memory test.",
+    "Development source is not a stable-package/store-release qualification.",
+    "Authored roleplay, not an official game collaboration or a real offline meeting.",
+    "Files were saved/read back; no claim that every working-tree file is Git-committed."
+  ],
+  "ordering": "Thematic selection across the recorded task, not a continuous unedited video.",
+  "assets": [
+    {
+      "file": "01.png",
+      "sha256": "e818af31300ba01f1ee7a92e3b7479f484e68953c5f66009610a5d249a320da0",
+      "width": 1080,
+      "height": 2400,
+      "label": "初次见面",
+      "selectionSource": "latest-companion-preview.png"
+    },
+    {
+      "file": "02.png",
+      "sha256": "12e3bbe5cd7103afb709445657f9efdfb961a99a47bff9e1d24f3af2098dd243",
+      "width": 1080,
+      "height": 2400,
+      "label": "先陪我聊",
+      "selectionSource": "round3-companion-preference.png"
+    },
+    {
+      "file": "03.png",
+      "sha256": "efeeb39a63a92bc63650933d820e7be76f6eb9a77c0cc569865baba4755c80dd",
+      "width": 1080,
+      "height": 2400,
+      "label": "不用清单",
+      "selectionSource": "round3-companion-response-fixed.png"
+    },
+    {
+      "file": "04.png",
+      "sha256": "553e5085f4eff8bb6dcdc8a45ffb8d5fc69621d4f1d222e0fc14779c10c7ca09",
+      "width": 1080,
+      "height": 2400,
+      "label": "记在这里",
+      "selectionSource": "round3-companion-memory.png"
+    },
+    {
+      "file": "05.png",
+      "sha256": "3cab7e1d8116248caca477a83d0885494932a982fa2a88063fa782597bac349d",
+      "width": 1080,
+      "height": 2400,
+      "label": "别贴标签",
+      "selectionSource": "finish-companion-01-frame.png"
+    },
+    {
+      "file": "06.png",
+      "sha256": "ea734ffa0c86421e19658f743155c14187f653348ebdcb251e7b509d72223501",
+      "width": 1080,
+      "height": 2400,
+      "label": "留点痕迹",
+      "selectionSource": "finish-companion-02-frame.png"
+    },
+    {
+      "file": "07.png",
+      "sha256": "61fb9971cbba997bcd776502bde1a1dfda1e1707e8225821dabd28146e95e413",
+      "width": 1080,
+      "height": 2400,
+      "label": "叫作毛边",
+      "selectionSource": "finish-companion-03-frame.png"
+    },
+    {
+      "file": "08.png",
+      "sha256": "6e8d7f1d79c7bb632362853fc0cb1280ba6ab1e06ff52f208a2c936ffd560eaf",
+      "width": 1080,
+      "height": 2400,
+      "label": "不是回忆",
+      "selectionSource": "finish-companion-04-frame.png"
+    },
+    {
+      "file": "09.png",
+      "sha256": "46597f52ed265e28a37cebcb690d47795d2c010364ec55ceadc558fdabf16fae",
+      "width": 1080,
+      "height": 2400,
+      "label": "下次再聊",
+      "selectionSource": "finish-companion-05-frame.png"
+    },
+    {
+      "file": "10.png",
+      "sha256": "ea82dcda1515289b14c0121918f33ef7744aca6abe7c83f50427b15cb24c16ce",
+      "width": 1080,
+      "height": 2400,
+      "label": "记忆更新",
+      "selectionSource": "finish-companion-final-memory.png"
+    },
+    {
+      "file": "grid.png",
+      "sha256": "d131738a6cfeda39e70144113431e249ce9112281006894aa62d99baf2efa523",
+      "width": 3240,
+      "height": 7200,
+      "method": "Nine full-screen captures directly joined, without cropping, painted text or added frames."
+    },
+    {
+      "file": "preferences.md",
+      "sha256": "9b5c99e248710c33495e51b62629b72d2d36ff6a27d70e9956df58e728570176",
+      "originalCaptureFileSha256": "2f1e669225148cd75f2179cb9bdb1102b10a6b7a5a2b2fa9969e4ba7765c7996",
+      "presentation": "Markdown formatting only; original source text retained in private approved capture archive."
+    }
+  ]
+}
