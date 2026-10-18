@@ -1,0 +1,140 @@
+{
+  "captured": "2026-10-18",
+  "productSource": "d2529feb520ace2d773db6ac0966dc265887bdc5",
+  "platform": "Android emulator native app; SDK 58 compatible development client",
+  "uiLanguage": "Chinese",
+  "theme": "light",
+  "inputMethod": "Operator-organized prompts sent using the production CLI/canonical channel send; actual model replies and file tools",
+  "limits": [
+    "All captures are Day 0 in existing Sessions, not a cross-day or cross-Session memory test.",
+    "Development source is not a stable-package/store-release qualification.",
+    "Authored roleplay, not an official game collaboration or a real offline meeting.",
+    "Files were saved/read back; no claim that every working-tree file is Git-committed."
+  ],
+  "ordering": "Thematic selection; frame 07 comes from a later actual bicycle/car correction.",
+  "assets": [
+    {
+      "file": "01.png",
+      "sha256": "70ca212e89224e8c843ad93ab7fbfaaef4cf53684d5c673f681aef33ce1a023d",
+      "width": 1080,
+      "height": 2400,
+      "label": "约好出门",
+      "selectionSource": "finish-daily-01-correct.png"
+    },
+    {
+      "file": "02.png",
+      "sha256": "98350c5230af1771c31cc0a4937150cabffe5752f838d4137c99540b4e403098",
+      "width": 1080,
+      "height": 2400,
+      "label": "骑多远呀",
+      "selectionSource": "finish-daily-02.png"
+    },
+    {
+      "file": "03.png",
+      "sha256": "8c41da9dce5480bdf1df72e8a8672c02990d46c1b975464c996dc33582ca3936",
+      "width": 1080,
+      "height": 2400,
+      "label": "水族馆吧",
+      "selectionSource": "finish-daily-03.png"
+    },
+    {
+      "file": "04.png",
+      "sha256": "809beef7db7241a58ed21abfd99dcee54e07acd1aae9d31c417fc9dcb858a18b",
+      "width": 1080,
+      "height": 2400,
+      "label": "十点半见",
+      "selectionSource": "finish-daily-04.png"
+    },
+    {
+      "file": "05.png",
+      "sha256": "d47947ec05aa8408ed3055f95a7926ff327a30aa30e2d839ff28029d24ea5ecc",
+      "width": 1080,
+      "height": 2400,
+      "label": "吃点东西",
+      "selectionSource": "finish-daily-05.png"
+    },
+    {
+      "file": "06.png",
+      "sha256": "e371c4fac7747a4a89b49e47b4e15a697f76d17188eb31ebbdaf2379b2cdedad",
+      "width": 1080,
+      "height": 2400,
+      "label": "最后布丁",
+      "selectionSource": "finish-daily-06.png"
+    },
+    {
+      "file": "07.png",
+      "sha256": "5cd9660f635ee536fe92dcfb93577c248605bf42761fdbcdc1a497c04f719ca9",
+      "width": 1080,
+      "height": 2400,
+      "label": "雨天公交",
+      "selectionSource": "finish-daily-11.png"
+    },
+    {
+      "file": "08.png",
+      "sha256": "4dffd6a7aa67e3e525093f0df3c5d1b721e7ad82c7f6e8cb33263f38c0790db1",
+      "width": 1080,
+      "height": 2400,
+      "label": "坐着看鱼",
+      "selectionSource": "finish-daily-08.png"
+    },
+    {
+      "file": "09.png",
+      "sha256": "b3ac6a710e8099554d50df9a24d415a4593b9e6f1f8f73cfdc371f21cb2f424f",
+      "width": 1080,
+      "height": 2400,
+      "label": "慢慢等你",
+      "selectionSource": "finish-daily-09.png"
+    },
+    {
+      "file": "10.png",
+      "sha256": "b55812ff51d43f421980f8fb7154e42f9e68187e8d04ac88e58f8b8a2050f82e",
+      "width": 1080,
+      "height": 2400,
+      "label": "小约定",
+      "selectionSource": "finish-daily-10.png"
+    },
+    {
+      "file": "grid.png",
+      "sha256": "60ef899a107dc72ac93007376b38fd9f7edcde1f1211826ccf2bfd9ad6a69f90",
+      "width": 3240,
+      "height": 7200,
+      "method": "Nine full-screen captures directly joined, without cropping, painted text or added frames."
+    },
+    {
+      "file": "yuuka-soul.md",
+      "sha256": "41fa752bbe40aeae3353299816cd34e039c550bd7281e87d462614c50ac298e9",
+      "originalCaptureFileSha256": "503633b4749bc94e9797269167fcbde4ae3f9e9463aa3f37ce121c8331091e98",
+      "presentation": "Markdown formatting only; original source text retained in private approved capture archive."
+    },
+    {
+      "file": "yuuka-canon.md",
+      "sha256": "97fb22220c4466c5aa3edda1dfbb1ef0772be129068b7fcc5a5de84ba70a2205",
+      "originalCaptureFileSha256": "1a7070f50afba73381e0ac63b492ea394748c3c5868bc04fc701578b315fb49b",
+      "presentation": "Markdown formatting only; original source text retained in private approved capture archive."
+    },
+    {
+      "file": "shiroko-soul.md",
+      "sha256": "3be192873d74b2d34ff0213499391c9138c79bae69d1f96f87a04f25e7963be5",
+      "originalCaptureFileSha256": "886b2182d3eb997ae99bc10f230876bd8c0055960e811a63285939c9a10f9ce2",
+      "presentation": "Markdown formatting only; original source text retained in private approved capture archive."
+    },
+    {
+      "file": "shiroko-canon.md",
+      "sha256": "93f860de17f57fdf007394382d736623391c280f7cda50a84c38aa2867f64dd4",
+      "originalCaptureFileSha256": "e223382a33b7d7d216e850864b1cb48ba162b56628f115c1b81adc0fa63813e0",
+      "presentation": "Markdown formatting only; original source text retained in private approved capture archive."
+    },
+    {
+      "file": "hoshino-soul.md",
+      "sha256": "3a07ef4cfcfbe52198915469ae6a876bf7e24c69cde20050f9029ab291424a0c",
+      "originalCaptureFileSha256": "6df0b9a275c9d349c5eb57d844bd1d06ee0d948d3ad963e6c2dc457318198a64",
+      "presentation": "Markdown formatting only; original source text retained in private approved capture archive."
+    },
+    {
+      "file": "hoshino-canon.md",
+      "sha256": "992a365c4bdbc779410a9ea736177daf01cbfbc2af7cd335b321bf32418878d4",
+      "originalCaptureFileSha256": "f93a2ba4476a2efbd4a0a05587c11d4d983c516f7be911e776b473f243b1249c",
+      "presentation": "Markdown formatting only; original source text retained in private approved capture archive."
+    }
+  ]
+}

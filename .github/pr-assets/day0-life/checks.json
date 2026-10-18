@@ -1,0 +1,208 @@
+[
+  {
+    "case": "life",
+    "language": "zh",
+    "viewport": [1440, 1000],
+    "mobile": [390, 844],
+    "beforeStatus": 404,
+    "afterStatus": 200,
+    "h1": 1,
+    "canonical": "https://deepseekbot.app/blog/blue-archive-ai-roleplay-soul/",
+    "alternates": [
+      ["zh-Hans", "https://deepseekbot.app/blog/blue-archive-ai-roleplay-soul/"],
+      ["en", "https://deepseekbot.app/en/blog/blue-archive-ai-roleplay-soul/"],
+      ["x-default", "https://deepseekbot.app/blog/blue-archive-ai-roleplay-soul/"]
+    ],
+    "images": [
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/grid.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/01.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/03.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/04.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/05.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/06.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/08.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/09.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+        "loaded": true
+      }
+    ],
+    "overflow": false,
+    "links": [
+      "/blog/",
+      "/blog-figures/blue-archive-ai-roleplay-soul/grid.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+      "/docs/soul-and-core-memory/",
+      "/docs/installation/",
+      "/blog/personal-ai-agent-memory/",
+      "/blog-figures/blue-archive-ai-roleplay-soul/01.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/03.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/04.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/05.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/06.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/08.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/09.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/yuuka-soul.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/shiroko-soul.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/hoshino-soul.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/yuuka-canon.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/shiroko-canon.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/hoshino-canon.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/provenance.json"
+    ],
+    "mobileOverflow": false,
+    "galleryImages": 10
+  },
+  {
+    "case": "life",
+    "language": "en",
+    "viewport": [1440, 1000],
+    "mobile": [390, 844],
+    "beforeStatus": 404,
+    "afterStatus": 200,
+    "h1": 1,
+    "canonical": "https://deepseekbot.app/en/blog/blue-archive-ai-roleplay-soul/",
+    "alternates": [
+      ["zh-Hans", "https://deepseekbot.app/blog/blue-archive-ai-roleplay-soul/"],
+      ["en", "https://deepseekbot.app/en/blog/blue-archive-ai-roleplay-soul/"],
+      ["x-default", "https://deepseekbot.app/blog/blue-archive-ai-roleplay-soul/"]
+    ],
+    "images": [
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/grid.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/01.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/03.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/04.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/05.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/06.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/08.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/09.png",
+        "loaded": true
+      },
+      {
+        "src": "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+        "loaded": true
+      }
+    ],
+    "overflow": false,
+    "links": [
+      "/en/blog/",
+      "/blog-figures/blue-archive-ai-roleplay-soul/grid.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+      "/en/docs/soul-and-core-memory/",
+      "/en/docs/installation/",
+      "/en/blog/personal-ai-agent-memory/",
+      "/blog-figures/blue-archive-ai-roleplay-soul/01.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/02.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/03.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/04.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/05.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/06.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/07.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/08.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/09.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/10.png",
+      "/blog-figures/blue-archive-ai-roleplay-soul/yuuka-soul.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/shiroko-soul.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/hoshino-soul.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/yuuka-canon.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/shiroko-canon.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/hoshino-canon.md",
+      "/blog-figures/blue-archive-ai-roleplay-soul/provenance.json"
+    ],
+    "mobileOverflow": false,
+    "galleryImages": 10
+  }
+]
