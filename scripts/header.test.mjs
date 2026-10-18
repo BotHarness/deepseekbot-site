@@ -8,6 +8,7 @@ import { renderChangelog } from './changelog.ts';
 import { renderBlog } from './blog.ts';
 import { COMMUNITY_LINKS, QQ_GROUP } from '../src/communityLinks.ts';
 import { HEADER_COMMUNITY_COPY, headerCommunityMarkup } from '../src/headerCommunity.ts';
+import { DESKTOP_PACKAGE } from '../src/installRelease.ts';
 
 test('rendered changelogs preserve every release-summary paragraph in both languages', () => {
   const cwd = process.cwd();
@@ -43,6 +44,9 @@ test('rendered changelogs preserve every release-summary paragraph in both langu
       assert.equal([...html.matchAll(/<p class="changelog-summary">/g)].length, 2);
       assert.ok(html.includes('Added Tob.'));
       assert.ok(!html.includes('Pending.'));
+      assert.ok(html.includes(`<code>${DESKTOP_PACKAGE}</code>`));
+      assert.ok(html.includes(`href="/${prefix}docs/installation/"`));
+      assert.ok(html.includes(lang === 'zh' ? '历史安装版本' : 'historical install versions'));
     }
   } finally {
     process.chdir(cwd);

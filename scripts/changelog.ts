@@ -9,6 +9,7 @@ import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { VERSION } from '../src/installRelease.ts';
 import { privacyPath, searchButton } from './docs.ts';
+import { DESKTOP_PACKAGE } from '../src/installRelease.ts';
 
 type Lang = 'zh' | 'en';
 const SITE = 'https://deepseekbot.app';
@@ -45,6 +46,8 @@ const UI = {
     suffix: 'DeepSeekBot',
     description: 'DeepSeekBot 每个版本的新增、变更和修复。',
     lead: '每个 DeepSeekBot 版本的变化。插件会在更新后弹出同样的内容。',
+    installNote: '条目记录当时的变化，包括历史安装版本；当前安装请使用',
+    installLink: '安装指南',
     versions: '版本',
     development: '开发历史',
     developmentNote: '首个 npm 版本之前的开发记录，没有对应的安装包。',
@@ -86,6 +89,9 @@ const UI = {
     suffix: 'DeepSeekBot',
     description: 'What was added, changed and fixed in each DeepSeekBot release.',
     lead: 'What changed in each DeepSeekBot release. The plugin shows the same notes after an update.',
+    installNote:
+      'Entries describe changes at the time, including historical install versions. Install today with',
+    installLink: 'installation guide',
     versions: 'Versions',
     development: 'Development history',
     developmentNote: 'Work before the first npm release; it has no installable package.',
@@ -328,6 +334,7 @@ function page(lang: Lang, releases: Release[]) {
           <p class="kicker">DeepSeekBot</p>
           <h1>${t.title}</h1>
           <p class="docs-lead">${t.lead}</p>
+          <p class="changelog-note">${t.installNote} <code>${escape(DESKTOP_PACKAGE)}</code> · <a href="${home(lang)}docs/installation/">${t.installLink}</a></p>
           <div class="docs-body changelog-body">${body(lang, releases)}</div>
         </article>
         <p class="docs-source"><a href="${GITHUB_BLOB}${lang === 'zh' ? 'CHANGELOG.zh.md' : 'CHANGELOG.md'}" target="_blank" rel="noreferrer">${t.source}</a></p>
