@@ -55,7 +55,7 @@ iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器�
 
 **统计**
 
-目前 App Store 和 Google Play 上的版本**不发送**任何统计。如果以后的版本开启可选的手机统计，首次启动会告知你，开关在设置页最底部。开启后，手机向 PostHog 发送随机手机统计标识、应用版本和构建号、iOS 或 Android、应用语言，以及打开应用、配对、连接和首次聊天的粗略结果。从不发送名称、聊天、Memory、文件、配对链接、凭证、推送令牌或任何能识别你电脑的信息。这个标识不与官网访问或电脑关联，也不建立个人档案。事件经 `t.botharness.ai` 发往 PostHog 美国区域，关闭 GeoIP，丢弃 IP 地址。关闭统计会删除标识和未发送事件；再次开启会生成新标识。手机统计独立于电脑上插件的遥测。详见[手机统计说明](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/mobile-statistics.md)。
+目前 App Store 和 Google Play 上的版本**不发送**任何统计。如果以后的版本开启手机统计，新安装会默认开启。首次启动会显示一条说明，这条说明只是告知，统计不会等你关闭说明才开始。你随时可以用设置页最底部的开关关闭统计。开启后，手机向 PostHog 发送随机手机统计标识、应用版本和构建号、iOS 或 Android、应用语言，以及打开应用、配对、连接和首次聊天的粗略结果。从不发送名称、聊天、Memory、文件、配对链接、凭证、推送令牌或任何能识别你电脑的信息。这个标识不与官网访问或电脑关联，也不建立个人档案。事件经 `t.botharness.ai` 发往 PostHog 美国区域，关闭 GeoIP，丢弃 IP 地址。关闭统计会删除标识和未发送事件；再次开启会生成新标识。手机统计独立于电脑上插件的遥测。详见[手机统计说明](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/mobile-statistics.md)。
 
 我们不出售数据，不使用广告标识，也不跨应用或网站追踪你。
 
