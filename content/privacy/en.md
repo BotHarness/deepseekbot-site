@@ -51,7 +51,7 @@ Messages you type, photos and files you attach, and text from voice dictation go
 - **Camera**: to scan the pairing code on your computer, or to take a photo you choose to send.
 - **Photos**: to pick a photo you choose to send.
 - **Microphone and speech recognition**: only after you tap the dictation button, until you stop. Your phone's built-in speech service (Apple or Google) turns speech into text, under that provider's own privacy policy; you see and can edit the text before sending. No audio is recorded or sent to your computer or to us.
-- **Notifications**: optional. If you allow them, the phone gives its push token to your paired computer only. When a Bot needs you, your computer sends a short notification (Bot or channel name and a short preview) through [Expo's push service](https://docs.expo.dev/push-notifications/faq/) to Apple (APNs) or Google (FCM), which deliver it to your phone. Expo does not keep notification content longer than needed to deliver it. Turn notifications off in the app or in system settings at any time.
+- **Notifications**: optional. If you allow them, the phone gives its push token to your paired computer only. When a Bot needs you, your computer sends a short notification (Bot or channel name and a short preview) through [Expo's push service](https://docs.expo.dev/push-notifications/faq/) to Apple (APNs) or Google (FCM), which deliver it to your phone. Expo keeps the push token so it can deliver later notifications, but does not keep notification content longer than needed to deliver it. Turn notifications off in the app or in system settings at any time.
 
 **Statistics**
 
