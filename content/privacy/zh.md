@@ -1,10 +1,10 @@
 ---
-{ "title": "隐私说明", "description": "DeepSeekBot 官网和插件收集哪些匿名统计、为什么收集、怎么关闭。" }
+{ "title": "隐私说明", "description": "DeepSeekBot 官网、插件和手机应用收集哪些数据、为什么收集、怎么关闭。" }
 ---
 
-我们收集匿名统计只有一个目的：**改善 DeepSeekBot，了解它被怎样使用、官网从哪里被访问**。我们不收集能识别你本人的信息，也不收集你的对话或 Memory 内容。做这件事的代码全部开源：[官网](https://github.com/BotHarness/deepseekbot-site)、[插件](https://github.com/BotHarness/BotHarness)，设计记录在 [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md)。
+我们收集匿名统计只有一个目的：**改善 DeepSeekBot，了解它被怎样使用、官网从哪里被访问**。我们不收集能识别你本人的信息，也不收集你的对话或 Memory 内容。做这件事的代码全部开源：[官网](https://github.com/BotHarness/deepseekbot-site)、[插件](https://github.com/BotHarness/BotHarness)，插件的设计记录在 [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md)。
 
-统计数据存放在 [PostHog](https://posthog.com) 的美国区域，经由我们自己的域名 `t.botharness.ai` 转发。PostHog 只用 IP 地址推断国家或地区，然后丢弃，不会存储。
+官网和插件的统计数据存放在 [PostHog](https://posthog.com) 的美国区域，经由我们自己的域名 `t.botharness.ai` 转发。PostHog 只用 IP 地址推断国家或地区，然后丢弃，不会存储。
 
 ## 官网
 
@@ -30,6 +30,34 @@
 - 在插件配置里设置 `telemetry: false`
 - 设置环境变量 `DO_NOT_TRACK=1`
 - 设置环境变量 `BOTHARNESS_TELEMETRY=0`
+
+## 手机应用
+
+iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器。它没有 DeepSeekBot 账号，中间也没有 DeepSeekBot 服务器：它只通过你的 [Tailscale](https://tailscale.com) 网络（`*.ts.net` 或 `100.x` 地址，始终 HTTPS）连接你配对的那台电脑。你的 Bot、Memory 和对话都留在那台电脑上。
+
+**保存在手机上的**
+
+- 每台已配对电脑的配对凭证，只保存在 iOS 钥匙串或 Android Keystore 加密的安全存储里，只在手机解锁时可读，也无法恢复到其他设备上。
+- 最近对话和未发送草稿的缓存，用来让应用打开更快，保存在应用自己的存储里。
+
+要移除一台电脑和它的凭证，在应用里打开这台电脑，选择**取消配对**。也可以在电脑的设置里撤销这台手机。
+
+**只发给你的电脑的**
+
+你输入的消息、附带的照片和文件、语音听写得到的文字，只发送到已配对的电脑，我们收不到。
+
+**权限，只在你操作时使用**
+
+- **相机**：扫描电脑上的配对码，或拍一张你要发送的照片。
+- **照片**：选择你要发送的照片。
+- **麦克风和语音识别**：只在你点按听写按钮后、停止之前使用。由手机系统自带的语音服务（Apple 或 Google）把语音转成文字，适用该服务商自己的隐私政策；文字发送前你可以看到并修改。不录音，也不会把音频发给你的电脑或我们。
+- **通知**：可选。允许后，手机只把推送令牌交给已配对的电脑。Bot 需要你时，电脑经由 [Expo 推送服务](https://docs.expo.dev/push-notifications/faq/) 把一条简短通知（Bot 或频道名称和一小段预览）交给 Apple（APNs）或 Google（FCM），再送达你的手机。Expo 不会在送达所需之外保留通知内容。随时可以在应用或系统设置里关闭通知。
+
+**统计**
+
+目前 App Store 和 Google Play 上的版本**不发送**任何统计。如果以后的版本开启手机统计，新安装会默认开启。首次启动会显示一条说明，这条说明只是告知，统计不会等你关闭说明才开始。你随时可以用设置页最底部的开关关闭统计。开启后，手机向 PostHog 发送随机手机统计标识、应用版本和构建号、iOS 或 Android、应用语言，以及打开应用、配对、连接和首次聊天的粗略结果。从不发送名称、聊天、Memory、文件、配对链接、凭证、推送令牌或任何能识别你电脑的信息。这个标识不与官网访问或电脑关联，也不建立个人档案。事件经 `t.botharness.ai` 发往 PostHog 美国区域，关闭 GeoIP，丢弃 IP 地址。关闭统计会删除标识和未发送事件；再次开启会生成新标识。手机统计独立于电脑上插件的遥测。详见[手机统计说明](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/mobile-statistics.md)。
+
+我们不出售数据，不使用广告标识，也不跨应用或网站追踪你。
 
 ## 联系
 
