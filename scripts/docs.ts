@@ -35,7 +35,7 @@ const UI = {
     nav: {
       features: '能力',
       install: '安装',
-      market: 'Bot 市场',
+      market: '市场',
       avatar: '头像工坊',
       changelog: '更新日志',
       blog: '博客',

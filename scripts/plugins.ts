@@ -92,7 +92,7 @@ const UI = {
     nav: {
       features: '能力',
       install: '安装',
-      market: 'Bot 市场',
+      market: '市场',
       avatar: '头像工坊',
       changelog: '更新日志',
       blog: '博客',
@@ -251,7 +251,7 @@ function card(lang: Lang, plugin: Plugin) {
 function listMain(lang: Lang, plugins: Plugin[]) {
   const t = UI[lang];
   return `<main id="main" class="section market-page plugins-page">
-      <p class="kicker">DeepSeekBot</p>
+      <p class="kicker">${t.nav.market}</p>
       <h1 class="market-title">${t.title}</h1>
       <p class="section-lead">${t.lead}</p>
       ${shelves(lang, 'plugins')}
