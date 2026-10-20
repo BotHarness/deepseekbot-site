@@ -4,7 +4,7 @@
   "description": "Install Tailscale, publish DSH on your tailnet and pair the phone app by QR code.",
   "order": 16,
   "source": "docs/mobile-pairing.md",
-  "sourceRevision": "18088235ee07112f142665cbefbf679919e53458"
+  "sourceRevision": "03cec71d99b7c79c727dadcef7b8357cdcc96da9"
 }
 ---
 
