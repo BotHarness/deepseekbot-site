@@ -4,7 +4,7 @@
   "description": "Install Tailscale, publish DSH on your tailnet and pair the phone app by QR code.",
   "order": 16,
   "source": "docs/mobile-pairing.md",
-  "sourceRevision": "f912931fe9c81ad16828c164e5547d663c6adc9c"
+  "sourceRevision": "34d043beec540f386b822fe137a6ec8b56a2c241"
 }
 ---
 
@@ -76,7 +76,13 @@ On the phone:
 3. Allow the camera and point it at the code on the computer. If scanning does not work, click **Copy pairing link** on the computer, send the link to your phone (for example through your own notes or chat), and paste it into **Or paste the pairing link**.
 4. Optionally give the phone a name under **Name on this phone**, then tap **Pair**.
 
+![The Pair with your computer screen on the phone, with the camera area and the paste field](/guides/mobile-pairing/04-phone-pair-en.webp)
+
+![A pasted pairing link, ready to pair](/guides/mobile-pairing/05-phone-pasted-en.webp)
+
 Once paired, the phone shows the Bots and groups on your computer, and the computer's **Devices** page lists the phone under **Paired devices** with its last-seen time. Restarting the computer or DSH does not require pairing again.
+
+![The phone after pairing, showing the computer's Bot under All and My Mac](/guides/mobile-pairing/06-phone-paired-en.webp)
 
 ## Troubleshooting
 
