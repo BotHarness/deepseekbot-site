@@ -118,20 +118,20 @@ export function MarketList({
   useEffect(() => {
     const abort = new AbortController();
     setState({ status: 'loading' });
-    listBots({ sort, q, topic }, abort.signal)
+    listBots({ sort, q, topic, lang }, abort.signal)
       .then((page) => setState({ status: 'ready', bots: page.bots, nextCursor: page.nextCursor }))
       .catch((error: unknown) => {
         if (!abort.signal.aborted) setState({ status: 'error' });
         return error;
       });
     return () => abort.abort();
-  }, [sort, q, topic, attempt]);
+  }, [sort, q, topic, lang, attempt]);
 
   const loadMore = async () => {
     if (state.status !== 'ready' || !state.nextCursor) return;
     setState({ ...state, more: 'loading' });
     try {
-      const page = await listBots({ sort, q, topic, cursor: state.nextCursor });
+      const page = await listBots({ sort, q, topic, lang, cursor: state.nextCursor });
       setState({
         status: 'ready',
         bots: [...state.bots, ...page.bots],
@@ -228,7 +228,14 @@ export function MarketList({
                       </span>
                     </span>
                   </span>
-                  {botBio(bot) ? <span className="bot-card-desc">{botBio(bot)}</span> : null}
+                  {botBio(bot) ? (
+                    <span
+                      className="bot-card-desc"
+                      title={bot.bioGenerated ? t.generatedBio : undefined}
+                    >
+                      {botBio(bot)}
+                    </span>
+                  ) : null}
                   <span className="bot-card-meta">
                     {bot.roles.map((role) => (
                       <span key={role} className="tag">
@@ -298,7 +305,7 @@ export function MarketDetail({
   useEffect(() => {
     const abort = new AbortController();
     setState({ status: 'loading' });
-    getBot(id, abort.signal)
+    getBot(id, lang, abort.signal)
       .then((detail) => setState({ status: 'ready', detail }))
       .catch((error: unknown) => {
         if (abort.signal.aborted) return;
@@ -308,7 +315,7 @@ export function MarketDetail({
         });
       });
     return () => abort.abort();
-  }, [id, attempt]);
+  }, [id, lang, attempt]);
 
   const bot = state.status === 'ready' ? state.detail.bot : preview;
   const readme = useMemo(() => {
@@ -364,7 +371,11 @@ export function MarketDetail({
                 ))}
               </p>
             ) : null}
-            {botBio(bot) ? <p className="detail-desc">{botBio(bot)}</p> : null}
+            {botBio(bot) ? (
+              <p className="detail-desc" title={bot.bioGenerated ? t.generatedBio : undefined}>
+                {botBio(bot)}
+              </p>
+            ) : null}
             {bot.topics.length > 0 ? (
               <ul className="detail-topics">
                 {bot.topics.map((name) => (

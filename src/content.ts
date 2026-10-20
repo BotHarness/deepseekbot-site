@@ -189,6 +189,7 @@ export interface Copy {
     stars: string;
     updated: string;
     notFound: string;
+    generatedBio: string;
     readmeLoading: string;
     noReadme: string;
     gitUrl: string;
@@ -504,6 +505,7 @@ const zh: Copy = {
     stars: '★ {count}',
     updated: '更新于 {date}',
     notFound: '这个 Bot 已不在市场中。',
+    generatedBio: '作者没写中文简介，这句由 AI 根据 README 生成',
     readmeLoading: '正在加载 README…',
     noReadme: '这个仓库没有 README。',
     gitUrl: 'Git 仓库地址',
@@ -875,6 +877,7 @@ const en: Copy = {
     stars: '★ {count}',
     updated: 'Updated {date}',
     notFound: 'This Bot is no longer in the Marketplace.',
+    generatedBio: 'The author wrote no English bio; AI wrote this from the README',
     readmeLoading: 'Loading the README…',
     noReadme: 'This repository has no README.',
     gitUrl: 'Git repository URL',

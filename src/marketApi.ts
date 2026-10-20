@@ -1,3 +1,5 @@
+import type { Lang } from './content';
+
 // Public read API of the Bot Marketplace Worker (BotHarness packages/market, "Public read API (v1)").
 export const MARKET_API = 'https://market.botharness.ai/v1';
 
@@ -10,6 +12,8 @@ export interface MarketplaceEntry {
   roles: string[];
   // bot.json `bio`, else the GitHub description; absent from Workers older than the bio column
   bio?: string | null;
+  // true when `bio` is the Marketplace's generated summary for the asked language
+  bioGenerated?: boolean;
   description: string | null;
   // bot.json `banner`: a pixel-banner recipe, or the uploaded image as a raw GitHub URL
   banner?: MarketplaceBanner | null;
@@ -32,6 +36,8 @@ export interface MarketplacePage {
 export interface MarketplaceDetail {
   bot: MarketplaceEntry;
   readme: string | null;
+  // which README.<lang>.md `readme` is, null for README.md; absent from older Workers
+  readmeLanguage?: Lang | null;
   commitSha: string | null;
 }
 
@@ -56,10 +62,11 @@ async function get<T>(path: string, signal?: AbortSignal): Promise<T> {
 }
 
 export const listBots = (
-  query: { sort: Sort; q: string; topic: string; cursor?: string },
+  query: { sort: Sort; q: string; topic: string; lang: Lang; cursor?: string },
   signal?: AbortSignal,
 ) => {
-  const params = new URLSearchParams({ limit: '24' });
+  // lang picks the author's README.<lang>.md and bot.json translation, else a generated bio
+  const params = new URLSearchParams({ limit: '24', lang: query.lang });
   // search ranks by relevance, so sort only applies when browsing
   if (query.q) params.set('q', query.q);
   else params.set('sort', query.sort);
@@ -71,5 +78,5 @@ export const listBots = (
 export const listTopics = (signal?: AbortSignal) =>
   get<{ topics: { topic: string; count: number }[] }>('/topics', signal);
 
-export const getBot = (id: string, signal?: AbortSignal) =>
-  get<MarketplaceDetail>(`/bots/${encodeURIComponent(id)}`, signal);
+export const getBot = (id: string, lang: Lang, signal?: AbortSignal) =>
+  get<MarketplaceDetail>(`/bots/${encodeURIComponent(id)}?lang=${lang}`, signal);
