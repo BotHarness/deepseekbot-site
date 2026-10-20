@@ -7,10 +7,10 @@ Open a step image to view its original size.
 ## Prepare first
 
 - An administrator account for the [QQ Open Platform](https://bot.q.qq.com/open) and a dedicated group you can manage.
-- A running DeepSeekBot, working model and target PersonaBot. Get a real local DM reply first; see [installation](/en/docs/installation/), [model setup](/en/docs/model-setup/) and the [2-core / 4 GB VPS guide](/en/docs/vps-qq-tutorial/).
+- A running DeepSeekBot, working model and target Bot. Get a real local DM reply first; see [installation](/en/docs/installation/), [model setup](/en/docs/model-setup/) and the [2-core / 4 GB VPS guide](/en/docs/vps-qq-tutorial/).
 - **One application must have one running receiving Host.** Assign independent QA Apps to concurrent branches; stop the original receiver before handing it over.
 
-**Version scope:** product captures and acceptance use source candidate `1.2.1-vps.20261012.sha031a14db` ([exact source](https://github.com/BotHarness/DeepSeekBot/tree/031a14db43af5b3bf52e76b01c30e27828e6e9c9)), DSH `0.2.0-rc.1` and qualified QQ Provider `4.32.0-botharness.19`. These screens are not established for every npm release. Check your installed version and [Connections and optional tools](/en/docs/capabilities/). Tencent's instructions were checked on October 12, 2026.
+**Version scope:** this flow applies to DeepSeekBot 1.4.1 (npm `deepseekbot`), DSH `0.2.1-rc.2` and the bundled QQ Provider `4.32.0-botharness.21`. The product screenshots and recordings in steps 4, 5 and 7 come from an earlier 1.2.1 candidate, so button positions and wording can differ slightly; follow the version you installed and see [Connections and optional tools](/en/docs/capabilities/). Tencent's instructions were checked on October 12, 2026.
 
 ## 1. Register and verify your developer account
 
@@ -25,7 +25,7 @@ The current [official guide](https://bot.q.qq.com/wiki/) lists QQ group developm
 
 ## 2. Create an official QQ Bot application
 
-In application management click **创建机器人 (Create robot)**, submit its name, avatar and description, then open the application after its AppID is generated. This QQ identity will later be bound to a DeepSeekBot PersonaBot.
+In application management click **创建机器人 (Create robot)**, submit its name, avatar and description, then open the application after its AppID is generated. This QQ identity will later be bound to a Bot in DeepSeekBot.
 
 <figure>
 <a href="/guides/qq/04-create-app.png"><img src="/guides/qq/04-create-app.png" alt="Tencent application management's Create robot button" loading="lazy" decoding="async"></a>
@@ -58,11 +58,11 @@ After a real local model reply, open **Settings → IM bots → QQ → Manual se
 
 The qualified version's QR entry creates a Bot; reuse an existing App through Manual setup. If QQ or Manual setup is missing, check the installed qualified Provider and version instead of using another platform's authorization command.
 
-Confirm the correct identity and connected status. **Provider authorization, PersonaBot binding and visible group delivery are separate checkpoints.** The account holder completes initial authorization. Developers with a stopped, previously authorized native Profile can use the [QQ QA reuse helper](https://github.com/BotHarness/DeepSeekBot/blob/codex/1438-vps-qq-tutorial/docs/agents/qq-test-clients.md) to allocate QA1/QA2/QA3, read the selected native credential and claim an exclusive receiver. This development helper is not a released `deepseekbot im-authorize qq` command.
+Confirm the correct identity and connected status. **Provider authorization, Bot binding and visible group delivery are separate checkpoints.** The account holder completes initial authorization. Developers with a stopped, previously authorized native Profile can use the [QQ QA reuse helper](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/agents/qq-test-clients.md) to allocate QA1/QA2/QA3, read the selected native credential and claim an exclusive receiver. This development helper is not a released `deepseekbot im-authorize qq` command.
 
 <figure>
 <a href="/guides/qq/09-manual-setup.png"><img src="/guides/qq/09-manual-setup.png" alt="Actual QQ Manual setup with empty AppID and AppSecret fields" loading="lazy" decoding="async"></a>
-<figcaption>Actual supplemental capture: 设置 → IM机器人 → QQ → 手动接入. The submit label is 绑定并连接; Provider connection and PersonaBot binding are separate.</figcaption>
+<figcaption>Actual supplemental capture: 设置 → IM机器人 → QQ → 手动接入. The submit label is 绑定并连接; Provider connection and Bot binding are separate.</figcaption>
 </figure>
 
 <video controls preload="metadata" playsinline poster="/guides/qq/09-manual-setup.png">
@@ -73,7 +73,7 @@ Confirm the correct identity and connected status. **Provider authorization, Per
 
 [Transcript and chapters](/guides/qq/manual-setup-transcript.md): actual entry points and an empty form, stopping before credential input. Strict SSH forwarding reaches the same VPS; this does not replace HTTPS verification.
 
-## 5. Bind the application to your PersonaBot
+## 5. Bind the application to your Bot
 
 Open the target Bot's DM sidebar → **External identities** → QQ. Select the connected App and confirm. Follow the installed UI's new-conversation policy; ask-first also requires accepting the new group conversation. See [External identities](/en/docs/channel-sidebar/external-identities/).
 
@@ -128,6 +128,18 @@ Use QQ's mention picker to select the correct robot. Send `请只回复 TUTORIAL
 For persistent deployment, restart only your own Host, verify the Bot and binding remain, send a fresh marker such as `请只回复 TUTORIAL_QQ_B_OK` and check the new visible reply. See the [VPS guide](/en/docs/vps-qq-tutorial/) for the task unit and refreshed Owner login procedure. Do not restart another tester's service.
 
 For diagnosis correlate Source Event, Bot Inbox and outbound results. A Provider receipt is process evidence. This acceptance covers text @ replies, not every image, ordinary-message or proactive-sending capability.
+
+## What else you can do
+
+Once basic @ replies work, turn on these as needed. The product repository's [QQ connection notes](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/qq-connection.md) cover the full steps and current limits.
+
+- **Sync to a local group:** after the first @mention, choose **Sync** in the app's **Edit identity** conversation list and pick a local group that contains this Bot. Later mentions appear there, and replies still go back to the original QQ group. **Mute** keeps receiving without waking the Bot; **Block** stops intake.
+- **Two Bots in one QQ group:** bind each Bot to its own QQ application, then sync both conversations to the same local group. Each Bot replies only through its own application.
+- **Results after 5 minutes:** QQ's passive reply window is five minutes. When a task finishes later, its result is kept, and the Bot can post it through an authorized saved target for the original group, within an hourly limit.
+- **Images, files and voice (development candidate):** include an image in the @ message, or quote a file or voice message and @ the Bot, and the Bot can read, process and reply with an image or file; understanding images needs an image-capable model. These are still being qualified; check your installed version.
+- **Ordinary group messages (development candidate):** only @ messages are received by default. The Bot collects ordinary messages for observation and periodic summaries only after you enable **获取群内全部消息** on the phone and opt in for that conversation.
+
+QQ private messages are not supported yet; use another platform or the local DM for DM slash commands.
 
 ## Troubleshooting
 

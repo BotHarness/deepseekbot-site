@@ -2,19 +2,25 @@ import type { PixelSymbol } from '@botharness/pixel-avatar';
 import {
   AlarmClock,
   ArrowUp,
+  Bell,
   BellOff,
+  Check,
   ChevronRight,
-  CirclePlus,
+  Ellipsis,
   Files,
   FolderLock,
   GitCommitVertical,
+  Hash,
+  House,
+  Image,
   MessagesSquare,
   PanelRightClose,
   PanelRightOpen,
+  Paperclip,
   Plus,
-  Puzzle,
   RotateCcw,
-  ShieldCheck,
+  Search,
+  Settings,
   Users,
   type LucideIcon,
 } from 'lucide-react';
@@ -22,7 +28,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { track } from '../analytics';
 import type { Copy } from '../content';
 import type { DemoChannel, DemoIcon, DemoStep, PanelSection } from '../demoCopy';
-import { recipeFor } from '../mascot';
+import { DEEPSEEKBOT_RECIPE, recipeFor } from '../mascot';
 import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
 
 const TOOL_MS = 1100;
@@ -45,7 +51,27 @@ function Icon({ name }: { name: DemoIcon }) {
 /** A message the visitor typed after the script finished, and the Bot's canned answer. */
 type Extra = { kind: 'user'; text: string } | { kind: 'fallback'; bot: string };
 
-type Answer = 'allow' | 'deny';
+/** Allow once, Always allow or Reject, like the desktop approval card. */
+type Answer = 'allow' | 'always' | 'deny';
+
+/** One status per row, as the desktop Channel list draws it. */
+type RowStatus = 'working' | 'needs' | 'done' | undefined;
+
+function StatusGlyph({ status, label }: { status: RowStatus; label?: string }) {
+  if (!status) return null;
+  if (status === 'done')
+    return (
+      <span className="app-status" data-status="done" title={label}>
+        <Check size={12} strokeWidth={2.5} aria-hidden="true" />
+      </span>
+    );
+  return <span className="app-status" data-status={status} title={label} aria-hidden="true" />;
+}
+
+/** Token usage bars for one range of the Home card; seeded, not measured. */
+const usageBars = (count: number, seed: number) =>
+  Array.from({ length: count }, (_, i) => 0.25 + (((i + 1) * 37 + seed * 53) % 70) / 100);
+const RANGE_BARS = [6, 7, 4, 12];
 
 const fill = (template: string, values: Record<string, string>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? '');
@@ -166,26 +192,42 @@ function Message({
         <li className="app-msg app-msg--bot">
           <Avatar name={step.bot} size={32} />
           <div className="app-approval" data-answer={answer}>
-            <p className="app-approval-title">
-              <ShieldCheck className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
-              {step.text}
+            <p className="app-approval-kind">
+              <span>{t.tool}</span>
+              {answer ? null : (
+                <span className="app-badge" data-tone="waiting">
+                  {t.needsYou}
+                </span>
+              )}
             </p>
+            <p className="app-approval-title">{step.text}</p>
             <code>{step.detail}</code>
             {answer ? (
               <p className="app-approval-result">
-                {answer === 'allow' ? `✓ ${t.allowed}` : t.denied}
+                {answer === 'allow'
+                  ? `✓ ${t.allowed}`
+                  : answer === 'always'
+                    ? `✓ ${t.alwaysAllowed}`
+                    : t.denied}
               </p>
             ) : (
               <div className="app-approval-actions">
                 <button
                   type="button"
-                  className="app-btn app-btn--primary"
+                  className="app-choice app-choice--primary"
                   data-pulse={waiting ? '' : undefined}
                   onClick={() => onAnswer('allow')}
                 >
                   {t.allow}
                 </button>
-                <button type="button" className="app-btn" onClick={() => onAnswer('deny')}>
+                <button type="button" className="app-choice" onClick={() => onAnswer('always')}>
+                  {t.always}
+                </button>
+                <button
+                  type="button"
+                  className="app-choice app-choice--reject"
+                  onClick={() => onAnswer('deny')}
+                >
                   {t.deny}
                 </button>
                 {waiting ? <span className="app-approval-hint">{t.waiting}</span> : null}
@@ -223,6 +265,12 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   const [extra, setExtra] = useState<Extra[]>([]);
   const [seen, setSeen] = useState<Set<string>>(() => new Set());
   const [panelOpen, setPanelOpen] = useState(true);
+  // the Control Rail's panels and views
+  const [view, setView] = useState<'chat' | 'home'>('chat');
+  const [channelsOpen, setChannelsOpen] = useState(true);
+  const [activityOpen, setActivityOpen] = useState(false);
+  const [wallpaper, setWallpaper] = useState(false);
+  const [range, setRange] = useState(1);
   // sidebar sections the visitor folded, by section id; they stay folded across chats
   const [folded, setFolded] = useState<Set<string>>(() => new Set());
 
@@ -343,13 +391,18 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   const open = (index: number) => {
     touched.current = true;
     track('demo_channel_opened', { channel: channels[index]!.id });
+    setView('chat');
     if (index === active) setRun((n) => n + 1);
     else setActive(index);
   };
 
   const answer = (value: Answer) => {
     touched.current = true;
-    track('demo_approval_answered', { channel: channel.id, answer: value });
+    track('demo_approval_answered', {
+      channel: channel.id,
+      answer: value === 'deny' ? 'deny' : 'allow',
+      scope: value === 'always' ? 'always' : 'once',
+    });
     answerWith.current?.(value);
   };
 
@@ -373,6 +426,61 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   };
 
   const steps = channel.steps.slice(0, shown);
+  const statusOf = (index: number): RowStatus => {
+    if (index !== active) return seen.has(channels[index]!.id) ? 'done' : undefined;
+    if (waiting) return 'needs';
+    if (working || typing || !done) return inView ? 'working' : undefined;
+    return 'done';
+  };
+  const unreadOf = (c: DemoChannel) =>
+    c.steps.filter((step) => step.kind !== 'user' && step.kind !== 'event').length;
+  const statusLabel = (status: RowStatus) =>
+    status === 'working'
+      ? t.tob.states.working
+      : status === 'needs'
+        ? t.needsYou
+        : status === 'done'
+          ? t.tob.states.idle
+          : undefined;
+  const bots = [...new Set(channels.flatMap((c) => c.bots))];
+  const botState = (bot: string) => {
+    if (waiting && channel.bots.includes(bot) && steps.at(-1)?.kind === 'approval') {
+      const last = steps.at(-1);
+      if (last && last.kind === 'approval' && last.bot === bot) return 'needs' as const;
+    }
+    if (working?.bot === bot) return 'working' as const;
+    return 'idle' as const;
+  };
+  const needing = channels
+    .map((c, index) => ({ c, index }))
+    .filter(({ index }) => statusOf(index) === 'needs');
+  const unseen = channels
+    .map((c, index) => ({ c, index }))
+    .filter(({ c, index }) => index !== active && !seen.has(c.id));
+  const railButton = (
+    id: string,
+    label: string,
+    Svg: LucideIcon,
+    pressed: boolean,
+    onClick: () => void,
+    count?: number,
+  ) => (
+    <button
+      type="button"
+      className="app-rail-btn"
+      data-rail={id}
+      aria-pressed={pressed}
+      aria-label={label}
+      title={label}
+      onClick={() => {
+        touched.current = true;
+        onClick();
+      }}
+    >
+      <Svg size={18} strokeWidth={1.75} aria-hidden="true" />
+      {count ? <span className="app-corner-count">{count}</span> : null}
+    </button>
+  );
 
   return (
     <div className="demo-stage demo-stage--hero" ref={root}>
@@ -392,214 +500,399 @@ export function LiveDemo({ copy }: { copy: Copy }) {
             {t.app} · {t.botMode}
           </span>
         </div>
-        <div className="app-body" data-panel={panelOpen ? undefined : 'closed'}>
-          <nav className="app-side" aria-label={t.messages}>
-            <p className="app-brand" aria-hidden="true">
-              deepseek <span>HARNESS</span>
-            </p>
-            <span className="app-side-btn app-side-btn--new" aria-hidden="true">
-              <CirclePlus className="app-icon" size={16} strokeWidth={1.75} />
-              {t.newChat}
+        <div
+          className="app-body"
+          data-panel={panelOpen ? undefined : 'closed'}
+          data-wallpaper={wallpaper ? '' : undefined}
+        >
+          <nav className="app-rail" aria-label={t.rail}>
+            <span className="app-rail-me" aria-hidden="true">
+              <Avatar name="DeepSeekBot" size={26} />
             </span>
-            <span className="app-side-btn" aria-hidden="true">
-              <Puzzle className="app-icon" size={16} strokeWidth={1.75} />
-              {t.plugins}
+            {railButton('home', t.home, House, view === 'home', () =>
+              setView((v) => (v === 'home' ? 'chat' : 'home')),
+            )}
+            {railButton(
+              'activity',
+              t.activity,
+              Bell,
+              activityOpen,
+              () => setActivityOpen((v) => !v),
+              needing.length + unseen.length,
+            )}
+            {railButton('channels', t.channelsPanel, Hash, channelsOpen, () =>
+              setChannelsOpen((v) => !v),
+            )}
+            {railButton('messages', t.messages, MessagesSquare, view === 'chat', () =>
+              setView('chat'),
+            )}
+            <span className="app-rail-gap" />
+            {railButton('wallpaper', t.wallpaper, Image, wallpaper, () => setWallpaper((v) => !v))}
+            <span className="app-rail-btn app-rail-btn--static" aria-hidden="true">
+              <Settings size={18} strokeWidth={1.75} />
             </span>
-            <span className="app-side-btn app-side-btn--on" aria-hidden="true">
-              <Avatar name="DeepSeekBot" size={22} />
-              {t.botMode}
-              <span className="app-count">{channels.length - seen.size || ''}</span>
-            </span>
-            <p className="app-side-head">
-              <span>{t.messages}</span>
-              <Plus className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
-            </p>
-            <ul className="app-channels">
-              {channels.map((c, index) => (
-                <li key={c.id}>
-                  <button
-                    type="button"
-                    className="app-channel"
-                    aria-current={index === active ? 'true' : undefined}
-                    onClick={() => open(index)}
-                  >
-                    {c.kind === 'group' ? (
-                      <GroupAvatar bots={c.bots} size={36} />
-                    ) : (
-                      <Avatar name={c.bots[0]!} size={36} />
-                    )}
-                    <span className="app-channel-text">
-                      <span className="app-channel-top">
-                        <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
-                        <time>{c.time}</time>
-                      </span>
-                      <span className="app-channel-preview">{c.preview}</span>
-                    </span>
-                    {seen.has(c.id) ? null : <span className="app-unread" aria-hidden="true" />}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <p className="app-me" aria-hidden="true">
-              <span className="app-me-badge">H</span>
-              {t.human}
-            </p>
           </nav>
 
-          <section className="app-chat" aria-label={channel.title}>
-            <header className="app-chat-head">
-              <span className="app-pill">
-                {channel.kind === 'group' ? (
-                  <GroupAvatar bots={channel.bots} size={24} />
-                ) : (
-                  <Avatar name={channel.bots[0]!} size={24} />
-                )}
-                {channel.title}
-              </span>
-              <button
-                type="button"
-                className="app-icon-btn app-panel-toggle"
-                aria-expanded={panelOpen}
-                aria-label={panelOpen ? t.hideSidebar : t.showSidebar}
-                title={panelOpen ? t.hideSidebar : t.showSidebar}
-                onClick={() => {
-                  touched.current = true;
-                  setPanelOpen((open) => !open);
-                }}
-              >
-                {panelOpen ? (
-                  <PanelRightClose size={16} strokeWidth={1.75} aria-hidden="true" />
-                ) : (
-                  <PanelRightOpen size={16} strokeWidth={1.75} aria-hidden="true" />
-                )}
-              </button>
+          <section
+            className="app-pane app-pane--channels"
+            aria-label={t.channelsPanel}
+            hidden={!channelsOpen}
+          >
+            <header className="app-pane-head" aria-hidden="true">
+              <Hash className="app-icon" size={16} strokeWidth={1.75} />
+              <span className="app-pane-title">{t.channelsPanel}</span>
+              <Search className="app-icon" size={15} strokeWidth={1.75} />
+              <Ellipsis className="app-icon" size={15} strokeWidth={1.75} />
+              <Plus className="app-icon" size={15} strokeWidth={1.75} />
             </header>
-            <div className="app-feed" ref={feed}>
-              <ol className="app-msgs">
-                <li className="app-day">{t.today}</li>
-                {steps.map((step, index) => (
-                  <Message
-                    key={`${channel.id}-${run}-${index}`}
-                    step={step}
-                    t={t}
-                    answer={answers[index]}
-                    waiting={waiting && index === shown - 1}
-                    onAnswer={answer}
-                  />
-                ))}
-                {extra.map((item, index) =>
-                  item.kind === 'user' ? (
-                    <li key={`x${index}`} className="app-msg app-msg--user">
-                      <span className="app-msg-name">{t.human}</span>
-                      <p className="app-bubble">{item.text}</p>
-                    </li>
-                  ) : (
-                    <li key={`x${index}`} className="app-msg app-msg--bot">
-                      <Avatar name={item.bot} size={32} />
-                      <div>
-                        <span className="app-msg-name">{item.bot}</span>
-                        <p className="app-bubble">
-                          {t.fallback} <a href="#install">{t.fallbackCta}</a>
-                        </p>
-                      </div>
-                    </li>
-                  ),
-                )}
-                {working ? (
-                  <Working
-                    bot={working.bot}
-                    tool={working.tool}
-                    label={fill(t.working, { bot: working.bot, tool: copy.symbols[working.tool] })}
-                  />
-                ) : null}
-                {done && extra.length === 0 ? (
-                  <li className="app-event app-event--replay">
-                    <button type="button" className="app-btn" onClick={() => open(active)}>
-                      <RotateCcw
-                        className="app-icon"
-                        size={14}
-                        strokeWidth={1.75}
-                        aria-hidden="true"
-                      />
-                      {t.replay}
-                    </button>
-                  </li>
-                ) : null}
-              </ol>
-            </div>
-            <form className="app-composer" onSubmit={send} data-typing={typing ? '' : undefined}>
-              <Plus className="app-composer-plus" size={18} strokeWidth={1.75} aria-hidden="true" />
-              <input
-                value={draft}
-                readOnly={!done}
-                onChange={(event) => setDraft(event.target.value)}
-                placeholder={fill(t.composer, { name: channel.title })}
-                aria-label={fill(t.composer, { name: channel.title })}
-                maxLength={200}
-              />
-              <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
-                <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
-                <span className="visually-hidden">{t.send}</span>
-              </button>
-            </form>
-          </section>
-
-          <aside className="app-panel" aria-label={t.sidebar} hidden={!panelOpen}>
-            {panel.map((section) => {
-              const open = !folded.has(section.id);
-              return (
-                <section key={section.id} className="app-panel-section">
-                  <h4>
+            <ul className="app-channels">
+              {channels.map((c, index) => {
+                const status = statusOf(index);
+                const unread = seen.has(c.id) ? 0 : unreadOf(c);
+                return (
+                  <li key={c.id}>
                     <button
                       type="button"
-                      className="app-panel-head"
-                      aria-expanded={open}
-                      onClick={() => {
-                        touched.current = true;
-                        setFolded((prev) => {
-                          const next = new Set(prev);
-                          if (open) next.add(section.id);
-                          else next.delete(section.id);
-                          return next;
-                        });
-                      }}
+                      className="app-channel"
+                      aria-current={index === active && view === 'chat' ? 'true' : undefined}
+                      data-status={status}
+                      onClick={() => open(index)}
                     >
-                      <ChevronRight
-                        className="app-chevron"
-                        size={14}
-                        strokeWidth={2}
-                        aria-hidden="true"
-                      />
-                      <Icon name={section.icon} />
-                      <span className="app-panel-title">{section.title}</span>
-                      {section.items.length ? (
-                        <span className="app-count">{section.items.length}</span>
-                      ) : null}
-                    </button>
-                  </h4>
-                  <ul hidden={!open}>
-                    {section.items.map((item) => (
-                      // keyed by its badge too, so a status change flashes the row
-                      <li
-                        key={`${item.id}-${item.badge ?? ''}`}
-                        className="app-panel-item"
-                        data-tone={item.tone}
-                      >
-                        {section.id === 'members' && item.id !== 'h' ? (
-                          <Avatar name={item.title} size={22} />
+                      <span className="app-channel-avatar">
+                        {c.kind === 'group' ? (
+                          <GroupAvatar bots={c.bots} size={36} />
+                        ) : (
+                          <Avatar name={c.bots[0]!} size={36} />
+                        )}
+                        {unread ? (
+                          <span className="app-corner-count" aria-hidden="true">
+                            {unread}
+                          </span>
                         ) : null}
-                        <span className="app-panel-text">
-                          <span>{item.title}</span>
-                          {item.meta ? <small>{item.meta}</small> : null}
+                      </span>
+                      <span className="app-channel-text">
+                        <span className="app-channel-top">
+                          <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
+                          <time>{c.time}</time>
                         </span>
-                        {item.badge ? <span className="app-badge">{item.badge}</span> : null}
-                      </li>
+                        <span className="app-channel-line">
+                          <span className="app-channel-preview">{c.preview}</span>
+                          <StatusGlyph status={status} label={statusLabel(status)} />
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+
+          <section
+            className="app-pane app-chat"
+            aria-label={view === 'home' ? t.home : channel.title}
+            data-view={view}
+          >
+            <header className="app-pane-head app-chat-head">
+              {view === 'home' ? (
+                <>
+                  <House className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
+                  <span className="app-pane-title">{t.home}</span>
+                </>
+              ) : (
+                <>
+                  <MessagesSquare
+                    className="app-icon"
+                    size={16}
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                  <span className="app-pane-title">{t.messages}</span>
+                  <span className="app-pill">
+                    {channel.kind === 'group' ? (
+                      <GroupAvatar bots={channel.bots} size={22} />
+                    ) : (
+                      <Avatar name={channel.bots[0]!} size={22} />
+                    )}
+                    {channel.title}
+                  </span>
+                  <button
+                    type="button"
+                    className="app-icon-btn app-panel-toggle"
+                    aria-expanded={panelOpen}
+                    aria-label={panelOpen ? t.hideSidebar : t.showSidebar}
+                    title={panelOpen ? t.hideSidebar : t.showSidebar}
+                    onClick={() => {
+                      touched.current = true;
+                      setPanelOpen((open) => !open);
+                    }}
+                  >
+                    {panelOpen ? (
+                      <PanelRightClose size={16} strokeWidth={1.75} aria-hidden="true" />
+                    ) : (
+                      <PanelRightOpen size={16} strokeWidth={1.75} aria-hidden="true" />
+                    )}
+                  </button>
+                </>
+              )}
+            </header>
+            {view === 'home' ? (
+              <div className="app-home">
+                <p className="app-home-hello">
+                  <PixelAvatar recipe={DEEPSEEKBOT_RECIPE} size={40} />
+                  <strong>{t.tob.greeting}</strong>
+                </p>
+                <p className="app-home-lead">{t.tob.description}</p>
+                <p className="app-composer app-home-input" aria-hidden="true">
+                  <Paperclip className="app-composer-plus" size={16} strokeWidth={1.75} />
+                  <span>{t.tob.input}</span>
+                  <span className="app-send" data-off="">
+                    <ArrowUp size={16} strokeWidth={2} />
+                  </span>
+                </p>
+                <ul className="app-home-starters" aria-label={t.tob.name}>
+                  {t.tob.starters.map((starter) => (
+                    <li key={starter}>{starter}</li>
+                  ))}
+                </ul>
+                <div className="app-home-cards">
+                  <section className="app-home-card" aria-label={t.tob.usage}>
+                    <p className="app-home-card-head">
+                      <strong>{t.tob.usage}</strong>
+                      <span className="app-segment" role="group" aria-label={t.tob.usage}>
+                        {t.tob.ranges.map((label, index) => (
+                          <button
+                            key={label}
+                            type="button"
+                            aria-pressed={range === index}
+                            onClick={() => setRange(index)}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </span>
+                    </p>
+                    <div
+                      className="app-bars"
+                      role="img"
+                      aria-label={`${t.tob.usage} · ${t.tob.ranges[range]}`}
+                    >
+                      {usageBars(RANGE_BARS[range]!, range).map((h, index) => (
+                        <i
+                          key={`${range}-${index}`}
+                          style={{ height: `${Math.round(h * 100)}%` }}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                  <section className="app-home-card" aria-label={t.tob.botActivity}>
+                    <p className="app-home-card-head">
+                      <strong>{t.tob.botActivity}</strong>
+                    </p>
+                    <ul className="app-home-bots">
+                      {bots.map((bot) => {
+                        const state = botState(bot);
+                        const time =
+                          (
+                            channels.find((c) => c.kind === 'dm' && c.bots[0] === bot) ??
+                            channels.find((c) => c.bots.includes(bot))
+                          )?.time ?? '';
+                        return (
+                          <li key={bot} data-state={state}>
+                            <Avatar name={bot} size={28} />
+                            <span>
+                              <strong>{bot}</strong>
+                              <small>
+                                {t.tob.states[state]} · {time}
+                              </small>
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </section>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="app-feed" ref={feed}>
+                  <ol className="app-msgs">
+                    <li className="app-day">{t.today}</li>
+                    {steps.map((step, index) => (
+                      <Message
+                        key={`${channel.id}-${run}-${index}`}
+                        step={step}
+                        t={t}
+                        answer={answers[index]}
+                        waiting={waiting && index === shown - 1}
+                        onAnswer={answer}
+                      />
                     ))}
-                  </ul>
-                </section>
-              );
-            })}
-          </aside>
+                    {extra.map((item, index) =>
+                      item.kind === 'user' ? (
+                        <li key={`x${index}`} className="app-msg app-msg--user">
+                          <span className="app-msg-name">{t.human}</span>
+                          <p className="app-bubble">{item.text}</p>
+                        </li>
+                      ) : (
+                        <li key={`x${index}`} className="app-msg app-msg--bot">
+                          <Avatar name={item.bot} size={32} />
+                          <div>
+                            <span className="app-msg-name">{item.bot}</span>
+                            <p className="app-bubble">
+                              {t.fallback} <a href="#install">{t.fallbackCta}</a>
+                            </p>
+                          </div>
+                        </li>
+                      ),
+                    )}
+                    {working ? (
+                      <Working
+                        bot={working.bot}
+                        tool={working.tool}
+                        label={fill(t.working, {
+                          bot: working.bot,
+                          tool: copy.symbols[working.tool],
+                        })}
+                      />
+                    ) : null}
+                    {done && extra.length === 0 ? (
+                      <li className="app-event app-event--replay">
+                        <button type="button" className="app-btn" onClick={() => open(active)}>
+                          <RotateCcw
+                            className="app-icon"
+                            size={14}
+                            strokeWidth={1.75}
+                            aria-hidden="true"
+                          />
+                          {t.replay}
+                        </button>
+                      </li>
+                    ) : null}
+                  </ol>
+                </div>
+                <form
+                  className="app-composer"
+                  onSubmit={send}
+                  data-typing={typing ? '' : undefined}
+                >
+                  <Plus
+                    className="app-composer-plus"
+                    size={18}
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                  <input
+                    value={draft}
+                    readOnly={!done}
+                    onChange={(event) => setDraft(event.target.value)}
+                    placeholder={fill(t.composer, { name: channel.title })}
+                    aria-label={fill(t.composer, { name: channel.title })}
+                    maxLength={200}
+                  />
+                  <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
+                    <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
+                    <span className="visually-hidden">{t.send}</span>
+                  </button>
+                </form>
+              </>
+            )}
+          </section>
+
+          <div className="app-stack" hidden={!activityOpen && !panelOpen}>
+            <section
+              className="app-pane app-activity"
+              aria-label={t.activity}
+              hidden={!activityOpen}
+            >
+              <header className="app-pane-head">
+                <Bell className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
+                <span className="app-pane-title">{t.activity}</span>
+              </header>
+              {needing.length + unseen.length === 0 ? (
+                <p className="app-activity-empty">{t.nothingWaiting}</p>
+              ) : (
+                <ul className="app-activity-list">
+                  {[
+                    ...needing.map((row) => ({ ...row, tag: t.needsYou, tone: 'waiting' })),
+                    ...unseen.map((row) => ({ ...row, tag: t.unread, tone: 'info' })),
+                  ].map(({ c, index, tag, tone }) => (
+                    <li key={c.id}>
+                      <button type="button" onClick={() => open(index)}>
+                        <span className="app-badge" data-tone={tone}>
+                          {tag}
+                        </span>
+                        <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
+                        <small>{c.preview}</small>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <aside className="app-pane app-panel" aria-label={t.sidebar} hidden={!panelOpen}>
+              <header className="app-pane-head" aria-hidden="true">
+                <Users className="app-icon" size={16} strokeWidth={1.75} />
+                <span className="app-pane-title">{t.sidebar}</span>
+              </header>
+              <div className="app-panel-body">
+                {panel.map((section) => {
+                  const open = !folded.has(section.id);
+                  return (
+                    <section key={section.id} className="app-panel-section">
+                      <h4>
+                        <button
+                          type="button"
+                          className="app-panel-head"
+                          aria-expanded={open}
+                          onClick={() => {
+                            touched.current = true;
+                            setFolded((prev) => {
+                              const next = new Set(prev);
+                              if (open) next.add(section.id);
+                              else next.delete(section.id);
+                              return next;
+                            });
+                          }}
+                        >
+                          <ChevronRight
+                            className="app-chevron"
+                            size={14}
+                            strokeWidth={2}
+                            aria-hidden="true"
+                          />
+                          <Icon name={section.icon} />
+                          <span className="app-panel-title">{section.title}</span>
+                          {section.items.length ? (
+                            <span className="app-count">{section.items.length}</span>
+                          ) : null}
+                        </button>
+                      </h4>
+                      <ul hidden={!open}>
+                        {section.items.map((item) => (
+                          // keyed by its badge too, so a status change flashes the row
+                          <li
+                            key={`${item.id}-${item.badge ?? ''}`}
+                            className="app-panel-item"
+                            data-tone={item.tone}
+                          >
+                            {section.id === 'members' && item.id !== 'h' ? (
+                              <Avatar name={item.title} size={22} />
+                            ) : null}
+                            <span className="app-panel-text">
+                              <span>{item.title}</span>
+                              {item.meta ? <small>{item.meta}</small> : null}
+                            </span>
+                            {item.badge ? <span className="app-badge">{item.badge}</span> : null}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  );
+                })}
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
     </div>
