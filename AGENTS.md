@@ -12,7 +12,7 @@ pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 
 ## Conventions
 
-- `content/` is the source. `docs/`, `changelog/`, `blog/`, `privacy/` page trees are generated at build by `scripts/docs.ts`, `scripts/changelog.ts`, `scripts/blog.ts` — never edit generated HTML, never commit it (gitignored).
+- `content/` is the source. `docs/`, `changelog/`, `blog/`, `privacy/`, `plugins/` page trees are generated at build by `scripts/docs.ts`, `scripts/changelog.ts`, `scripts/blog.ts`, `scripts/plugins.ts` — never edit generated HTML, never commit it (gitignored).
 - Bilingual: Chinese default at `/`, English under `/en/`. Every new section ships both: content in `content/<section>/{zh,en}/`, hreflang alternates, sitemap entries with both languages. A page without an English mirror must not emit an `/en/` URL anywhere (sitemap, alternates).
 - Copy lives in `src/content.ts` and is covered by docs-sync regression tests; keep claims to what has shipped.
 - The generated-page header test (`scripts/header.test.mjs`) pins the topnav link count and order — update it when adding a nav entry.

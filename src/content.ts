@@ -167,6 +167,9 @@ export interface Copy {
     kicker: string;
     title: string;
     lead: string;
+    shelvesLabel: string;
+    shelfBots: string;
+    shelfPlugins: string;
     searchLabel: string;
     searchPlaceholder: string;
     relevance: string;
@@ -479,6 +482,9 @@ const zh: Copy = {
     kicker: 'Bot 市场',
     title: '找一个现成的 Bot',
     lead: '这里收录了大家放在公开 GitHub 仓库里的 Bot。在 DeepSeekBot 里安装后，它会成为一个新的 PersonaBot，带着作者写好的 Memory。',
+    shelvesLabel: '市场分类',
+    shelfBots: 'Bot',
+    shelfPlugins: '插件',
     searchLabel: '搜索 Bot',
     searchPlaceholder: '搜索名称、描述、话题或 README',
     relevance: '搜索结果按相关度排序，最多显示前 200 个。',
@@ -851,6 +857,9 @@ const en: Copy = {
     kicker: 'Marketplace',
     title: 'Find a ready-made Bot',
     lead: 'Bots that people share as public GitHub repositories. Install one in DeepSeekBot and it becomes a new PersonaBot with the Memory its author wrote.',
+    shelvesLabel: 'Marketplace shelves',
+    shelfBots: 'Bots',
+    shelfPlugins: 'Plugins',
     searchLabel: 'Search Bots',
     searchPlaceholder: 'Search names, descriptions, topics or READMEs',
     relevance: 'Search results are ranked by relevance, top 200 only.',

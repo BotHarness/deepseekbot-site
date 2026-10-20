@@ -4,7 +4,7 @@ import { MarketDetail, MarketList } from './components/Market';
 import { SiteHeader } from './components/SiteHeader';
 import { COPY } from './content';
 import type { MarketplaceEntry } from './marketApi';
-import { initialMode, pathLang, write, type Mode } from './site';
+import { initialMode, marketPath, pathLang, pluginsPath, write, type Mode } from './site';
 import { pixelTheme } from './theme';
 
 // A Bot's detail is ?bot=<GitHub node ID> on the same page, so a shared link opens it
@@ -73,6 +73,14 @@ export function MarketApp() {
             <p className="kicker">{copy.market.kicker}</p>
             <h1 className="market-title">{copy.market.title}</h1>
             <p className="section-lead">{copy.market.lead}</p>
+            <nav className="market-shelves" aria-label={copy.market.shelvesLabel}>
+              <a className="topic-chip" href={marketPath(lang)} aria-current="page">
+                {copy.market.shelfBots}
+              </a>
+              <a className="topic-chip" href={pluginsPath(lang)}>
+                {copy.market.shelfPlugins}
+              </a>
+            </nav>
           </>
         )}
         <MarketList copy={copy} lang={lang} hidden={botId !== null} onOpen={open} />

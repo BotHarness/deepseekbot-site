@@ -1,0 +1,131 @@
+{
+  "order": 1,
+  "package": "@botharness/vrm-companion",
+  "version": "0.1.0",
+  "official": true,
+  "platform": "desktop",
+  "dsh": ">=0.2.0-rc.2 <0.3.0",
+  "deepseekbot": "1.4.1",
+  "source": "https://github.com/BotHarness/DeepSeekBot/tree/main/packages/vrm-companion",
+  "guide": "https://github.com/BotHarness/DeepSeekBot/blob/main/docs/panel-plugin.md",
+  "media": "/guides/plugins/vrm-companion/",
+  "cover": { "light": "cover-light.webp", "dark": "cover-dark.webp" },
+  "video": { "src": "highlight.mp4", "poster": "highlight-poster.webp" },
+  "stills": [
+    {
+      "light": "alert.webp",
+      "zh": "新消息：桌上的手机亮起，信封弹出，头顶冒出感叹号",
+      "en": "A new message: the phone lights up, an envelope pops out and a mark appears overhead"
+    },
+    {
+      "light": "chin.webp",
+      "zh": "空闲时托着下巴发呆",
+      "en": "Resting its chin while the Bot is idle"
+    },
+    {
+      "light": "sip.webp",
+      "zh": "端起杯子喝一口",
+      "en": "Taking a sip from the mug"
+    },
+    {
+      "light": "phone.webp",
+      "zh": "拿起手机看一眼",
+      "en": "Checking the phone"
+    },
+    {
+      "light": "speech.webp",
+      "zh": "回复按句分页显示在对话气泡里",
+      "en": "Replies appear one page at a time in a speech bubble"
+    },
+    {
+      "light": "menu-light.webp",
+      "dark": "menu-dark.webp",
+      "zh": "Scene 菜单：视角、时间、天气、画面风格和动作",
+      "en": "The Scene menu: view, time, weather, look and movement"
+    }
+  ],
+  "zh": {
+    "title": "VRM 陪伴",
+    "pitch": "让 Bot 的角色坐在 lo-fi 书房里陪你：工作时打字，思考时抬头，回复时转过来说话。",
+    "description": "VRM 陪伴是 DeepSeekBot 的面板插件。Bot 的角色坐在一间 lo-fi 风格的书房里：Bot 工作时打字，思考时抬头，把已发出的回复显示在对话气泡里；空闲时会喝咖啡、托腮或看手机。昼夜和天气跟着你的本地时间变化，也可以换成你自己的 .vrm 角色，文件不会上传。",
+    "tags": ["官方", "桌面端"],
+    "usage": [
+      "在 Bot 模式下选择一个 Bot 私聊。",
+      "如果消息栏是收起的，先打开 **Messages**。",
+      "在 Messages 顶栏选择 **VRM Companion**，面板会出现在聊天旁边。拖动聊天和面板之间的分隔条可以调整宽度。",
+      "想固定某个 Bot，点面板顶栏的图钉（**Pin character globally**），会生成一个只属于这个 Bot 的面板。"
+    ],
+    "controls": [
+      {
+        "name": "Auto camera tour",
+        "text": "播放或暂停自动运镜，在桌面、肖像、全景、过肩和房间几个机位之间切换。拖动画面会暂停 20 秒。"
+      },
+      {
+        "name": "Character",
+        "text": "**Change character…** 从电脑载入 `.vrm`（VRoid / VRM 0.x 或 VRM 1.0），**Use default** 换回默认角色，也可以切换 MToon / lilToon 着色。"
+      },
+      {
+        "name": "Scene",
+        "text": "视角（桌面、房间、肖像）、时间（本地时间、日落、夜晚）、天气（晴、雨）、画面（Lo-fi 或 Plain）和动作（坐下、站起、走动）。"
+      },
+      {
+        "name": "Pin character globally",
+        "text": "把当前 Bot 固定成一个独立面板，关掉再打开也会保留。"
+      }
+    ],
+    "customCharacter": "自己的角色只保存在这个浏览器的 IndexedDB 里，刷新后还在，不会上传。浏览器不允许保存时只在本次会话有效，面板会提示。",
+    "performance": [
+      "目标 60 帧；负载高时降到 30 帧，再逐步降低分辨率，负载降下来后恢复。",
+      "默认角色模型只在第一次打开面板时下载，装了插件不会让每个页面都变重。",
+      "面板隐藏时停止绘制。"
+    ],
+    "licenses": [
+      "源代码：MIT。",
+      "默认角色：VRoid Project 的 AvatarSample_A。按 VRoid Hub 条款可以使用、修改和再分发，无需署名；它不属于 MIT 许可。插件内的版本只把贴图缩小到 2048 px，其他未改动。",
+      "房间家具：Kay Lousberg 的 KayKit Furniture Bits，CC0。",
+      "lilToon 着色器移植：MIT，附带第三方声明。"
+    ]
+  },
+  "en": {
+    "title": "VRM Companion",
+    "pitch": "Your Bot's character at a desk in a lo-fi study: it types while the Bot works, looks up while it thinks and turns to you to speak its replies.",
+    "description": "VRM Companion is a Panel plugin for DeepSeekBot. The Bot's character sits at a desk in a lo-fi study room: it types while the Bot works, looks up while it thinks and speaks the Bot's sent replies in a speech bubble. Between tasks it sips coffee, rests its chin or checks its phone. Day, night and weather follow your local clock, and you can load your own .vrm character without uploading it.",
+    "tags": ["Official", "Desktop"],
+    "usage": [
+      "In Bot mode, select a Bot DM.",
+      "Open **Messages** if it is closed.",
+      "Choose **VRM Companion** in the Messages header. The Panel opens beside the chat; drag the split between them to resize it.",
+      "To keep a fixed instance for one Bot, click the pin (**Pin character globally**) in the Panel header."
+    ],
+    "controls": [
+      {
+        "name": "Auto camera tour",
+        "text": "Plays or pauses a camera tour through desk, portrait, wide, over-the-shoulder and room shots. Dragging the camera pauses it for 20 seconds."
+      },
+      {
+        "name": "Character",
+        "text": "**Change character…** loads a `.vrm` from your computer (VRoid / VRM 0.x or VRM 1.0), **Use default** switches back, and MToon / lilToon switches the shading."
+      },
+      {
+        "name": "Scene",
+        "text": "View (desk, room, portrait), Time (local time, sunset, night), Weather (clear, rain), Look (lo-fi or plain) and Movement (sit down, stand up, walk around)."
+      },
+      {
+        "name": "Pin character globally",
+        "text": "Pins the current Bot as its own Panel, which survives closing and reopening."
+      }
+    ],
+    "customCharacter": "Your own character is kept in this browser's IndexedDB, survives reloads and is never uploaded. If the browser refuses to store it, it stays for the session and the Panel says so.",
+    "performance": [
+      "Targets 60 fps; under load it drops to 30 fps, then lowers the resolution step by step, and recovers when the load eases.",
+      "The default character downloads only when a Panel first opens, so installing the plugin does not slow every page.",
+      "Hidden Panels stop drawing."
+    ],
+    "licenses": [
+      "Source code: MIT.",
+      "Default character: VRoid Project's AvatarSample_A. Its VRoid Hub conditions allow use, modification and redistribution without credit; it is not under the MIT license. The bundled copy only has its textures downscaled to 2048 px.",
+      "Room furniture: KayKit Furniture Bits by Kay Lousberg, CC0.",
+      "lilToon shader port: MIT, with third-party notices."
+    ]
+  }
+}

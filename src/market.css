@@ -10,6 +10,26 @@
   font-size: clamp(28px, 5vw, 48px);
   line-height: 1.25;
 }
+/* Bots and Plugins, the two shelves of the marketplace */
+.market-shelves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 28px;
+}
+.market-shelves .topic-chip {
+  font-size: 14px;
+  padding: 6px 16px;
+  text-decoration: none;
+  box-shadow: var(--px) var(--px) 0 var(--px-shadow);
+}
+.market-shelves .topic-chip:hover {
+  translate: 0 -2px;
+}
+.market-shelves .topic-chip[aria-current='page'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
 .market-controls {
   display: flex;
   flex-wrap: wrap;

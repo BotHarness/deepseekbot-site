@@ -6,6 +6,7 @@ import test from 'node:test';
 import { renderDocs } from './docs.ts';
 import { renderChangelog } from './changelog.ts';
 import { renderBlog } from './blog.ts';
+import { renderPlugins } from './plugins.ts';
 import { COMMUNITY_LINKS, QQ_GROUP } from '../src/communityLinks.ts';
 import { HEADER_COMMUNITY_COPY, headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { DESKTOP_PACKAGE } from '../src/installRelease.ts';
@@ -191,13 +192,16 @@ test('localized controls retain destinations, hidden descriptions and click-only
   }
 });
 
-test('all generated guides, privacy, changelog and blog pages retain the shared header and correct locale links', () => {
+test('all generated guides, privacy, changelog, blog and plugin pages retain the shared header and correct locale links', () => {
   const cwd = process.cwd();
   const fixture = mkdtempSync(join(tmpdir(), 'site-header-test-'));
   try {
     cpSync(join(cwd, 'content'), join(fixture, 'content'), { recursive: true });
+    cpSync(join(cwd, 'public/guides/plugins'), join(fixture, 'public/guides/plugins'), {
+      recursive: true,
+    });
     process.chdir(fixture);
-    const paths = [...renderDocs(), ...renderChangelog(), ...renderBlog()];
+    const paths = [...renderDocs(), ...renderChangelog(), ...renderBlog(), ...renderPlugins()];
     assert.ok(paths.length > 10);
     for (const path of paths) {
       const lang = path.split(/[\\/]/)[0] === 'en' ? 'en' : 'zh';
