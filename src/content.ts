@@ -306,11 +306,11 @@ const zh: Copy = {
   features: {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
-    lead: `v${VERSION} 已发布：托布帮你创建 Bot、组建团队和调整模型；Home 展示 Token 用量与 Bot 动态，多面板工作区按你的习惯摆放。自动审批、聊天和 CLI 也一起增强。`,
+    lead: `v${VERSION} 已发布：第一次进入 Bot 模式时，托布五步带你上手；主题配色、半透明面板和壁纸库让 Bot 模式换成你喜欢的样子；/compact 和空闲压缩让长对话保持轻快，快速搜索能直达任意设置项。`,
     release: {
-      text: '从模型配置到建 Bot、建群和整理布局，新的 Desktop 入门引导带你开始。',
-      label: '查看 1.4.0 更新介绍',
-      href: '/blog/deepseekbot-1-4-0/',
+      text: 'Memory 可以预览图片和 Markdown，审批简化为「允许这次／始终允许／拒绝」，并修复了 Windows Desktop、活动中心和缩放的一批问题。',
+      label: '查看 1.4.1 更新日志',
+      href: `/changelog/#v${VERSION}`,
     },
     items: [
       {
@@ -675,11 +675,11 @@ const en: Copy = {
   features: {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
-    lead: `v${VERSION} is out: Tob helps create Bots, organize groups and adjust models. Home shows Token history and Bot activity, while flexible panels make room for your work. Approvals, chat and CLI controls expand too.`,
+    lead: `v${VERSION} is out: Tob walks you through a five-step intro the first time you enter Bot mode; themes, see-through panels and a wallpaper library make Bot mode your own; /compact and Idle Compaction keep long conversations fast, and quick search reaches any setting.`,
     release: {
-      text: 'The new Desktop onboarding takes you from model setup to creating a Bot and group, then arranging your panels.',
-      label: 'Explore 1.4.0',
-      href: '/en/blog/deepseekbot-1-4-0/',
+      text: 'Memory previews images and Markdown, approvals come down to Allow once, Always allow and Reject, and a batch of Windows Desktop, Activity and zoom issues are fixed.',
+      label: 'Read the 1.4.1 changelog',
+      href: `/en/changelog/#v${VERSION}`,
     },
     items: [
       {
