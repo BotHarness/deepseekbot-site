@@ -223,7 +223,9 @@ export function MarketList({
                     <BotFace bot={bot} size={72} />
                     <span className="bot-card-id">
                       <span className="bot-card-name">{botName(bot)}</span>
-                      <span className="bot-card-repo">{bot.fullName}</span>
+                      <span className="bot-card-repo" title={bot.fullName}>
+                        {bot.fullName}
+                      </span>
                     </span>
                   </span>
                   {botBio(bot) ? <span className="bot-card-desc">{botBio(bot)}</span> : null}

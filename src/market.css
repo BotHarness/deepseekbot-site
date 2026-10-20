@@ -139,11 +139,15 @@ a.bot-card {
 }
 .bot-card-head {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
   min-width: 0;
-  margin-top: -30px;
   padding-left: 12px;
+}
+/* Only the avatar rises into the banner; the name and repository stay below it so a
+   busy scene never sits behind the text (the Host's marketplace card does the same). */
+.bot-card-head > .bot-face {
+  margin-top: -30px;
 }
 .bot-card-id {
   min-width: 0;
@@ -163,6 +167,11 @@ a.bot-card {
   font-size: 13px;
   color: var(--ink-soft);
   overflow-wrap: anywhere;
+}
+.bot-card-id > .bot-card-repo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .bot-card-desc {
   font-size: 14px;
@@ -225,10 +234,14 @@ a.bot-card {
 .detail-head {
   display: flex;
   gap: 20px;
-  align-items: flex-end;
+  align-items: flex-start;
   padding-left: 16px;
 }
-.detail-head[data-banner='shown'] {
+.detail-head > div {
+  min-width: 0;
+  padding-top: 8px;
+}
+.detail-head[data-banner='shown'] > .bot-face {
   margin-top: -36px;
 }
 .detail-head h1 {
