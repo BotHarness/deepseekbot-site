@@ -105,6 +105,7 @@ const UI = {
     skip: '跳到正文',
     copy: '复制',
     copied: '已复制',
+    copyFailed: '复制失败',
     footer: '开源，MIT 许可。',
     privacy: '隐私说明',
   },
@@ -156,6 +157,7 @@ const UI = {
     skip: 'Skip to content',
     copy: 'Copy',
     copied: 'Copied',
+    copyFailed: 'Copy failed',
     footer: 'Open source under the MIT license.',
     privacy: 'Privacy',
   },
@@ -180,6 +182,7 @@ const media = (plugin: Plugin, file: string | undefined) =>
 /** Width and height of a WebP or PNG, so images reserve their space before they load. */
 export function imageSize(path: string): { width: number; height: number } {
   const b = readFileSync(path);
+  if (b.length < 30) throw new Error(`${path}: image file is truncated`);
   if (b.toString('ascii', 1, 4) === 'PNG')
     return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
   if (b.toString('ascii', 0, 4) !== 'RIFF' || b.toString('ascii', 8, 12) !== 'WEBP')
@@ -208,7 +211,7 @@ function picture(plugin: Plugin, image: Image, alt: string, className: string, l
 
 function command(lang: Lang, text: string) {
   const t = UI[lang];
-  return `<div class="command plugin-command"><code><span class="prompt" aria-hidden="true">$ </span>${escape(text)}</code><button type="button" class="code-copy" data-copy-command="${escape(text)}" data-copied="${t.copied}">${t.copy}</button></div>`;
+  return `<div class="command plugin-command"><code><span class="prompt" aria-hidden="true">$ </span>${escape(text)}</code><button type="button" class="code-copy" data-copy-command="${escape(text)}" data-copied="${t.copied}" data-copy-failed="${t.copyFailed}">${t.copy}</button></div>`;
 }
 
 function tags(copy: Copy) {
@@ -435,9 +438,9 @@ export function readPlugins(): Plugin[] {
       for (const lang of ['zh', 'en'] as const)
         if (!plugin[lang]?.title || !plugin[lang].pitch)
           throw new Error(`plugin ${plugin.slug} needs a ${lang} title and pitch`);
-      if (!media(plugin, plugin.cover.light))
+      if (!plugin.cover?.light || !media(plugin, plugin.cover.light))
         throw new Error(
-          `plugin ${plugin.slug}: cover ${plugin.media}${plugin.cover.light} is missing`,
+          `plugin ${plugin.slug}: cover ${plugin.media}${plugin.cover?.light ?? ''} is missing`,
         );
       return plugin;
     })
