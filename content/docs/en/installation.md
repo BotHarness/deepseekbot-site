@@ -4,15 +4,15 @@
   "description": "Import the public npm plugin in DSH, enable Bot mode and create a PersonaBot.",
   "order": 12,
   "source": "docs/installation.md",
-  "sourceRevision": "ef2e2673d235ec9fdd5109297cfe3210096867f6"
+  "sourceRevision": "93c3cd11326ca10135d546741a639f477a5dcfdb"
 }
 ---
 
-> **Version scope: stable 1.4.0.** Installation identity and bilingual release notes are synchronized; historical screenshots do not show the current UI.
+> **Version scope: current-source guide.** These steps include UI updates absent from npm v1.1.0; older test packages and screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and component boundaries.
 
 Install the **DeepSeekBot** plugin in DeepSeek Harness (DSH), enable it and create your first PersonaBot. You install one product package; Core, Client and the qualified IM Provider arrive with it.
 
-Install the stable npm package **`deepseekbot@1.4.0`**. Use **DSH `0.2.1-rc.2`**; the same released packages passed installation, Host startup, Bot/DM creation and restart persistence on **0.2.0-rc.2 and 0.2.1-rc.2**. Declared admission is `>=0.2.0-rc.2 <0.3.0-0`, not runtime qualification of every version. The DSH 0.2.0-rc.1 screenshots below are historical UI records; follow the current text. Back up the Profile before upgrading; returning to an older binary may require the pre-upgrade backup.
+This guide installs the public npm package **`deepseekbot`**, which requires **DSH `0.2.0-rc.2`**. Screenshots, taken on DSH 0.2.0-rc.1, show a clean Profile using the Chinese DSH interface; the captions name the corresponding controls. No repository checkout or local build is required.
 
 ## 1. Open Plugins
 
@@ -27,7 +27,7 @@ Click **Plugins (插件)** in the left sidebar, then **Add plugin (添加插件)
 Paste this exact value into **Package name or address (包名或地址)**:
 
 ```text
-deepseekbot@1.4.0
+deepseekbot@1.4.1
 ```
 
 Keep **npm official registry (npm 官方源)** as the installation source and click **Install (安装)**. Wait for the installation task to finish.
@@ -40,7 +40,7 @@ _This field imports the package source, not an uploaded file. Screenshots are hi
 
 Do not replace the exact spec with `deepseekbot` or `deepseekbot@latest`. With pnpm 11.7 defaults, both selected 1.2.0 during 1.2.1's 24-hour release-age window, even though DSH's preview displayed 1.2.1. Core 1.2.0 requires DSH 0.2.0-rc.1 exactly; Core 1.2.1 declares `>=0.1.7-0`. These are different installed packages, not a remaining version ceiling in 1.2.1.
 
-Retry using the exact spec above. For an existing Desktop Profile, fully quit Desktop before running `dsh plugin --profile desktop add deepseekbot@1.4.0`; restart afterwards and check the actual installed Product/Core versions. Preserve the Profile and its data; do not delete it to retry.
+Retry using the exact spec above. For an existing Desktop Profile, fully quit Desktop before running `dsh plugin --profile desktop add deepseekbot@1.4.1`; restart afterwards and check the actual installed Product/Core versions. Preserve the Profile and its data; do not delete it to retry.
 
 Explicit versions can record exact `minimumReleaseAgeExclude` entries under pnpm defaults. If strict policy prompts or refuses, obtain approval for only the verified package versions or wait for the policy window; do not globally disable supply-chain protection or use DSH version exemptions. These instructions do not claim native Windows Desktop verification or compatibility with every future DSH release.
 
@@ -54,11 +54,21 @@ Once enabled, **Bot mode (Bot 模式)** appears in the sidebar. In the verified 
 
 ![Installed plugin enabled and Bot mode available in the sidebar](/guides/install/04-enabled-zh.webp)
 
-## 4. Start with Home onboarding
+## 4. Open Bot mode
 
-Open **Bot mode**, configure a model in Home and send Tob an editable creation request. Follow the journey to create a real Bot and group, with existing management approvals, then learn to drag panel titles, resize panels and reopen them from the control rail. Finish by clicking the **Home title** to close Home and enter the original Tob DM.
+Click **Bot mode (Bot 模式)**, then **Create your first PersonaBot (创建第一个 PersonaBot)**. Enter a name and click **Create (创建)**; role and description are optional.
 
-New Bots no longer receive an automatic welcome message. Send your own greeting and check a real reply to verify model usability. DSH still manages credentials; npm installation does not provide them. See [API and Bot models](/en/docs/model-setup/) and the [1.4.0 introduction](/en/blog/deepseekbot-1-4-0/).
+![Fresh Bot mode with the Create your first PersonaBot action](/guides/install/05-bot-mode-zh.webp)
+
+![Create Bot dialog with a tutorial Bot name](/guides/install/06-create-bot-zh.webp)
+
+Open the new Bot's DM, expand **Model** in the Channel sidebar on the right and click **Main model**. Choose the main model and task model, then **Save**. See [API and Bot models](/docs/model-setup) for all fields. Return to the DM and send a short greeting. A reply verifies that your model is usable as well as the plugin being enabled. Model credentials are configured in DSH; npm installation does not provide them.
+
+![A real model reply in the freshly installed product after a cold restart](/guides/install/07-local-reply-zh.webp)
+
+_The verification Bot answered a message sent through the Web DM after installation and a cold Host restart. Messaging app accounts remain disconnected._
+
+See [Settings guide](/docs/settings) for appearance, concurrency, persona, attention, sidebar, and workspace authorization fields.
 
 ## 5. Connect a messaging app
 
@@ -87,18 +97,18 @@ When you import a Bot from an SSH address such as `git@github.com:owner/repo.git
 The [official DSH packaging reference](https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish) also supports CLI installation into a named Profile:
 
 ```bash
-dsh plugin --profile <your-profile> add deepseekbot@1.4.0
+dsh plugin --profile <your-profile> add deepseekbot@1.4.1
 ```
 
 Use the Profile you actually start. Enable the plugin in that Profile's Plugins page afterward.
 
-To import the same precompiled archive, download the public npm tarball with `npm pack deepseekbot@1.4.0`, which saves `deepseekbot-<version>.tgz` in the current directory. In the Web interface, enter its **absolute path on the machine running DSH** in Package name or address; a path on a different browser machine is not a Host path. With the CLI you can instead use `dsh plugin --profile <your-profile> add ./deepseekbot-<version>.tgz` from the download directory.
+To import the same precompiled archive, download the public npm tarball with `npm pack deepseekbot@1.4.1`, which saves `deepseekbot-<version>.tgz` in the current directory. In the Web interface, enter its **absolute path on the machine running DSH** in Package name or address; a path on a different browser machine is not a Host path. With the CLI you can instead use `dsh plugin --profile <your-profile> add ./deepseekbot-<version>.tgz` from the download directory.
 
 ## If installation does not finish
 
 | What you see                              | Next check                                                                                                                |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| deepseekbot is incompatible with this DSH | Use qualified DSH 0.2.0-rc.2 or 0.2.1-rc.2 and confirm the exact deepseekbot@1.4.0 package.                         |
+| deepseekbot is incompatible with this DSH | Install DSH 0.2.0-rc.2 and install again; the bundled Computer runtime only matches that release.                         |
 | Package or version not found              | Check the exact package spelling and version, choose npm official registry and retry once registry metadata is available. |
 | Installed but no Bot mode                 | Enable deepseekbot in the current Profile; follow any DSH restart notice, then reload the Web page.                       |
 | Bot mode works but the Bot cannot reply   | Check the selected model and DSH credentials; installation and model access are separate.                                 |
