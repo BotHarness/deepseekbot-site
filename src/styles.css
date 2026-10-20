@@ -948,7 +948,7 @@ a:where(:not(.astryx-button)) {
   outline: 2px solid var(--px-ink);
 }
 
-/* Balance cards against the available content width, including in narrower shells. */
+/* One, two or three cards per line by available width; the last line always fills the row. */
 @container features (min-width: 640px) {
   .feature-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -961,15 +961,18 @@ a:where(:not(.astryx-button)) {
   .feature-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
-  .feature-grid > .feature {
+  .feature-grid > .feature,
+  .feature-grid > .feature:last-child:nth-child(odd) {
     grid-column: span 2;
   }
-  .feature-grid > .feature:nth-child(n + 4),
-  .feature-grid > .feature:last-child:nth-child(odd) {
-    grid-column: span 3;
-  }
-  .feature-grid > .feature:nth-child(n + 4):last-child:nth-child(even) {
+  /* one card left over: it takes the whole line */
+  .feature-grid > .feature:last-child:nth-child(3n + 1) {
     grid-column: 1 / -1;
+  }
+  /* two cards left over: they split the line */
+  .feature-grid > .feature:nth-last-child(2):nth-child(3n + 1),
+  .feature-grid > .feature:last-child:nth-child(3n + 2) {
+    grid-column: span 3;
   }
 }
 

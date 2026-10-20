@@ -1651,16 +1651,6 @@
   }
 }
 
-/* the features without a demo sit as cards under the rows, two to a line */
-@container features (min-width: 640px) {
-  .feature-rows + .feature-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .feature-rows + .feature-grid > .feature {
-    grid-column: auto;
-  }
-}
-
 /* ---- mobile app: a phone beside numbered steps ---- */
 .app--phone {
   background: none;
