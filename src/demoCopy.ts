@@ -66,8 +66,6 @@ export interface DemoCopy {
   lead: string;
   windowLabel: string;
   app: string;
-  newChat: string;
-  plugins: string;
   botMode: string;
   messages: string;
   human: string;
@@ -77,10 +75,35 @@ export interface DemoCopy {
   composer: string;
   send: string;
   allow: string;
+  always: string;
   deny: string;
   allowed: string;
+  alwaysAllowed: string;
   denied: string;
   waiting: string;
+  /** the approval card's kind line and its status */
+  tool: string;
+  needsYou: string;
+  /** the full-height Control Rail on the left and the panels it opens */
+  rail: string;
+  home: string;
+  channelsPanel: string;
+  activity: string;
+  unread: string;
+  nothingWaiting: string;
+  wallpaper: string;
+  /** Home: Tob, the local steward, with Token usage and Bot activity */
+  tob: {
+    name: string;
+    greeting: string;
+    description: string;
+    input: string;
+    starters: string[];
+    usage: string;
+    ranges: string[];
+    botActivity: string;
+    states: { working: string; needs: string; idle: string };
+  };
   replay: string;
   sidebar: string;
   hideSidebar: string;
@@ -137,6 +160,66 @@ export interface FeatureDemoCopy {
     items: { name: string; when: string; next: string }[];
     initial: { name: string; time: string }[];
   };
+  mobile: {
+    label: string;
+    phoneLabel: string;
+    stepsLabel: string;
+    steps: { pair: string; chat: string; approve: string; browser: string };
+    pair: {
+      title: string;
+      hint: string;
+      expires: string;
+      scan: string;
+      paired: string;
+      pairedHint: string;
+      again: string;
+    };
+    chat: {
+      title: string;
+      nav: string[];
+      back: string;
+      composer: string;
+      needsYou: string;
+      rows: {
+        name: string;
+        preview: string;
+        time: string;
+        status: 'done' | 'needs' | 'idle';
+        members?: string[];
+        prompt?: string;
+        speaker?: string;
+        reply?: string[];
+      }[];
+    };
+    approve: {
+      app: string;
+      now: string;
+      date: string;
+      title: string;
+      body: string;
+      allowOnce: string;
+      alwaysAllow: string;
+      reject: string;
+      results: { once: string; always: string; reject: string };
+      inChat: string;
+      again: string;
+    };
+    browser: {
+      bot: string;
+      title: string;
+      botDriving: string;
+      youDriving: string;
+      pause: string;
+      resume: string;
+      tap: string;
+      trackpad: string;
+      view: string;
+      url: string;
+      heading: string;
+      plans: { name: string; price: string }[];
+      tapped: string;
+    };
+  };
 }
 
 const zhDemo: DemoCopy = {
@@ -145,8 +228,6 @@ const zhDemo: DemoCopy = {
   lead: '这是 DeepSeekBot 的 Bot 模式。点左侧切换对话，替 Bot 做决定，或者直接发一句话试试。',
   windowLabel: 'DeepSeekBot Bot 模式的仿真界面',
   app: 'DeepSeek Harness',
-  newChat: '新会话',
-  plugins: '插件',
   botMode: 'Bot 模式',
   messages: '消息',
   human: 'Human',
@@ -155,15 +236,42 @@ const zhDemo: DemoCopy = {
   working: '{bot} 正在{tool}…',
   composer: '发消息给 {name}',
   send: '发送',
-  allow: '允许',
-  deny: '先不',
-  allowed: '你允许了',
+  allow: '允许这次',
+  always: '始终允许',
+  deny: '拒绝',
+  allowed: '你允许了这次',
+  alwaysAllowed: '你选择了始终允许',
   denied: '你拒绝了，Bot 不会访问这个文件夹',
   waiting: '等你回答，演示才会继续',
+  tool: '工具',
+  needsYou: '需要你',
+  rail: '工作区控制列',
+  home: '首页',
+  channelsPanel: '频道列表',
+  activity: '活动',
+  unread: '未读',
+  nothingWaiting: '没有等你处理的事',
+  wallpaper: '壁纸',
+  tob: {
+    name: '托布',
+    greeting: '你好，我是托布',
+    description: '你的本地总管。了解 Bot 的状态，或告诉我你想调整什么。',
+    input: '有什么可以帮你？',
+    starters: [
+      '帮我创建一个 Bot',
+      '看看我的 Bot 最近怎么样',
+      '有哪些事情需要我处理？',
+      '最近有哪些记忆更新？',
+    ],
+    usage: 'Token 用量',
+    ranges: ['今日', '7 天', '4 周', '12 周'],
+    botActivity: 'Bot 活跃情况',
+    states: { working: '工作中', needs: '需要你', idle: '空闲' },
+  },
   replay: '再看一遍',
-  sidebar: 'Channel sidebar',
-  hideSidebar: '收起 Channel sidebar',
-  showSidebar: '展开 Channel sidebar',
+  sidebar: '频道子面板',
+  hideSidebar: '收起频道子面板',
+  showSidebar: '展开频道子面板',
   fallback:
     '这里是预设脚本的演示，我还不能真的回答你。把 DeepSeekBot 装进 DeepSeek Harness，就能和真正的我聊了。',
   fallbackCta: '开始安装 →',
@@ -488,8 +596,6 @@ const enDemo: DemoCopy = {
   lead: 'This is DeepSeekBot’s Bot mode. Switch chats on the left, make the call when a Bot asks, or type a message yourself.',
   windowLabel: 'A simulation of DeepSeekBot’s Bot mode',
   app: 'DeepSeek Harness',
-  newChat: 'New chat',
-  plugins: 'Plugins',
   botMode: 'Bot mode',
   messages: 'Messages',
   human: 'Human',
@@ -498,15 +604,42 @@ const enDemo: DemoCopy = {
   working: '{bot} · {tool}…',
   composer: 'Message {name}',
   send: 'Send',
-  allow: 'Allow',
-  deny: 'Not now',
-  allowed: 'You allowed',
-  denied: 'You declined; the Bot stays out of that folder',
+  allow: 'Allow once',
+  always: 'Always allow',
+  deny: 'Reject',
+  allowed: 'You allowed it once',
+  alwaysAllowed: 'You always allowed it',
+  denied: 'You rejected it; the Bot stays out of that folder',
   waiting: 'The demo waits for your answer',
+  tool: 'Tool',
+  needsYou: 'Needs you',
+  rail: 'Workspace controls',
+  home: 'Home',
+  channelsPanel: 'Channels',
+  activity: 'Activity',
+  unread: 'Unread',
+  nothingWaiting: 'Nothing waiting on you',
+  wallpaper: 'Wallpaper',
+  tob: {
+    name: 'Tob',
+    greeting: 'Hello, I’m Tob',
+    description: 'Your local steward. Check on your Bots or tell me what you’d like to change.',
+    input: 'What can I help you with?',
+    starters: [
+      'Help me create a Bot',
+      'How are my Bots doing?',
+      'What needs my attention?',
+      'What memories changed recently?',
+    ],
+    usage: 'Token usage',
+    ranges: ['Today', '7 days', '4 weeks', '12 weeks'],
+    botActivity: 'Bot activity',
+    states: { working: 'Working', needs: 'Needs you', idle: 'Idle' },
+  },
   replay: 'Replay',
-  sidebar: 'Channel sidebar',
-  hideSidebar: 'Hide the Channel sidebar',
-  showSidebar: 'Show the Channel sidebar',
+  sidebar: 'Channel subpanels',
+  hideSidebar: 'Hide Channel subpanels',
+  showSidebar: 'Show Channel subpanels',
   fallback:
     'This demo plays a script, so I can’t really answer you yet. Add DeepSeekBot to DeepSeek Harness and you can talk to the real me.',
   fallbackCta: 'Install →',
@@ -973,7 +1106,7 @@ const zhFeatureDemos: FeatureDemoCopy = {
     bot: 'Nova',
     alert: '1 项需要你批准',
     clear: '没有等你处理的事',
-    approve: '批准',
+    approve: '允许这次',
     reset: '重来',
     jobs: [
       { folder: '~/code/api', title: '升级依赖' },
@@ -1003,6 +1136,89 @@ const zhFeatureDemos: FeatureDemoCopy = {
       { name: '构建巡检', time: '15:17' },
       { name: '每日早报', time: '09:00' },
     ],
+  },
+  mobile: {
+    label: '点一点手机 App：配对、聊天、审批、接管浏览器',
+    phoneLabel: '手机 App 演示',
+    stepsLabel: '演示步骤',
+    steps: { pair: '扫码配对', chat: '和 Bot 聊天', approve: '通知里审批', browser: '接管浏览器' },
+    pair: {
+      title: '与电脑配对',
+      hint: '在电脑上打开 DeepSeekBot 设置 → 设备 → 配对手机，然后扫描二维码。',
+      expires: '二维码只能用一次，10 分钟后失效。',
+      scan: '扫描二维码',
+      paired: '已与 Studio Mac 配对',
+      pairedHint: '电脑重启后不用重新配对，也可以随时在电脑上撤销。',
+      again: '重新演示',
+    },
+    chat: {
+      title: '聊天',
+      nav: ['聊天', '活动', '我'],
+      back: '返回',
+      composer: '发消息',
+      needsYou: '1 个 Bot 需要你',
+      rows: [
+        {
+          name: 'Mira',
+          preview: '早报整理好了',
+          time: '09:30',
+          status: 'done',
+          prompt: '帮我看看今天有什么要紧事',
+          reply: [
+            '**今天有 3 件事：**',
+            '- 10:00 和设计组过定价页',
+            '- 周报草稿已放进 notes/weekly.md',
+            '- Nova 在等你批准一次推送',
+          ],
+        },
+        { name: 'Nova', preview: '想要运行 git push', time: '09:12', status: 'needs' },
+        {
+          name: 'launch-team',
+          preview: 'Theo：定价页改好了',
+          time: '昨天',
+          status: 'idle',
+          members: ['Mira', 'Theo', 'Nova'],
+          prompt: '@Theo 定价页可以上线了吗？',
+          speaker: 'Theo',
+          reply: ['可以。**构建已通过**，等 Nova 推送后就能上线。'],
+        },
+      ],
+    },
+    approve: {
+      app: 'DeepSeekBot',
+      now: '现在',
+      date: '10 月 19 日 星期一',
+      title: 'Nova 想要运行 Bash',
+      body: 'git push origin pricing-update',
+      allowOnce: '允许一次',
+      alwaysAllow: '始终允许',
+      reject: '拒绝',
+      results: {
+        once: '已允许，Bot 继续工作。',
+        always: '已始终允许，Bot 继续工作。',
+        reject: '已拒绝，Bot 已收到。',
+      },
+      inChat: '也可以打开聊天再处理。',
+      again: '再来一次',
+    },
+    browser: {
+      bot: 'Mira',
+      title: 'Mira 的浏览器',
+      botDriving: 'Bot 正在使用浏览器。暂停它即可接管。',
+      youDriving: '你正在控制浏览器。点继续交还给 Bot。',
+      pause: '暂停 Bot',
+      resume: '继续',
+      tap: '点按',
+      trackpad: '触控板',
+      view: 'Bot 浏览器的实时画面',
+      url: 'example.com/pricing',
+      heading: '选择套餐',
+      plans: [
+        { name: '个人版', price: '¥0' },
+        { name: '团队版', price: '¥49' },
+      ],
+      tapped: '你点了这里',
+    },
   },
 };
 
@@ -1142,7 +1358,7 @@ const enFeatureDemos: FeatureDemoCopy = {
     bot: 'Nova',
     alert: '1 needs your approval',
     clear: 'Nothing waiting on you',
-    approve: 'Approve',
+    approve: 'Allow once',
     reset: 'Reset',
     jobs: [
       { folder: '~/code/api', title: 'Upgrade dependencies' },
@@ -1176,6 +1392,95 @@ const enFeatureDemos: FeatureDemoCopy = {
       { name: 'Build check', time: '15:17' },
       { name: 'Morning brief', time: '09:00' },
     ],
+  },
+  mobile: {
+    label: 'Try the phone app: pair, chat, approve, take over the Browser',
+    phoneLabel: 'Phone app demo',
+    stepsLabel: 'Demo steps',
+    steps: {
+      pair: 'Scan to pair',
+      chat: 'Chat with a Bot',
+      approve: 'Approve from a notification',
+      browser: 'Take over the Browser',
+    },
+    pair: {
+      title: 'Pair with your computer',
+      hint: 'On your computer, open DeepSeekBot Settings → Devices → Pair a phone, then scan the code it shows.',
+      expires: 'The code works once and expires after 10 minutes.',
+      scan: 'Scan the code',
+      paired: 'Paired with Studio Mac',
+      pairedHint:
+        'No need to pair again after your computer restarts. Revoke it from the computer anytime.',
+      again: 'Start over',
+    },
+    chat: {
+      title: 'Chats',
+      nav: ['Chats', 'Activity', 'Me'],
+      back: 'Back',
+      composer: 'Message',
+      needsYou: '1 Bot needs you',
+      rows: [
+        {
+          name: 'Mira',
+          preview: 'Your morning brief is ready',
+          time: '09:30',
+          status: 'done',
+          prompt: 'What needs my attention today?',
+          reply: [
+            '**Three things today:**',
+            '- 10:00 pricing page review with design',
+            '- Weekly report draft is in notes/weekly.md',
+            '- Nova is waiting for you to approve a push',
+          ],
+        },
+        { name: 'Nova', preview: 'wants to run git push', time: '09:12', status: 'needs' },
+        {
+          name: 'launch-team',
+          preview: 'Theo: the pricing page is done',
+          time: 'Yesterday',
+          status: 'idle',
+          members: ['Mira', 'Theo', 'Nova'],
+          prompt: '@Theo is the pricing page ready to ship?',
+          speaker: 'Theo',
+          reply: ['Yes. **The build passes**; it ships once Nova pushes.'],
+        },
+      ],
+    },
+    approve: {
+      app: 'DeepSeekBot',
+      now: 'now',
+      date: 'Monday, October 19',
+      title: 'Nova wants to run Bash',
+      body: 'git push origin pricing-update',
+      allowOnce: 'Allow once',
+      alwaysAllow: 'Always allow',
+      reject: 'Reject',
+      results: {
+        once: 'Allowed. The Bot continues.',
+        always: 'Always allowed. The Bot continues.',
+        reject: 'Rejected. The Bot was told.',
+      },
+      inChat: 'You can also decide in the chat.',
+      again: 'Try again',
+    },
+    browser: {
+      bot: 'Mira',
+      title: "Mira's Browser",
+      botDriving: 'The Bot is using the Browser. Pause it to take over.',
+      youDriving: 'You have the Browser. Resume to hand it back.',
+      pause: 'Pause Bot',
+      resume: 'Resume',
+      tap: 'Tap',
+      trackpad: 'Trackpad',
+      view: 'Live view of the Bot Browser',
+      url: 'example.com/pricing',
+      heading: 'Choose a plan',
+      plans: [
+        { name: 'Personal', price: '$0' },
+        { name: 'Team', price: '$9' },
+      ],
+      tapped: 'You tapped here',
+    },
   },
 };
 

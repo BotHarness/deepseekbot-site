@@ -69,6 +69,8 @@ interface Feature {
   body: string;
   tag?: string;
   guide?: { slug: string; label: string };
+  /** an on-page link in place of a guide, such as the community section */
+  cta?: { label: string; href: string };
   /** the hands-on demo shown beside it; features without one are listed as cards */
   demo?: keyof FeatureDemoCopy;
 }
@@ -340,6 +342,14 @@ const zh: Copy = {
         demo: 'schedules',
         title: '定时任务',
         body: '设置计划，或让 Bot 帮你管理。查看每次触发及处理记录，随时暂停，也可锁定以防 Bot 修改。应用运行时按计划执行。',
+      },
+      {
+        icon: 'present',
+        demo: 'mobile',
+        title: '手机 App',
+        body: '扫码把手机和电脑上的 Host 配对，电脑重启后依然有效，也能随时撤销。在手机上和 Bot 私聊、进群聊，回复以 Markdown 流式显示；请求和回复会推送通知，工具审批在通知里就能处理。还能实时查看 Bot 的浏览器和电脑并接管，在 Bot 资料里看用量、Memory 活动、定时任务和模型。iOS 与 Android 都是原生界面。测试版通过 TestFlight 和 Google Play 内部测试分发，尚未上架应用商店。',
+        tag: 'Beta',
+        cta: { label: '加入社区，获取测试邀请', href: '#community' },
       },
       {
         icon: 'web',
@@ -701,6 +711,14 @@ const en: Copy = {
         demo: 'schedules',
         title: 'Scheduled tasks',
         body: 'Set a schedule or ask your Bot to manage one. Review triggers and handling history, pause it, or lock it against Bot edits. Tasks run while the app is running.',
+      },
+      {
+        icon: 'present',
+        demo: 'mobile',
+        title: 'Mobile app',
+        body: 'Scan a QR code to pair your phone with the Host on your computer; access survives restarts and you can revoke it anytime. Chat with Bots in DMs and groups as Markdown replies stream in. Get notified about requests and replies, and decide tool approvals right from the notification. Watch a Bot’s Browser or Computer live and take over, and see usage, Memory activity, schedules and models in its profile. Native on iOS and Android. Testing builds go out through TestFlight and Google Play internal testing; it is not in the app stores yet.',
+        tag: 'Beta',
+        cta: { label: 'Join the community for a test invite', href: '#community' },
       },
       {
         icon: 'web',

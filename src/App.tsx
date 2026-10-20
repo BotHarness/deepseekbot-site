@@ -120,6 +120,11 @@ export function App() {
                         {item.guide.label} →
                       </a>
                     ) : null}
+                    {item.cta ? (
+                      <a className="feature-guide" href={item.cta.href}>
+                        {item.cta.label} →
+                      </a>
+                    ) : null}
                   </div>
                   <FeatureDemo copy={copy} demo={item.demo!} />
                 </li>
