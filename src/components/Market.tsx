@@ -101,12 +101,6 @@ export function MarketList({
   const [attempt, setAttempt] = useState(0);
   const dates = dateFormat(lang);
 
-  // search as the visitor pauses typing, not on every key
-  useEffect(() => {
-    const timer = setTimeout(() => setQ(input.trim().slice(0, 100)), 300);
-    return () => clearTimeout(timer);
-  }, [input]);
-
   useEffect(() => {
     const abort = new AbortController();
     listTopics(abort.signal)
@@ -152,7 +146,12 @@ export function MarketList({
             label={t.searchLabel}
             value={input}
             placeholder={t.searchPlaceholder}
-            onChange={(value) => setInput(value)}
+            onChange={(value) => {
+              setInput(value);
+              // search runs on Enter only; clearing the box resets the list right away
+              if (value.trim() === '') setQ('');
+            }}
+            onEnter={() => setQ(input.trim().slice(0, 100))}
           />
         </div>
         <SegmentedControl
