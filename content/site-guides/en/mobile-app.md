@@ -2,7 +2,7 @@
 
 The DeepSeekBot phone app is a remote for DeepSeek Harness (DSH) running on your own computer. Your Bots, chats and approvals stay on the computer; the phone shows them and lets you chat and approve from anywhere. This guide goes from a clean computer to a paired phone in about 20 minutes.
 
-Everything here is free. DSH and DeepSeekBot are open source and need no account. The phone reaches the computer over your own [Tailscale](https://tailscale.com) network, which is free for personal use but needs a Tailscale account.
+The software is free. DSH and DeepSeekBot are open source and need no account. The phone reaches the computer over your own [Tailscale](https://tailscale.com) network, which is free for personal use but needs a Tailscale account. The only possible cost is your model provider: DeepSeek and most others bill API usage by token.
 
 **Watch the whole flow first:** [1-minute video](https://youtube.com/shorts/MWGKtM5xwkQ).
 
@@ -10,9 +10,9 @@ Everything here is free. DSH and DeepSeekBot are open source and need no account
 
 ## What you need
 
-- A Mac, Windows or Linux computer that stays on while you use the phone.
-- An iPhone with the DeepSeekBot beta from TestFlight, or an Android phone with the Google Play internal test.
-- An API key for a model provider, such as DeepSeek, so your Bots can reply.
+- A Mac (Apple Silicon or Intel) or a Windows x64 computer that stays on while you use the phone. Linux works with the command-line install.
+- An iPhone with the DeepSeekBot beta from TestFlight, or an Android phone with the Google Play internal test. Both are invitation-only for now: open the invitation link you received and install the app from there.
+- A [DeepSeek API key](https://platform.deepseek.com/api_keys), or a DeepSeek account to sign in with, so your Bots can reply.
 - A Tailscale account. You can sign up with Google, Microsoft, GitHub, Apple and others.
 
 The steps:
@@ -25,14 +25,37 @@ The steps:
 
 ## 1. Install DeepSeek Harness
 
-[Download the DeepSeek Harness desktop app](https://www.deepseek.com/harness/), version **0.2.1-rc.2**, for your system, install it and open it.
+DeepSeek Harness (DSH) is DeepSeek's open-source desktop app for AI agents. DeepSeekBot runs inside it as a plugin. This guide uses version **0.2.1-rc.2**.
 
-Developers can use the command line instead (Node 22 or later):
+**Download.** Open the [DeepSeek Harness download page](https://www.deepseek.com/harness/), or download the installer for your computer directly:
+
+| Computer                       | Installer                                                                                     |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| Mac with Apple Silicon (M series) | [dsh-latest-macos-arm64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-arm64.dmg) |
+| Mac with an Intel chip         | [dsh-latest-macos-x64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-x64.dmg)     |
+| Windows (x64)                  | [dsh-latest-windows-x64.exe](https://download.deepseek.com/desktop/dsh-latest-windows-x64.exe) |
+
+To check your Mac's chip, open the Apple menu → **About This Mac**.
+
+**Install on macOS.** Open the `.dmg`, drag **DeepSeek Harness** into **Applications**, then open it from Applications or Launchpad. The app is signed and notarized by DeepSeek, so macOS opens it normally.
+
+**Install on Windows.** Run the `.exe`, follow the installer and click **Finish** to launch it. When you close the window later, DSH keeps running in the system tray; quit it from the tray icon.
+
+**First launch.** The welcome window asks how to use DeepSeek models:
+
+- **Add API Key**: paste your DeepSeek API key and click **Save and continue**.
+- **Sign in**: sign in with your DeepSeek account in the browser.
+
+You can also click **Set up later** and add a model provider in settings afterwards. To check the installed version, open the app menu → **About DeepSeek Harness**. DeepSeekBot 1.4.1 works with DSH 0.2.0-rc.2 and later 0.2.x releases, so a newer 0.2.x download also works.
+
+**Command line (Linux, or if you prefer it).** With Node 22 or later:
 
 ```bash
 npm i -g @deepseek-ai/dsh@0.2.1-rc.2
 dsh web
 ```
+
+`dsh web` opens DSH in your browser at `http://127.0.0.1:3080`. The rest of this guide is the same in the browser and in the desktop app.
 
 ## 2. Install DeepSeekBot and create a Bot
 
@@ -44,7 +67,7 @@ dsh web
    ```
 
 3. When the task shows **Installed**, click **Enable now**. If DSH asks for a restart, restart it.
-4. Click **Bot mode** in the sidebar. Follow the Home onboarding to add your model provider's API key, then ask Tob, the built-in helper, to create your first Bot.
+4. Click **Bot mode** in the sidebar. Follow the Home onboarding to choose a model, then ask Tob, the built-in helper, to create your first Bot.
 5. Send the new Bot a short message on the computer. A reply means the model works.
 
 Screenshots and fixes for each step are in [Install DeepSeekBot](/docs/installation) and [API and Bot models](/docs/model-setup). Bot mode also needs Git; if it is missing, click **Install Git** in the notice.

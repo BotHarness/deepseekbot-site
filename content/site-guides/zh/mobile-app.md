@@ -2,7 +2,7 @@
 
 DeepSeekBot 手机 App 是你自己电脑上 DeepSeek Harness（DSH）的遥控器。Bot、聊天记录和审批都留在电脑上，手机负责查看、聊天和审批，在外面也能用。这篇教程从一台干净的电脑开始，大约 20 分钟完成手机配对。
 
-整个流程都免费。DSH 和 DeepSeekBot 都开源，不需要注册账号。手机通过你自己的 [Tailscale](https://tailscale.com) 网络连到电脑，Tailscale 个人版免费，但需要注册一个 Tailscale 账号。
+用到的软件都免费。DSH 和 DeepSeekBot 都开源，不需要注册账号。手机通过你自己的 [Tailscale](https://tailscale.com) 网络连到电脑，Tailscale 个人版免费，但需要注册一个 Tailscale 账号。唯一可能产生费用的是模型提供商：DeepSeek 和大多数提供商都按 token 收取 API 费用。
 
 **先看一遍完整流程**：[1 分钟演示视频](https://youtube.com/shorts/MWGKtM5xwkQ)。
 
@@ -10,9 +10,9 @@ DeepSeekBot 手机 App 是你自己电脑上 DeepSeek Harness（DSH）的遥控�
 
 ## 准备
 
-- 一台 Mac、Windows 或 Linux 电脑，用手机时保持开机。
-- 一部 iPhone，装好 TestFlight 上的 DeepSeekBot 测试版；或一部 Android 手机，加入 Google Play 内部测试。
-- 一个模型提供商（比如 DeepSeek）的 API Key，Bot 才能回复。
+- 一台 Mac（Apple 芯片或 Intel）或 Windows x64 电脑，用手机时保持开机。Linux 可以用命令行安装。
+- 一部 iPhone，装好 TestFlight 上的 DeepSeekBot 测试版；或一部 Android 手机，加入 Google Play 内部测试。两者目前都只对受邀测试者开放：打开你收到的邀请链接，按提示安装 App。
+- 一个 [DeepSeek API Key](https://platform.deepseek.com/api_keys)，或者一个用来登录的 DeepSeek 账号，Bot 才能回复。
 - 一个 Tailscale 账号，可以用 Google、Microsoft、GitHub、Apple 等账号注册。
 
 步骤：
@@ -25,14 +25,37 @@ DeepSeekBot 手机 App 是你自己电脑上 DeepSeek Harness（DSH）的遥控�
 
 ## 1. 安装 DeepSeek Harness
 
-[下载 DeepSeek Harness 桌面端](https://www.deepseek.com/harness/)，选择 **0.2.1-rc.2** 版本和你的系统，安装后打开。
+DeepSeek Harness（DSH）是 DeepSeek 开源的 AI Agent 桌面应用，DeepSeekBot 作为插件运行在它里面。本教程使用 **0.2.1-rc.2** 版本。
 
-开发者也可以用命令行安装（需要 Node 22 以上）：
+**下载**：打开 [DeepSeek Harness 下载页](https://www.deepseek.com/harness/)，或者直接下载对应电脑的安装包：
+
+| 电脑                       | 安装包                                                                                         |
+| -------------------------- | ---------------------------------------------------------------------------------------------- |
+| Apple 芯片（M 系列）的 Mac | [dsh-latest-macos-arm64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-arm64.dmg) |
+| Intel 芯片的 Mac           | [dsh-latest-macos-x64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-x64.dmg)     |
+| Windows（x64）             | [dsh-latest-windows-x64.exe](https://download.deepseek.com/desktop/dsh-latest-windows-x64.exe) |
+
+不确定 Mac 是哪种芯片：点左上角苹果菜单 → **关于本机**。
+
+**macOS 安装**：打开 `.dmg`，把 **DeepSeek Harness** 拖进 **应用程序**，再从应用程序或启动台打开。应用由 DeepSeek 签名并经过 Apple 公证，可以直接打开。
+
+**Windows 安装**：运行 `.exe`，按安装向导完成后点 **完成** 启动。之后关闭窗口时，DSH 会继续在系统托盘里运行；要完全退出，从托盘图标退出。
+
+**第一次打开**：欢迎窗口会让你选择怎样使用 DeepSeek 模型：
+
+- **添加 API Key**：粘贴你的 DeepSeek API Key，点 **保存并继续**。
+- **登录**：在浏览器里登录 DeepSeek 账号。
+
+也可以点 **稍后配置**，之后再到设置里添加模型提供商。想确认安装的版本，打开应用菜单 → **关于 DeepSeek Harness**。DeepSeekBot 1.4.1 支持 DSH 0.2.0-rc.2 及之后的 0.2.x 版本，所以下载到更新的 0.2.x 也可以用。
+
+**命令行安装（Linux，或者你更喜欢命令行）**：需要 Node 22 以上：
 
 ```bash
 npm i -g @deepseek-ai/dsh@0.2.1-rc.2
 dsh web
 ```
+
+`dsh web` 会在浏览器里打开 `http://127.0.0.1:3080`。后面的步骤在浏览器和桌面端里完全一样。
 
 ## 2. 安装 DeepSeekBot 并创建 Bot
 
@@ -44,7 +67,7 @@ dsh web
    ```
 
 3. 显示 **已安装** 后点 **立即启用**。如果提示重启，就重启 DSH。
-4. 点左侧的 **Bot 模式**，跟随 Home 引导填入模型提供商的 API Key，再让内置助手托布帮你创建第一个 Bot。
+4. 点左侧的 **Bot 模式**，跟随 Home 引导选择模型，再让内置助手托布帮你创建第一个 Bot。
 5. 在电脑上给新 Bot 发一句话，收到回复就说明模型可用。
 
 每一步的截图和常见问题见 [安装 DeepSeekBot](/docs/installation) 和 [API 与 Bot 模型](/docs/model-setup)。Bot 模式还需要 Git，缺少时点提示里的 **安装 Git** 即可。
