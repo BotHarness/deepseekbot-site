@@ -17,7 +17,7 @@ DeepSeekBot 手机 App 是你自己电脑上 DeepSeek Harness（DSH）的遥控�
 
 ## 准备
 
-- 一台 Mac（Apple 芯片或 Intel）或 Windows x64 电脑，用手机时保持开机。Linux 可以用命令行安装。
+- 一台 Apple 芯片、macOS 13 或更高版本的 Mac，或 Windows 10 或更高版本的 64 位电脑，用手机时保持开机。Intel 芯片的 Mac 和 Linux 可以用命令行安装。
 - 一部 iPhone，装好 TestFlight 上的 DeepSeekBot 测试版；或一部 Android 手机，加入 Google Play 内部测试。两者目前都只对受邀测试者开放：打开你收到的邀请链接，按提示安装 App。
 - 一个 [DeepSeek API Key](https://platform.deepseek.com/api_keys)，或者一个用来登录的 DeepSeek 账号，Bot 才能回复。
 - 一个 Tailscale 账号，可以用 Google、Microsoft、GitHub、Apple 等账号注册。
@@ -34,15 +34,14 @@ DeepSeekBot 手机 App 是你自己电脑上 DeepSeek Harness（DSH）的遥控�
 
 DeepSeek Harness（DSH）是 DeepSeek 开源的 AI Agent 桌面应用，DeepSeekBot 作为插件运行在它里面。本教程使用 **0.2.1-rc.2** 版本。
 
-**下载**：打开 [DeepSeek Harness 下载页](https://www.deepseek.com/harness/)，或者直接下载对应电脑的安装包：
+**下载**：打开 [DeepSeek Harness 下载页](https://www.deepseek.com/harness/)，点 **下载 macOS 版** 或 **下载 Windows 版**；也可以直接下载安装包：
 
-| 电脑                       | 安装包                                                                                         |
-| -------------------------- | ---------------------------------------------------------------------------------------------- |
-| Apple 芯片（M 系列）的 Mac | [dsh-latest-macos-arm64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-arm64.dmg) |
-| Intel 芯片的 Mac           | [dsh-latest-macos-x64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-x64.dmg)     |
-| Windows（x64）             | [dsh-latest-windows-x64.exe](https://download.deepseek.com/desktop/dsh-latest-windows-x64.exe) |
+| 电脑                                 | 安装包                                                                                         |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| Apple 芯片的 Mac，macOS 13 或更高版本 | [dsh-latest-macos-arm64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-arm64.dmg) |
+| Windows 10 或更高版本（64 位）        | [dsh-latest-windows-x64.exe](https://download.deepseek.com/desktop/dsh-latest-windows-x64.exe) |
 
-不确定 Mac 是哪种芯片：点左上角苹果菜单 → **关于本机**。
+桌面端暂不支持 Intel 芯片的 Mac，请用下面的命令行安装。不确定 Mac 是哪种芯片：点左上角苹果菜单 → **关于本机**。
 
 **macOS 安装**：打开 `.dmg`，把 **DeepSeek Harness** 拖进 **应用程序**，再从应用程序或启动台打开。应用由 DeepSeek 签名并经过 Apple 公证，可以直接打开。
 
@@ -55,7 +54,7 @@ DeepSeek Harness（DSH）是 DeepSeek 开源的 AI Agent 桌面应用，DeepSeek
 
 也可以点 **稍后配置**，之后再到设置里添加模型提供商。想确认安装的版本，打开应用菜单 → **关于 DeepSeek Harness**。DeepSeekBot 1.4.1 支持 DSH 0.2.0-rc.2 及之后的 0.2.x 版本，所以下载到更新的 0.2.x 也可以用。
 
-**命令行安装（Linux，或者你更喜欢命令行）**：需要 Node 22 以上：
+**命令行安装（Intel 芯片的 Mac、Linux，或者你更喜欢命令行）**：需要 Node 22 以上：
 
 ```bash
 npm i -g @deepseek-ai/dsh@0.2.1-rc.2

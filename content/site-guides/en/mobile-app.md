@@ -10,7 +10,7 @@ The software is free. DSH and DeepSeekBot are open source and need no account. T
 
 ## What you need
 
-- A Mac (Apple Silicon or Intel) or a Windows x64 computer that stays on while you use the phone. Linux works with the command-line install.
+- A Mac with Apple silicon (macOS 13 or later) or a Windows 10 or later x64 computer that stays on while you use the phone. Intel Macs and Linux work with the command-line install.
 - An iPhone with the DeepSeekBot beta from TestFlight, or an Android phone with the Google Play internal test. Both are invitation-only for now: open the invitation link you received and install the app from there.
 - A [DeepSeek API key](https://platform.deepseek.com/api_keys), or a DeepSeek account to sign in with, so your Bots can reply.
 - A Tailscale account. You can sign up with Google, Microsoft, GitHub, Apple and others.
@@ -27,15 +27,14 @@ The steps:
 
 DeepSeek Harness (DSH) is DeepSeek's open-source desktop app for AI agents. DeepSeekBot runs inside it as a plugin. This guide uses version **0.2.1-rc.2**.
 
-**Download.** Open the [DeepSeek Harness download page](https://www.deepseek.com/en/harness/), or download the installer for your computer directly:
+**Download.** Open the [DeepSeek Harness download page](https://www.deepseek.com/en/harness/) and click **Download for macOS** or **Download for Windows**, or download the installer directly:
 
-| Computer                       | Installer                                                                                     |
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| Mac with Apple Silicon (M series) | [dsh-latest-macos-arm64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-arm64.dmg) |
-| Mac with an Intel chip         | [dsh-latest-macos-x64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-x64.dmg)     |
-| Windows (x64)                  | [dsh-latest-windows-x64.exe](https://download.deepseek.com/desktop/dsh-latest-windows-x64.exe) |
+| Computer                                     | Installer                                                                                     |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Mac with Apple silicon, macOS 13 or later    | [dsh-latest-macos-arm64.dmg](https://download.deepseek.com/desktop/dsh-latest-macos-arm64.dmg) |
+| Windows 10 or later (64-bit)                 | [dsh-latest-windows-x64.exe](https://download.deepseek.com/desktop/dsh-latest-windows-x64.exe) |
 
-To check your Mac's chip, open the Apple menu → **About This Mac**.
+The desktop app does not support Intel Macs yet; use the command-line install below. To check your Mac's chip, open the Apple menu → **About This Mac**.
 
 **Install on macOS.** Open the `.dmg`, drag **DeepSeek Harness** into **Applications**, then open it from Applications or Launchpad. The app is signed and notarized by DeepSeek, so macOS opens it normally.
 
@@ -48,7 +47,7 @@ To check your Mac's chip, open the Apple menu → **About This Mac**.
 
 You can also click **Set up later** and add a model provider in settings afterwards. To check the installed version, open the app menu → **About DeepSeek Harness**. DeepSeekBot 1.4.1 works with DSH 0.2.0-rc.2 and later 0.2.x releases, so a newer 0.2.x download also works.
 
-**Command line (Linux, or if you prefer it).** With Node 22 or later:
+**Command line (Intel Mac, Linux, or if you prefer it).** With Node 22 or later:
 
 ```bash
 npm i -g @deepseek-ai/dsh@0.2.1-rc.2
