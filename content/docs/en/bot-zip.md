@@ -4,7 +4,7 @@
   "description": "Pack a Bot into a zip, choose its files and Git history, and import it as a new Bot.",
   "order": 26,
   "source": "docs/bot-zip.md",
-  "sourceRevision": "45ab888743ca6553f1729ec60147075debbc3d31"
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

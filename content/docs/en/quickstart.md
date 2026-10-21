@@ -3,14 +3,15 @@
   "title": "Quickstart",
   "description": "Install DeepSeekBot, create a PersonaBot and connect a messaging app.",
   "order": 11,
-  "source": "apps/docs/src/content/docs/docs/quickstart.mdx"
+  "source": "apps/docs/src/content/docs/docs/quickstart.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
 
 ## Install the plugin
 
-Follow the [illustrated installation guide](/docs/installation): open DSH **Plugins → Add plugin**, enter `deepseekbot`, install it and click **Enable now**. The public npm package was verified with DSH `0.2.0-rc.1`.
+Follow the [illustrated installation guide](/docs/installation): open DSH **Plugins → Add plugin**, enter `deepseekbot@1.4.1`, install it and click **Enable now**. Use **DSH `0.2.1-rc.2`** (verified on `0.2.0-rc.2` and `0.2.1-rc.2`, declared range `>=0.2.0-rc.2 <0.3.0-0`).
 
 ## Configure an API provider
 
@@ -18,7 +19,7 @@ Open **Settings → Models** and configure a provider’s endpoint, credentials,
 
 ## Create your first PersonaBot
 
-Open **Bot mode**, choose **Create your first PersonaBot**, enter a name and create it. Open its DM and click its header name/avatar → **View details → Model preset**. Choose Orchestrator and Assignment models and **Create and apply**. Return to chat and verify a real reply.
+Open **Bot mode**, configure a model in **Home** and follow Tob’s onboarding to create your first Bot and group (or create one from the **+** button). In a Bot DM, open **··· → Channel settings… → Model** (or **Model** in the Channel sidebar), choose the main model and task model, then **Save**. Send a greeting and verify a real reply.
 
 ## Connect a messaging app
 

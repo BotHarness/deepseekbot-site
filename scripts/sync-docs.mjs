@@ -31,6 +31,8 @@ const installIdentityPath = join(ROOT, 'scripts/install-release.json');
 const installVersion = existsSync(installIdentityPath)
   ? JSON.parse(readFileSync(installIdentityPath, 'utf8')).version
   : undefined;
+const reviewedInstallVersion =
+  installVersion === '1.4.0' || installVersion === '1.4.1' ? installVersion : undefined;
 const media = new Set();
 const siteMedia = new Map();
 // A site-owned asset directory also owns its transcripts, manifests and caption
@@ -106,17 +108,17 @@ const prepare = (text, source) => {
 // as today's product status. These website-only corrections survive every sync.
 const editorialBody = (body, slug, lang) => {
   if (slug === 'installation') {
-    // 1.4.0's install-identity sync retains older prose and screenshot records upstream.
-    // Correct only that known release; future guides must be reviewed again.
-    if (installVersion === '1.4.0') {
+    // 1.4.0/1.4.1 install-identity sync retains historical screenshot records upstream.
+    // Correct only reviewed releases; future guides must be reviewed again.
+    if (reviewedInstallVersion) {
       body = body
         .replace(
           lang === 'zh'
-            ? /^本页安装公共 npm 包.*$/m
-            : /^This guide installs the public npm package.*$/m,
+            ? /^本页安装公共 npm (?:包|正式包).*$/m
+            : /^(?:This guide installs the public npm package|Install the stable npm package).*$/m,
           lang === 'zh'
-            ? '本页安装公共 npm 正式包 **`deepseekbot@1.4.0`**。推荐 **DSH `0.2.1-rc.2`**；同一组发布包已在 **0.2.0-rc.2 与 0.2.1-rc.2** 验证安装、Host 启动、Bot／DM 创建和重启持久化。声明安装范围为 `>=0.2.0-rc.2 <0.3.0-0`，不代表所有版本均已运行验证。下方 DSH 0.2.0-rc.1 截图属于历史界面记录；请按当前文字步骤操作。升级前备份 Profile，回退旧版可能需要恢复升级前备份。'
-            : 'Install the stable npm package **`deepseekbot@1.4.0`**. Use **DSH `0.2.1-rc.2`**; the same released packages passed installation, Host startup, Bot/DM creation and restart persistence on **0.2.0-rc.2 and 0.2.1-rc.2**. Declared admission is `>=0.2.0-rc.2 <0.3.0-0`, not runtime qualification of every version. The DSH 0.2.0-rc.1 screenshots below are historical UI records; follow the current text. Back up the Profile before upgrading; returning to an older binary may require the pre-upgrade backup.',
+            ? `本页安装公共 npm 正式包 **\`deepseekbot@${reviewedInstallVersion}\`**。推荐 **DSH \`0.2.1-rc.2\`**；同一组发布包已在 **0.2.0-rc.2 与 0.2.1-rc.2** 验证安装、Host 启动、Bot／DM 创建和重启持久化。声明安装范围为 \`>=0.2.0-rc.2 <0.3.0-0\`，不代表所有版本均已运行验证。下方 DSH 0.2.0-rc.1 截图属于历史界面记录；请按当前文字步骤操作。升级前备份 Profile，回退旧版可能需要恢复升级前备份。`
+            : `Install the stable npm package **\`deepseekbot@${reviewedInstallVersion}\`**. Use **DSH \`0.2.1-rc.2\`**; the same released packages passed installation, Host startup, Bot/DM creation and restart persistence on **0.2.0-rc.2 and 0.2.1-rc.2**. Declared admission is \`>=0.2.0-rc.2 <0.3.0-0\`, not runtime qualification of every version. The DSH 0.2.0-rc.1 screenshots below are historical UI records; follow the current text. Back up the Profile before upgrading; returning to an older binary may require the pre-upgrade backup.`,
         )
         .replace(
           /^## 4\. [\s\S]*?(?=\n## 5\.)/m,
@@ -126,11 +128,11 @@ const editorialBody = (body, slug, lang) => {
         )
         .replace(
           lang === 'zh'
-            ? '安装 DSH 0.2.0-rc.2 后再装；随包的 Computer 运行时只匹配这个版本。'
-            : 'Install DSH 0.2.0-rc.2 and install again; the bundled Computer runtime only matches that release.',
+            ? /(?:安装 DSH 0\.2\.0-rc\.2 后再装；随包的 Computer 运行时只匹配这个版本。|请使用已验证的 DSH 0\.2\.0-rc\.2 或 0\.2\.1-rc\.2，并确认安装的是 deepseekbot@\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?。)/
+            : /(?:Install DSH 0\.2\.0-rc\.2 and install again; the bundled Computer runtime only matches that release\.|Use qualified DSH 0\.2\.0-rc\.2 or 0\.2\.1-rc\.2 and confirm the exact deepseekbot@\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)? package\.)/,
           lang === 'zh'
-            ? '请使用已验证的 DSH 0.2.0-rc.2 或 0.2.1-rc.2，并确认安装的是 deepseekbot@1.4.0。'
-            : 'Use qualified DSH 0.2.0-rc.2 or 0.2.1-rc.2 and confirm the exact deepseekbot@1.4.0 package.',
+            ? `请使用已验证的 DSH 0.2.0-rc.2 或 0.2.1-rc.2，并确认安装的是 deepseekbot@${reviewedInstallVersion}。`
+            : `Use qualified DSH 0.2.0-rc.2 or 0.2.1-rc.2 and confirm the exact deepseekbot@${reviewedInstallVersion} package.`,
         );
     }
     return body.replace(
@@ -149,8 +151,8 @@ const editorialBody = (body, slug, lang) => {
           ? /^\*\*公开 npm 产品尚未发布。\*\*.*$/m
           : /^\*\*The public npm product has not been published\.\*\*.*$/m,
         lang === 'zh'
-          ? '**历史验证记录（#823）：** 以下测试包用于当时的源码预览，不是今天的 npm 安装命令。正式版已发布为 deepseekbot v1.1.0；安装及最新源码流程的区别见[接入与可选能力](/docs/capabilities)。已有 #823 验证产物只用于复现对应历史记录。'
-          : '**Historical qualification (#823):** the test packages below belonged to that source preview and are not today’s npm installation commands. The public product is now deepseekbot v1.1.0; see [Connections and optional tools](/docs/capabilities) for release and current-source differences. Existing #823 artifacts reproduce that historical record only.',
+          ? '**历史验证记录（#823）：** 以下测试包用于当时的源码预览，不是今天的 npm 安装命令。正式版现已发布至 deepseekbot v1.4.1；安装与各能力的版本范围见[接入与可选能力](/docs/capabilities)。已有 #823 验证产物只用于复现对应历史记录。'
+          : '**Historical qualification (#823):** the test packages below belonged to that source preview and are not today’s npm installation commands. The public product is now at deepseekbot v1.4.1; see [Connections and optional tools](/docs/capabilities) for current release and capability scope. Existing #823 artifacts reproduce that historical record only.',
       )
       .replace('<summary>当前源码预览：', '<summary>历史源码预览：')
       .replace('<summary>Current source preview:', '<summary>Historical source preview:');
@@ -159,11 +161,11 @@ const editorialBody = (body, slug, lang) => {
       body
         .replace(
           '**本指南对应已验证的源码预览，不代表 npm 产品已经发布。**',
-          '**历史验证记录（#868；正式版现已发布为 deepseekbot v1.1.0）：**',
+          '**历史验证记录（#868；正式版现已发布至 deepseekbot v1.4.1）：**',
         )
         .replace(
           '**This guide documents the qualified source preview, not a published npm release.**',
-          '**Historical qualification (#868; the public product is now deepseekbot v1.1.0):**',
+          '**Historical qualification (#868; the public product is now at deepseekbot v1.4.1):**',
         )
         .replace('本指南涵盖已验证的 **公共频道**', '以下历史资格验证涵盖 **公共频道**')
         .replace(
@@ -200,14 +202,14 @@ for (const page of pages) {
     const file = join('content/docs', lang, `${page.slug}.md`);
     mkdirSync(dirname(file), { recursive: true });
     const notice =
-      page.slug === 'installation' && installVersion === '1.4.0'
+      page.slug === 'installation' && reviewedInstallVersion
         ? lang === 'zh'
-          ? '> **版本范围：正式版 1.4.0。** 安装版本与双语更新日志已同步；历史截图不代表本版界面。\n\n'
-          : '> **Version scope: stable 1.4.0.** Installation identity and bilingual release notes are synchronized; historical screenshots do not show the current UI.\n\n'
+          ? `> **版本范围：正式版 ${reviewedInstallVersion}。** 安装版本与双语更新日志已同步；历史截图不代表本版界面。\n\n`
+          : `> **Version scope: stable ${reviewedInstallVersion}.** Installation identity and bilingual release notes are synchronized; historical screenshots do not show the current UI.\n\n`
         : page.currentSource
           ? lang === 'zh'
-            ? '> **版本范围：当前源码教程。** 下列步骤包含尚未进入 npm v1.1.0 的界面更新；文中的旧测试包版本和截图属于历史验证记录。正式版与可选组件的区别见[接入与可选能力](/docs/capabilities)。\n\n'
-            : '> **Version scope: current-source guide.** These steps include UI updates absent from npm v1.1.0; older test packages and screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and component boundaries.\n\n'
+            ? '> **版本范围：当前源码教程。** 本页同步自当前源码（正式版现已发布至 deepseekbot v1.4.1）；文中的旧测试包版本和 DSH 0.2.0-rc.1 截图属于历史验证记录。正式版与各能力的版本范围见[接入与可选能力](/docs/capabilities)。\n\n'
+            : '> **Version scope: current-source guide.** Synced from current source (the public release is now deepseekbot v1.4.1); older test package versions and DSH 0.2.0-rc.1 screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and capability scope.\n\n'
           : '';
     writeFileSync(file, `---\n${JSON.stringify(head, null, 2)}\n---\n\n${notice}${body}`);
     for (const match of body.matchAll(
@@ -227,6 +229,10 @@ for (const page of pages) {
   }
 }
 if (!requested) {
+  if (existsSync('public/guides/plugins') && !preservedDirectories.has('/guides/plugins')) {
+    preserveSiteDirectory('/guides/plugins');
+    preservedDirectories.add('/guides/plugins');
+  }
   rmSync('public/guides', { recursive: true, force: true });
   cpSync(resolve(ROOT, 'apps/docs/public/guides'), 'public/guides', { recursive: true });
 } else {

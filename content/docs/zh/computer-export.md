@@ -3,7 +3,8 @@
   "title": "Computer 导出与迁移",
   "description": "把 Computer 搬到另一台机器——一个归档文件导出，一个归档文件导入。",
   "order": 20,
-  "source": "apps/docs/src/content/docs-zh/docs/computer-export.mdx"
+  "source": "apps/docs/src/content/docs-zh/docs/computer-export.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

@@ -3,7 +3,8 @@
   "title": "Slides",
   "description": "Watch the BotHarness intro deck, presented as slides.",
   "order": 12,
-  "source": "apps/docs/src/content/docs/docs/slides.mdx"
+  "source": "apps/docs/src/content/docs/docs/slides.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

@@ -4,11 +4,12 @@
   "description": "Review a Bot’s folders and understand the separate task and tool permissions.",
   "order": 5,
   "parent": "channel-sidebar",
-  "source": "docs/channel-sidebar/workspaces.md"
+  "source": "docs/channel-sidebar/workspaces.md",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-Open **Bot DM → Channel sidebar → Workspace Grants**. Grants belong to this Bot. A folder shown in DSH’s left Workspace list is not automatically a grant to every Bot.
+Open **Bot DM → Channel settings → Workspace Grants** (the chat header's **···** menu → **Channel settings…**). Grants belong to this Bot. A folder shown in DSH’s left Workspace list is not automatically a grant to every Bot.
 
 ## Review the folders
 
@@ -39,5 +40,17 @@ The switch does not change Orchestrator permissions. Per-folder Orchestrator wri
 **Developer mode** exposes additional controls such as a manually entered Host path, registered folders and revoked-grant history. Ordinary setup uses **Add folder**; do not infer a grant from a saved text path alone.
 
 The screenshot shows the actual initial state. This tutorial capture did not add a folder or enable broader permissions. For a task refusal, open its [Session](/docs/channel-sidebar/sessions) and inspect the selected folder, access mode and actual tool result rather than assuming that a visible folder guarantees execution.
+
+## While an Assignment awaits approval
+
+An Assignment without Subagent descendants can release its running slot while it waits for your tool approval. The card says that it is waiting for approval without holding a slot. Other tools must have finished first. This does not unblock an Orchestrator’s own approval or a Group privacy request.
+
+1. In Bot mode Settings, set the Assignment concurrency limit to **1**. Ask the Bot to create an Assignment that runs a harmless command requiring approval; inspect the exact request and leave it pending.
+2. Send an unrelated message. The Bot can reply while that independent Assignment waits.
+3. Ask for a second Assignment that runs a harmless 45-second wait. Approve its card and verify that its command has actually started.
+4. Approve the first request while the second runs. Its card shows **Decision received; waiting for a running slot**. The first command runs only after the second releases the slot.
+5. Inspect the original Session’s actual tool result. Removing the folder authorization while the approved call awaits capacity prevents that original call from executing.
+
+At most 32 Assignment Sessions can await approval independently of the running limit. New work still refuses when running slots are full. After a Host restart, an interrupted Assignment needs inspection; its old approval card cannot restart or replay the command automatically.
 
 Related: [Settings guide](/docs/settings), [sidebar overview](/docs/channel-sidebar).

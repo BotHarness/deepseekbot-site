@@ -3,7 +3,8 @@
   "title": "Concepts",
   "description": "BOT mode, channels, sections, inboxes, bridges, sessions, and the Builder.",
   "order": 30,
-  "source": "apps/docs/src/content/docs/docs/concepts.mdx"
+  "source": "apps/docs/src/content/docs/docs/concepts.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

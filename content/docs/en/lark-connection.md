@@ -4,11 +4,11 @@
   "description": "Connect an application bot, bind its identity and manage group conversations.",
   "order": 23,
   "source": "docs/lark-connection.md",
-  "sourceRevision": "636a5a6cf4a366bb0b29e6a59155d46fb3cc2192"
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-> **Version scope: current-source guide.** These steps include UI updates absent from npm v1.1.0; older test packages and screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and component boundaries.
+> **Version scope: current-source guide.** Synced from current source (the public release is now deepseekbot v1.4.1); older test package versions and DSH 0.2.0-rc.1 screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and capability scope.
 
 Install the plugin first using the [illustrated installation guide](/docs/installation), then return here after a local Bot DM works.
 
@@ -35,9 +35,9 @@ You need:
 - Membership in a Lark / Feishu organization and permission to create and publish a company-built application, or an administrator who can help.
 - A test group and a Human account that can send messages in it.
 - A running BotHarness, a working model and a PersonaBot. Confirm the Bot can answer a local DM first.
-- A BotHarness product containing the qualified IM Provider. The product installs Core, Client and Provider together; **do not separately install a Lark SDK, Human lark-cli or an arbitrary dsh-im version**.
+- A BotHarness product containing the qualified IM Provider. The product installs Core, Client, Browser, Computer and Provider together; **do not separately install a Lark SDK, Human lark-cli or an arbitrary dsh-im version**.
 
-**Historical qualification (#823):** the test packages below belonged to that source preview and are not today’s npm installation commands. The public product is now deepseekbot v1.1.0; see [Connections and optional tools](/docs/capabilities) for release and current-source differences. Existing #823 artifacts reproduce that historical record only.
+**Historical qualification (#823):** the test packages below belonged to that source preview and are not today’s npm installation commands. The public product is now at deepseekbot v1.4.1; see [Connections and optional tools](/docs/capabilities) for current release and capability scope. Existing #823 artifacts reproduce that historical record only.
 
 <details>
 <summary>Historical source preview: build the qualified single-install product</summary>
@@ -94,11 +94,13 @@ Enable permissions by purpose:
 
 - `im:message.group_at_msg:readonly`: receive group messages mentioning the bot; needed for the initial intake test.
 - `im:message:send_as_bot`: send and reply as the application bot; needed for the initial reply test.
-- `im:message:readonly`: read messages and message resources; needed for original-message and attachment reading.
+- `im:message:readonly`: read messages and message resources; also required for protected replies, which re-read the original message to verify its sender and conversation before sending.
 - `im:message.group_msg`: obtain all group messages; needed for ordinary-message intake, group history and topic following. Request this sensitive permission when needed.
 - `im:resource`: upload images and files; needed when sending attachments.
 
 Your organization determines availability and approval requirements. Even with all-group-message permission, BotHarness only takes ordinary messages from groups whose **Rules** allow them; mentions and DMs are admitted on their own. See the official [message receive event](https://open.larksuite.com/document/server-docs/im-v1/message/events/receive) and [message history API](https://open.larksuite.com/document/server-docs/im-v1/message/get-2).
+
+Receiving an event and reading the original message are separate capabilities. If intake and model execution succeed but original-message verification returns `99991672`, check that application-identity `im:message:readonly` is enabled and published. DM/group-mention event scopes plus send permission alone do not qualify protected replies. Keep original-message verification enabled; see [Get message details](https://open.larksuite.com/document/server-docs/im-v1/message/get).
 
 ### Compare the actual console configuration
 
@@ -184,13 +186,13 @@ Adjust behaviour after the first successful test:
 Start small: **mention the application bot** in a test group and send “Please reply here with LARK-OK.” Avoid testing several Bots at once.
 
 1. The message appears in the Bot DM’s right-hand **Bot Inbox** with the correct Lark group, sender and content, and the group appears under **Active** in the app’s conversation list.
-2. Source details show the external message ID, Source Event ID and topic information when present.
+2. Source details show the external message ID, Event ID and topic information when present.
 3. Lark receives `LARK-OK` from this Bot’s own app in the original conversation. A topic test replies in the same topic.
 4. Send an ordinary unmentioned message and confirm it does not reach this Bot unless the group’s **Rules** allow ordinary messages.
 
 **Lark’s green or gray read circle does not show whether a Bot received a message.** Use the local Inbox source record and the actual reply.
 
-![Real source details, native message ID and Source Event ID](/guides/lark/08-source.webp)
+![Real source details, native message ID and Event ID](/guides/lark/08-source.webp)
 
 _In the Bot DM sidebar, expand Bot Inbox → group; if the message is already handled, expand the processed/ignored section too. Click the message to open its Modal, then expand Source details and Message details._
 
@@ -286,7 +288,7 @@ These additional captures use the integrated source preview in a fresh isolated 
 | Mention does not enter Inbox                         | Application bot in the group; application permissions, long-connection `im.message.receive_v1` subscription, published version and approval; identity enabled, conversation not muted or blocked |
 | Ordinary or unmentioned topic messages do not arrive | `im:message.group_msg`, genuine event delivery verification, group intake condition and explicit topic following                                                                                 |
 | History read returns 230027                          | Effective published application group-message permission; Human login permission cannot substitute for it                                                                                        |
-| Received but no reply                                | Working model, Inbox / wake state, this Bot's enabled identity and `im:message:send_as_bot`                                                                                                      |
+| Received but no reply                                | Working model, Inbox / wake state, this Bot's enabled identity; published `im:message:send_as_bot` and `im:message:readonly` for original-message verification                                   |
 | No message in local DM                               | Conversations reach the Bot Inbox by default; only an existing sync (see **External connectors**) shows them in a Channel                                                                        |
 
 When requesting help, include the platform, reproduction steps, a public-safe error code and checks already performed. Do not include App Secrets, access tokens or unrelated group messages.
@@ -327,13 +329,42 @@ _The exact [BH-LARK-SETUP] source ends in f708a3f1; its Inbox admission was hand
 
 _Close/reopen and same-Profile restart retained configuration/history; select the persisted account after reload. Disable, grant revocation, unbind and account removal returned relevant steps to pending. Native Remove integration then stopped reception and deleted local configuration/credentials. The external application remains; external credential reset is an administrator action._
 
+## Open one group to visitors
+
+In the Bot DM sidebar, open the bound App's conversation list and the group's **Rules**.
+Enable **Allow unpaired visitors to address the Bot in this group** to accept new mentions under
+the existing reception and Wake Policy. Visitors have no paired Role or management powers.
+Disable it to return their next restricted mention to reviewed pairing; an approved person's
+separate pairing remains valid. The exception does not cover DMs, other groups, Bots or Apps,
+and rebinding does not inherit it. Blocking or disabling reception still wins.
+
+Separately choose ordinary-message collection when you want background context. Under pairing
+restriction, an unpaired author's ordinary text can be retained without starting a Turn or filling
+count/time thresholds. A later eligible request can read that context with individual sender
+provenance. It can influence the reply and consume tokens; background authors do not supply a
+combined Role. Replies are visible to the group. This is not a current/full membership list.
+
 ## Handle tool approvals in a management DM
 
-This slice supports Lark private **Allow once** and **Reject** cards through a qualified Provider. Group approvals, native question forms, saved automatic rules and non-blocking native waits are separate slices. The released dsh-im package number alone does not imply card capability; an unavailable Provider remains unavailable.
+The #1375 candidate also lets you edit a Role in **IM roles and pairing** and explicitly select
+Allow once/Reject capabilities, or assign another Role to an approved ordinary person. Empty
+capabilities mean chat without management power. Save checks current revisions; refresh after a
+stale-change error. Subsequent permission and directory queries show current state without
+rewriting earlier model history. Role text alone cannot approve a tool.
+
+For an ordinary Role-based private approval destination, use a person whose approved pairing
+originated in a DM, then choose that person in **Management notifications**. The existing
+private-origin check is retained; a group pairing does not create a management destination.
+Removing a capability or revoking/reassigning the person refuses delayed decisions. If
+reassignment invalidates the route, explicitly select/save its new current destination again.
+Legacy `/pair` management grants remain independent and do not enable ordinary chat by themselves.
+Native Questions, group execution-approval destinations and pairing-code issuance are separate work.
+
+This slice supports Lark private **Allow once** and **Reject** cards through a qualified Provider. The #1033 source candidate adds the separately confirmed exact-rule path below. Group execution approvals, native question forms and non-blocking native waits are separate slices. The released dsh-im package number alone does not imply card capability; an unavailable Provider remains unavailable.
 
 1. Enable the app's **Events & callbacks → Callback configuration → Long connection** and add `card.action.trigger`, then publish the version. Retain the existing message read/send scopes and add `im:chat:read` so the sender can verify a private conversation. A maintainer must authorize these app changes.
 2. Send `/pair` in the Bot's Lark DM. In **External identities → IM administrator pairing**, inspect the real applicant/account and explicitly grant **Approve** and/or **Reject**. Pairing does not create ordinary DM intake or grant VPS/API access.
-3. In the sidebar's **External identities → Lark approval notifications**, choose that person's name and receiving account, then **Save destination**. Select **Send test card**; it has no approval buttons and grants nothing.
+3. In the sidebar's **External identities → Management notifications**, choose that person's name and receiving account, then **Save destination**. Select **Send test card**; it has no approval buttons and grants nothing.
 4. A subsequent native tool approval sends its complete operation to that management DM, with **Allow once** and **Reject**. Check the proposed operation before deciding. A truncated card asks you to inspect the complete operation in Web. The card's acknowledgement only confirms receipt of your click; the final native decision and result are separate.
 5. Refresh notifications in that dialog and use **Open native session and complete operation** to inspect the actual native result. **Decision accepted** is not proof that a tool ran. Rejected, revoked, expired, duplicate or mismatched actions cannot approve a new call.
 
@@ -353,6 +384,112 @@ In the earlier isolated 2026-10-07 test, the actual Lark platform accepted both 
 
 [Light theme recovery screenshot](/guides/lark/approvals/recovery-light.jpg). After the test authority was revoked and the local Host restarted with its IM Provider disabled, the destination is **Off**, the old request is **Expired**, and the local identity is unavailable. This screen does not prove production availability; production Discord/Lark connections were verified separately after restoration. Do not use the old card for a new test.
 
+### Save an exact rule in a management DM
+
+The #1033 source candidate requires a Provider with the checked rule-card capability. Grant
+**Approve** and **Save approval rules** separately through the reviewer's Role, Group or personal
+exception. Explicit Deny wins. A natural-language policy or ordinary chat pairing alone cannot
+save a rule. Keep the existing private approval destination and App permissions.
+
+On a complete native tool card, **Allow once** remains the one-call choice. To allow future
+identical operations, choose **Allow matching operations…**, inspect the complete tool name and
+input, Bot execution role and current Workspace Grant scope, then choose **Confirm matching rule**.
+The first click only shows the confirmation; **Back** saves nothing. Truncated operations and
+native Session-wide authorization require Web review.
+
+The Human accepted the exact-rule interaction on 2026-10-12. These actual QA1 captures show
+that slice; grey masks hide only the machine-local directory. They do not qualify the broader
+candidate below. Some Lark Web updates required refreshing the designated DM to show final state.
+
+![Independent matching-rule entry for a currently authorized reviewer](/guides/lark/approvals/rules/exact-entry.png)
+
+![Actual exact-rule preview with complete input and explicit confirmation](/guides/lark/approvals/rules/exact-preview.png)
+
+The preview image ends at Confirm; Back was below the visible area in that capture. Back was
+tested on the actual refreshed card and saved no rule. After a new preview and confirmation,
+the tool returned its real result and the final card removed all decision controls:
+
+![Native execution result and saved exact rule](/guides/lark/approvals/rules/exact-result.png)
+
+A saved exact rule matches the complete input, not similar commands. Each matching call still
+records its own native decision, and changed input or Grant scope requires another approval.
+The Web **Workspace access → Tool approval rules** list shows the same rule, external creator
+and Active/Disabled status. Current approval and rule-saving authority are checked before every
+use. Revoking the original pairing, losing effective capability or disabling its App permanently
+disables the rule; restoring permission or pairing again requires a newly confirmed rule. If a
+second current group still grants the capability and no Deny applies, removing one grant alone
+does not disable it. Existing Web Human rules retain their prior behavior.
+
+![Known saved-rule receipt after Web revocation](/guides/lark/approvals/rules/disabled.png)
+
+### All opaque tools in one scope — source candidate
+
+After the accepted exact slice, #1033 adds a separate **All opaque tools in this scope…** entry.
+It requires Provider rule-card version 2 and the account's checked all-opaque capability;
+version 1 retains the exact-only entry. On 2026-10-12 the Human accepted the actual QA1
+all-opaque first slice. The following captures show its separate entry and high-risk preview,
+including Confirm and Back; grey masks hide only machine-local paths.
+
+![Separate all-opaque entry](/guides/lark/approvals/rules/all-entry.png)
+
+![Actual high-risk preview with Confirm and Back](/guides/lark/approvals/rules/all-preview.png)
+
+Inspect the displayed Bot execution role, directory and Grant IDs/write revisions. The high-risk
+preview applies to **every opaque tool and every input** in that scope; future commands need not
+match the current example and may access files outside authorized folders or the network. Choose
+**Confirm ALL opaque tools** only for that intended scope. Back saves nothing; use Back before
+changing rule kind. An exact confirmation cannot authorize the broader kind.
+
+The same current Approve/Save approval rules checks, creator revocation and native audit apply.
+A newly created Bot does not require opening its Web DM before a native approval can be delivered;
+the owning Host creates the canonical DM request surface when needed.
+A different role, directory or Grant scope needs another approval. Underlying native, Workspace
+and Service authority is not enlarged. External rules cannot approve Web-only native Session
+authorizations. Web can revoke either kind; restoring capabilities cannot resurrect it.
+
+Back up the Profile before upgrading to database generation 82. Rollback needs a compatible writer
+or the pre-upgrade backup.
+
+Actual QA1 calls returned different stdout markers within the same scope, each with its own
+native approval record and no second card. Adding a Workspace Grant required new approval;
+Reject prevented execution. After revocation and Host restart, the same earlier input required
+approval again and Reject prevented execution. The refreshed known receipt displayed fixed
+disabled-rule text with no controls. An interrupted revoke-card update was explicitly refreshed
+through the same idempotent revoke command; this did not execute a call.
+
+![Actual all-opaque saved-rule execution result](/guides/lark/approvals/rules/all-result.png)
+
+![Revoked rule in the refreshed private conversation](/guides/lark/approvals/rules/all-disabled.png)
+
+Exact source heads and native sequences are recorded in
+[#1033](https://github.com/BotHarness/DeepSeekBot/issues/1033). This qualification does not publish
+or upgrade the Provider artifact. Group destinations remain separate.
+
+## Work-failure alerts (source candidate)
+
+In **Bot DM sidebar → Management notifications**, use the existing paired management DM destination and enable **Work-failure alerts**. The setting is off by default and revision-checked. **Test failure alerts** sends a clearly labelled test notice; it does not pretend that work failed. Refresh the same settings view to inspect recent delivery state or open the original Session.
+
+The wide dialog uses the same native components as IM roles and pairing. Its left column contains the destination and event/test controls; its right column has **Work failures** and **Tool approvals** delivery tables. Search by event, state or notification reference, sort by recorded time, and select a row to inspect its reference, attempts and original Session. Explanations open from the info icons. On narrow screens, the columns stack and the dialog body scrolls while the close control remains reachable.
+
+This candidate still configures one qualified Lark DM. [#1492](https://github.com/BotHarness/DeepSeekBot/issues/1492) tracks multiple independently authorized destinations and delivery states; group and other-IM qualification remain separate. The generic management-notifications entry does not claim those providers are available yet.
+The first source candidate sends a fixed failure notice after the Runtime commits its owned Session failure to the Channel Store. It includes execution role, Session identity and a notification reference. Error details, prompts, tool arguments and credentials stay in Web. Speaking in a source conversation does not select the alert destination, and receiving this notice grants no decision permissions.
+
+A current qualified private destination, checked reply source, receipt and final-send fence are required. Route disable, pairing revoke, App replacement, Bot pause or conversation Block prevents later dispatch. A definite unsent failure can retry at most three times; an unknown outcome requires platform inspection and cannot be resent. Restart does not replay queued or ambiguous alerts. Enabling alerts does not backfill historical failures.
+
+The source candidate's first private-Lark slice passed real-platform QA and Human feedback. It does not qualify group destinations, other Providers or Host/VPS-down monitoring, and this verification does not imply a published release. Back up the Profile before Generation 83 upgrades. See [#1041](https://github.com/BotHarness/DeepSeekBot/issues/1041) for exact-head evidence and the runnable review path.
+
+## Receipt and answer feedback (candidate)
+
+The [#1040](https://github.com/BotHarness/BotHarness/issues/1040) candidate adds optional feedback on the **original incoming message**. After its Source Event and Inbox Admission are durably committed, BotHarness attempts native `GLANCE`. Only after that source's explicit reply is accepted by the external Provider does it attempt native `DONE`. The Human selected these two official types; both rendered on original DM messages in the authorized retest. Neither reaction proves that a Human read the message.
+
+Ordinary unmentioned group traffic, held requests and blocked conversations receive no Admission feedback. Mute still admits silently and may show `GLANCE`; an explicit accepted reply may later show `DONE`. Silence, waiting for clarification, delegation completion, failed or unknown sends and unrelated proactive output do not qualify as an answer.
+
+This requires the optional checked `reactionVersion: 1` / `reaction-write-checked` Provider capability. An older Provider remains usable for normal messaging and reports feedback unavailable. The qualified Provider pin is unchanged. The [official create-reaction API](https://open.larksuite.com/document/server-docs/im-v1/message-reaction/create) requires reaction write permission or an existing broader message permission, plus access to the source conversation. A maintainer must review any missing permission; this candidate does not expand app scopes or subscribe to reaction events automatically. See the [official reaction types](https://open.larksuite.com/document/server-docs/im-v1/message-reaction/emojis-introduce).
+
+Feedback runs separately with a four-second deadline and bounded concurrency. Permission failures, missing/deleted sources and unavailable transport do not block Inbox receipt, model work or replies. Attempts are retained without automatic retry, including after restart or reconnect; enabling a permission later does not replay historical messages. The authenticated `messagingSnapshot` management API exposes `reactionSupported` and recent `feedback` attempt states: `attempted`, `accepted`, `unavailable`, `failed` or `unknown`. In Web, open the existing Lark identity editor to inspect feedback capability and the five most recent source attempts; refresh external identities to update them. An interrupted `attempted` or `unknown` record is not success.
+
+Use the [candidate QA runbook](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/agents/qa-lark-feedback.md) for preparation, exact tested sources and recovery. After the first window exposed missing permission, the Human authorized and added `im:message.reactions:write_only`. The guarded 2026-10-09 retest verified two distinct DM replies with original-source `GLANCE` / `DONE`, and a silent DM with `GLANCE` only, using the signed-in Codex in-app browser. A further authorized window verified real group-mention receipt/reply states, receipt-only muted Admission, retained feedback across Provider reconnect, and matching post-merge Web light/dark captures; the Human sent messages from their working client when the web mention chooser failed. Production was restored and the Human confirmed normal Lark and Discord replies. A later guarded window verified a real same-Profile Host restart followed by a new accepted reply, retaining the identity and historical feedback. Its blocked DM was sent inside the window with no reply or reaction; a single official delivery record falls within the reported minute, but exact marker correlation remains unproven. The Human subsequently supplied the exact `BH1040-R3-GROUP` original-message screenshot showing both reaction chips attributed to DeepSeekBot and the matching reply, completing group rendering evidence. Exact blocked-marker correlation, the earlier Web failure with an unverified trigger and unexercised cases remain unresolved. Source PRs have merged; remaining cases gate broader qualification and Provider pin promotion. Older guide screenshots above are not feedback evidence.
+
 ## Images in Channel history
 
 In the image-capable #1021 candidate, an authorized Lark image or supported image-bearing post appears inside its original Channel bubble. The source name above it still opens source details. Images load when visible; select an image to enlarge it, and use **Retry** after a failed load. Text and multiple images stay in their native order in one message.
@@ -362,3 +499,11 @@ This requires the conversation to be synced to a Channel. Inbox-only reception d
 Pausing the sync keeps already acquired images readable but stops new image acquisition. Unbinding its identity or revoking source authorization makes that path unavailable, including cached images. A separately valid source path remains independent. Refresh and restart retain authorized acquired images; purged or missing originals are not downloaded again. Previews support PNG, JPEG, GIF and WebP up to 25 MiB. An unsupported format or oversized image shows an explicit state.
 
 Human image viewing does not make the Bot understand images or change its attention, model context or permissions. Real platform acceptance and screenshots for this candidate are tracked in [#1021](https://github.com/BotHarness/BotHarness/issues/1021); they are not implied by the older onboarding evidence above.
+
+## Referenced files in Channel history (candidate)
+
+The #1022 candidate reuses the shared Channel file card for a checked Lark parent file. In the native group, reply to the file with a real Bot mention and text, with that conversation synced to a Channel. The card belongs to that checked request bubble and references its exact parent file. Current Provider support is one referenced file; direct file messages, multiple files and mixed text/file ordering are not qualified by this slice.
+
+Select the filename to download the original. The card shows its known filename and size; absent MIME and size remain unknown. Download starts only on explicit action, shows progress or a refusal, and offers **Retry**. The default limit is 25 MiB. When the Host supports native file opening, the card also offers the existing detected-application menu. Choosing an application opens the acquired Host copy; it never uploads edits to Lark. Unsupported devices retain download.
+
+Every action checks current Human Channel membership, the original placement and source, receiving identity and independent valid source paths. Pausing sync prevents new acquisition through that path while retaining authorized acquired files. Unbind or revocation prevents acquisition and cached access through that authorization. Refresh and restart preserve acquired history; missing or purged bytes are not reconstructed. Human access adds no Inbox admission, model work or external send authority. Real Lark/file/Client verification remains a separate gate tracked in [#1022](https://github.com/BotHarness/DeepSeekBot/issues/1022).

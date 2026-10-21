@@ -575,7 +575,7 @@ const zh: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/harness/',
     },
-    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；1.4.0 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2 与 0.2.1-rc.2 验证。声明安装范围为 >=0.2.0-rc.2 <0.3.0-0，不代表所有后续版本均已验证。`,
+    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；${VERSION} 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2 与 0.2.1-rc.2 验证。声明安装范围为 >=0.2.0-rc.2 <0.3.0-0，不代表所有后续版本均已验证。`,
     steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
     next: {
       title: '装好了？选择接入方式与可选能力',
@@ -951,7 +951,7 @@ const en: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/en/harness/',
     },
-    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact 1.4.0 packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2 and 0.2.1-rc.2. Declared admission is >=0.2.0-rc.2 <0.3.0-0; later versions are not all runtime-qualified.`,
+    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact ${VERSION} packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2 and 0.2.1-rc.2. Declared admission is >=0.2.0-rc.2 <0.3.0-0; later versions are not all runtime-qualified.`,
     steps: [
       'Install DeepSeek Harness',
       'Add DeepSeekBot to the web Profile',

@@ -3,9 +3,16 @@
   "title": "Open files on the Host",
   "description": "Open Memory, Workspace and message files in native applications.",
   "order": 21,
-  "source": "docs/file-open.md"
+  "source": "docs/file-open.md",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
+
+The #1022 source candidate adds an explicit application-menu action to checked Bridge file cards when the Host reports native file opening is available. Looking at the card checks only that capability; it does not acquire the file. Selecting the action resolves the current Channel/source/file authorization before using the existing application menu, and opening resolves it again. The filename downloads to the current device with visible loading, refusal and retry states. Bridge cards retain this download-first interaction so viewing them never acquires remote file bytes. Edits to the acquired Host copy are not written back to the provider.
+
+The current Memory file reader, ordinary file cards in chat, and the Memory Repository and authorized Workspace folder rows show an **Open** split button. The main button opens the file or folder on the Host in your default application; the arrow lists the other detected applications. Choosing another application there opens it once and leaves your default unchanged. **Set default for …** remembers an application for that file type (for example `.md`) or for folders, and **Restore system default** removes it. The default applies only to this browser and this Host profile: it does not change the operating system's file associations and does not follow you to another device. Files start with the Host's system default. Folders have no system default, so the first click asks you to choose. If your default application is no longer available on the Host, the button says so and asks you to choose again instead of picking another one. "Open request sent to the Host" means the Host accepted the request; check the Host screen for the window.
+
+In Memory Evolution, every file row of a commit diff or an uncommitted diff has **Open current file**. It opens the file that exists at that path now, with the same default and dropdown, and never the version stored in the selected commit. A renamed file appears as its old path (deleted) and its new path (added); use the new path's row. If nothing exists at the path now, the button says so and nothing is rebuilt from history; when that row is itself a deletion it adds that the commit or the working change marked the path as deleted. A file that was deleted in an old commit and created again later opens normally.
 
 Click a displayed Memory Repository or authorized Workspace path to choose a detected application. Memory file rows offer a context menu and a More button. Current files can be revealed in the file manager, opened in an editor, copied as a Host path, or downloaded to this device.
 
@@ -35,7 +42,7 @@ Owner-qualified legacy downloads and image reads resolve the migrated current de
 
 Reference-aware cleanup marks ready fileIds and all pending reserved fileIds; legacy objects remain reachable while any retained occurrence is unconverted. Only after all retained dependencies are converted can the existing explicit sweep release an obsolete shared CAS object. Migration does not enable automatic deletion or affect SoulSnapshots or other CAS stores. Future Profile Backup/Export/Purge must include the Operational Database's binding records and current file destinations/receipts. This one-time conversion and its obsolete compatibility storage provide no attachment-history API.
 
-Schema activation is a one-way upgrade: older hash-only releases cannot consume generation 39 or the managed file identities. Recover forward, retaining the database, bindings and current files. Before upgrading, any separately supported backup remains its owner's responsibility; this feature does not implement a new backup or restore product. Runtime proof uses `scripts/e2e-legacy-attachment-migration.mjs`: actual old-version composer sends, a private SQLite backup into a new isolated Profile, real native editor save, owner-qualified current reads, source/independent-file separation, unchanged durable attention, restart and missing-file refusal.
+Schema activation is a one-way upgrade: older hash-only releases cannot consume generation 39 or the managed file identities. Recover forward, retaining the database, bindings and current files. Before upgrading, any separately supported backup remains its owner's responsibility; this feature does not implement a new backup or restore product.
 
 ## Let a PersonaBot process a received file
 

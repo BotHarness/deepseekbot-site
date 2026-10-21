@@ -3,7 +3,8 @@
   "title": "Computer export & migration",
   "description": "Move a Computer to another machine — one archive out, one archive in.",
   "order": 20,
-  "source": "apps/docs/src/content/docs/docs/computer-export.mdx"
+  "source": "apps/docs/src/content/docs/docs/computer-export.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

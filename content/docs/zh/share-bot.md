@@ -4,7 +4,7 @@
   "description": "把 Bot 的 Memory 发布到 GitHub，并收录进 Bot 市场。",
   "order": 26,
   "source": "docs/share-bot.zh.md",
-  "sourceRevision": "40e50d28b8ac800e3d2d7ae6c51c0d6ae1dbe663"
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

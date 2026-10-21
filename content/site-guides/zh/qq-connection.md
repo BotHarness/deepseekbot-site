@@ -10,7 +10,7 @@
 - 已运行的 DeepSeekBot、可用模型和目标 Bot。先在本地 DM 取得真实模型回复；参见[安装](/docs/installation/)、[模型设置](/docs/model-setup/)和 [2 核 4GB VPS 教程](/docs/vps-qq-tutorial/)。
 - **一个 App 只交给一个运行中的 Host 接收。** 多分支同时测试请分配独立 QA App，切换前停止原接收器。
 
-**版本范围：** 本页流程适用于 DeepSeekBot 1.4.1（npm `deepseekbot`）、DSH `0.2.1-rc.2` 和产品自带的 QQ Provider `4.32.0-botharness.21`。第 4、5、7 步的产品截图和录屏来自更早的 1.2.1 候选构建，按钮位置和文案可能略有不同，以你实际安装的版本为准，参见[接入与可选能力](/docs/capabilities/)。腾讯平台说明于 2026-10-12 核对。
+**版本范围：** 本页流程适用于 DeepSeekBot 1.4.1（npm `deepseekbot`）、DSH `0.2.1-rc.2` 和产品自带的 QQ Provider `4.32.0-botharness.21`。第 4、5、7 步的产品截图和录屏来自历史候选构建 `1.2.1-vps.20261012.sha031a14db`（提交 `031a14db43af5b3bf52e76b01c30e27828e6e9c9`、DSH `0.2.0-rc.1`、QQ Provider `4.32.0-botharness.19`）的真实群聊验收，按钮位置和文案可能略有不同，以你实际安装的版本为准，参见[接入与可选能力](/docs/capabilities/)。腾讯平台说明于 2026-10-12 核对。
 
 ## 1. 腾讯平台注册与主体认证
 

@@ -3,7 +3,8 @@
   "title": "介绍 Slides",
   "description": "以幻灯片形式观看 BotHarness 介绍。",
   "order": 12,
-  "source": "apps/docs/src/content/docs-zh/docs/slides.mdx"
+  "source": "apps/docs/src/content/docs-zh/docs/slides.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

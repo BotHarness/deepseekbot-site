@@ -3,7 +3,8 @@
   "title": "概念",
   "description": "BOT 模式、Channel、Channel section、inbox、Bridge、Session 与 Builder。",
   "order": 30,
-  "source": "apps/docs/src/content/docs-zh/docs/concepts.mdx"
+  "source": "apps/docs/src/content/docs-zh/docs/concepts.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

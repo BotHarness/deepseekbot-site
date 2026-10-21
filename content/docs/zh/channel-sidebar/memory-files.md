@@ -4,13 +4,20 @@
   "description": "浏览 Bot 当前的记忆文件，并在聊天主体中查看内容。",
   "order": 1,
   "parent": "channel-sidebar",
-  "source": "docs/channel-sidebar/memory-files.zh.md"
+  "source": "docs/channel-sidebar/memory-files.zh.md",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
 打开 **Bot 私聊 → Channel sidebar → 记忆文件**。文件树属于这个 PersonaBot 的 Memory Repository，不是某个任务的工作目录。新 Bot 可能只有初始化文件；你或 Bot 保存主题文件后，才会出现相应内容。
 
 根目录的 `SOUL.md` 和 `MEMORY.md` 固定排在最上面，带 **常驻** 标签和字数用量：它们会在每个新 Session 开始时放进 system prompt。用途、上限和生效时间见 [Bot 灵魂与核心记忆](/zh/docs/soul-and-core-memory)。
+
+## 常驻记忆上限
+
+文件树下方的 **常驻记忆上限** 行显示当前上限，例如 `SOUL.md 5,000 · MEMORY.md 3,000`；改过后带 **已修改** 标签。点击后分别设置两个字符上限，再点 **保存上限**；**恢复默认** 改回 5,000 和 3,000。新上限从下一个 Session 或当前 Session 下次压缩时生效。
+
+![常驻记忆上限行与弹窗](/guides/channel-sidebar/23-standing-limits-zh.webp)
 
 ## 读取文件
 

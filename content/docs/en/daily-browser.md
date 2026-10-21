@@ -4,11 +4,11 @@
   "description": "Explicitly lend one daily-browser tab read-only to a PersonaBot.",
   "order": 22,
   "source": "docs/daily-browser.md",
-  "sourceRevision": "636a5a6cf4a366bb0b29e6a59155d46fb3cc2192"
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-> **Version scope: current-source guide.** These steps include UI updates absent from npm v1.1.0; older test packages and screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and component boundaries.
+> **Version scope: current-source guide.** Synced from current source (the public release is now deepseekbot v1.4.1); older test package versions and DSH 0.2.0-rc.1 screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and capability scope.
 
 Daily Browser lets one PersonaBot read a tab you explicitly share from Chrome or Edge, including its current login state. This first version is read-only: it cannot click, type, navigate, or read other tabs. You can return the tab at any time.
 
