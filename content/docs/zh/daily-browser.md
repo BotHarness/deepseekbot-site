@@ -4,11 +4,11 @@
   "description": "将日常浏览器的一个标签页明确借给 PersonaBot 只读观察。",
   "order": 22,
   "source": "docs/daily-browser.zh.md",
-  "sourceRevision": "636a5a6cf4a366bb0b29e6a59155d46fb3cc2192"
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-> **版本范围：当前源码教程。** 下列步骤包含尚未进入 npm v1.1.0 的界面更新；文中的旧测试包版本和截图属于历史验证记录。正式版与可选组件的区别见[接入与可选能力](/docs/capabilities)。
+> **版本范围：当前源码教程。** 本页同步自当前源码（正式版现已发布至 deepseekbot v1.4.1）；文中的旧测试包版本和 DSH 0.2.0-rc.1 截图属于历史验证记录。正式版与各能力的版本范围见[接入与可选能力](/docs/capabilities)。
 
 Daily Browser 让一个 PersonaBot 读取你在 Chrome 或 Edge 中明确分享的标签页，复用该页当前的登录状态。首版支持只读观察，不能点击、输入、导航或读取其他标签页。你随时可以归还。
 

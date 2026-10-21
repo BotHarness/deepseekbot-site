@@ -4,11 +4,12 @@
   "description": "Wake a Bot weekly, once, on cron or every few minutes, run a schedule now and lock it.",
   "order": 6,
   "parent": "channel-sidebar",
-  "source": "docs/channel-sidebar/schedules.md"
+  "source": "docs/channel-sidebar/schedules.md",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-Open **Bot DM → Channel sidebar → Schedules**. A schedule belongs to one PersonaBot. When it is due, BotHarness drops the schedule’s instruction into that Bot’s [Bot Inbox](/docs/channel-sidebar/bot-inbox) and wakes its Orchestrator, which decides what to do with it like any other incoming item.
+Open **Bot DM → Channel sidebar → Schedules**. The Schedules tab is hidden by default; turn it on from the sidebar's **+ Views** menu. A schedule belongs to one PersonaBot. When it is due, BotHarness drops the schedule’s instruction into that Bot’s [Bot Inbox](/docs/channel-sidebar/bot-inbox) and wakes its Orchestrator, which decides what to do with it like any other incoming item.
 
 ![Schedules in a Bot DM, with cadence, last firing and creator on each row](/guides/channel-sidebar/12-schedules-zh.webp)
 

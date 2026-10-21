@@ -139,6 +139,7 @@ test('full and scoped sync preserve site-owned screenshots rather than replacing
     put(join(f.site, 'public/guides/qq/manifest.json'), '{"source":"actual capture"}');
     put(join(f.site, 'public/guides/qq/terminal/recording.timing'), '0.4 128');
     put(join(f.site, 'public/guides/fixture.png'), 'Site-owned shared screenshot');
+    put(join(f.site, 'public/guides/plugins/vrm-companion/cover-light.webp'), 'Plugin cover');
     put(
       join(f.site, 'content/site-guides/en/qq-connection.md'),
       '# QQ\n\n![Shared](/guides/fixture.png)\n',
@@ -151,6 +152,10 @@ test('full and scoped sync preserve site-owned screenshots rather than replacing
     assert.equal(
       readFileSync(join(f.site, 'public/guides/fixture.png'), 'utf8'),
       'Site-owned shared screenshot',
+    );
+    assert.equal(
+      readFileSync(join(f.site, 'public/guides/plugins/vrm-companion/cover-light.webp'), 'utf8'),
+      'Plugin cover',
     );
     f.run(['--only', 'capabilities,qq-connection']);
     for (const [name, text] of [
@@ -202,9 +207,15 @@ test('1.4.0 installation sync keeps released compatibility and Tob onboarding ac
     }
     put(join(upstream, 'scripts/install-release.json'), '{"version":"1.4.1"}');
     f.run(['--only', 'installation']);
+    const guide141 = readFileSync(join(f.site, 'content/docs/en/installation.md'), 'utf8');
+    assert.doesNotMatch(guide141, /stable 1\.4\.0/);
+    assert.match(guide141, /stable 1\.4\.1/);
+    assert.ok(guide141.includes('deepseekbot@1.4.1'));
+    put(join(upstream, 'scripts/install-release.json'), '{"version":"1.4.2"}');
+    f.run(['--only', 'installation']);
     assert.doesNotMatch(
       readFileSync(join(f.site, 'content/docs/en/installation.md'), 'utf8'),
-      /stable 1\.4\.0/,
+      /stable 1\.4\.[01]/,
     );
   } finally {
     f.clean();

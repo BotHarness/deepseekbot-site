@@ -3,7 +3,8 @@
   "title": "概览",
   "description": "BotHarness 是什么，为什么存在，以及它由哪几块组成。",
   "order": 10,
-  "source": "apps/docs/src/content/docs-zh/docs/overview.mdx"
+  "source": "apps/docs/src/content/docs-zh/docs/overview.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

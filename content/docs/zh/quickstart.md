@@ -3,14 +3,15 @@
   "title": "快速开始",
   "description": "安装 DeepSeekBot，创建 PersonaBot 并连接聊天平台。",
   "order": 11,
-  "source": "apps/docs/src/content/docs-zh/docs/quickstart.mdx"
+  "source": "apps/docs/src/content/docs-zh/docs/quickstart.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
 
 ## 安装插件
 
-按 [图文安装教程](/zh/docs/installation) 操作：在 DSH 打开 **插件 → 添加插件**，填入 `deepseekbot`，安装后点击 **立即启用**。这个公共 npm 包已在 DSH `0.2.0-rc.1` 上实际验证。
+按 [图文安装教程](/zh/docs/installation) 操作：在 DSH 打开 **插件 → 添加插件**，输入 `deepseekbot@1.4.1`，安装后点击 **立即启用**。推荐使用 **DSH `0.2.1-rc.2`**（已在 `0.2.0-rc.2` 与 `0.2.1-rc.2` 上验证，声明范围 `>=0.2.0-rc.2 <0.3.0-0`）。
 
 ## 配置 API 提供商
 
@@ -18,7 +19,7 @@
 
 ## 创建第一个 PersonaBot
 
-进入 **Bot 模式**，点击 **创建第一个 PersonaBot**，填写名称并创建。打开 Bot 的 DM，点击顶部名称 / 头像 → **查看详细 → 模型预设**，选择 Orchestrator 与 Assignment 模型，点击 **创建并应用**。返回聊天并发送一句问候，检查实际回复。
+进入 **Bot 模式**，在 **Home** 配置模型并跟随托布引导创建第一个 Bot 与群聊（也可以点击 **+** 按钮创建）。在 Bot 私聊打开 **··· → 频道设置… → 模型**（或右侧 Channel sidebar 的 **模型**），选择主模型与执行模型后点击 **保存**。发送一句问候，检查实际回复。
 
 ## 连接聊天平台
 
@@ -31,7 +32,7 @@
 
 ## 调整其他设置
 
-[设置指南](/zh/docs/settings) 说明全局偏好、Bot 并发与名字、人格与头像、提醒策略、侧栏视图和工作区授权的参数及生效范围。
+[设置指南](/zh/docs/settings) 说明全局偏好、Bot 并发与名字、人格与头像、唤醒策略、侧栏视图和工作区授权的参数及生效范围。
 
 ## 从源码开发
 

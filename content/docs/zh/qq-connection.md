@@ -14,10 +14,10 @@
 ## 开始前准备
 
 - 可登录 [QQ 开放平台](https://bot.q.qq.com/open) 的管理员账号，以及有管理权限的专用测试群。
-- 已运行的 DeepSeekBot、可用模型和目标 PersonaBot。先在本地 DM 取得真实模型回复；参见[安装](/docs/installation/)、[模型设置](/docs/model-setup/)和 [2 核 4GB VPS 教程](/docs/vps-qq-tutorial/)。
+- 已运行的 DeepSeekBot、可用模型和目标 Bot。先在本地 DM 取得真实模型回复；参见[安装](/docs/installation/)、[模型设置](/docs/model-setup/)和 [2 核 4GB VPS 教程](/docs/vps-qq-tutorial/)。
 - **一个 App 只交给一个运行中的 Host 接收。** 多分支同时测试请分配独立 QA App，切换前停止原接收器。
 
-**版本范围：** 本页产品截图与验收来自源码候选构建 `1.2.1-vps.20261012.sha031a14db`（[精确源码](https://github.com/BotHarness/DeepSeekBot/tree/031a14db43af5b3bf52e76b01c30e27828e6e9c9)）、DSH `0.2.0-rc.1`、qualified QQ Provider `4.32.0-botharness.19`，不表示任意 npm 版本具备这些入口。先核对实际安装版本，参见[接入与可选能力](/docs/capabilities/)。腾讯平台说明于 2026-10-12 核对。
+**版本范围：** 本页流程适用于 DeepSeekBot 1.4.1（npm `deepseekbot`）、DSH `0.2.1-rc.2` 和产品自带的 QQ Provider `4.32.0-botharness.21`。第 4、5、7 步的产品截图和录屏来自历史候选构建 `1.2.1-vps.20261012.sha031a14db`（提交 `031a14db43af5b3bf52e76b01c30e27828e6e9c9`、DSH `0.2.0-rc.1`、QQ Provider `4.32.0-botharness.19`）的真实群聊验收，按钮位置和文案可能略有不同，以你实际安装的版本为准，参见[接入与可选能力](/docs/capabilities/)。腾讯平台说明于 2026-10-12 核对。
 
 ## 1. 腾讯平台注册与主体认证
 
@@ -32,7 +32,7 @@
 
 ## 2. 创建官方 QQ 机器人
 
-在应用管理页点击**创建机器人**，填写名称、头像、说明并提交。成功后生成 AppID，点击该应用进入管理页。这是 QQ 平台应用，稍后还需要绑定到 DeepSeekBot 的 PersonaBot。
+在应用管理页点击**创建机器人**，填写名称、头像、说明并提交。成功后生成 AppID，点击该应用进入管理页。这是 QQ 平台应用，稍后还需要绑定到 DeepSeekBot 里的 Bot。
 
 <figure>
 <a href="/guides/qq/04-create-app.png"><img src="/guides/qq/04-create-app.png" alt="腾讯应用管理页的创建机器人按钮" loading="lazy" decoding="async"></a>
@@ -65,11 +65,11 @@
 
 当前验证版本的扫码入口用于创建 Bot；复用已有 App 走手动连接。找不到 QQ 或 Manual setup 时核对实际 qualified Provider 与版本，不要用其他平台的授权命令代替。
 
-连接后核对真实应用身份与 connected 状态。**Provider 授权、绑定目标 Bot、原群收到回复是三个检查点。** 首次授权由账号持有人完成。开发者已有停止的原生 Profile 时，可以用 [QQ QA 客户端复用脚本](https://github.com/BotHarness/DeepSeekBot/blob/codex/1438-vps-qq-tutorial/docs/agents/qq-test-clients.md)分配 QA1/QA2/QA3，读取所选原生凭据并认领独占接收器；这是开发 helper，不是已发布的 `deepseekbot im-authorize qq` 命令。
+连接后核对真实应用身份与 connected 状态。**Provider 授权、绑定目标 Bot、原群收到回复是三个检查点。** 首次授权由账号持有人完成。开发者已有停止的原生 Profile 时，可以用 [QQ QA 客户端复用脚本](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/agents/qq-test-clients.md)分配 QA1/QA2/QA3，读取所选原生凭据并认领独占接收器；这是开发 helper，不是已发布的 `deepseekbot im-authorize qq` 命令。
 
 <figure>
 <a href="/guides/qq/09-manual-setup.png"><img src="/guides/qq/09-manual-setup.png" alt="实际 QQ 手动接入表单，AppID 与 AppSecret 均为空" loading="lazy" decoding="async"></a>
-<figcaption>实际补录：设置 → IM机器人 → QQ → 手动接入。中文提交按钮为「绑定并连接」；它连接 Provider，之后仍需绑定 PersonaBot。</figcaption>
+<figcaption>实际补录：设置 → IM机器人 → QQ → 手动接入。中文提交按钮为「绑定并连接」；它连接 Provider，之后仍需绑定 Bot。</figcaption>
 </figure>
 
 <video controls preload="metadata" playsinline poster="/guides/qq/09-manual-setup.png">
@@ -80,7 +80,7 @@
 
 [文字稿与章节](/guides/qq/manual-setup-transcript.md)：只录入口和空表单，凭据输入前停止。经严格 SSH 转发访问同一 VPS，不替代 HTTPS 验证。
 
-## 5. 绑定到目标 PersonaBot
+## 5. 绑定到目标 Bot
 
 打开目标 Bot 的 DM 侧栏 → **External identities（外部身份）** → QQ，选择已连接应用并确认绑定。按实际界面选择新会话接收方式；使用“先询问”时还要接受新群会话。参见[外部身份](/docs/channel-sidebar/external-identities/)。
 
@@ -135,6 +135,18 @@
 持久化部署只重启自己的 Host，确认 Bot 与绑定保留，再发送新 marker，例如 `请只回复 TUTORIAL_QQ_B_OK`，核对新回复。精确服务与 Owner 登录更新方式见 [VPS 教程](/docs/vps-qq-tutorial/)。不要重启其他人的服务。
 
 排错时关联 Source Event、Bot Inbox 与发送结果；Provider receipt 是过程证据。本次验收覆盖文字 @ 问答，不宣称图片、普通群消息处理或任意主动推送都已验证。
+
+## 接入后还能做什么
+
+基础 @ 问答跑通后，可以按需打开下面这些能力。完整操作和当前限制见产品仓库的 [QQ 接入说明](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/qq-connection.md)。
+
+- **同步到本地群聊：** 第一次被 @ 后，在应用的「编辑身份」会话列表里选择「同步」，把这个 QQ 群接到包含该 Bot 的本地群聊。之后的 @ 会出现在本地群聊里，回复仍发回原 QQ 群。「静音」只接收不唤醒，「屏蔽」停止接收。
+- **一个 QQ 群里放两个 Bot：** 每个 Bot 绑定自己的 QQ 应用，再把两个会话同步到同一个本地群聊。每个 Bot 只用自己的应用回复。
+- **超过 5 分钟的结果：** QQ 被动回复只有 5 分钟窗口。任务做完时已超时，结果会保留下来；Bot 可以通过已授权的原群发送目标主动补发，受每小时额度限制。
+- **图片、文件和语音（开发候选）：** 在 @ 消息里带图片，或引用一条文件、语音消息再 @ Bot，Bot 可以读取、处理并回传图片或文件；看图需要支持图片的模型。这些能力仍在验证中，以实际版本为准。
+- **普通群消息（开发候选）：** 默认只收 @ 消息。手机上开启「获取群内全部消息」并在会话中明确选择后，Bot 才会收集普通群消息，用于观察和定时汇总。
+
+QQ 私聊目前不在接入范围内，私聊斜杠命令等功能请使用其他平台或本地私聊。
 
 ## 排错
 

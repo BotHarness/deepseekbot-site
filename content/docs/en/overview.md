@@ -3,7 +3,8 @@
   "title": "Overview",
   "description": "What BotHarness is, why it exists, and what it is made of.",
   "order": 10,
-  "source": "apps/docs/src/content/docs/docs/overview.mdx"
+  "source": "apps/docs/src/content/docs/docs/overview.mdx",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 

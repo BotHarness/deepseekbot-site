@@ -3,7 +3,8 @@
   "title": "Bot 灵魂与核心记忆",
   "description": "SOUL.md 与 MEMORY.md 如何进入每个 Session、字数上限，以及修改何时生效。",
   "order": 28,
-  "source": "docs/soul-and-core-memory.zh.md"
+  "source": "docs/soul-and-core-memory.zh.md",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
@@ -56,11 +57,13 @@
 
 ### 修改上限
 
-1. 在 Bot 私聊顶部点击 Bot 名称，在弹出的资料卡里点击 **查看详细**。
-2. 找到 **常驻记忆上限**，分别填写 Soul 和 Core Memory 的字符数。可填 500 到 50,000 之间的整数，下方会显示大约相当于多少汉字或英文单词。
-3. 点击 **保存上限**。**恢复默认** 会改回 5,000 和 3,000。
+1. 在 Bot 私聊右侧的 Channel sidebar 打开 **记忆文件**。
+2. 点击文件树下方的 **常驻记忆上限** 行（显示当前数值，例如 `SOUL.md 5,000 · MEMORY.md 3,000`；改过后带 **已修改** 标签）。在弹窗中分别填写 Soul 和 Core Memory 的字符数。可填 500 到 50,000 之间的整数，下方会显示大约相当于多少汉字或英文单词。
+3. 点击 **保存上限**。**恢复默认** 会改回 5,000 和 3,000；**取消** 关闭弹窗、不保存。
 
 ![Bot 详情里的常驻记忆上限](/guides/soul-and-core-memory/03-limits-zh.webp)
+
+_图片为旧版 Profile 布局；现在上限位于右侧侧栏的「记忆文件」。_
 
 上限只属于这个 Bot，不影响其他 Bot。
 

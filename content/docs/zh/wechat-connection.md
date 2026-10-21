@@ -4,17 +4,17 @@
   "description": "扫码连接个人微信 Bot、绑定扫码者私聊身份，并核对回复。",
   "order": 25,
   "source": "docs/wechat-connection.zh.md",
-  "sourceRevision": "636a5a6cf4a366bb0b29e6a59155d46fb3cc2192"
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-> **版本范围：当前源码教程。** 下列步骤包含尚未进入 npm v1.1.0 的界面更新；文中的旧测试包版本和截图属于历史验证记录。正式版与可选组件的区别见[接入与可选能力](/docs/capabilities)。
+> **版本范围：当前源码教程。** 本页同步自当前源码（正式版现已发布至 deepseekbot v1.4.1）；文中的旧测试包版本和 DSH 0.2.0-rc.1 截图属于历史验证记录。正式版与各能力的版本范围见[接入与可选能力](/docs/capabilities)。
 
 接入支持扫码者在微信 Bot 私聊发送文字或单个文件，消息进入 PersonaBot 的 Inbox，由 Bot 使用自己的绑定身份回复原微信私聊。#904 预览另外支持第 6 节说明的原生图片。第 7 节说明微信平台语音转写，第 8 节说明 #906 原始音频候选。第 9 节说明 #907 原生视频候选。第 12 节增加显式授权的纯外部主动文字报告。群消息、其他联系人、远端历史／搜索及定时任务 UI 仍属于独立切片。企业微信是另一种接入方式。
 
 ## 开始前
 
-使用对应的 BotHarness 源码预览产品及 DSH `0.2.0-rc.1`。先创建 PersonaBot，确认它能真实回复本地 DM。文本切片验收使用的本机测试产品为 `0.0.0-test.878`，Provider 为 `@botharness/im-provider@4.32.0-botharness.4`，输入固定为 fork `589e5507d47ab21de5b39c776a598452744a5368`；这不是已发布的 npm 产品。源码版已在微信客户端验证收件、模型与回复；压缩包安装后保留了连接及记录，并通过新一轮扫码者文字 → canonical Inbox → 模型 → 原私聊回复验证；Human 已确认微信收到 `BH878-PACKED-OK`。Human 于 2026-10-06 验收了首个切片。源码预览产物准备见[产品 IM 安装](https://github.com/BotHarness/BotHarness/blob/main/docs/product-im-installation.md)。
+使用对应的 BotHarness 源码预览产品及 DSH `0.2.0-rc.1`。先创建 Bot，确认它能真实回复本地 DM。文本切片验收使用的本机测试产品为 `0.0.0-test.878`，Provider 为 `@botharness/im-provider@4.32.0-botharness.4`，输入固定为 fork `589e5507d47ab21de5b39c776a598452744a5368`；这不是已发布的 npm 产品。源码版已在微信客户端验证收件、模型与回复；压缩包安装后保留了连接及记录，并通过新一轮扫码者文字 → canonical Inbox → 模型 → 原私聊回复验证；Human 已确认微信收到 `BH878-PACKED-OK`。Human 于 2026-10-06 验收了首个切片。源码预览产物准备见[产品 IM 安装](https://github.com/BotHarness/BotHarness/blob/main/docs/product-im-installation.md)。
 
 ## 1. 扫码绑定微信 Bot
 
@@ -30,7 +30,7 @@
 
 打开 PersonaBot 的 DM，在右侧 **Channel sidebar** 展开 **外部身份**，点击 **+ 绑定应用**，绑定已连接的微信账号；行内显示名称、状态及启用开关。身份行显示「已就绪」后，扫码者本人私聊这个微信 Bot 的消息会直接进入这个 Bot 的收件箱，Bot 在原私聊回复；其他联系人和微信群的消息不会进入。不需要授权会话。
 
-![PersonaBot Profile 中真实配对的微信身份](/guides/wechat/identity-bound.jpg)
+![Bot Profile 中真实配对的微信身份](/guides/wechat/identity-bound.jpg)
 
 _图片为旧版 Profile 布局；现在绑定位于右侧侧栏的「外部身份」。_
 
@@ -40,7 +40,7 @@ _图片为旧版 Profile 布局；现在绑定位于右侧侧栏的「外部身�
 
 ## 4. 核对真实文字与原私聊回复
 
-在绑定的微信 Bot 私聊发送唯一测试文字，例如：`请通过 bridge_reply 在此微信私聊只回复 WECHAT-SETUP-OK。` 展开 **Bot 收件箱**，打开来源详情，确认平台为微信、范围为私聊。微信未提供昵称时，界面使用通用的“微信用户”标签；原始发送人、消息和 Source Event ID 保留在详情里。
+在绑定的微信 Bot 私聊发送唯一测试文字，例如：`请通过 bridge_reply 在此微信私聊只回复 WECHAT-SETUP-OK。` 展开 **Bot 收件箱**，打开来源详情，确认平台为微信、范围为私聊。微信未提供昵称时，界面使用通用的“微信用户”标签；原始发送人、消息和 事件 ID 保留在详情里。
 
 两侧都需要核对：Inbox 状态变成已处理，并且回复出现在原微信私聊。仅有“平台已接受”不能证明送达或已读。iLink 回执里的 ID 是客户端生成的确认标识，不是已证明的原生服务端消息 ID。
 
@@ -90,7 +90,7 @@ Human 提供的接收端截图显示：06:14 发出原图，12:57 收到 Bot 的
 
 ## 7. 读取微信原生语音转写并回复
 
-#905 源码预览候选使用本机产品 `0.0.0-test.905.1` 和托管 Provider `4.32.0-botharness.7`，不是公开 npm 发布。在绑定的微信 Bot 私聊发送一条**原生语音**，无需先在微信客户端转换成另一条文字消息。微信提供 `voice_item.text` 时，平台转写进入现有 canonical Inbox。来源卡片和弹窗显示**微信语音 · 平台转写**，平台提供时长时一并展示。原始消息、语音项与 Source Event ID 保留在折叠详情中。
+#905 源码预览候选使用本机产品 `0.0.0-test.905.1` 和托管 Provider `4.32.0-botharness.7`，不是公开 npm 发布。在绑定的微信 Bot 私聊发送一条**原生语音**，无需先在微信客户端转换成另一条文字消息。微信提供 `voice_item.text` 时，平台转写进入现有 canonical Inbox。来源卡片和弹窗显示**微信语音 · 平台转写**，平台提供时长时一并展示。原始消息、语音项与 事件 ID 保留在折叠详情中。
 
 ![真实 5.2 秒微信原生语音的来源弹窗，浅色主题](/guides/wechat/voice-source-light.jpg)
 
@@ -144,7 +144,7 @@ Bot 可在已有可写工作区授权下，用 `bridge_attachment_save` 的 `rep
 
 微信可能提供引用正文、显示摘要、条目 ID、服务器消息 ID 或局部引用信息。摘要不会被当作原文，条目 ID 与服务器消息 ID 分开保留。微信未提供正文时，只能通过真实的服务器消息 ID，查找同一当前授权账号／私聊中可读的 canonical 记录。未知、未保留或无权读取的引用明确不可用，不能据此判断原消息已删除；引用附件不会自动下载。引用不会建立 Thread。
 
-需要时可让 Bot 读取**本地保留上下文**。`bridge_context` 的 `retained` 返回最近保留的来源，按时间从新到旧；`retained-nearby` 返回锚点前最多 10 条、后最多 5 条保留来源，不包含锚点，Bot 可指定每侧 0–20 条。每条保留原生 Message ID 和 canonical Source Event ID。范围仅是此 Bot 当前可读的本地记录，不是微信远端历史或搜索；附近条数也不承诺远端五分钟时间窗。
+需要时可让 Bot 读取**本地保留上下文**。`bridge_context` 的 `retained` 返回最近保留的来源，按时间从新到旧；`retained-nearby` 返回锚点前最多 10 条、后最多 5 条保留来源，不包含锚点，Bot 可指定每侧 0–20 条。每条保留原生 Message ID 和 canonical 事件 ID。范围仅是此 Bot 当前可读的本地记录，不是微信远端历史或搜索；附近条数也不承诺远端五分钟时间窗。
 
 每页最多 20 条，同时遵守 JSON 字符预算（1,000–24,000，默认 12,000）。用相同来源、范围与条数参数跟随 `nextCursor` 续页。cursor 固定首次读取的记录边界，不会把后来新消息塞入续页；30 分钟后或 Host 重启后失效。Grant／身份改变或撤销会拒绝继续读取；若单条超出预算，`requiredCharacters` 提示所需预算。读取不产生新收件、唤醒、订阅、本地 DM 或外部发送；来源面板展示 Bot 的读取记录和最近一页。
 
@@ -216,7 +216,7 @@ _图片为旧版 Profile 布局；保存的发送目标现在位于右侧侧栏�
 
 ![Human 提供的原生微信截图，显示两条主动报告与后续回复](/guides/wechat/native-proactive-reports.png)
 
-![后续回复的 canonical 来源、原生消息 ID 和 Source Event ID，亮色主题](/guides/wechat/proactive-followup-source-light.jpg)
+![后续回复的 canonical 来源、原生消息 ID 和 事件 ID，亮色主题](/guides/wechat/proactive-followup-source-light.jpg)
 
 ![同一 canonical 后续回复来源，深色主题](/guides/wechat/proactive-followup-source-dark.jpg)
 
@@ -234,7 +234,7 @@ _图片为旧版 Profile 布局；保存的发送目标现在位于右侧侧栏�
 
 ## 13. Bot 工作时请求微信原生输入状态
 
-#911 预览候选把原生输入状态接到 canonical Bot 处理生命周期。在 Windows 打包候选 `.911.7` 中，Human 已确认私聊、关联 Assignment 及后续消息处理期间显示原生输入提示，关闭偏好后实际工作期间不显示。真实原生 pwsh 等待命令和最终回复已验证。Human 亦确认失败、原生 Session 停止、Binding 关闭、Grant 撤销、Provider disposal 及 Windows Host 中断／重启后提示消失；撤销和重启后的新消息完整收发恢复通过。随后整合 main 的 `.911.8` 使用全新 Profile，原生补验仍待完成。证据及限制参见 [Windows 验证记录](https://github.com/BotHarness/BotHarness/blob/main/docs/qa/wechat-911-windows-handoff.md)；当前仍是 Draft 候选，等待最终 Human QA 和产物晋级。
+#911 预览候选把原生输入状态接到 canonical Bot 处理生命周期。在 Windows 打包候选 `.911.7` 中，Human 已确认私聊、关联 Assignment 及后续消息处理期间显示原生输入提示，关闭偏好后实际工作期间不显示。真实原生 pwsh 等待命令和最终回复已验证。Human 亦确认失败、原生 Session 停止、Binding 关闭、Grant 撤销、Provider disposal 及 Windows Host 中断／重启后提示消失；撤销和重启后的新消息完整收发恢复通过。随后 `.911.8` 在全新 Windows Profile 完成正常执行、关联 Assignment（stdout `911-V8-ASSIGN`、退出码 0）和停止清理补验，均获 Human 独立确认。证据及限制参见 [Windows 验证记录](https://github.com/BotHarness/BotHarness/blob/main/docs/qa/wechat-911-windows-handoff.md)；#1102 已合并，#911 已验收关闭；公开发布与部署仍分别授权。
 
 在绑定微信身份的 **PersonaBot 私聊 → Channel sidebar → 外部身份 → 编辑** 中找到 **微信原生输入状态**。默认开启，关闭后不再为该身份请求输入状态；偏好重启后保留。Provider 未提供受检能力时，即使偏好开启也明确显示不可用。全局默认与 Profile 继承属于 #912。
 
@@ -253,6 +253,54 @@ flowchart LR
 **输入状态请求已接受** 只说明接口接受，不证明客户端显示、送达或已读。**输入状态请求未成功** 时，原消息仍可正常处理。**输入状态清理未确认** 表示无法确认取消成功，不能把它说成已清理，也不能承诺未公开的服务器失效时间。关闭身份或撤销授权会取消活跃生命周期；重启从空闲开始，不恢复保存的指示器。
 
 真实验证时，在已配对微信私聊发送唯一的受控请求，观察实际工作期间的原生输入状态，并记录正常完成及停止／失败后消失的过程。微信由 Human 操作和记录；Host 日志不能替代此检查。证据不包含原生票据、有效二维码和无关聊天。资格验证记录见 [#911](https://github.com/BotHarness/BotHarness/issues/911)。
+
+## 14. 继承默认值或保留 Bot 自定义
+
+在 **Bot 设置 → 外部平台默认行为 → WeChat / 微信** 保存身份启停与原生输入状态的默认值。
+当前微信仅接收扫码账号的私聊并直接唤醒 Bot，不提供群 @、Thread 或新联系人选项。
+外部连接器保留自己的目标、开关与成员处理策略。
+
+在绑定身份的 **编辑** 弹窗中，分别为身份启停和输入状态选择 **继承全局默认** 或
+**自定义**，选择继承并保存即可恢复当前默认值。身份启停的自定义选择使用身份行的开关；
+输入状态选择自定义后，在弹窗内切换。新绑定默认继承，已有绑定保留之前的选择并显示自定义，
+包括之前关闭的偏好。同一 Profile 重启后，有效值和设置来源仍保留。
+
+```mermaid
+flowchart LR
+    A[微信全局默认值] --> B{设置来源}
+    C[Bot 自定义覆盖] --> B
+    B --> D[有效身份与输入状态偏好]
+    D --> E[既有账号、Grant 与扫码账号私聊检查]
+    E --> F[新的已授权处理]
+```
+
+修改默认值不会绑定应用或授权新目标。暂停停止继承身份的收件；恢复后仅接收新的事件，
+不补入暂停期间的消息。关闭继承的输入状态会取消运行中的请求，自定义偏好保留原选择。
+已接收来源与回复保留原作者、时间、原生消息 ID、事件 ID 和可信路由。
+旧版本保存会要求刷新并保留未保存草稿。
+
+#912 候选的自动检查覆盖升级保留、独立覆盖、恢复继承、重启、旧版本拒绝、运行中输入清理
+与扫码账号私聊边界。Windows Chrome 保存与重开、原生输入状态继承开关、接收暂停和
+同一 Profile 重启后的偏好保留已检查。Human 亦确认重启后新消息正常处理与回复、输入提示
+结束后消失，暂停消息未被补回复；截图及限制见
+[Windows 验证记录](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/qa/wechat-912-defaults-windows.md)。本节提供候选的审阅路径，不代表已发布。
+
+![微信接收与原生输入状态全局默认值](https://raw.githubusercontent.com/BotHarness/DeepSeekBot/main/docs/evidence/issue-912/defaults-after-zh-dark.jpg)
+
+## 在扫码账号私聊中使用命令
+
+发送 `/commands`（或 `/命令`）查看帮助，`/status` 查看当前模型与活动，
+`/model` 列出带序号的模型，`/effort` 列出当前模型的推理强度。
+`/model <序号|名称>` 只修改编排模型；`/effort <强度>` 修改其推理强度。
+任务模型保留原有设置或继承关系。
+用 `/stop` 停止当前轮次，再用 `/new` 退役空闲的编排会话。用 `/compact` 就地压缩空闲的编排会话。
+下一条普通消息开启新会话，Bot 身份与 Memory 保留。
+
+命令必须独占一条纯文字私聊消息。支持中文别名和全角 `／`；
+多行指令、带附件消息及群消息继续走原有路径。
+Host 直接回答，不消耗模型轮次；准入、屏蔽与账号检查沿用扫码账号私聊的规则。
+回复的成功、失败或结果未知状态保留在 Outbox；重复投递不重复操作，也不盲目重发未知结果。
+命令路径具有隔离 Host 和自动化验证；这些证据不代替一次新的原生微信命令往返。
 
 ## 暂停与重新连接
 

@@ -4,13 +4,20 @@
   "description": "Browse a Bot’s current Memory files and inspect their contents.",
   "order": 1,
   "parent": "channel-sidebar",
-  "source": "docs/channel-sidebar/memory-files.md"
+  "source": "docs/channel-sidebar/memory-files.md",
+  "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
 Open a **Bot DM → Channel sidebar → Memory files**. The tree belongs to this PersonaBot’s Memory Repository, not the folder used by an Assignment. A new Bot can have only initialization files; useful topic files appear as you or the Bot save them.
 
 `SOUL.md` and `MEMORY.md` at the root are pinned at the top with a **Standing** badge and their character usage: both go into the system prompt at the start of every new Session. See [Bot Soul and Core Memory](/docs/soul-and-core-memory) for what they are for, their limits, and when edits apply.
+
+## Standing memory limits
+
+Below the file tree, the **Standing memory limits** row shows the current limits, for example `SOUL.md 5,000 · MEMORY.md 3,000`, with a **Customized** chip after a change. Click it to set both character limits, then **Save limits**; **Restore defaults** returns to 5,000 and 3,000. New limits apply from the next Session, or from the next compaction of the current Session.
+
+![The Standing memory limits row and dialog](/guides/channel-sidebar/23-standing-limits-zh.webp)
 
 ## Read a file
 

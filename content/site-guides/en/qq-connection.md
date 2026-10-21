@@ -10,7 +10,7 @@ Open a step image to view its original size.
 - A running DeepSeekBot, working model and target Bot. Get a real local DM reply first; see [installation](/en/docs/installation/), [model setup](/en/docs/model-setup/) and the [2-core / 4 GB VPS guide](/en/docs/vps-qq-tutorial/).
 - **One application must have one running receiving Host.** Assign independent QA Apps to concurrent branches; stop the original receiver before handing it over.
 
-**Version scope:** this flow applies to DeepSeekBot 1.4.1 (npm `deepseekbot`), DSH `0.2.1-rc.2` and the bundled QQ Provider `4.32.0-botharness.21`. The product screenshots and recordings in steps 4, 5 and 7 come from an earlier 1.2.1 candidate, so button positions and wording can differ slightly; follow the version you installed and see [Connections and optional tools](/en/docs/capabilities/). Tencent's instructions were checked on October 12, 2026.
+**Version scope:** this flow applies to DeepSeekBot 1.4.1 (npm `deepseekbot`), DSH `0.2.1-rc.2` and the bundled QQ Provider `4.32.0-botharness.21`. The product screenshots and recordings in steps 4, 5 and 7 come from the historical `1.2.1-vps.20261012.sha031a14db` candidate qualification (commit `031a14db43af5b3bf52e76b01c30e27828e6e9c9`, DSH `0.2.0-rc.1`, QQ Provider `4.32.0-botharness.19`), so button positions and wording can differ slightly; follow the version you installed and see [Connections and optional tools](/en/docs/capabilities/). Tencent's instructions were checked on October 12, 2026.
 
 ## 1. Register and verify your developer account
 
