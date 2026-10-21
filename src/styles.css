@@ -1272,6 +1272,16 @@ a:where(:not(.astryx-button)) {
 .footer p {
   margin: 0;
 }
+.footer-badge {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 16px;
+}
+.footer-badge img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
 
 /* ---- analytics consent (src/analytics.ts) ---- */
 .consent-bar {
