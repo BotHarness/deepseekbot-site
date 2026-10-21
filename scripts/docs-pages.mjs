@@ -366,6 +366,22 @@ export const DOC_PAGES = [
     },
   },
   {
+    slug: 'mobile-app',
+    siteSource: true,
+    order: 16,
+    en: {
+      source: 'content/site-guides/en/mobile-app.md',
+      title: 'Get started with the phone app',
+      description:
+        'Install DeepSeek Harness and DeepSeekBot, connect over Tailscale and pair your phone.',
+    },
+    zh: {
+      source: 'content/site-guides/zh/mobile-app.md',
+      title: '手机 App 上手',
+      description: '安装 DeepSeek Harness 与 DeepSeekBot，用 Tailscale 连接，再扫码配对手机。',
+    },
+  },
+  {
     slug: 'mobile-pairing',
     order: 16,
     en: {
