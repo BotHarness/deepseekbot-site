@@ -27,7 +27,7 @@ The steps:
 
 DeepSeek Harness (DSH) is DeepSeek's open-source desktop app for AI agents. DeepSeekBot runs inside it as a plugin. This guide uses version **0.2.1-rc.2**.
 
-**Download.** Open the [DeepSeek Harness download page](https://www.deepseek.com/harness/), or download the installer for your computer directly:
+**Download.** Open the [DeepSeek Harness download page](https://www.deepseek.com/en/harness/), or download the installer for your computer directly:
 
 | Computer                       | Installer                                                                                     |
 | ------------------------------ | --------------------------------------------------------------------------------------------- |
