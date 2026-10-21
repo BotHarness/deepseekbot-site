@@ -7,12 +7,14 @@ import { defineConfig, type Plugin } from 'vite';
 import { changelogPath, renderChangelog } from './scripts/changelog.ts';
 import { blogPath, blogSitemap, renderBlog } from './scripts/blog.ts';
 import { docsSitemap, renderDocs, searchIndex } from './scripts/docs.ts';
+import { pluginsLlms, pluginsSitemap, renderPlugins } from './scripts/plugins.ts';
 
 const require = createRequire(import.meta.url);
 const FONT_URL = '/fonts/pixel.woff2';
 const SITE = 'https://deepseekbot.app';
 // the Chinese entry at / and the English one at /en/, each with its own share card, plus the
-// guides rendered from content/docs and the changelog from content/changelog
+// guides rendered from content/docs, the changelog from content/changelog and the plugin shelf
+// from content/plugins
 const PAGES = [
   'index.html',
   'en/index.html',
@@ -23,6 +25,7 @@ const PAGES = [
   ...renderDocs(),
   ...renderChangelog(),
   ...renderBlog(),
+  ...renderPlugins(),
 ];
 const fontFile = () =>
   readFileSync(
@@ -82,6 +85,7 @@ function pixelAssets(): Plugin {
       const subset = await subsetFont(fontFile(), siteCharacters(), { targetFormat: 'woff2' });
       this.emitFile({ type: 'asset', fileName: FONT_URL.slice(1), source: subset });
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() });
+      this.emitFile({ type: 'asset', fileName: 'llms.txt', source: llms() });
       // the docs search box loads its language's index on first open
       for (const lang of ['zh', 'en'] as const)
         this.emitFile({
@@ -120,7 +124,26 @@ ${[
   .join('\n')}
 ${docsSitemap()}
 ${blogSitemap()}
+${pluginsSitemap()}
 </urlset>
+`;
+
+/** A plain-text map of the site for language models (https://llmstxt.org). */
+const llms = () => `# DeepSeekBot
+
+> DeepSeekBot (npm \`deepseekbot\`) by BotHarness is an open-source, MIT-licensed plugin for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. This is its product site, in Chinese at / and English at /en/.
+
+## Guides
+
+- [Overview](${SITE}/en/docs/overview/): what DeepSeekBot is and where to start ([中文](${SITE}/docs/overview/))
+- [Installation](${SITE}/en/docs/installation/): install DeepSeekBot ([中文](${SITE}/docs/installation/))
+- [Changelog](${SITE}/en/changelog/): what changed in each release ([中文](${SITE}/changelog/))
+
+## Marketplace
+
+- [Bot marketplace](${SITE}/en/market): Bots shared as public GitHub repositories ([中文](${SITE}/market))
+
+${pluginsLlms()}
 `;
 
 export default defineConfig({

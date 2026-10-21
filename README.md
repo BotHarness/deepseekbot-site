@@ -57,6 +57,12 @@ For repeatable local model setup across product worktrees, see the
   button opens a client-side search over `/search/zh.json` or `/search/en.json`, built from the
   same Markdown at build time (one entry per section, plain substring matching so Chinese needs no
   segmenter; `src/search.ts`). Developer docs stay on botharness.ai.
+- **Plugins**: `/plugins/` and `/en/plugins/` are the second shelf of the marketplace, next to the
+  Bot list at `/market`. Each plugin is one file, `content/plugins/<slug>.json` (package, version,
+  requirements, links, media file names and the zh/en copy); its media lives under
+  `public/guides/plugins/<slug>/`. `scripts/plugins.ts` renders the list and one page per plugin
+  at build, adds them to `sitemap.xml` and `/llms.txt`, and leaves out media that has not been
+  recorded yet (only the cover is required).
 - **Frames**: the wooden nine-slice frame is pixel art in `scripts/frame-svg.mjs`; run
   `pnpm frames` after editing it to regenerate `src/frames.css`.
 - The visual direction takes cues from Stardew Valley UIs such as
