@@ -101,12 +101,6 @@ export function MarketList({
   const [attempt, setAttempt] = useState(0);
   const dates = dateFormat(lang);
 
-  // search as the visitor pauses typing, not on every key
-  useEffect(() => {
-    const timer = setTimeout(() => setQ(input.trim().slice(0, 100)), 300);
-    return () => clearTimeout(timer);
-  }, [input]);
-
   useEffect(() => {
     const abort = new AbortController();
     listTopics(abort.signal)
@@ -147,14 +141,22 @@ export function MarketList({
   return (
     <div className="market" hidden={hidden}>
       <div className="market-controls frame">
-        <div className="market-search">
+        {/* search runs when the visitor presses Enter, not on every key */}
+        <form
+          className="market-search"
+          role="search"
+          onSubmit={(event) => {
+            event.preventDefault();
+            setQ(input.trim().slice(0, 100));
+          }}
+        >
           <TextInput
             label={t.searchLabel}
             value={input}
             placeholder={t.searchPlaceholder}
             onChange={(value) => setInput(value)}
           />
-        </div>
+        </form>
         <SegmentedControl
           label={t.sortLabel}
           value={sort}
