@@ -33,7 +33,7 @@
 
 ## 手机应用
 
-iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器。它没有 DeepSeekBot 账号，中间也没有 DeepSeekBot 服务器：它只通过你的 [Tailscale](https://tailscale.com) 网络（`*.ts.net` 或 `100.x` 地址，始终 HTTPS）连接你配对的那台电脑。你的 Bot、Memory 和对话都留在那台电脑上。
+iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器。它只连接你配对的那台电脑：通过你的 [Tailscale](https://tailscale.com) 网络（`*.ts.net` 或 `100.x` 地址，始终 HTTPS），或者在你选择时通过 DeepSeekBot Connect（见下文）。你的 Bot、Memory 和对话都留在那台电脑上。
 
 **保存在手机上的**
 
@@ -41,6 +41,16 @@ iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器�
 - 最近对话和未发送草稿的缓存，用来让应用打开更快，保存在应用自己的存储里。
 
 要移除一台电脑和它的凭证，在应用里打开这台电脑，选择**取消配对**。也可以在电脑的设置里撤销这台手机。
+
+**DeepSeekBot 账号和 DeepSeekBot Connect（可选）**
+
+不登录账号也能配对。DeepSeekBot Connect 让手机不用 Tailscale 也能连上你的电脑；使用它时，你要在电脑和手机上登录 DeepSeekBot 账号，可以用 Google、Apple 或发到邮箱的验证码。
+
+- 我们的登录服务商 [WorkOS](https://workos.com/legal/privacy) 保存账号：你的邮箱、Google 或 Apple 账号提供的名字，以及一个用户 ID。
+- 我们的中继 `connect.botharness.ai` 保存你的用户 ID，以及你关联的电脑名称（最多 5 台）和它们的 DeepSeekBot Connect 地址（`<id>.deepseekbot.dev`）。
+- 手机和电脑之间的通信通过 HTTPS 经 [Cloudflare Tunnel](https://www.cloudflare.com/privacypolicy/) 传输，只开放手机用的接口。我们的中继不会收到你的消息、照片或文件。
+
+要删除账号，在应用里打开**配对电脑**，登录后选择**删除账号**。这会删除 WorkOS 上的账号，解除所有电脑的关联，并删除它们的隧道和地址。在某台电脑上退出登录只会解除这一台电脑的关联。
 
 **只发给你的电脑的**
 

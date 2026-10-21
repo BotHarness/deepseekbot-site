@@ -33,7 +33,7 @@ To turn it off, use any one of:
 
 ## Mobile app
 
-The DeepSeekBot app for iPhone and Android is a remote for **your own computer**. It has no DeepSeekBot account and no DeepSeekBot server in between: it talks only to the computer you pair it with, over your [Tailscale](https://tailscale.com) network (`*.ts.net` or `100.x` addresses, always HTTPS). Your Bots, Memory and conversations stay on that computer.
+The DeepSeekBot app for iPhone and Android is a remote for **your own computer**. It talks only to the computer you pair it with: over your [Tailscale](https://tailscale.com) network (`*.ts.net` or `100.x` addresses, always HTTPS), or, if you choose, through DeepSeekBot Connect (below). Your Bots, Memory and conversations stay on that computer.
 
 **Stored on the phone**
 
@@ -41,6 +41,16 @@ The DeepSeekBot app for iPhone and Android is a remote for **your own computer**
 - A cache of recent conversations and unsent drafts, so the app opens quickly. It lives in the app's own storage.
 
 To remove a computer and its credential, open it in the app and choose **Unpair**. You can also revoke the phone from the computer's settings.
+
+**DeepSeekBot account and DeepSeekBot Connect (optional)**
+
+You can pair without an account. DeepSeekBot Connect lets the phone reach your computer without Tailscale; to use it, you sign in to a DeepSeekBot account on the computer and on the phone, with Google, Apple or a code sent to your email.
+
+- Our sign-in provider, [WorkOS](https://workos.com/legal/privacy), keeps the account: your email address, the name your Google or Apple account shares, and a user ID.
+- Our relay, `connect.botharness.ai`, keeps your user ID with the names of the computers you link (at most five) and their DeepSeekBot Connect addresses (`<id>.deepseekbot.dev`).
+- Traffic between the phone and your computer goes over HTTPS through a [Cloudflare Tunnel](https://www.cloudflare.com/privacypolicy/) that only exposes the phone interface. Our relay never receives your messages, photos or files.
+
+To delete the account, open **Pair a computer** in the app, sign in, and choose **Delete account**. This deletes the account at WorkOS, unlinks every computer and deletes their tunnels and addresses. Signing out on a computer unlinks only that computer.
 
 **Sent only to your computer**
 
