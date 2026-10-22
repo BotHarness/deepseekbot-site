@@ -25,7 +25,7 @@ It sends: plugin and DSH version, operating system and architecture; events such
 
 Every event includes the plugin and DSH versions, operating system and architecture, Node.js major version, operating-system kernel release major version, logical CPU count band (`1–2`, `3–4`, `5–8`, `9–16`, or `17+`), and total RAM band. RAM uses upper bounds of 4, 8, 16 and 32 GiB, plus an open-ended band above 32 GiB (labelled `64plus`). Unavailable information is marked `unknown`. These fields help compare releases and device classes; exact RAM bytes, hostnames, usernames and hardware serial numbers are never sent.
 
-**Never sent**: Bot names, Persona or Memory content, conversation text, repository URLs, connector credentials, file paths, IP addresses.
+**Excluded from event payloads**: Bot names, Persona or Memory content, conversation text, repository URLs, connector credentials, file paths, IP addresses. Network connections still expose the source IP to the receiving infrastructure; disabling location enrichment does not remove that transport information.
 
 To turn it off, use any one of:
 
