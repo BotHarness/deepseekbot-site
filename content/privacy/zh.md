@@ -4,7 +4,7 @@
 
 我们收集匿名统计只有一个目的：**改善 DeepSeekBot，了解它被怎样使用、官网从哪里被访问**。我们不收集能识别你本人的信息，也不收集你的对话或 Memory 内容。做这件事的代码全部开源：[官网](https://github.com/BotHarness/deepseekbot-site)、[插件](https://github.com/BotHarness/BotHarness)，插件的设计记录在 [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md)。
 
-官网和插件的统计数据存放在 [PostHog](https://posthog.com) 的美国区域，经由我们自己的域名 `t.botharness.ai` 转发。PostHog 只用 IP 地址推断国家或地区，然后丢弃，不会存储。
+统计数据存放在 [PostHog](https://posthog.com) 的美国区域，经由我们自己的域名 `t.botharness.ai` 转发。官网统计只用 IP 地址推断国家或地区，然后丢弃。插件和手机端事件禁用这类位置推断，不建立用户画像。
 
 ## 官网
 
@@ -23,10 +23,13 @@
 
 会发送：插件和 DSH 版本、操作系统和架构；创建、归档、删除 Bot，从市场安装 Bot，启用连接器（只记类型，例如「飞书」），编辑头像这类事件；每天一次的汇总数量（Bot 数、会话数、消息数）；以及插件错误的类型和去掉了个人路径的堆栈。
 
+每条事件都带有插件和 DSH 版本、操作系统和架构、Node.js 主版本、操作系统内核发行主版本、逻辑 CPU 数量区间（`1–2`、`3–4`、`5–8`、`9–16` 或 `17+`），以及总内存区间。内存区间依次以 4、8、16、32 GiB 为上限，超过 32 GiB 的设备统一归入 `64plus`。无法获取的信息记为 `unknown`。这些字段用于比较不同版本和设备类别；不会发送精确内存字节数、主机名、用户名或硬件序列号。
+
 **从不发送**：Bot 名称、人格或 Memory 内容、对话文字、仓库地址、连接器凭据、文件路径、IP 地址。
 
 关闭方法，任选其一：
 
+- 在 DeepSeekBot 设置中关闭使用统计
 - 在插件配置里设置 `telemetry: false`
 - 设置环境变量 `DO_NOT_TRACK=1`
 - 设置环境变量 `BOTHARNESS_TELEMETRY=0`
@@ -55,7 +58,13 @@ iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器�
 
 **统计**
 
-目前 App Store 和 Google Play 上的版本**不发送**任何统计。如果以后的版本开启手机统计，新安装会默认开启。首次启动会显示一条说明，这条说明只是告知，统计不会等你关闭说明才开始。你随时可以用设置页最底部的开关关闭统计。开启后，手机向 PostHog 发送随机手机统计标识、应用版本和构建号、iOS 或 Android、应用语言，以及打开应用、配对、连接和首次聊天的粗略结果。从不发送名称、聊天、Memory、文件、配对链接、凭证、推送令牌或任何能识别你电脑的信息。这个标识不与官网访问或电脑关联，也不建立个人档案。事件经 `t.botharness.ai` 发往 PostHog 美国区域，关闭 GeoIP，丢弃 IP 地址。关闭统计会删除标识和未发送事件；再次开启会生成新标识。手机统计独立于电脑上插件的遥测。详见[手机统计说明](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/mobile-statistics.md)。
+在启用了统计功能的构建中，手机应用会记录打开应用、配对尝试及结果、连接结果与粗粒度耗时区间，以及首次消息被接受等启用进度。此类构建默认开启统计，并提供提示和设置开关。在手机应用设置中关闭「使用统计」，即可停止收集并删除待发送事件和随机安装 ID。手机端设置与 Host 设置相互独立。
+
+每条事件带有随机安装 ID、前台会话 UUID、应用版本和构建号、iOS 或 Android 平台、应用语言和构建环境、系统主次版本、手机或平板类别、总内存区间（与插件相同），以及用于估计硬件能力的设备年份等级。iOS 能获取时，还会包含 `iPhone11,6` 这样的公开机型标识，同一机型共用该标识；Android 的此字段记为 `unknown`。无法获取的设备信息也记为 `unknown`。
+
+只发送白名单明确允许的字段。不会发送设备名称、广告 ID、Android ID、序列号、精确内存字节数、配对链接、凭据、Host 地址、对话文字或 Memory。应用不录制会话，不自动采集崩溃。此次统计不包含定期 CPU 或内存占用采样、帧率测量或启动耗时。
+
+再次开启统计会生成新的随机 ID。详见[手机统计说明](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/mobile-statistics.md)。
 
 我们不出售数据，不使用广告标识，也不跨应用或网站追踪你。
 
