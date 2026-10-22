@@ -58,11 +58,11 @@ Messages you type, photos and files you attach, and text from voice dictation go
 
 **Statistics**
 
-In builds with statistics enabled, the mobile app records opens, pairing attempts and outcomes, connection outcomes with coarse duration bands, and activation milestones such as the first accepted message. Statistics are on by default in those builds, with a notice and a switch in app settings. Turn off **Usage statistics** in the mobile app to stop collection and delete its queued events and random installation ID. This preference is separate from the Host setting.
+In builds with statistics enabled, the mobile app records opens, pairing attempts and outcomes, connection outcomes with coarse duration bands, and activation milestones such as the first accepted message. Statistics are on by default in those builds, with a notice and a switch in app settings; collection does not wait for you to dismiss the notice. Turn off **Usage statistics** in the mobile app to stop collection and delete its queued events and random installation ID. This preference is separate from the Host setting, and the ID is not linked to website visits or Host identities.
 
 Each event carries a random installation ID and a foreground-session UUID, app version and build, iOS or Android, app language and build environment, OS major.minor version, phone/tablet class, total RAM band (the same bands as the plugin), and device year class, an estimate of hardware capability. When available on iOS, it also includes a public model identifier such as `iPhone11,6`, shared by that hardware model; Android reports this field as `unknown`. Unavailable device information is marked `unknown`.
 
-Only explicitly allowed fields are sent. We do not send device names, advertising IDs, Android IDs, serial numbers, exact RAM bytes, pairing links, credentials, Host addresses, conversation text or Memory. The app does not record sessions or automatically capture crashes. This collection does not include periodic CPU or memory-use samples, frame-rate measurements or startup timings.
+Only explicitly allowed fields are sent. We do not send device names, advertising IDs, Android IDs, serial numbers, exact RAM bytes, pairing links, credentials, push tokens, Host addresses, conversation text or Memory. The app does not record sessions or automatically capture crashes. This collection does not include periodic CPU or memory-use samples, frame-rate measurements or startup timings.
 
 Turning statistics on again creates a new random ID. Details: [mobile statistics](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/mobile-statistics.md).
 
