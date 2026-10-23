@@ -37,7 +37,7 @@ test('VRM Companion is listed in both languages with its install command, requir
     assert.ok(plugin);
     assert.equal(
       installCommand(plugin),
-      'dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.1.0',
+      'dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.2.0',
     );
     renderPlugins();
     for (const lang of ['zh', 'en']) {
@@ -49,7 +49,7 @@ test('VRM Companion is listed in both languages with its install command, requir
         assert.ok(html.includes(`hreflang="en" href="${SITE}/en${self}"`), path);
         assert.ok(
           html.includes(
-            'dsh plugin --profile &lt;your-profile&gt; add @botharness/vrm-companion@0.1.0',
+            'dsh plugin --profile &lt;your-profile&gt; add @botharness/vrm-companion@0.2.0',
           ),
           path,
         );
@@ -74,7 +74,7 @@ test('VRM Companion is listed in both languages with its install command, requir
       assert.ok(
         detail.includes('https://github.com/BotHarness/DeepSeekBot/blob/main/docs/panel-plugin.md'),
       );
-      assert.ok(detail.includes('https://www.npmjs.com/package/@botharness/vrm-companion/v/0.1.0'));
+      assert.ok(detail.includes('https://www.npmjs.com/package/@botharness/vrm-companion/v/0.2.0'));
       assert.match(detail, /VRM Companion/);
     }
   });
@@ -117,7 +117,7 @@ test('sitemap and llms.txt list the plugin pages in both languages', () => {
       assert.ok(sitemap.includes(`<loc>${SITE}${path}</loc>`), path);
       assert.ok(llms.includes(`${SITE}${path}`), path);
     }
-    assert.ok(llms.includes('@botharness/vrm-companion@0.1.0'));
+    assert.ok(llms.includes('@botharness/vrm-companion@0.2.0'));
   });
 });
 

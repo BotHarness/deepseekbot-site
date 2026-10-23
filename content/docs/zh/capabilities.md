@@ -56,7 +56,7 @@
 
 ## 安装可选组件
 
-npm `deepseekbot@1.4.1` **已包含** `@botharness/browser` 和 `@botharness/computer`（早期 `deepseekbot@1.2.1` 等版本未随包内置）。安装 `deepseekbot@1.4.1` 后，在对应 Bot 设置中开启 Browser Access 或 Computer Access 并选择目标即可。容器目标仍需要安装 Docker；日常浏览器模式仍需从仓库源码加载未打包浏览器扩展（见[日常浏览器教程](/docs/daily-browser)）。独立可选插件（如 [VRM 伴侣 `@botharness/vrm-companion@0.1.0`](/plugins/vrm-companion/)）通过 `dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.1.0` 单独安装。
+npm `deepseekbot@1.4.1` **已包含** `@botharness/browser` 和 `@botharness/computer`（早期 `deepseekbot@1.2.1` 等版本未随包内置）。安装 `deepseekbot@1.4.1` 后，在对应 Bot 设置中开启 Browser Access 或 Computer Access 并选择目标即可。容器目标仍需要安装 Docker；日常浏览器模式仍需从仓库源码加载未打包浏览器扩展（见[日常浏览器教程](/docs/daily-browser)）。独立可选插件（如 [VRM 伴侣 `@botharness/vrm-companion@0.2.0`](/plugins/vrm-companion/)）通过 `dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.2.0` 单独安装。
 
 如需从源码运行或在隔离 Profile 中调试本地组件，可按[源码 README 的开发启动步骤](https://github.com/BotHarness/DeepSeekBot/blob/main/README.md#从源码开始使用)（历史快照：[`636a5a6c`](https://github.com/BotHarness/BotHarness/blob/636a5a6cf4a366bb0b29e6a59155d46fb3cc2192/README.md#从源码开始使用)）开始：安装 Node ≥22 和 pnpm 12.4.2，获取仓库，安装依赖并构建，用开发启动器启动全新的隔离 Profile；再按 Bot 开启对应 Access、选择目标并按教程连接扩展。配置可用模型后，批准一次受限测试操作。
 

@@ -1,0 +1,30 @@
+{
+  "viewport": "1440x1000",
+  "theme": "light",
+  "results": [
+    {
+      "lang": "zh",
+      "phase": "before",
+      "command": "$ dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.1.0",
+      "npm": "https://www.npmjs.com/package/@botharness/vrm-companion/v/0.1.0"
+    },
+    {
+      "lang": "zh",
+      "phase": "after",
+      "command": "$ dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.2.0",
+      "npm": "https://www.npmjs.com/package/@botharness/vrm-companion/v/0.2.0"
+    },
+    {
+      "lang": "en",
+      "phase": "before",
+      "command": "$ dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.1.0",
+      "npm": "https://www.npmjs.com/package/@botharness/vrm-companion/v/0.1.0"
+    },
+    {
+      "lang": "en",
+      "phase": "after",
+      "command": "$ dsh plugin --profile <your-profile> add @botharness/vrm-companion@0.2.0",
+      "npm": "https://www.npmjs.com/package/@botharness/vrm-companion/v/0.2.0"
+    }
+  ]
+}

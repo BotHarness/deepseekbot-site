@@ -1,7 +1,7 @@
 {
   "order": 1,
   "package": "@botharness/vrm-companion",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "official": true,
   "platform": "desktop",
   "dsh": ">=0.2.0-rc.2 <0.3.0",
@@ -45,14 +45,14 @@
     }
   ],
   "zh": {
-    "title": "VRM 陪伴",
+    "title": "VRM 伴侣",
     "pitch": "让 Bot 的角色坐在 lo-fi 书房里陪你：工作时打字，思考时抬头，回复时转过来说话。",
-    "description": "VRM 陪伴是 DeepSeekBot 的面板插件。Bot 的角色坐在一间 lo-fi 风格的书房里：Bot 工作时打字，思考时抬头，把已发出的回复显示在对话气泡里；空闲时会喝咖啡、托腮或看手机。昼夜和天气跟着你的本地时间变化，也可以换成你自己的 .vrm 角色，文件不会上传。",
+    "description": "VRM 伴侣是 DeepSeekBot 的面板插件。Bot 的角色坐在一间 lo-fi 风格的书房里：Bot 工作时打字，思考时抬头，把已发出的回复显示在对话气泡里；空闲时会喝咖啡、托腮或看手机。昼夜和天气跟着你的本地时间变化，也可以换成你自己的 .vrm 角色，文件不会上传。面板文字随应用语言切换为中文或英文。",
     "tags": ["官方", "桌面端"],
     "usage": [
       "在 Bot 模式下选择一个 Bot 私聊。",
       "如果消息栏是收起的，先打开 **Messages**。",
-      "在 Messages 顶栏选择 **VRM Companion**，面板会出现在聊天旁边。拖动聊天和面板之间的分隔条可以调整宽度。",
+      "在 Messages 顶栏选择 **VRM 伴侣**（英文界面为 **VRM Companion**），面板会出现在聊天旁边。拖动聊天和面板之间的分隔条可以调整宽度。",
       "想固定某个 Bot，点面板顶栏的图钉（**Pin character globally**），会生成一个只属于这个 Bot 的面板。"
     ],
     "controls": [
@@ -75,7 +75,9 @@
     ],
     "customCharacter": "自己的角色只保存在这个浏览器的 IndexedDB 里，刷新后还在，不会上传。浏览器不允许保存时只在本次会话有效，面板会提示。",
     "performance": [
-      "目标 60 帧；负载高时降到 30 帧，再逐步降低分辨率，负载降下来后恢复。",
+      "活动时目标 60 帧，角色休息时降到 30 帧；负载高时逐步降低分辨率，负载降下来后恢复。",
+      "首次打开时并行编译着色器，减少加载时的卡顿。",
+      "检测到软件渲染时先显示静态画面，避免电脑持续高负载；可点 **仍然开启 3D** 手动开启。",
       "默认角色模型只在第一次打开面板时下载，装了插件不会让每个页面都变重。",
       "面板隐藏时停止绘制。"
     ],
@@ -89,7 +91,7 @@
   "en": {
     "title": "VRM Companion",
     "pitch": "Your Bot's character at a desk in a lo-fi study: it types while the Bot works, looks up while it thinks and turns to you to speak its replies.",
-    "description": "VRM Companion is a Panel plugin for DeepSeekBot. The Bot's character sits at a desk in a lo-fi study room: it types while the Bot works, looks up while it thinks and speaks the Bot's sent replies in a speech bubble. Between tasks it sips coffee, rests its chin or checks its phone. Day, night and weather follow your local clock, and you can load your own .vrm character without uploading it.",
+    "description": "VRM Companion is a Panel plugin for DeepSeekBot. The Bot's character sits at a desk in a lo-fi study room: it types while the Bot works, looks up while it thinks and speaks the Bot's sent replies in a speech bubble. Between tasks it sips coffee, rests its chin or checks its phone. Day, night and weather follow your local clock, and you can load your own .vrm character without uploading it. Panel text follows the app language in Chinese or English.",
     "tags": ["Official", "Desktop"],
     "usage": [
       "In Bot mode, select a Bot DM.",
@@ -117,7 +119,9 @@
     ],
     "customCharacter": "Your own character is kept in this browser's IndexedDB, survives reloads and is never uploaded. If the browser refuses to store it, it stays for the session and the Panel says so.",
     "performance": [
-      "Targets 60 fps; under load it drops to 30 fps, then lowers the resolution step by step, and recovers when the load eases.",
+      "Targets 60 fps during activity and drops to 30 fps while the character rests; under load it lowers the resolution step by step and recovers when the load eases.",
+      "Shaders compile in parallel on first open to reduce loading stalls.",
+      "When software rendering is detected, a still image keeps the computer from staying under heavy load; choose **Show 3D anyway** to enable 3D manually.",
       "The default character downloads only when a Panel first opens, so installing the plugin does not slow every page.",
       "Hidden Panels stop drawing."
     ],
