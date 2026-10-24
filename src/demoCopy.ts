@@ -225,8 +225,8 @@ export interface FeatureDemoCopy {
 const zhDemo: DemoCopy = {
   kicker: '实时演示',
   title: '看一组 Bot 怎么一起做事',
-  lead: '这是 DeepSeekBot 的 Bot 模式。点左侧切换对话，替 Bot 做决定，或者直接发一句话试试。',
-  windowLabel: 'DeepSeekBot Bot 模式的仿真界面',
+  lead: '这是 Tobs 的 Bot 模式。点左侧切换对话，替 Bot 做决定，或者直接发一句话试试。',
+  windowLabel: 'Tobs Bot 模式的仿真界面',
   app: 'DeepSeek Harness',
   botMode: 'Bot 模式',
   messages: '消息',
@@ -273,7 +273,7 @@ const zhDemo: DemoCopy = {
   hideSidebar: '收起频道子面板',
   showSidebar: '展开频道子面板',
   fallback:
-    '这里是预设脚本的演示，我还不能真的回答你。把 DeepSeekBot 装进 DeepSeek Harness，就能和真正的我聊了。',
+    '这里是预设脚本的演示，我还不能真的回答你。把 Tobs 装进 DeepSeek Harness，就能和真正的我聊了。',
   fallbackCta: '开始安装 →',
   note: '仿真演示：界面与对话是预设脚本，不连接模型，也不会发送你输入的内容。',
   channels: [
@@ -593,8 +593,8 @@ const zhDemo: DemoCopy = {
 const enDemo: DemoCopy = {
   kicker: 'Live demo',
   title: 'Watch a crew of Bots get work done',
-  lead: 'This is DeepSeekBot’s Bot mode. Switch chats on the left, make the call when a Bot asks, or type a message yourself.',
-  windowLabel: 'A simulation of DeepSeekBot’s Bot mode',
+  lead: 'This is Tobs’ Bot mode. Switch chats on the left, make the call when a Bot asks, or type a message yourself.',
+  windowLabel: 'A simulation of Tobs’ Bot mode',
   app: 'DeepSeek Harness',
   botMode: 'Bot mode',
   messages: 'Messages',
@@ -641,7 +641,7 @@ const enDemo: DemoCopy = {
   hideSidebar: 'Hide Channel subpanels',
   showSidebar: 'Show Channel subpanels',
   fallback:
-    'This demo plays a script, so I can’t really answer you yet. Add DeepSeekBot to DeepSeek Harness and you can talk to the real me.',
+    'This demo plays a script, so I can’t really answer you yet. Add Tobs to DeepSeek Harness and you can talk to the real me.',
   fallbackCta: 'Install →',
   note: 'Simulated demo: the interface and chats are a script. Nothing talks to a model, and nothing you type is sent.',
   channels: [
