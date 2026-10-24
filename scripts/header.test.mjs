@@ -11,6 +11,21 @@ import { COMMUNITY_LINKS, QQ_GROUP } from '../src/communityLinks.ts';
 import { HEADER_COMMUNITY_COPY, headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { DESKTOP_PACKAGE } from '../src/installRelease.ts';
 
+test('homepages identify Tobs as the new brand while keeping the published install package', () => {
+  for (const path of ['index.html', 'en/index.html']) {
+    const html = readFileSync(path, 'utf8');
+    const documents = [
+      ...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g),
+    ].map((match) => JSON.parse(match[1]));
+    const app = documents.find((document) => document['@type'] === 'SoftwareApplication');
+    assert.equal(app.name, 'Tobs');
+    assert.ok(app.alternateName.includes('DeepSeekBot'));
+    assert.ok(app.alternateName.includes('托布'));
+    assert.doesNotMatch(html, /Tobs\s*[(（](?:简称 |DSB for short|DSB[;；])/);
+    assert.match(html, /https:\/\/www\.npmjs\.com\/package\/deepseekbot/);
+  }
+});
+
 test('rendered changelogs preserve every release-summary paragraph in both languages', () => {
   const cwd = process.cwd();
   const fixture = mkdtempSync(join(tmpdir(), 'site-release-summary-'));
@@ -67,18 +82,9 @@ test('bilingual blog pages keep self-canonicals and reciprocal locale alternates
       const html = readFileSync(path, 'utf8');
       const pathname = `/${path.replace(/index\.html$/, '')}`;
       const chinesePath = pathname.replace(/^\/en\//, '/');
-      assert.ok(
-        html.includes(`<link rel="canonical" href="https://deepseekbot.app${pathname}"`),
-        path,
-      );
-      assert.ok(
-        html.includes(`hreflang="zh-Hans" href="https://deepseekbot.app${chinesePath}"`),
-        path,
-      );
-      assert.ok(
-        html.includes(`hreflang="en" href="https://deepseekbot.app/en${chinesePath}"`),
-        path,
-      );
+      assert.ok(html.includes(`<link rel="canonical" href="https://tobs.app${pathname}"`), path);
+      assert.ok(html.includes(`hreflang="zh-Hans" href="https://tobs.app${chinesePath}"`), path);
+      assert.ok(html.includes(`hreflang="en" href="https://tobs.app/en${chinesePath}"`), path);
       assert.doesNotMatch(html, /\/en\/en\//, path);
     }
     for (const prefix of ['', 'en/']) {
@@ -87,9 +93,7 @@ test('bilingual blog pages keep self-canonicals and reciprocal locale alternates
       assert.equal([...html.matchAll(/<h1[ >]/g)].length, 1);
       assert.match(html, /<meta name="description" content="[^"]+"/);
       assert.ok(
-        html.includes(
-          `https://deepseekbot.app/blog-covers/tailscale-remote-ai-workspace-${lang}.png`,
-        ),
+        html.includes(`https://tobs.app/blog-covers/tailscale-remote-ai-workspace-${lang}.png`),
       );
       assert.ok(
         readFileSync(`${prefix}blog/index.html`, 'utf8').includes('tailscale-remote-ai-workspace'),
@@ -123,7 +127,7 @@ test('personal memory article keeps paired metadata, covers and existing guide d
       const metadata = JSON.parse(source.match(/^---\n(\{[\s\S]*?\})\n---/)[1]);
       assert.equal([...html.matchAll(/<h1[ >]/g)].length, 1);
       for (const attribute of ['property="og:title"', 'name="twitter:title"']) {
-        assert.ok(html.includes(`<meta ${attribute} content="${metadata.title} · DeepSeekBot"`));
+        assert.ok(html.includes(`<meta ${attribute} content="${metadata.title} · Tobs"`));
       }
       for (const attribute of [
         'name="description"',
@@ -133,7 +137,7 @@ test('personal memory article keeps paired metadata, covers and existing guide d
         assert.ok(html.includes(`<meta ${attribute} content="${metadata.description}"`));
       }
       const cover = `/blog-covers/personal-ai-agent-memory-${lang}.png`;
-      assert.ok(html.includes(`content="https://deepseekbot.app${cover}"`));
+      assert.ok(html.includes(`content="https://tobs.app${cover}"`));
       assert.ok(readFileSync(`public${cover}`).length > 0);
       assert.ok(readFileSync(`.${prefix}/blog/index.html`, 'utf8').includes(articlePath));
       for (const destination of [

@@ -54,7 +54,7 @@ function Member({ name, symbols }: { name: string; symbols: Copy['symbols'] }) {
         {tool ? symbols[tool] : ' '}
       </span>
       <PixelAvatar ref={avatar} recipe={recipe} size={hero ? 128 : 88} />
-      <span className="crew-name">{name}</span>
+      <span className="crew-name">{hero ? 'Tob' : name}</span>
     </li>
   );
 }

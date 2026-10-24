@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://deepseekbot.app/sitemap.xml
+Sitemap: https://tobs.app/sitemap.xml

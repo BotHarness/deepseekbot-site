@@ -1,7 +1,7 @@
-# deepseekbot.app
+# tobs.app
 
-The bilingual product website for [DeepSeekBot](https://www.npmjs.com/package/deepseekbot),
-maintained by [BotHarness](https://github.com/BotHarness/DeepSeekBot) at [deepseekbot.app](https://deepseekbot.app).
+The bilingual product website for [Tobs](https://www.npmjs.com/package/deepseekbot),
+maintained by [BotHarness](https://github.com/BotHarness/DeepSeekBot) at [tobs.app](https://tobs.app).
 It includes the homepage, guides, changelog, blog, marketplace and avatar studio in Chinese
 and English, with day and night palettes. Every face on it is a
 [BotPixel](https://github.com/BotHarness/BotPixel) avatar seeded from a Bot's name, morphing into
@@ -111,11 +111,11 @@ Do not use development versions, bare names or `@latest` as the install identity
 supply-chain protection globally to avoid a new-release age-policy refusal.
 
 `wrangler.jsonc` deploys `dist/` as static assets on the Worker `deepseekbot-site`, in the account
-that holds the `deepseekbot.app`, `deepseekbot.dev` and `botharness.ai` zones. **deepseekbot.app** is
+that holds the `tobs.app`, `deepseekbot.app`, `deepseekbot.dev` and `botharness.ai` zones. **tobs.app** is
 the canonical domain: canonical links, share cards, the sitemap and `SITE` in `vite.config.ts`,
-`scripts/docs.ts` and `scripts/changelog.ts` use it. `www.deepseekbot.app`, `deepseekbot.dev`,
+`scripts/docs.ts` and `scripts/changelog.ts` use it. `www.tobs.app`, `deepseekbot.app`, `www.deepseekbot.app`, `deepseekbot.dev`,
 `www.deepseekbot.dev` and the original `deepseekbot.botharness.ai` stay bound as custom domains and
-301 to the same path on deepseekbot.app through the small Worker in `worker/index.ts` (it runs before
+301 to the same path on tobs.app through the small Worker in `worker/index.ts` (it runs before
 the assets; preview URLs are served directly). The Marketplace API and the analytics ingest proxy
 (BotHarness `packages/market`, `packages/ingest`) must allow the site's origin for CORS.
 
@@ -140,3 +140,7 @@ repository) with build command `pnpm build` and deploy command `npx wrangler dep
 
 Manual: `pnpm deploy` (production) or `pnpm deploy:preview` (preview URL only), after
 `npx wrangler login`.
+
+## Tobs brand migration
+
+Tobs (托布) means **Team of bots**, with the ambition of **Thousands of Bots**. The site uses `tobs.app`; previous product hostnames redirect to the same path and query. Device subdomains under `deepseekbot.dev` are outside this Worker’s redirect allowlist. Existing npm install instructions, release campaign identifiers, local browser storage and historical articles retain their compatible identities. The Worker stays named `deepseekbot-site`.

@@ -251,7 +251,7 @@ export interface Copy {
 
 const zh: Copy = {
   htmlLang: 'zh-Hans',
-  pageTitle: 'DeepSeekBot（DSB）：开源的 GrokBot 平替，基于 DeepSeek Harness',
+  pageTitle: 'Tobs（托布）：开源的 GrokBot 平替，基于 DeepSeek Harness',
   nav: {
     features: '能力',
     avatar: '头像工坊',
@@ -269,9 +269,9 @@ const zh: Copy = {
   modeDark: '夜晚',
   hero: {
     badge: `v${VERSION} 正式版`,
-    title: 'DeepSeekBot',
+    title: 'Tobs',
     tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
-    lead: 'DeepSeekBot 是 BotHarness 开发的个人 AI 智能体协作工具，作为 deepseekbot 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
+    lead: 'Tobs（托布）意为 Team of bots，也寓意 Thousands of Bots，是 BotHarness 开发的个人 AI 智能体协作工具，作为 deepseekbot 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
     crewLabel: '一组正在工作的 PersonaBots，头像会变成它们正在使用的工具',
@@ -401,26 +401,26 @@ const zh: Copy = {
     items: [
       {
         id: 'affiliation',
-        question: 'DeepSeekBot 和 DeepSeek 有什么关系？',
+        question: 'Tobs 和 DeepSeek 有什么关系？',
         answer:
-          'DeepSeekBot 是独立的开源项目，与 DeepSeek 公司没有隶属关系，也不是其官方产品。它基于 DeepSeek Harness（DSH），以插件形式提供 Bot 的身份、人格、记忆与协作能力。',
+          'Tobs 是独立的开源项目，与 DeepSeek 公司没有隶属关系，也不是其官方产品。它基于 DeepSeek Harness（DSH），以插件形式提供 Bot 的身份、人格、记忆与协作能力。',
       },
       {
         id: 'project-identity',
         question: '这是哪个 DeepSeek Bot？和 DS Bot 是同一个项目吗？',
         answer:
-          '这里是 BotHarness 的 DeepSeekBot，简称 DSB，安装包为 deepseekbot，官网为 deepseekbot.app，MIT 开源。DS Bot 使用 ds-bot 安装，Apache-2.0，由 Fei2411/DeepSeek-Bot 维护，是另一个独立项目。两者都基于 DeepSeek Harness，都不是 DeepSeek 官方产品。',
-        links: [{ label: 'DeepSeekBot 与 DS Bot 怎么选', href: '/blog/deepseekbot-vs-ds-bot/' }],
+          '这里是 BotHarness 的 Tobs（托布，原名 DeepSeekBot），安装包为 deepseekbot，官网为 tobs.app，MIT 开源。DS Bot 使用 ds-bot 安装，Apache-2.0，由 Fei2411/DeepSeek-Bot 维护，是另一个独立项目。两者都基于 DeepSeek Harness，都不是 DeepSeek 官方产品。',
+        links: [{ label: 'Tobs 与 DS Bot 怎么选', href: '/blog/deepseekbot-vs-ds-bot/' }],
       },
       {
         id: 'project-focus',
-        question: 'DeepSeekBot（DSB）和 DS Bot 的重心有什么不同？',
+        question: 'Tobs（托布）和 DS Bot 的重心有什么不同？',
         answer:
-          'DeepSeekBot 让每个 Bot 成为能走出 DSH 窗口的长期同事：可审阅的 Git 记忆、Bot 自己的飞书 / Slack / Discord / 微信身份、定时任务、任务委派和 Bot 市场。DS Bot 把 DSH 本身变成 Bot 聊天应用：主 Bot Chief 带你建团队，群管理员默认统筹回复，并提供按 Bot 和模型的用量统计。',
+          'Tobs 让每个 Bot 成为能走出 DSH 窗口的长期同事：可审阅的 Git 记忆、Bot 自己的飞书 / Slack / Discord / 微信身份、定时任务、任务委派和 Bot 市场。DS Bot 把 DSH 本身变成 Bot 聊天应用：主 Bot Chief 带你建团队，群管理员默认统筹回复，并提供按 Bot 和模型的用量统计。',
       },
       {
         id: 'capabilities',
-        question: 'DeepSeekBot 能帮我做什么？',
+        question: 'Tobs 能帮我做什么？',
         answer:
           '你可以创建负责研究、设计或实现的 Bot，分别私聊，或让它们在 Group 中协作。每个 Bot 保留自己的身份和记忆，可以在授权的文件夹中开展工作，也能设置定时任务。定时任务需要应用保持运行。',
       },
@@ -434,14 +434,14 @@ const zh: Copy = {
         id: 'models',
         question: '只能使用 DeepSeek 模型吗？',
         answer:
-          '不限于 DeepSeek。DeepSeekBot 使用你在 DSH 中配置的模型提供商，也支持通过 DSH 配置兼容 API 或自部署服务。能否使用某个模型取决于接口支持、凭据和模型配置。',
+          '不限于 DeepSeek。Tobs 使用你在 DSH 中配置的模型提供商，也支持通过 DSH 配置兼容 API 或自部署服务。能否使用某个模型取决于接口支持、凭据和模型配置。',
         links: [{ label: '模型配置', href: '/docs/model-setup/' }],
       },
       {
         id: 'cost',
-        question: '使用 DeepSeekBot 需要付费吗？',
+        question: '使用 Tobs 需要付费吗？',
         answer:
-          'DeepSeekBot 采用 MIT 许可开源，可免费使用。模型服务需要自行配置凭据，调用可能产生服务商费用；开源软件不等于免费的模型额度。',
+          'Tobs 采用 MIT 许可开源，可免费使用。模型服务需要自行配置凭据，调用可能产生服务商费用；开源软件不等于免费的模型额度。',
       },
       {
         id: 'data-and-access',
@@ -464,24 +464,24 @@ const zh: Copy = {
   },
   video: {
     kicker: '宣传片',
-    title: '三分钟看懂 DeepSeekBot',
+    title: '三分钟看懂 Tobs',
     lead: '一座像素小镇里，一群有名字、有记忆的 Bot 各忙各的，也会一起做事。',
     src: `${MEDIA_BASE}/pv/botharness-town-v19-1080p-lite-zh.mp4`,
     poster: '/pv-poster-zh-v1.png',
-    label: 'DeepSeekBot 宣传片（中文）',
+    label: 'Tobs 宣传片（中文）',
     play: '播放宣传片',
   },
   studio: {
-    pageTitle: '头像工坊 · DeepSeekBot',
+    pageTitle: '头像工坊 · Tobs',
     kicker: 'BotPixel',
     title: '头像工坊',
     lead: '换物种、发型、五官和颜色，或者自己画头饰、头发和其他部件，画好直接下载。设计保存在这个浏览器里，首页的小伙伴也会换上它。',
   },
   market: {
-    pageTitle: '市场 · DeepSeekBot',
+    pageTitle: '市场 · Tobs',
     kicker: '市场',
     title: '找一个现成的 Bot',
-    lead: '这里收录了大家放在公开 GitHub 仓库里的 Bot。在 DeepSeekBot 里安装后，它会成为一个新的 PersonaBot，带着作者写好的 Memory。',
+    lead: '这里收录了大家放在公开 GitHub 仓库里的 Bot。在 Tobs 里安装后，它会成为一个新的 Bot，带着作者写好的 Memory。',
     shelvesLabel: '市场分类',
     shelfBots: 'Bot',
     shelfPlugins: '插件',
@@ -502,7 +502,7 @@ const zh: Copy = {
     emptySearch: '没有符合条件的 Bot。换个关键词或话题试试。',
     author: {
       title: '想让你的 Bot 出现在这里？',
-      body: '把 Bot 的 Memory 发布成公开 GitHub 仓库并加上 botharness-bot 话题，每天会自动收录；也可以在 DeepSeekBot 的「Bot 市场」里贴入仓库地址，立即收录。',
+      body: '把 Bot 的 Memory 发布成公开 GitHub 仓库并加上 botharness-bot 话题，每天会自动收录；也可以在 Tobs 的「Bot 市场」里贴入仓库地址，立即收录。',
       docs: '分享 Bot 教程：发布前检查、一键复制给 Bot 的提示词、名称和头像设置',
     },
     open: '查看 {name} 详情',
@@ -515,14 +515,14 @@ const zh: Copy = {
     readmeLoading: '正在加载 README…',
     noReadme: '这个仓库没有 README。',
     gitUrl: 'Git 仓库地址',
-    installTitle: '在 DeepSeekBot 里安装',
+    installTitle: '在 Tobs 里安装',
     installSteps: [
-      '打开 DeepSeekBot，点侧栏消息列表上方的「＋」，选「Bot 市场」，搜索这个 Bot，点「安装」。',
+      '打开 Tobs，点侧栏消息列表上方的「＋」，选「Bot 市场」，搜索这个 Bot，点「安装」。',
       '也可以在「＋」里选「创建 PersonaBot」，记忆来源选「从 Git 仓库导入」，粘贴上面的地址。',
     ],
     risk: '这是第三方仓库：它的文件会成为新 Bot 的 Memory，可能包含有害内容或会被 Bot 执行的指令。请只安装你信任的仓库。',
     commit: '最新提交 {sha} · {date}',
-    getApp: '还没装 DeepSeekBot？',
+    getApp: '还没装 Tobs？',
   },
   playground: {
     kicker: 'BotPixel',
@@ -576,7 +576,7 @@ const zh: Copy = {
       downloadUrl: 'https://www.deepseek.com/harness/',
     },
     lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；${VERSION} 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2 与 0.2.1-rc.2 验证。声明安装范围为 >=0.2.0-rc.2 <0.3.0-0，不代表所有后续版本均已验证。`,
-    steps: ['安装 DeepSeek Harness', '把 DeepSeekBot 装进 web Profile', '启动并打开 Bot mode'],
+    steps: ['安装 DeepSeek Harness', '把 Tobs 装进 web Profile', '启动并打开 Bot mode'],
     next: {
       title: '装好了？选择接入方式与可选能力',
       button: '查看接入与配置',
@@ -590,7 +590,7 @@ const zh: Copy = {
   },
   dsh: {
     title: '站在 DeepSeek Harness 上',
-    body: 'DeepSeekBot 直接用 DSH 自己的 Session 管理和 Harness：你在 DSH 里接入的任何 LLM 模型 provider，Bot 都能用；也可以和其他 DSH 插件装在一起。个别插件可能还不兼容，遇到了欢迎提 Issue 或 PR。',
+    body: 'Tobs 直接用 DSH 自己的 Session 管理和 Harness：你在 DSH 里接入的任何 LLM 模型 provider，Bot 都能用；也可以和其他 DSH 插件装在一起。个别插件可能还不兼容，遇到了欢迎提 Issue 或 PR。',
     issues: '去 GitHub 提 Issue',
   },
   community: {
@@ -599,12 +599,12 @@ const zh: Copy = {
     lead: '问题、想法，还有你做出来的 Bot，都欢迎带来。',
     discord: {
       title: 'Discord',
-      body: '加入 DeepSeekBot 的 Discord 服务器。',
+      body: '加入 Tobs 的 Discord 服务器。',
       cta: '加入 Discord',
     },
     github: {
       title: 'GitHub',
-      body: '查看源码，报告问题，或一起改进 DeepSeekBot。',
+      body: '查看源码，报告问题，或一起改进 Tobs。',
       cta: '在 GitHub 查看',
     },
     qq: {
@@ -624,7 +624,7 @@ const zh: Copy = {
 
 const en: Copy = {
   htmlLang: 'en',
-  pageTitle: 'DeepSeekBot (DSB): the open-source Grok Bot alternative for DeepSeek Harness',
+  pageTitle: 'Tobs: the open-source Grok Bot alternative for DeepSeek Harness',
   nav: {
     features: 'Features',
     avatar: 'Avatar Studio',
@@ -642,9 +642,9 @@ const en: Copy = {
   modeDark: 'Night',
   hero: {
     badge: `v${VERSION} is out`,
-    title: 'DeepSeekBot',
+    title: 'Tobs',
     tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
-    lead: 'DeepSeekBot is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the deepseekbot plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
+    lead: 'Tobs means Team of bots, with the ambition of Thousands of Bots. It is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the deepseekbot plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
     crewLabel: 'A crew of working PersonaBots whose avatars turn into the tool each one is using',
@@ -774,28 +774,26 @@ const en: Copy = {
     items: [
       {
         id: 'affiliation',
-        question: 'Is DeepSeekBot affiliated with DeepSeek?',
+        question: 'Is Tobs affiliated with DeepSeek?',
         answer:
-          'DeepSeekBot is an independent open-source project. It is not affiliated with DeepSeek and is not an official DeepSeek product. It runs as a plugin on DeepSeek Harness (DSH), giving Bots their own identity, persona, memory and collaboration tools.',
+          'Tobs is an independent open-source project. It is not affiliated with DeepSeek and is not an official DeepSeek product. It runs as a plugin on DeepSeek Harness (DSH), giving Bots their own identity, persona, memory and collaboration tools.',
       },
       {
         id: 'project-identity',
         question: 'Which DeepSeek Bot is this? Is it the same as DS Bot?',
         answer:
-          'This is DeepSeekBot by BotHarness, DSB for short: npm package deepseekbot, website deepseekbot.app, MIT licensed. DS Bot installs as ds-bot, is Apache-2.0 licensed and lives at Fei2411/DeepSeek-Bot; it is a separate project. Both run on DeepSeek Harness, and neither is an official DeepSeek product.',
-        links: [
-          { label: 'Compare DeepSeekBot and DS Bot', href: '/en/blog/deepseekbot-vs-ds-bot/' },
-        ],
+          'This is Tobs by BotHarness, formerly DeepSeekBot (DSB): npm package deepseekbot, website tobs.app, MIT licensed. DS Bot installs as ds-bot, is Apache-2.0 licensed and lives at Fei2411/DeepSeek-Bot; it is a separate project. Both run on DeepSeek Harness, and neither is an official DeepSeek product.',
+        links: [{ label: 'Compare Tobs and DS Bot', href: '/en/blog/deepseekbot-vs-ds-bot/' }],
       },
       {
         id: 'project-focus',
-        question: 'How do DeepSeekBot (DSB) and DS Bot differ in focus?',
+        question: 'How do Tobs and DS Bot differ in focus?',
         answer:
-          "DeepSeekBot makes each Bot a long-lived colleague that works beyond the DSH window: Git memory you can review, the Bot's own Lark / Slack / Discord / WeChat identity, schedules, delegated Assignments and a Bot Marketplace. DS Bot turns DSH itself into a bot chat app: a main Bot, Chief, builds your team, a group admin answers first, and a Usage page shows tokens by Bot and model.",
+          "Tobs makes each Bot a long-lived colleague that works beyond the DSH window: Git memory you can review, the Bot's own Lark / Slack / Discord / WeChat identity, schedules, delegated Assignments and a Bot Marketplace. DS Bot turns DSH itself into a bot chat app: a main Bot, Chief, builds your team, a group admin answers first, and a Usage page shows tokens by Bot and model.",
       },
       {
         id: 'capabilities',
-        question: 'What can DeepSeekBot help me do?',
+        question: 'What can Tobs help me do?',
         answer:
           'Create Bots for research, design or implementation, chat with them individually, or bring them together in a Group. Each Bot keeps its own identity and memory, can work in folders you authorize, and can run scheduled tasks. Scheduled tasks require the app to keep running.',
       },
@@ -809,14 +807,14 @@ const en: Copy = {
         id: 'models',
         question: 'Can I use models other than DeepSeek?',
         answer:
-          'Yes. DeepSeekBot uses the model providers you configure in DSH, including compatible APIs or self-hosted services configured through DSH. Whether a model works depends on interface support, credentials and model configuration.',
+          'Yes. Tobs uses the model providers you configure in DSH, including compatible APIs or self-hosted services configured through DSH. Whether a model works depends on interface support, credentials and model configuration.',
         links: [{ label: 'Model setup', href: '/en/docs/model-setup/' }],
       },
       {
         id: 'cost',
-        question: 'Does DeepSeekBot cost money to use?',
+        question: 'Does Tobs cost money to use?',
         answer:
-          'DeepSeekBot is open source under the MIT license and free to use. You supply your own model credentials, and model calls may incur charges from your provider. Open-source software does not include free model credits.',
+          'Tobs is open source under the MIT license and free to use. You supply your own model credentials, and model calls may incur charges from your provider. Open-source software does not include free model credits.',
       },
       {
         id: 'data-and-access',
@@ -839,24 +837,24 @@ const en: Copy = {
   },
   video: {
     kicker: 'Video',
-    title: 'DeepSeekBot in three minutes',
+    title: 'Tobs in three minutes',
     lead: 'A pixel town of Bots with names and memories, each busy with its own work, and working together.',
     src: `${MEDIA_BASE}/pv/botharness-town-v19-1080p-lite-en.mp4`,
     poster: '/pv-poster-en-v1.png',
-    label: 'DeepSeekBot promo video (English)',
+    label: 'Tobs promo video (English)',
     play: 'Play the video',
   },
   studio: {
-    pageTitle: 'Avatar Studio · DeepSeekBot',
+    pageTitle: 'Avatar Studio · Tobs',
     kicker: 'BotPixel',
     title: 'Avatar Studio',
     lead: 'Swap species, hair, features and colors, or draw your own headpiece, hair and other parts, then download it. Your design is saved in this browser, and the companion on the home page wears it too.',
   },
   market: {
-    pageTitle: 'Bot Marketplace · DeepSeekBot',
+    pageTitle: 'Bot Marketplace · Tobs',
     kicker: 'Marketplace',
     title: 'Find a ready-made Bot',
-    lead: 'Bots that people share as public GitHub repositories. Install one in DeepSeekBot and it becomes a new PersonaBot with the Memory its author wrote.',
+    lead: 'Bots that people share as public GitHub repositories. Install one in Tobs and it becomes a new Bot with the Memory its author wrote.',
     shelvesLabel: 'Marketplace shelves',
     shelfBots: 'Bots',
     shelfPlugins: 'Plugins',
@@ -877,7 +875,7 @@ const en: Copy = {
     emptySearch: 'No Bots match. Try another keyword or topic.',
     author: {
       title: 'Want your Bot listed here?',
-      body: 'Put its Memory in a public GitHub repository and add the botharness-bot topic: it is picked up daily. Or paste the repository URL into the Bot Marketplace inside DeepSeekBot to list it right away.',
+      body: 'Put its Memory in a public GitHub repository and add the botharness-bot topic: it is picked up daily. Or paste the repository URL into the Bot Marketplace inside Tobs to list it right away.',
       docs: 'Share a Bot: checks before publishing, a prompt to paste to your Bot, name and avatar',
     },
     open: 'Open {name}',
@@ -890,14 +888,14 @@ const en: Copy = {
     readmeLoading: 'Loading the README…',
     noReadme: 'This repository has no README.',
     gitUrl: 'Git repository URL',
-    installTitle: 'Install it in DeepSeekBot',
+    installTitle: 'Install it in Tobs',
     installSteps: [
-      'In DeepSeekBot, click + above the message list in the sidebar, choose Bot Marketplace, search for this Bot and click Install.',
+      'In Tobs, click + above the message list in the sidebar, choose Bot Marketplace, search for this Bot and click Install.',
       'Or choose + → Create PersonaBot, set Memory source to Import from a Git repository and paste the URL above.',
     ],
     risk: 'This is a third-party repository: its files become the new Bot’s Memory and may contain harmful content or instructions the Bot will follow. Install only repositories you trust.',
     commit: 'Latest commit {sha} · {date}',
-    getApp: 'Don’t have DeepSeekBot yet?',
+    getApp: 'Don’t have Tobs yet?',
   },
   playground: {
     kicker: 'BotPixel',
@@ -954,7 +952,7 @@ const en: Copy = {
     lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact ${VERSION} packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2 and 0.2.1-rc.2. Declared admission is >=0.2.0-rc.2 <0.3.0-0; later versions are not all runtime-qualified.`,
     steps: [
       'Install DeepSeek Harness',
-      'Add DeepSeekBot to the web Profile',
+      'Add Tobs to the web Profile',
       'Start it and open Bot mode',
     ],
     next: {
@@ -970,7 +968,7 @@ const en: Copy = {
   },
   dsh: {
     title: 'Built on DeepSeek Harness',
-    body: 'DeepSeekBot runs on DSH’s own session management and harness, so any LLM provider you connect in DSH works for your Bots, and it installs alongside other DSH plugins. Some plugins may not be compatible yet; if you hit one, please open an issue or a PR.',
+    body: 'Tobs runs on DSH’s own session management and harness, so any LLM provider you connect in DSH works for your Bots, and it installs alongside other DSH plugins. Some plugins may not be compatible yet; if you hit one, please open an issue or a PR.',
     issues: 'Open an issue on GitHub',
   },
   community: {
@@ -979,12 +977,12 @@ const en: Copy = {
     lead: 'Questions, ideas and the Bots you build are all welcome.',
     discord: {
       title: 'Discord',
-      body: 'Join the DeepSeekBot Discord server.',
+      body: 'Join the Tobs Discord server.',
       cta: 'Join Discord',
     },
     github: {
       title: 'GitHub',
-      body: 'Explore the source, report a problem, or help improve DeepSeekBot.',
+      body: 'Explore the source, report a problem, or help improve Tobs.',
       cta: 'View on GitHub',
     },
     qq: {

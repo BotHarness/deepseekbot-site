@@ -10,7 +10,7 @@ import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { privacyPath, searchButton } from './docs.ts';
 
 type Lang = 'zh' | 'en';
-const SITE = 'https://deepseekbot.app';
+const SITE = 'https://tobs.app';
 const CONTENT = 'content/plugins';
 export const PLUGINS_OUT = ['plugins', 'en/plugins'];
 
@@ -44,7 +44,7 @@ export interface Plugin {
   official: boolean;
   platform: string;
   dsh: string;
-  /** The last DeepSeekBot version that is too old; the plugin needs a newer one. */
+  /** The last Tobs version that is too old; the plugin needs a newer one. */
   deepseekbot: string;
   source: string;
   guide: string;
@@ -62,9 +62,9 @@ const UI = {
     htmlLang: 'zh-Hans',
     ogLocale: 'zh_CN',
     title: '插件',
-    suffix: 'DeepSeekBot',
-    description: 'DeepSeekBot 插件：截图、安装命令、版本要求、用法和素材许可。',
-    lead: '插件给 DeepSeekBot 加上新的面板和能力。每个插件单独发布在 npm 上，用一条命令装进你的 Profile。',
+    suffix: 'Tobs',
+    description: 'Tobs 插件：截图、安装命令、版本要求、用法和素材许可。',
+    lead: '插件给 Tobs 加上新的面板和能力。每个插件单独发布在 npm 上，用一条命令装进你的 Profile。',
     shelves: '市场分类',
     bots: 'Bot',
     plugins: '插件',
@@ -75,7 +75,7 @@ const UI = {
     profile: '<your-profile>',
     requires: '版本要求',
     dsh: 'DeepSeek Harness',
-    deepseekbot: 'DeepSeekBot',
+    deepseekbot: 'Tobs',
     newerThan: (v: string) => `高于 ${v}`,
     links: '链接',
     npm: 'npm',
@@ -113,10 +113,10 @@ const UI = {
     htmlLang: 'en',
     ogLocale: 'en_US',
     title: 'Plugins',
-    suffix: 'DeepSeekBot',
+    suffix: 'Tobs',
     description:
-      'DeepSeekBot plugins: screenshots, install commands, requirements, usage and asset licenses.',
-    lead: 'Plugins add new Panels and abilities to DeepSeekBot. Each one is published on npm on its own and installs into your Profile with one command.',
+      'Tobs plugins: screenshots, install commands, requirements, usage and asset licenses.',
+    lead: 'Plugins add new Panels and abilities to Tobs. Each one is published on npm on its own and installs into your Profile with one command.',
     shelves: 'Marketplace shelves',
     bots: 'Bots',
     plugins: 'Plugins',
@@ -127,7 +127,7 @@ const UI = {
     profile: '<your-profile>',
     requires: 'Requirements',
     dsh: 'DeepSeek Harness',
-    deepseekbot: 'DeepSeekBot',
+    deepseekbot: 'Tobs',
     newerThan: (v: string) => `newer than ${v}`,
     links: 'Links',
     npm: 'npm',
@@ -339,7 +339,7 @@ function page(
   const t = UI[lang];
   const url = `${SITE}${at(lang)}`;
   const fullTitle = `${title} · ${t.suffix}`;
-  const og = image ? `${SITE}${image}` : `${SITE}/og-${lang}-v2.png`;
+  const og = image ? `${SITE}${image}` : `${SITE}/og-${lang}-v5.png`;
   const icon = (name: NavIcon) => `<span class="nav-icon-wrap">${navIconSvg(name)}</span>`;
   return `<!doctype html>
 <html lang="${t.htmlLang}">
@@ -354,7 +354,7 @@ function page(
     <link rel="alternate" hreflang="x-default" href="${SITE}${at('zh')}" />
     <meta name="theme-color" content="#f6e7c1" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="DeepSeekBot" />
+    <meta property="og:site_name" content="Tobs" />
     <meta property="og:url" content="${url}" />
     <meta property="og:title" content="${escape(fullTitle)}" />
     <meta property="og:description" content="${escape(description)}" />
@@ -388,9 +388,9 @@ function page(
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
         <span class="brand-logo"><img src="/logo.png" width="32" height="32" alt="" /></span>
-        <span>DeepSeekBot</span>
+        <span>Tobs</span>
       </a>
-      <nav class="topnav" aria-label="DeepSeekBot">
+      <nav class="topnav" aria-label="Tobs">
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market" aria-current="page">${icon('market')}${t.nav.market}</a>
@@ -415,7 +415,7 @@ function page(
       </div>
     </header>
     ${main}
-    <footer class="footer"><p>DeepSeekBot · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
+    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
     <script type="module" src="/src/plugins.ts"></script>
   </body>
 </html>
@@ -505,10 +505,10 @@ export function pluginsLlms(): string {
   return [
     '## Plugins',
     '',
-    `- [Plugins](${SITE}${pluginsPath('en')}): DeepSeekBot plugins published on npm, with install commands and requirements ([中文](${SITE}${pluginsPath('zh')}))`,
+    `- [Plugins](${SITE}${pluginsPath('en')}): Tobs plugins published on npm, with install commands and requirements ([中文](${SITE}${pluginsPath('zh')}))`,
     ...plugins.map(
       (p) =>
-        `- [${p.en.title}](${SITE}${pluginPath('en', p.slug)}): ${p.en.pitch} Install: \`${installCommand(p)}\`. Requires DeepSeek Harness ${p.dsh} and DeepSeekBot newer than ${p.deepseekbot}. ([中文](${SITE}${pluginPath('zh', p.slug)}))`,
+        `- [${p.en.title}](${SITE}${pluginPath('en', p.slug)}): ${p.en.pitch} Install: \`${installCommand(p)}\`. Requires DeepSeek Harness ${p.dsh} and Tobs newer than ${p.deepseekbot}. ([中文](${SITE}${pluginPath('zh', p.slug)}))`,
     ),
   ].join('\n');
 }

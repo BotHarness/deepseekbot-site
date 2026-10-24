@@ -16,7 +16,7 @@ test('Naver verification file contains the downloaded verification payload', () 
 
 test('Naver GET and HEAD internally resolve the HTML asset without a client redirect', async () => {
   for (const method of ['GET', 'HEAD']) {
-    const request = new Request(`https://deepseekbot.app${naverVerificationPath}?check=1`, {
+    const request = new Request(`https://tobs.app${naverVerificationPath}?check=1`, {
       method,
       headers: { 'X-Verification-Test': 'preserved' },
     });
@@ -26,7 +26,7 @@ test('Naver GET and HEAD internally resolve the HTML asset without a client redi
         fetch: async (assetRequest) => {
           assert.equal(
             assetRequest.url,
-            `https://deepseekbot.app${naverVerificationPath.slice(0, -5)}?check=1`,
+            `https://tobs.app${naverVerificationPath.slice(0, -5)}?check=1`,
           );
           assert.equal(assetRequest.method, method);
           assert.equal(assetRequest.headers.get('X-Verification-Test'), 'preserved');
@@ -41,7 +41,7 @@ test('Naver GET and HEAD internally resolve the HTML asset without a client redi
 });
 
 test('Naver verification preserves canonical redirects before resolving the asset', async () => {
-  for (const origin of ['https://www.deepseekbot.app', 'http://deepseekbot.app']) {
+  for (const origin of ['https://www.tobs.app', 'http://tobs.app']) {
     const response = await worker.fetch(new Request(`${origin}${naverVerificationPath}`), {
       ASSETS: {
         fetch: () => {
@@ -50,10 +50,7 @@ test('Naver verification preserves canonical redirects before resolving the asse
       },
     });
     assert.equal(response.status, 301);
-    assert.equal(
-      response.headers.get('location'),
-      `https://deepseekbot.app${naverVerificationPath}`,
-    );
+    assert.equal(response.headers.get('location'), `https://tobs.app${naverVerificationPath}`);
   }
 });
 
@@ -65,7 +62,7 @@ test('Naver exception does not rewrite other paths or unsupported methods', asyn
     ['/naver-unregistered.html', 'GET'],
     ['/baidu_verify_codeva-ZL1kxPPyWo.html', 'GET'],
   ]) {
-    const request = new Request(`https://deepseekbot.app${path}`, { method });
+    const request = new Request(`https://tobs.app${path}`, { method });
     await worker.fetch(request, {
       ASSETS: {
         fetch: async (assetRequest) => {
@@ -94,10 +91,9 @@ test('missing pages and files preserve asset 404 responses for GET and HEAD', as
   ]) {
     for (const method of ['GET', 'HEAD']) {
       const notFound = new Response(null, { status: 404 });
-      const response = await worker.fetch(
-        new Request(`https://deepseekbot.app${path}`, { method }),
-        { ASSETS: { fetch: async () => notFound } },
-      );
+      const response = await worker.fetch(new Request(`https://tobs.app${path}`, { method }), {
+        ASSETS: { fetch: async () => notFound },
+      });
       assert.equal(response, notFound);
       assert.equal(response.status, 404);
       assert.equal(response.headers.get('location'), null);
@@ -115,7 +111,7 @@ test('Release short links carry fixed version and entry-point attribution', asyn
       for (const method of ['GET', 'HEAD']) {
         const response = await worker.fetch(
           new Request(
-            `https://deepseekbot.app/r/v${version}${suffix}?utm_source=spoof&url=https://evil.example`,
+            `https://tobs.app/r/v${version}${suffix}?utm_source=spoof&url=https://evil.example`,
             { method },
           ),
           {
@@ -130,7 +126,7 @@ test('Release short links carry fixed version and entry-point attribution', asyn
         assert.equal(response.headers.get('cache-control'), 'no-store');
         assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow');
         const target = new URL(response.headers.get('location'));
-        assert.equal(target.origin, 'https://deepseekbot.app');
+        assert.equal(target.origin, 'https://tobs.app');
         assert.equal(target.pathname, pathname);
         assert.deepEqual(Object.fromEntries(target.searchParams), {
           utm_source: 'github',
@@ -152,16 +148,16 @@ test('invalid or arbitrary short-link targets do not redirect', async () => {
     '/r/v1.2.1/https://evil.example',
     '/r/v1.2.1/install/fr',
   ]) {
-    const response = await worker.fetch(new Request(`https://deepseekbot.app${path}`), {
+    const response = await worker.fetch(new Request(`https://tobs.app${path}`), {
       ASSETS: assets,
     });
     assert.equal(response.status, 200);
     assert.equal(response.headers.get('location'), null);
   }
-  const trailing = await worker.fetch(new Request('https://deepseekbot.app/r/v1.2.1/'), {
+  const trailing = await worker.fetch(new Request('https://tobs.app/r/v1.2.1/'), {
     ASSETS: assets,
   });
-  const plain = await worker.fetch(new Request('https://deepseekbot.app/r/v1.2.1'), {
+  const plain = await worker.fetch(new Request('https://tobs.app/r/v1.2.1'), {
     ASSETS: assets,
   });
   assert.equal(trailing.headers.get('location'), plain.headers.get('location'));
@@ -169,7 +165,7 @@ test('invalid or arbitrary short-link targets do not redirect', async () => {
 
 test('Release short links refuse unsafe methods', async () => {
   const response = await worker.fetch(
-    new Request('https://deepseekbot.app/r/v1.2.1', { method: 'POST' }),
+    new Request('https://tobs.app/r/v1.2.1', { method: 'POST' }),
     { ASSETS: assets },
   );
   assert.equal(response.status, 405);
@@ -182,29 +178,28 @@ test('legacy host short links canonicalize before attribution redirects', async 
     ASSETS: assets,
   });
   assert.equal(response.status, 301);
-  assert.equal(response.headers.get('location'), 'https://deepseekbot.app/r/v1.2.1/install');
+  assert.equal(response.headers.get('location'), 'https://tobs.app/r/v1.2.1/install');
 });
 
-test('the other product hostnames 301 to the same path on deepseekbot.app', async () => {
+test('the other product hostnames 301 to the same path on tobs.app', async () => {
   for (const host of [
+    'deepseekbot.app',
+    'www.deepseekbot.app',
     'deepseekbot.botharness.ai',
     'deepseekbot.dev',
     'www.deepseekbot.dev',
-    'www.deepseekbot.app',
+    'www.tobs.app',
   ]) {
     const response = await worker.fetch(new Request(`https://${host}/en/docs/overview/?ref=x`), {
       ASSETS: assets,
     });
     assert.equal(response.status, 301);
-    assert.equal(
-      response.headers.get('location'),
-      'https://deepseekbot.app/en/docs/overview/?ref=x',
-    );
+    assert.equal(response.headers.get('location'), 'https://tobs.app/en/docs/overview/?ref=x');
   }
   const response = await worker.fetch(new Request('http://deepseekbot.dev:8080/market'), {
     ASSETS: assets,
   });
-  assert.equal(response.headers.get('location'), 'https://deepseekbot.app/market');
+  assert.equal(response.headers.get('location'), 'https://tobs.app/market');
 });
 
 test('Worker entrypoint exports only the supported default handler', async () => {
@@ -215,7 +210,7 @@ test('HTTP requests on the canonical product host permanently redirect to HTTPS'
   for (const path of ['/', '/en/', '/docs/concepts/', '/r/v1.2.1/install']) {
     for (const method of ['GET', 'HEAD']) {
       const response = await worker.fetch(
-        new Request(`http://deepseekbot.app:8080${path}?ref=gsc`, { method }),
+        new Request(`http://tobs.app:8080${path}?ref=gsc`, { method }),
         {
           ASSETS: {
             fetch: () => {
@@ -225,14 +220,14 @@ test('HTTP requests on the canonical product host permanently redirect to HTTPS'
         },
       );
       assert.equal(response.status, 301);
-      assert.equal(response.headers.get('location'), `https://deepseekbot.app${path}?ref=gsc`);
+      assert.equal(response.headers.get('location'), `https://tobs.app${path}?ref=gsc`);
     }
   }
 });
 
-test('deepseekbot.app, preview URLs and local dev are served from the assets', async () => {
+test('tobs.app, preview URLs and local dev are served from the assets', async () => {
   for (const url of [
-    'https://deepseekbot.app/market',
+    'https://tobs.app/market',
     'https://abc123-deepseekbot-site.example.workers.dev/market',
     'http://localhost:8787/market',
   ]) {
@@ -240,4 +235,12 @@ test('deepseekbot.app, preview URLs and local dev are served from the assets', a
     assert.equal(response.status, 200);
     assert.equal(await response.text(), 'asset /market');
   }
+});
+
+test('device tunnel subdomains are outside website redirect ownership', async () => {
+  const response = await worker.fetch(new Request('https://device.deepseekbot.dev/market'), {
+    ASSETS: assets,
+  });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('location'), null);
 });

@@ -9,7 +9,7 @@ import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { privacyPath, searchButton } from './docs.ts';
 
 type Lang = 'zh' | 'en';
-const SITE = 'https://deepseekbot.app';
+const SITE = 'https://tobs.app';
 const CONTENT = 'content/blog';
 export const BLOG_OUT = ['blog', 'en/blog'];
 
@@ -27,8 +27,8 @@ const UI = {
     htmlLang: 'zh-Hans',
     ogLocale: 'zh_CN',
     title: '博客',
-    suffix: 'DeepSeekBot',
-    description: 'DeepSeekBot 的实战文章：玩转 AI 机器人的指南与复盘。',
+    suffix: 'Tobs',
+    description: 'Tobs 的实战文章：玩转 AI 机器人的指南与复盘。',
     lead: '把机器人用好的实战文章：指南、对比与复盘。',
     posts: '文章',
     back: '返回博客',
@@ -62,9 +62,9 @@ const UI = {
     htmlLang: 'en',
     ogLocale: 'en_US',
     title: 'Blog',
-    suffix: 'DeepSeekBot',
+    suffix: 'Tobs',
     description:
-      'Hands-on DeepSeekBot writing: guides and retrospectives on getting the most out of AI bots.',
+      'Hands-on Tobs writing: guides and retrospectives on getting the most out of AI bots.',
     lead: 'Hands-on writing about getting the most out of bots: guides, comparisons and retrospectives.',
     posts: 'Posts',
     back: 'Back to the blog',
@@ -188,7 +188,7 @@ function renderBody(body: string): { html: string; toc: { id: string; text: stri
 function topnav(lang: Lang) {
   const t = UI[lang];
   const icon = (name: NavIcon) => `<span class="nav-icon-wrap">${navIconSvg(name)}</span>`;
-  return `<nav class="topnav" aria-label="DeepSeekBot">
+  return `<nav class="topnav" aria-label="Tobs">
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market">${icon('market')}${t.nav.market}</a>
@@ -210,7 +210,7 @@ function shell(
   cover?: string,
 ) {
   const t = UI[lang];
-  const image = cover ? `${SITE}${cover}` : `${SITE}/og-${lang}-v2.png`;
+  const image = cover ? `${SITE}${cover}` : `${SITE}/og-${lang}-v5.png`;
   // Without an English mirror, alternates point at the Chinese page, never a 404.
   const zhUrl = url.replace(SITE + '/en/', SITE + '/');
   const en = enUrl ?? zhUrl.replace(SITE + '/', SITE + '/en/');
@@ -227,7 +227,7 @@ function shell(
     <link rel="alternate" hreflang="x-default" href="${url.replace('/en/', '/')}" />
     <meta name="theme-color" content="#f6e7c1" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="DeepSeekBot" />
+    <meta property="og:site_name" content="Tobs" />
     <meta property="og:url" content="${url}" />
     <meta property="og:title" content="${escape(title)}" />
     <meta property="og:description" content="${escape(description)}" />
@@ -263,7 +263,7 @@ function shell(
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
         <span class="brand-logo"><img src="/logo.png" width="32" height="32" alt="" /></span>
-        <span>DeepSeekBot</span>
+        <span>Tobs</span>
       </a>
       ${topnav(lang)}
       <div class="header-actions">
@@ -281,7 +281,7 @@ function shell(
       </div>
     </header>
     ${main}
-    <footer class="footer"><p>DeepSeekBot · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
+    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>
@@ -313,7 +313,7 @@ function indexMain(lang: Lang, posts: Post[]) {
   return `<div class="blog-index-layout">
       <main id="main" class="docs-main">
         <article class="docs-article">
-          <p class="kicker">DeepSeekBot</p>
+          <p class="kicker">Tobs</p>
           <h1>${t.title}</h1>
           <p class="docs-lead">${t.lead}</p>
           ${heroBlock}

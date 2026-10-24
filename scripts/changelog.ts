@@ -12,7 +12,7 @@ import { privacyPath, searchButton } from './docs.ts';
 import { DESKTOP_PACKAGE } from '../src/installRelease.ts';
 
 type Lang = 'zh' | 'en';
-const SITE = 'https://deepseekbot.app';
+const SITE = 'https://tobs.app';
 const GITHUB_BLOB = `https://github.com/BotHarness/DeepSeekBot/blob/v${VERSION}/`;
 export const CHANGELOG_OUT = ['changelog', 'en/changelog'];
 const SECTION_ORDER = [
@@ -43,9 +43,9 @@ const UI = {
     htmlLang: 'zh-Hans',
     ogLocale: 'zh_CN',
     title: '更新日志',
-    suffix: 'DeepSeekBot',
-    description: 'DeepSeekBot 每个版本的新增、变更和修复。',
-    lead: '每个 DeepSeekBot 版本的变化。插件会在更新后弹出同样的内容。',
+    suffix: 'Tobs',
+    description: 'Tobs 每个版本的新增、变更和修复。',
+    lead: '每个 Tobs 版本的变化。插件会在更新后弹出同样的内容。',
     installNote: '条目记录当时的变化，包括历史安装版本；当前安装请使用',
     installLink: '安装指南',
     versions: '版本',
@@ -86,9 +86,9 @@ const UI = {
     htmlLang: 'en',
     ogLocale: 'en_US',
     title: 'Changelog',
-    suffix: 'DeepSeekBot',
-    description: 'What was added, changed and fixed in each DeepSeekBot release.',
-    lead: 'What changed in each DeepSeekBot release. The plugin shows the same notes after an update.',
+    suffix: 'Tobs',
+    description: 'What was added, changed and fixed in each Tobs release.',
+    lead: 'What changed in each Tobs release. The plugin shows the same notes after an update.',
     installNote:
       'Entries describe changes at the time, including historical install versions. Install today with',
     installLink: 'installation guide',
@@ -250,7 +250,7 @@ function page(lang: Lang, releases: Release[]) {
   const t = UI[lang];
   const url = `${SITE}${changelogPath(lang)}`;
   const title = `${t.title} · ${t.suffix}`;
-  const image = `${SITE}/og-${lang}-v2.png`;
+  const image = `${SITE}/og-${lang}-v5.png`;
   const icon = (name: NavIcon) => `<span class="nav-icon-wrap">${navIconSvg(name)}</span>`;
   return `<!doctype html>
 <html lang="${t.htmlLang}">
@@ -265,7 +265,7 @@ function page(lang: Lang, releases: Release[]) {
     <link rel="alternate" hreflang="x-default" href="${SITE}${changelogPath('zh')}" />
     <meta name="theme-color" content="#f6e7c1" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="DeepSeekBot" />
+    <meta property="og:site_name" content="Tobs" />
     <meta property="og:url" content="${url}" />
     <meta property="og:title" content="${escape(title)}" />
     <meta property="og:description" content="${escape(t.description)}" />
@@ -301,9 +301,9 @@ function page(lang: Lang, releases: Release[]) {
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
         <span class="brand-logo"><img src="/logo.png" width="32" height="32" alt="" /></span>
-        <span>DeepSeekBot</span>
+        <span>Tobs</span>
       </a>
-      <nav class="topnav" aria-label="DeepSeekBot">
+      <nav class="topnav" aria-label="Tobs">
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market">${icon('market')}${t.nav.market}</a>
@@ -331,7 +331,7 @@ function page(lang: Lang, releases: Release[]) {
       ${sidebar(lang, releases)}
       <main id="main" class="docs-main">
         <article class="docs-article frame">
-          <p class="kicker">DeepSeekBot</p>
+          <p class="kicker">Tobs</p>
           <h1>${t.title}</h1>
           <p class="docs-lead">${t.lead}</p>
           <p class="changelog-note">${t.installNote} <code>${escape(DESKTOP_PACKAGE)}</code> · <a href="${home(lang)}docs/installation/">${t.installLink}</a></p>
@@ -340,7 +340,7 @@ function page(lang: Lang, releases: Release[]) {
         <p class="docs-source"><a href="${GITHUB_BLOB}${lang === 'zh' ? 'CHANGELOG.zh.md' : 'CHANGELOG.md'}" target="_blank" rel="noreferrer">${t.source}</a></p>
       </main>
     </div>
-    <footer class="footer"><p>DeepSeekBot · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
+    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>

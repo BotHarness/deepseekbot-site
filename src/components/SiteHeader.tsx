@@ -43,9 +43,9 @@ export function SiteHeader({
           <span className="brand-logo">
             <img src="/logo.png" width={32} height={32} alt="" />
           </span>
-          <span>DeepSeekBot</span>
+          <span>Tobs</span>
         </a>
-        <nav className="topnav" aria-label="DeepSeekBot">
+        <nav className="topnav" aria-label="Tobs">
           <a href={`${home}#features`}>{copy.nav.features}</a>
           <a href={`${home}#install`}>{copy.nav.install}</a>
           <a href={marketPath(lang)} aria-current={page === 'market' ? 'page' : undefined}>

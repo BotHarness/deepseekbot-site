@@ -8,7 +8,7 @@ import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg } from '../src/navIcons.ts';
 
 type Lang = 'zh' | 'en';
-const SITE = 'https://deepseekbot.app';
+const SITE = 'https://tobs.app';
 const UPSTREAM = 'https://botharness.ai';
 const CONTENT = 'content/docs';
 export const DOCS_OUT = ['docs', 'en/docs'];
@@ -29,7 +29,7 @@ const UI = {
     htmlLang: 'zh-Hans',
     ogLocale: 'zh_CN',
     docs: '文档',
-    suffix: 'DeepSeekBot 文档',
+    suffix: 'Tobs 文档',
     guides: '使用教程',
     menu: '目录',
     nav: {
@@ -60,7 +60,7 @@ const UI = {
     htmlLang: 'en',
     ogLocale: 'en_US',
     docs: 'Docs',
-    suffix: 'DeepSeekBot docs',
+    suffix: 'Tobs docs',
     guides: 'Guides',
     menu: 'Contents',
     nav: {
@@ -260,7 +260,7 @@ function page(
   const next = docs[i + 1];
   const url = `${SITE}${at(lang)}`;
   const title = `${doc.title} · ${t.suffix}`;
-  const image = `${SITE}/og-${lang}-v2.png`;
+  const image = `${SITE}/og-${lang}-v5.png`;
   const pager = [
     prev
       ? `<a class="pager-prev frame" href="${docPath(lang, prev.slug)}"><span>${t.prev}</span>${escape(prev.title)}</a>`
@@ -282,7 +282,7 @@ function page(
     <link rel="alternate" hreflang="x-default" href="${SITE}${at('zh')}" />
     <meta name="theme-color" content="#f6e7c1" />
     <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="DeepSeekBot" />
+    <meta property="og:site_name" content="Tobs" />
     <meta property="og:url" content="${url}" />
     <meta property="og:title" content="${escape(title)}" />
     <meta property="og:description" content="${escape(doc.description)}" />
@@ -318,9 +318,9 @@ function page(
     <header class="topbar">
       <a class="brand" href="${home(lang)}">
         <span class="brand-logo"><img src="/logo.png" width="32" height="32" alt="" /></span>
-        <span>DeepSeekBot</span>
+        <span>Tobs</span>
       </a>
-      <nav class="topnav" aria-label="DeepSeekBot">
+      <nav class="topnav" aria-label="Tobs">
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
@@ -362,7 +362,7 @@ function page(
       </main>
       ${contents}
     </div>
-    <footer class="footer"><p>DeepSeekBot · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
+    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>

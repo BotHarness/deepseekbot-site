@@ -13,7 +13,7 @@ import {
   renderPlugins,
 } from './plugins.ts';
 
-const SITE = 'https://deepseekbot.app';
+const SITE = 'https://tobs.app';
 
 function inFixture(run) {
   const cwd = process.cwd();
