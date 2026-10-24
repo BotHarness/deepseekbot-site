@@ -43,7 +43,7 @@ The Tobs app for iPhone and Android, previously called DeepSeekBot, is a remote 
 - Pairing credentials, device keys and trusted computer keys are kept in the phone's system-protected storage. On iOS, pairing credentials are available only while the phone is unlocked and are bound to that device. The optional account session is also device-bound, but is available to the app after the first unlock following a restart.
 - Recent conversations, unsent drafts and files needed for app operations may be cached in the app's own storage.
 
-**Unpair** removes the connection stored on that phone. To revoke a phone's access on the computer, use **Revoke** in the computer's device settings. These actions do not delete your Bots or conversation history on the computer.
+**Unpair** removes the connection stored on that phone and attempts to revoke its access on the computer. If that cannot complete, use **Revoke** in the computer's device settings when it is reachable. These actions do not delete your Bots or conversation history on the computer.
 
 ### Connections and optional Tobs account
 
