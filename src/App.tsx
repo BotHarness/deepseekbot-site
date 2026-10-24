@@ -225,6 +225,19 @@ export function App() {
         <p>
           {copy.footer.built} {copy.footer.license} {copy.footer.community}
         </p>
+        <a
+          className="footer-badge"
+          href="https://www.opensourcealternatives.to/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            src="https://www.opensourcealternatives.to/badge-osa.svg"
+            alt="As seen on Open Source Alternatives"
+            width={270}
+            height={20}
+          />
+        </a>
       </footer>
     </Theme>
   );
