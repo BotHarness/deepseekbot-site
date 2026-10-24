@@ -1,4 +1,4 @@
-// Renders the share cards (public/og-{zh,en}-v4.png, 1200×630; bump the suffix when the
+// Renders the share cards (public/og-{zh,en}-v5.png, 1200×630; bump the suffix when the
 // design changes so social caches refetch) and the
 // apple-touch-icon from the same BotPixel avatars and pixel font as the site.
 // Run `pnpm og` after changing the copy below. Needs a Chromium: Playwright's own
@@ -30,7 +30,7 @@ const CARDS = {
 };
 
 // Same composition as the launch covers: centred pixel title, tags, and a row of BotPixel
-// presets on the grass with the DeepSeekBot logo (from BotHarness
+// presets on the grass with the Tobs logo (from BotHarness
 // packages/client/assets/bot/deepseekbot-light.png) in the biggest, middle tile.
 const LOGO = `data:image/png;base64,${readFileSync(new URL('./assets/deepseekbot-logo.png', import.meta.url)).toString('base64')}`;
 const CREW = [
@@ -80,13 +80,13 @@ body { width: 1200px; height: 630px; overflow: hidden; font-family: Px, sans-ser
 </style></head><body>
 <div class="cloud" style="left:70px;top:40px;width:96px;height:24px"></div>
 <div class="cloud" style="left:1050px;top:60px;width:72px;height:24px"></div>
-<h1 class="mark">DeepSeekBot</h1>
+<h1 class="mark">Tobs</h1>
 <p class="tag tag--blue">${card.headline}</p>
 ${card.extra ? `<p class="tag tag--yellow">${card.extra}</p>` : ''}
 <div class="chips">${card.chips.map((c) => `<span>${c}</span>`).join('')}</div>
 <div class="ground"></div>
 <div class="crew">${CREW.map(tile).join('')}</div>
-<p class="url">deepseekbot.app</p>
+<p class="url">tobs.app</p>
 </body></html>`;
 
 const browser = await chromium.launch(
@@ -96,7 +96,7 @@ const tab = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 for (const [key, card] of Object.entries(CARDS)) {
   await tab.setContent(page(card), { waitUntil: 'load' });
   await tab.evaluate(() => document.fonts.ready);
-  await tab.screenshot({ path: `public/og-${key}-v4.png` });
+  await tab.screenshot({ path: `public/og-${key}-v5.png` });
 }
 await tab.setViewportSize({ width: 180, height: 180 });
 await tab.setContent(
@@ -104,4 +104,4 @@ await tab.setContent(
 );
 await tab.screenshot({ path: 'public/apple-touch-icon.png' });
 await browser.close();
-console.log('wrote public/og-zh-v4.png, public/og-en-v4.png, public/apple-touch-icon.png');
+console.log('wrote public/og-zh-v5.png, public/og-en-v5.png, public/apple-touch-icon.png');

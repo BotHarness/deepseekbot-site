@@ -1,8 +1,8 @@
 ---
-{ "title": "Privacy", "description": "What the DeepSeekBot site, plugin and mobile app collect, why, and how to turn it off." }
+{ "title": "Privacy", "description": "What the Tobs site, plugin and mobile app collect, why, and how to turn it off." }
 ---
 
-We collect anonymous analytics for one reason: **to improve DeepSeekBot by learning how it is used and where site visitors come from**. We collect nothing that identifies you, and never your conversations or Memory. The code doing this is open source: [site](https://github.com/BotHarness/deepseekbot-site), [plugin](https://github.com/BotHarness/BotHarness), and the plugin's design is recorded in [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md).
+We collect anonymous analytics for one reason: **to improve Tobs by learning how it is used and where site visitors come from**. We collect nothing that identifies you, and never your conversations or Memory. The code doing this is open source: [site](https://github.com/BotHarness/deepseekbot-site), [plugin](https://github.com/BotHarness/BotHarness), and the plugin's design is recorded in [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md).
 
 Data is stored in [PostHog](https://posthog.com)'s US region and forwarded through our own domain, `t.botharness.ai`. Site analytics use the IP address only to infer the country or region, then discard it. Plugin and mobile events disable this location enrichment and do not create person profiles.
 
@@ -29,14 +29,14 @@ Every event includes the plugin and DSH versions, operating system and architect
 
 To turn it off, use any one of:
 
-- the usage statistics switch in DeepSeekBot settings
+- the usage statistics switch in Tobs settings
 - `telemetry: false` in the plugin config
 - the environment variable `DO_NOT_TRACK=1`
 - the environment variable `BOTHARNESS_TELEMETRY=0`
 
 ## Mobile app
 
-The DeepSeekBot app for iPhone and Android is a remote for **your own computer**. It has no DeepSeekBot account and no DeepSeekBot server in between: it talks only to the computer you pair it with, over your [Tailscale](https://tailscale.com) network (`*.ts.net` or `100.x` addresses, always HTTPS). Your Bots, Memory and conversations stay on that computer.
+The Tobs app for iPhone and Android is a remote for **your own computer**. It has no Tobs account and no Tobs server in between: it talks only to the computer you pair it with, over your [Tailscale](https://tailscale.com) network (`*.ts.net` or `100.x` addresses, always HTTPS). Your Bots, Memory and conversations stay on that computer.
 
 **Stored on the phone**
 

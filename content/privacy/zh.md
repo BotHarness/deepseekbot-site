@@ -1,8 +1,8 @@
 ---
-{ "title": "隐私说明", "description": "DeepSeekBot 官网、插件和手机应用收集哪些数据、为什么收集、怎么关闭。" }
+{ "title": "隐私说明", "description": "Tobs 官网、插件和手机应用收集哪些数据、为什么收集、怎么关闭。" }
 ---
 
-我们收集匿名统计只有一个目的：**改善 DeepSeekBot，了解它被怎样使用、官网从哪里被访问**。我们不收集能识别你本人的信息，也不收集你的对话或 Memory 内容。做这件事的代码全部开源：[官网](https://github.com/BotHarness/deepseekbot-site)、[插件](https://github.com/BotHarness/BotHarness)，插件的设计记录在 [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md)。
+我们收集匿名统计只有一个目的：**改善 Tobs，了解它被怎样使用、官网从哪里被访问**。我们不收集能识别你本人的信息，也不收集你的对话或 Memory 内容。做这件事的代码全部开源：[官网](https://github.com/BotHarness/deepseekbot-site)、[插件](https://github.com/BotHarness/BotHarness)，插件的设计记录在 [ADR-0132](https://github.com/BotHarness/BotHarness/blob/main/docs/adr/0132-anonymous-posthog-telemetry-and-campaign-short-links.md)。
 
 统计数据存放在 [PostHog](https://posthog.com) 的美国区域，经由我们自己的域名 `t.botharness.ai` 转发。官网统计只用 IP 地址推断国家或地区，然后丢弃。插件和手机端事件禁用这类位置推断，不建立用户画像。
 
@@ -29,14 +29,14 @@
 
 关闭方法，任选其一：
 
-- 在 DeepSeekBot 设置中关闭使用统计
+- 在 Tobs 设置中关闭使用统计
 - 在插件配置里设置 `telemetry: false`
 - 设置环境变量 `DO_NOT_TRACK=1`
 - 设置环境变量 `BOTHARNESS_TELEMETRY=0`
 
 ## 手机应用
 
-iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器。它没有 DeepSeekBot 账号，中间也没有 DeepSeekBot 服务器：它只通过你的 [Tailscale](https://tailscale.com) 网络（`*.ts.net` 或 `100.x` 地址，始终 HTTPS）连接你配对的那台电脑。你的 Bot、Memory 和对话都留在那台电脑上。
+iPhone 和 Android 上的 Tobs 应用是**你自己电脑**的遥控器。它没有 Tobs 账号，中间也没有 Tobs 服务器：它只通过你的 [Tailscale](https://tailscale.com) 网络（`*.ts.net` 或 `100.x` 地址，始终 HTTPS）连接你配对的那台电脑。你的 Bot、Memory 和对话都留在那台电脑上。
 
 **保存在手机上的**
 

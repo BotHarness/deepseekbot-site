@@ -11,7 +11,7 @@ import { pluginsLlms, pluginsSitemap, renderPlugins } from './scripts/plugins.ts
 
 const require = createRequire(import.meta.url);
 const FONT_URL = '/fonts/pixel.woff2';
-const SITE = 'https://deepseekbot.app';
+const SITE = 'https://tobs.app';
 // the Chinese entry at / and the English one at /en/, each with its own share card, plus the
 // guides rendered from content/docs, the changelog from content/changelog and the plugin shelf
 // from content/plugins
@@ -129,14 +129,14 @@ ${pluginsSitemap()}
 `;
 
 /** A plain-text map of the site for language models (https://llmstxt.org). */
-const llms = () => `# DeepSeekBot
+const llms = () => `# Tobs
 
-> DeepSeekBot (npm \`deepseekbot\`) by BotHarness is an open-source, MIT-licensed plugin for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. This is its product site, in Chinese at / and English at /en/.
+> Tobs (npm \`deepseekbot\`) by BotHarness is an open-source, MIT-licensed plugin for DeepSeek Harness: personal AI agents with identities, Git memory, group collaboration, task delegation and IM connections. This is its product site, in Chinese at / and English at /en/.
 
 ## Guides
 
-- [Overview](${SITE}/en/docs/overview/): what DeepSeekBot is and where to start ([中文](${SITE}/docs/overview/))
-- [Installation](${SITE}/en/docs/installation/): install DeepSeekBot ([中文](${SITE}/docs/installation/))
+- [Overview](${SITE}/en/docs/overview/): what Tobs is and where to start ([中文](${SITE}/docs/overview/))
+- [Installation](${SITE}/en/docs/installation/): install Tobs ([中文](${SITE}/docs/installation/))
 - [Changelog](${SITE}/en/changelog/): what changed in each release ([中文](${SITE}/changelog/))
 
 ## Marketplace

@@ -1,7 +1,7 @@
-# deepseekbot.app
+# tobs.app
 
-The bilingual product website for [DeepSeekBot](https://www.npmjs.com/package/deepseekbot),
-maintained by [BotHarness](https://github.com/BotHarness/DeepSeekBot) at [deepseekbot.app](https://deepseekbot.app).
+The bilingual product website for [Tobs](https://www.npmjs.com/package/deepseekbot),
+maintained by [BotHarness](https://github.com/BotHarness/DeepSeekBot) at [tobs.app](https://tobs.app).
 It includes the homepage, guides, changelog, blog, marketplace and avatar studio in Chinese
 and English, with day and night palettes. Every face on it is a
 [BotPixel](https://github.com/BotHarness/BotPixel) avatar seeded from a Bot's name, morphing into
@@ -140,3 +140,7 @@ repository) with build command `pnpm build` and deploy command `npx wrangler dep
 
 Manual: `pnpm deploy` (production) or `pnpm deploy:preview` (preview URL only), after
 `npx wrangler login`.
+
+## Tobs brand migration
+
+Tobs (托布) means **Team of bots**, with the ambition of **Thousands of Bots**. The site uses `tobs.app`; previous product hostnames redirect to the same path and query. Device subdomains under `deepseekbot.dev` are outside this Worker’s redirect allowlist. Existing npm install instructions, release campaign identifiers, local browser storage and historical articles retain their compatible identities. The Worker stays named `deepseekbot-site`.

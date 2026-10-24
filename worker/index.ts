@@ -1,6 +1,8 @@
-const CANONICAL_HOST = 'deepseekbot.app';
+const CANONICAL_HOST = 'tobs.app';
 const NAVER_VERIFICATION_PATH = '/naver2c42ccd37d36f1ee05627e66c5827ac4.html';
 const REDIRECT_HOSTS: ReadonlySet<string> = new Set([
+  'www.tobs.app',
+  'deepseekbot.app',
   'www.deepseekbot.app',
   'deepseekbot.dev',
   'www.deepseekbot.dev',
