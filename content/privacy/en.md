@@ -36,7 +36,7 @@ To turn it off, use any one of:
 
 ## Mobile app
 
-The Tobs app for iPhone and Android is a remote for **your own computer**. It has no Tobs account and no Tobs server in between: it talks only to the computer you pair it with, over your [Tailscale](https://tailscale.com) network (`*.ts.net` or `100.x` addresses, always HTTPS). Your Bots, Memory and conversations stay on that computer.
+The DeepSeekBot app for iPhone and Android is a remote for **your own computer**. It has no Tobs account and no Tobs server in between: it talks only to the computer you pair it with, over your [Tailscale](https://tailscale.com) network (`*.ts.net` or `100.x` addresses, always HTTPS). Your Bots, Memory and conversations stay on that computer.
 
 **Stored on the phone**
 

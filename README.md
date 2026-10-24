@@ -111,11 +111,11 @@ Do not use development versions, bare names or `@latest` as the install identity
 supply-chain protection globally to avoid a new-release age-policy refusal.
 
 `wrangler.jsonc` deploys `dist/` as static assets on the Worker `deepseekbot-site`, in the account
-that holds the `deepseekbot.app`, `deepseekbot.dev` and `botharness.ai` zones. **deepseekbot.app** is
+that holds the `tobs.app`, `deepseekbot.app`, `deepseekbot.dev` and `botharness.ai` zones. **tobs.app** is
 the canonical domain: canonical links, share cards, the sitemap and `SITE` in `vite.config.ts`,
-`scripts/docs.ts` and `scripts/changelog.ts` use it. `www.deepseekbot.app`, `deepseekbot.dev`,
+`scripts/docs.ts` and `scripts/changelog.ts` use it. `www.tobs.app`, `deepseekbot.app`, `www.deepseekbot.app`, `deepseekbot.dev`,
 `www.deepseekbot.dev` and the original `deepseekbot.botharness.ai` stay bound as custom domains and
-301 to the same path on deepseekbot.app through the small Worker in `worker/index.ts` (it runs before
+301 to the same path on tobs.app through the small Worker in `worker/index.ts` (it runs before
 the assets; preview URLs are served directly). The Marketplace API and the analytics ingest proxy
 (BotHarness `packages/market`, `packages/ingest`) must allow the site's origin for CORS.
 

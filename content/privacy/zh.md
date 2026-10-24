@@ -36,7 +36,7 @@
 
 ## 手机应用
 
-iPhone 和 Android 上的 Tobs 应用是**你自己电脑**的遥控器。它没有 Tobs 账号，中间也没有 Tobs 服务器：它只通过你的 [Tailscale](https://tailscale.com) 网络（`*.ts.net` 或 `100.x` 地址，始终 HTTPS）连接你配对的那台电脑。你的 Bot、Memory 和对话都留在那台电脑上。
+iPhone 和 Android 上的 DeepSeekBot 应用是**你自己电脑**的遥控器。它没有 Tobs 账号，中间也没有 Tobs 服务器：它只通过你的 [Tailscale](https://tailscale.com) 网络（`*.ts.net` 或 `100.x` 地址，始终 HTTPS）连接你配对的那台电脑。你的 Bot、Memory 和对话都留在那台电脑上。
 
 **保存在手机上的**
 

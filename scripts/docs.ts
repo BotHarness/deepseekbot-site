@@ -260,7 +260,7 @@ function page(
   const next = docs[i + 1];
   const url = `${SITE}${at(lang)}`;
   const title = `${doc.title} · ${t.suffix}`;
-  const image = `${SITE}/og-${lang}-v2.png`;
+  const image = `${SITE}/og-${lang}-v5.png`;
   const pager = [
     prev
       ? `<a class="pager-prev frame" href="${docPath(lang, prev.slug)}"><span>${t.prev}</span>${escape(prev.title)}</a>`

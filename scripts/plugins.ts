@@ -339,7 +339,7 @@ function page(
   const t = UI[lang];
   const url = `${SITE}${at(lang)}`;
   const fullTitle = `${title} · ${t.suffix}`;
-  const og = image ? `${SITE}${image}` : `${SITE}/og-${lang}-v2.png`;
+  const og = image ? `${SITE}${image}` : `${SITE}/og-${lang}-v5.png`;
   const icon = (name: NavIcon) => `<span class="nav-icon-wrap">${navIconSvg(name)}</span>`;
   return `<!doctype html>
 <html lang="${t.htmlLang}">

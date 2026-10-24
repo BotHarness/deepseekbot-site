@@ -250,7 +250,7 @@ function page(lang: Lang, releases: Release[]) {
   const t = UI[lang];
   const url = `${SITE}${changelogPath(lang)}`;
   const title = `${t.title} · ${t.suffix}`;
-  const image = `${SITE}/og-${lang}-v2.png`;
+  const image = `${SITE}/og-${lang}-v5.png`;
   const icon = (name: NavIcon) => `<span class="nav-icon-wrap">${navIconSvg(name)}</span>`;
   return `<!doctype html>
 <html lang="${t.htmlLang}">
