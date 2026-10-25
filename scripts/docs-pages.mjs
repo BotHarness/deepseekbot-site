@@ -254,13 +254,13 @@ export const DOC_PAGES = [
     order: 12,
     en: {
       source: 'docs/installation.md',
-      title: 'Install DeepSeekBot',
-      description: 'Import the public npm plugin in DSH, enable Bot mode and create a PersonaBot.',
+      title: 'Install Tobs',
+      description: 'Install the verified Tobs package in DSH, enable Bot mode and create a Bot.',
     },
     zh: {
       source: 'docs/installation.zh.md',
-      title: '安装 DeepSeekBot',
-      description: '通过 DSH 导入公开 npm 插件，启用 Bot 模式并创建 PersonaBot。',
+      title: '安装托布 Tobs',
+      description: '在 DSH 中安装已验证的 Tobs 包，启用 Bot 模式并创建 Bot。',
     },
   },
   {

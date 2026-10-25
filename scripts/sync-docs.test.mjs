@@ -221,3 +221,34 @@ test('1.4.0 installation sync keeps released compatibility and Tob onboarding ac
     f.clean();
   }
 });
+
+test('1.5.1 sync preserves scoped package and current DSH qualification instead of legacy corrections', () => {
+  const f = fixture();
+  try {
+    const upstream = join(f.site, '..', 'upstream');
+    put(
+      join(upstream, 'scripts/install-release.json'),
+      '{"version":"1.5.1","packageName":"@botharness/tobs"}',
+    );
+    const page = DOC_PAGES.find((p) => p.slug === 'installation');
+    for (const lang of ['zh', 'en']) {
+      put(
+        join(upstream, page[lang].source),
+        lang === 'zh'
+          ? '# 安装托布 Tobs\n\n本页安装公共 npm 正式包 **`@botharness/tobs@1.5.1`**。推荐 DSH `0.2.1-rc.3`；声明范围 `>=0.2.0-0`。\n'
+          : '# Install Tobs\n\nInstall the stable npm package **`@botharness/tobs@1.5.1`**. Use DSH `0.2.1-rc.3`; admission is `>=0.2.0-0`.\n',
+      );
+    }
+    f.run(['--only', 'installation']);
+    for (const lang of ['zh', 'en']) {
+      const guide = readFileSync(join(f.site, 'content/docs', lang, 'installation.md'), 'utf8');
+      assert.ok(guide.includes('@botharness/tobs@1.5.1'));
+      assert.ok(guide.includes('0.2.1-rc.3'));
+      assert.ok(guide.includes('>=0.2.0-0'));
+      assert.doesNotMatch(guide, /deepseekbot@1\.5\.1|<0\.3\.0-0/);
+      assert.ok(guide.includes(lang === 'zh' ? '正式版 1.5.1' : 'stable 1.5.1'));
+    }
+  } finally {
+    f.clean();
+  }
+});
