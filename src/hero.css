@@ -436,6 +436,11 @@ a.beta-button--ios {
   height: 20px;
   flex: none;
 }
+.beta-contact .community-icon-wrap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .beta-group-number {
   font: 22px var(--pixel-font) !important;
   user-select: text;

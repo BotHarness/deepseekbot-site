@@ -312,8 +312,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     const instant = prefersReducedMotion();
     const wait = (ms: number) =>
       new Promise<void>((resolve) => {
-        if (instant || signal.aborted) return resolve();
-        const id = setTimeout(resolve, ms);
+        if (instant || signal.aborted || ms === 0) return resolve();
+        const id = setTimeout(resolve, linkedPhone ? Math.min(ms, 350) : ms);
         signal.addEventListener('abort', () => {
           clearTimeout(id);
           resolve();
@@ -336,7 +336,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         if (step.kind === 'user') {
           // type it into the composer, then send
           setTyping(true);
-          const per = Math.min(32, 1400 / step.text.length);
+          const per = linkedPhone ? 0 : Math.min(32, 1400 / step.text.length);
           for (let n = 1; n <= step.text.length && !signal.aborted; n++) {
             setDraft(step.text.slice(0, n));
             await wait(per);
@@ -386,7 +386,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       setTyping(false);
       setWaiting(false);
     };
-  }, [inView, channel, channels.length, run]);
+  }, [inView, channel, channels.length, run, linkedPhone]);
 
   // keep the newest message in view, inside the window only (never scroll the page)
   useEffect(() => {
