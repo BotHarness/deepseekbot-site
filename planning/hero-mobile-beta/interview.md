@@ -88,3 +88,5 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - 恢复像素 Bot 的 Cookie／社区引导：原组件仍挂载，但已关闭的 Android 原生 Popover 被误判为模态框，且高 Hero 使角色等待地面进入视口。只让实际渲染的弹窗暂停角色，监听原生 toggle；高 Hero 初次进入时改用视口底部支撑，短 Hero 保留原地面动画。双语 Cookie 提示缩为一句匿名访问标识许可问句，保留同意／拒绝和隐私链接，以及选择后的 QQ／Discord 入口。
 
 - 参考 Codync 首页底部 Compare 区，在首页 FAQ 与页脚之间加入像素边框的三篇现有对比入口，双语分别链接 Grok Bot、DS Bot 和包含 Muse／Dots／Cue 的综合对比；页脚也加入区域锚点。仅新增文章发现入口，不改写已有比较事实或另建重复 SEO 页面；注明文章采用旧名称及各自版本范围。参考：https://www.codync.dev/ 。
+
+- 用户已认可 Hero 内完整桌面＋手机联动演示，撤销早期暂留第二组的要求：移除 Hero 下方单独的 LiveDemo 区块、标题和说明。Hero 后直接进入宣传片；保留 Hero 的同一份状态与交互。

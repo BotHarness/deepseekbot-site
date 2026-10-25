@@ -82,18 +82,6 @@ export function App() {
         </section>
 
         <section
-          className="section section--center demo-section"
-          id="demo"
-          aria-labelledby="demo-title"
-        >
-          <p className="kicker">{copy.demo.kicker}</p>
-          <h2 id="demo-title">{copy.demo.title}</h2>
-          <p className="section-lead">{copy.demo.lead}</p>
-          <LiveDemo copy={copy} />
-          <p className="demo-note">{copy.demo.note}</p>
-        </section>
-
-        <section
           className="section section--alt section--center"
           id="video"
           aria-labelledby="video-title"
