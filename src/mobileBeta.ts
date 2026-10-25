@@ -1,6 +1,6 @@
 export const TESTFLIGHT_URL = 'https://testflight.apple.com/join/sA9EznXr';
 
-/** One delegated click event, shared by the header and Hero; never includes an email. */
+/** One delegated click event, for the Install section; never includes an email. */
 export function mobileInstallEvent(
   url: URL,
   placement: string,

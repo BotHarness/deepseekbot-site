@@ -192,7 +192,6 @@ function topnav(lang: Lang) {
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market">${icon('market')}${t.nav.market}</a>
-        <a href="${home(lang)}avatar">${icon('avatar')}${t.nav.avatar}</a>
         <a href="${home(lang)}docs/overview/">${icon('docs')}${t.nav.docs}</a>
         <a class="nav-changelog" href="${home(lang)}changelog/">${icon('changelog')}${t.nav.changelog}</a>
         <a href="${blogPath(lang)}" aria-current="page">${icon('blog')}${t.nav.blog}</a>

@@ -20,6 +20,7 @@ import {
   Plus,
   RotateCcw,
   Search,
+  ScanLine,
   Settings,
   Users,
   type LucideIcon,
@@ -249,11 +250,33 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const t = copy.demo;
   const lang = copy.htmlLang === 'en' ? 'en' : 'zh';
   const hero = HERO_COPY[lang];
-  const channels = t.channels;
+  const channels = useMemo(
+    () =>
+      t.channels.map((channel, index) => {
+        if (!linkedPhone || index !== 0) return channel;
+        const approval = channel.steps.findIndex((step) => step.kind === 'approval');
+        if (approval < 0) return channel;
+        return {
+          ...channel,
+          steps: [
+            { kind: 'user' as const, text: hero.introPrompt },
+            {
+              kind: 'work' as const,
+              bot: channel.bots[0]!,
+              tools: ['thinking' as const, 'write' as const],
+            },
+            { kind: 'bot' as const, bot: channel.bots[0]!, text: hero.introReply },
+            ...channel.steps.slice(approval),
+          ],
+        };
+      }),
+    [t.channels, linkedPhone, hero.introPrompt, hero.introReply],
+  );
   const root = useRef<HTMLDivElement>(null);
   const feed = useRef<HTMLDivElement>(null);
   const phoneFeed = useRef<HTMLDivElement>(null);
   const answerWith = useRef<((answer: Answer) => void) | null>(null);
+  const pairingWith = useRef<(() => void) | null>(null);
   // the visitor took over: stop moving on to the next chat by itself
   const touched = useRef(false);
 
@@ -278,8 +301,13 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const [range, setRange] = useState(1);
   // sidebar sections the visitor folded, by section id; they stay folded across chats
   const [folded, setFolded] = useState<Set<string>>(() => new Set());
-  const [phoneTab, setPhoneTab] = useState<'chat' | 'pair' | 'native'>('chat');
-  const [device, setDevice] = useState<'desktop' | 'phone'>('phone');
+  const [phonePhase, setPhonePhase] = useState<'intro' | 'pair' | 'sync'>('intro');
+  const [isInteractive, setIsInteractive] = useState(false);
+  const takeOver = () => {
+    if (touched.current) return;
+    touched.current = true;
+    setIsInteractive(true);
+  };
 
   const channel = channels[active]!;
   const panel = useMemo(() => panelAt(channel, shown), [channel, shown]);
@@ -313,7 +341,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     const wait = (ms: number) =>
       new Promise<void>((resolve) => {
         if (instant || signal.aborted || ms === 0) return resolve();
-        const id = setTimeout(resolve, linkedPhone ? Math.min(ms, 350) : ms);
+        const id = setTimeout(resolve, linkedPhone && ms < 4000 ? Math.min(ms, 350) : ms);
         signal.addEventListener('abort', () => {
           clearTimeout(id);
           resolve();
@@ -327,8 +355,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     setDone(false);
     setWorking(null);
     setDraft('');
+    setPhonePhase('intro');
 
     void (async () => {
+      let paired = false;
       await wait(500);
       for (let i = 0; i < channel.steps.length; i++) {
         const step = channel.steps[i]!;
@@ -342,6 +372,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             await wait(per);
           }
           await wait(350);
+          if (signal.aborted) return;
           setTyping(false);
           setDraft('');
           setShown(i + 1);
@@ -352,14 +383,27 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             setWorking({ bot: step.bot, tool });
             await wait(TOOL_MS);
           }
+          if (signal.aborted) return;
           setWorking(null);
           setShown(i + 1);
         } else if (step.kind === 'approval') {
           setShown(i + 1);
           setWaiting(true);
           const answer = await new Promise<Answer>((resolve) => {
-            answerWith.current = resolve;
-            signal.addEventListener('abort', () => resolve('deny'));
+            const finish = (value: Answer) => {
+              window.clearTimeout(timer);
+              signal.removeEventListener('abort', abort);
+              resolve(value);
+            };
+            const abort = () => finish('deny');
+            const timer =
+              linkedPhone && !instant
+                ? window.setTimeout(() => {
+                    if (!touched.current) finish('allow');
+                  }, 5500)
+                : undefined;
+            answerWith.current = finish;
+            signal.addEventListener('abort', abort, { once: true });
           });
           answerWith.current = null;
           setWaiting(false);
@@ -370,6 +414,22 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         } else {
           setShown(i + 1);
           await wait(step.kind === 'bot' ? 900 + step.text.length * 12 : 1100);
+          if (signal.aborted) return;
+          if (linkedPhone && !paired && step.kind === 'bot') {
+            setPhonePhase('pair');
+            await new Promise<void>((resolve) => {
+              const finish = () => {
+                signal.removeEventListener('abort', finish);
+                if (pairingWith.current === finish) pairingWith.current = null;
+                resolve();
+              };
+              pairingWith.current = finish;
+              signal.addEventListener('abort', finish, { once: true });
+            });
+            if (signal.aborted) return;
+            paired = true;
+            setPhonePhase('sync');
+          }
         }
       }
       if (signal.aborted) return;
@@ -377,7 +437,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       // with nobody at the controls, move on to the next chat like a carousel
       await wait(4500);
       if (!signal.aborted && !touched.current && !instant) {
-        setActive((prev) => (prev + 1) % channels.length);
+        if (linkedPhone) setRun((prev) => prev + 1);
+        else setActive((prev) => (prev + 1) % channels.length);
       }
     })();
 
@@ -393,7 +454,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     for (const el of [feed.current, phoneFeed.current])
       if (el)
         el.scrollTo({ top: el.scrollHeight, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-  }, [shown, working, extra, answers, done, phoneTab, device]);
+  }, [shown, working, extra, answers, done, phonePhase]);
 
   const open = (index: number) => {
     answerWith.current = null;
@@ -494,7 +555,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       aria-label={label}
       title={label}
       onClick={() => {
-        touched.current = true;
+        takeOver();
+        if (linkedPhone && phonePhase === 'pair') pairingWith.current?.();
         onClick();
       }}
     >
@@ -509,26 +571,11 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         linkedPhone ? 'demo-stage demo-stage--hero hero-linked' : 'demo-stage demo-stage--hero'
       }
       ref={root}
-      data-device={linkedPhone ? device : undefined}
+      onFocusCapture={takeOver}
+      onPointerDownCapture={takeOver}
+      data-device={linkedPhone ? (phonePhase === 'sync' ? 'phone' : 'desktop') : undefined}
+      data-phase={linkedPhone ? phonePhase : undefined}
     >
-      {linkedPhone ? (
-        <div className="hero-device-switch" role="group" aria-label={hero.synced}>
-          <button
-            type="button"
-            aria-pressed={device === 'desktop'}
-            onClick={() => setDevice('desktop')}
-          >
-            {hero.desktop}
-          </button>
-          <button
-            type="button"
-            aria-pressed={device === 'phone'}
-            onClick={() => setDevice('phone')}
-          >
-            {hero.phone}
-          </button>
-        </div>
-      ) : null}
       <div className="sky" aria-hidden="true">
         <span className="cloud cloud--a" />
         <span className="cloud cloud--b" />
@@ -546,7 +593,13 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             <i />
           </span>
           <span>
-            {t.app} · {t.botMode}
+            {linkedPhone ? (
+              hero.interactive
+            ) : (
+              <>
+                {t.app} · {t.botMode}
+              </>
+            )}
           </span>
         </div>
         <div
@@ -684,7 +737,18 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 </>
               )}
             </header>
-            {view === 'home' ? (
+            {linkedPhone && phonePhase === 'pair' ? (
+              <div className="hero-desktop-pair">
+                <PhonePair
+                  t={{
+                    ...copy.featureDemos.mobile,
+                    pair: { ...copy.featureDemos.mobile.pair, title: hero.pairTitle },
+                  }}
+                  autoPlay={!isInteractive}
+                  onNext={() => pairingWith.current?.()}
+                />
+              </div>
+            ) : view === 'home' ? (
               <div className="app-home">
                 <p className="app-home-hello">
                   <PixelAvatar recipe={DEEPSEEKBOT_RECIPE} size={40} />
@@ -937,86 +1001,64 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       </div>
       {linkedPhone ? (
         <div className="hero-phone-wrap">
-          <div className="hero-phone-tabs" role="group" aria-label={hero.phone}>
-            {(['chat', 'pair', 'native'] as const).map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                aria-pressed={phoneTab === tab}
-                onClick={() => {
-                  setPhoneTab(tab);
-                  track('hero_demo_used', { action: tab });
-                }}
-              >
-                {hero[tab]}
-              </button>
-            ))}
-          </div>
           <div
             className="hero-linked-phone app"
             role="group"
-            aria-label={`${hero.phone} · ${hero.synced}`}
+            aria-label={`${hero.interactive} · ${hero.phone} · ${hero.synced}`}
           >
-            {phoneTab === 'native' ? (
-              <img
-                className="hero-native-screen"
-                src={`/hero/ios-${lang}.png`}
-                width={1320}
-                height={2868}
-                alt={hero.nativeAlt}
-                loading="lazy"
-              />
-            ) : (
-              <>
-                <div className="hero-phone-status" aria-hidden="true">
-                  <span>9:41</span>
-                  <span className="hero-phone-island" />
-                  <span>▰</span>
+            <div className="hero-phone-status" aria-hidden="true">
+              <span>9:41</span>
+              <span className="hero-phone-island" />
+              <span>▰</span>
+            </div>
+            <div className="hero-phone-scene" key={phonePhase}>
+              {phonePhase === 'intro' ? (
+                <div className="hero-phone-intro">
+                  <Avatar name="DeepSeekBot" size={88} />
+                  <strong>Tobs</strong>
                 </div>
-                {phoneTab === 'pair' ? (
-                  <PhonePair t={copy.featureDemos.mobile} onNext={() => setPhoneTab('chat')} />
-                ) : (
-                  <>
-                    <header className="hero-phone-head">
-                      <Avatar name={channel.bots[0]!} size={28} />
-                      <strong>{channel.title}</strong>
-                      <small>
-                        {waiting
-                          ? t.needsYou
-                          : done
-                            ? Object.values(answers).includes('deny')
-                              ? t.denied
-                              : hero.done
-                            : t.tob.states.working}
-                      </small>
-                    </header>
-                    <div className="hero-phone-feed" ref={phoneFeed}>
-                      <ol className="app-msgs">
-                        {steps.map(renderStep)}
-                        {extra.map((item, index) => (
-                          <li
-                            className={
-                              item.kind === 'user'
-                                ? 'app-msg app-msg--user'
-                                : 'app-msg app-msg--bot'
-                            }
-                            key={`extra-${index}`}
-                          >
-                            <p className="app-bubble">
-                              {item.kind === 'user' ? item.text : t.fallback}
-                            </p>
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                    <p className="hero-sync-note">{hero.synced}</p>
-                  </>
-                )}
-                <span className="hero-phone-home" aria-hidden="true" />
-              </>
-            )}
+              ) : phonePhase === 'pair' ? (
+                <div className="hero-phone-intro">
+                  <ScanLine size={112} strokeWidth={1.2} aria-hidden="true" />
+                  <strong>{hero.scanTitle}</strong>
+                </div>
+              ) : (
+                <>
+                  <header className="hero-phone-head">
+                    <Avatar name={channel.bots[0]!} size={28} />
+                    <strong>{channel.title}</strong>
+                    <small>
+                      {waiting
+                        ? t.needsYou
+                        : done
+                          ? Object.values(answers).includes('deny')
+                            ? t.denied
+                            : hero.done
+                          : t.tob.states.working}
+                    </small>
+                  </header>
+                  <div className="hero-phone-feed" ref={phoneFeed}>
+                    <ol className="app-msgs">
+                      {steps.map(renderStep)}
+                      {extra.map((item, index) => (
+                        <li
+                          className={
+                            item.kind === 'user' ? 'app-msg app-msg--user' : 'app-msg app-msg--bot'
+                          }
+                          key={`extra-${index}`}
+                        >
+                          <p className="app-bubble">
+                            {item.kind === 'user' ? item.text : t.fallback}
+                          </p>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </>
+              )}
+            </div>
+            <span className="hero-phone-home" aria-hidden="true" />
           </div>
-          {phoneTab === 'native' ? <p className="hero-native-note">{hero.nativeNote}</p> : null}
         </div>
       ) : null}
     </div>

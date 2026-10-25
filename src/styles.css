@@ -195,9 +195,14 @@ a:where(:not(.astryx-button)) {
 .topnav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(10px, 1.2vw, 20px);
   font-size: 12px;
   margin-right: auto;
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 .topnav a {
   display: inline-flex;
@@ -229,7 +234,7 @@ a:where(:not(.astryx-button)) {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 18px;
+  gap: 12px;
   margin-left: auto;
 }
 .header-community {
@@ -1320,7 +1325,7 @@ a:where(:not(.astryx-button)) {
 
 /* ---- small screens ---- */
 /* Keep actions beside the brand; navigation gets one dedicated second row. */
-@media (max-width: 1180px) {
+@media (max-width: 1080px) {
   .topbar {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px 16px;
@@ -1330,9 +1335,6 @@ a:where(:not(.astryx-button)) {
     grid-row: 2;
     gap: 14px;
     margin-right: 0;
-  }
-  .topnav .nav-icon-wrap {
-    display: none;
   }
   .header-actions {
     grid-column: 2;
@@ -1362,9 +1364,6 @@ a:where(:not(.astryx-button)) {
   }
   .toggles {
     gap: 8px;
-  }
-  .topnav .nav-changelog {
-    display: none;
   }
   .header-actions {
     position: relative;

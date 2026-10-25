@@ -25,9 +25,11 @@ export function HeroLinks({ lang }: { lang: Lang }) {
         </button>
         <a href="#install">{t.manual}</a>
       </div>
-      <p className="setup-hint" role="status">
-        {state === 'failed' ? t.failed : t.setupHint}
-      </p>
+      {state === 'failed' ? (
+        <p className="setup-hint" role="status">
+          {t.failed}
+        </p>
+      ) : null}
       <details className="setup-prompt" open={state === 'failed' ? true : undefined}>
         <summary>{t.preview}</summary>
         <pre tabIndex={0}>{prompt}</pre>

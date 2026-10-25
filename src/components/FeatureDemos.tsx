@@ -502,15 +502,33 @@ function StreamedReply({ lines, run }: { lines: string[]; run: string }) {
   return <>{out}</>;
 }
 
-export function PhonePair({ t, onNext }: { t: Demos['mobile']; onNext: () => void }) {
+export function PhonePair({
+  t,
+  onNext,
+  autoPlay = false,
+}: {
+  t: Demos['mobile'];
+  onNext: () => void;
+  autoPlay?: boolean;
+}) {
   const [state, setState] = useState<'idle' | 'scanning' | 'paired'>('idle');
+  useEffect(() => {
+    if (!autoPlay) return;
+    const id = window.setTimeout(() => setState('scanning'), prefersReducedMotion() ? 0 : 700);
+    return () => window.clearTimeout(id);
+  }, [autoPlay]);
+  useEffect(() => {
+    if (!autoPlay || state !== 'paired') return;
+    const id = window.setTimeout(onNext, prefersReducedMotion() ? 0 : 900);
+    return () => window.clearTimeout(id);
+  }, [autoPlay, state, onNext]);
   useEffect(() => {
     if (state !== 'scanning') return;
     const id = window.setTimeout(() => setState('paired'), prefersReducedMotion() ? 0 : 1100);
     return () => window.clearTimeout(id);
   }, [state]);
   return (
-    <div className="phone-page phone-pair">
+    <div className="phone-page phone-pair" data-manual={!autoPlay ? '' : undefined}>
       <h4 className="phone-title">{t.pair.title}</h4>
       <div className="phone-qr" data-state={state}>
         <PairCode />

@@ -324,7 +324,6 @@ function page(
         <a href="${home(lang)}#features">${t.nav.features}</a>
         <a href="${home(lang)}#install">${t.nav.install}</a>
         <a href="${home(lang)}market"><span class="nav-icon-wrap">${navIconSvg('market')}</span>${t.nav.market}</a>
-        <a href="${home(lang)}avatar"><span class="nav-icon-wrap">${navIconSvg('avatar')}</span>${t.nav.avatar}</a>
         <a href="${docPath(lang, 'overview')}"${guide ? ' aria-current="page"' : ''}><span class="nav-icon-wrap">${navIconSvg('docs')}</span>${t.docs}</a>
         <a class="nav-changelog" href="${home(lang)}changelog/"><span class="nav-icon-wrap">${navIconSvg('changelog')}</span>${t.nav.changelog}</a>
         <a href="${home(lang)}blog/"><span class="nav-icon-wrap">${navIconSvg('blog')}</span>${t.nav.blog}</a>

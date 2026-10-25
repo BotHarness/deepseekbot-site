@@ -1,3 +1,9 @@
+/* Platform button colors: Android brand green and a white iOS surface. */
+:root {
+  --mobile-android: #3ddc84;
+  --mobile-ios: #ffffff;
+  --mobile-button-ink: #073042;
+}
 /* Product preview inside the existing pixel sky; app surfaces keep their native typography. */
 .hero {
   padding-top: 32px;
@@ -5,52 +11,38 @@
 }
 .hero-layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
 }
 .hero-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
   max-width: none;
   margin: 0;
   text-align: left;
   min-width: 0;
 }
-.hero-brand {
-  display: inline-block;
-  margin: 0 0 16px 16px;
-  font-family: var(--pixel-font);
-  font-size: 24px;
-}
-.hero-brand span {
-  font-size: 18px;
-  color: var(--ink-soft);
-  margin-left: 8px;
-}
 .hero-heading {
-  margin: 0 0 24px;
-  font-family: var(--pixel-font);
-  font-weight: 400;
-  font-size: clamp(36px, 3.8vw, 62px);
-  line-height: 1.22;
+  grid-column: 1 / -1;
+  margin: 0;
+  font: 400 clamp(36px, 4.3vw, 64px)/1.2 var(--pixel-font);
   letter-spacing: -0.025em;
 }
 .hero-heading em {
   font-style: normal;
   color: var(--accent);
 }
-.hero-copy .lead {
-  margin: 0;
-  max-width: 440px;
-  font-size: 17px;
-  line-height: 1.7;
-}
 .hero-actions {
+  display: flex;
+  align-items: center;
   justify-items: start;
-  gap: 12px;
-  margin-top: 26px;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 0;
 }
 .hero-primary-actions {
   display: flex;
@@ -95,17 +87,28 @@ a.beta-button {
   color: var(--ink);
 }
 .beta-button--ios {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--mobile-ios);
+  color: var(--mobile-button-ink);
 }
 a.beta-button--ios {
-  color: var(--bg);
+  color: var(--mobile-button-ink);
+}
+.beta-button--android {
+  background: var(--mobile-android);
+  color: var(--mobile-button-ink);
 }
 .mobile-beta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
+  margin: 20px 0 28px;
+}
+.mobile-beta .beta-button {
+  min-height: 48px;
+  min-width: 132px;
+  font-size: 18px;
+  padding: 10px 18px;
 }
 .setup-hint {
   margin: 0;
@@ -115,7 +118,7 @@ a.beta-button--ios {
 }
 .setup-prompt {
   width: 100%;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--ink-soft);
 }
 .setup-prompt summary {
@@ -137,34 +140,23 @@ a.beta-button--ios {
   user-select: text;
 }
 .hero-ecosystem {
-  display: block;
-  margin-top: 26px;
-  max-width: 400px;
-  font-size: 12px;
-  line-height: 1.6;
+  align-self: center;
+  margin: 0;
+  max-width: 360px;
+  font: 16px/1.5 var(--pixel-font);
+  text-align: right;
   color: var(--ink-soft) !important;
 }
 .hero-product {
   min-width: 0;
 }
-.hero-demo-label {
-  margin: 0 0 12px;
-  font-size: 13px;
-  font-family: var(--pixel-font);
-}
-.hero-demo-note {
-  margin: 12px 0 0;
-  text-align: center;
-  font-size: 11px;
-  color: var(--ink-soft);
-}
 .hero-linked {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 200px;
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 18px;
   align-items: center;
   position: relative;
-  padding: 16px 0;
+  padding: 12px 0;
   border: 0;
   background: none;
   box-shadow: none;
@@ -176,92 +168,21 @@ a.beta-button--ios {
 }
 .hero-linked > .hero-desktop {
   width: 100%;
-  height: 420px;
+  height: 460px;
+  max-width: none;
   border: 2px solid var(--px-ink);
-  border-radius: 10px;
+  border-radius: 14px;
   box-shadow: 6px 6px 0 var(--px-shadow);
-  font-size: 12px;
-}
-.hero-linked .hero-desktop .app-body {
-  flex-direction: column;
-  padding: 5px;
-}
-.hero-linked .hero-desktop .app-rail,
-.hero-linked .hero-desktop .app-stack,
-.hero-linked .hero-desktop .app-panel-toggle {
-  display: none !important;
 }
 .hero-linked .hero-desktop .app-pane--channels {
-  flex: none;
-  border: 0;
-  padding: 0 0 5px;
+  flex-basis: 200px;
 }
-.hero-linked .hero-desktop .app-pane--channels > .app-pane-head {
-  display: none;
-}
-.hero-linked .hero-desktop .app-channels {
-  display: flex;
-  gap: 4px;
-  padding: 0;
-  overflow: auto;
-}
-.hero-linked .hero-desktop .app-channels > li {
-  flex: none;
-}
-.hero-linked .hero-desktop .app-channel {
-  width: auto;
-  padding: 7px;
-  gap: 4px;
-}
-.hero-linked .hero-desktop .app-channel-avatar,
-.hero-linked .hero-desktop .app-channel-line,
-.hero-linked .hero-desktop .app-channel time {
-  display: none;
-}
-.hero-linked .hero-desktop .app-channel-top {
-  font-size: 10px;
-}
-.hero-linked .hero-desktop .app-feed {
-  padding: 10px 6px;
-}
-.hero-linked .app-msgs {
-  gap: 12px;
-}
-.hero-linked .app-msg {
-  gap: 6px;
-}
-.hero-linked .app-msg > .pixel-avatar {
-  flex: 0 0 24px;
-  width: 24px !important;
-  height: 24px !important;
-}
-.hero-linked .app-choice {
-  padding: 6px 8px;
-  font-size: 11px;
+.hero-linked .hero-desktop .app-stack {
+  flex-basis: 200px;
 }
 .hero-phone-wrap {
   min-width: 0;
   position: relative;
-}
-.hero-phone-tabs {
-  display: flex;
-  margin-bottom: 10px;
-  justify-content: center;
-  gap: 4px;
-}
-.hero-phone-tabs button,
-.hero-device-switch button {
-  cursor: pointer;
-  font: 12px var(--pixel-font);
-  padding: 7px 9px;
-  color: var(--ink);
-  background: var(--bubble);
-  border: 2px solid var(--px-ink);
-}
-.hero-phone-tabs button[aria-pressed='true'],
-.hero-device-switch button[aria-pressed='true'] {
-  color: var(--accent-ink);
-  background: var(--accent);
 }
 .hero-linked .hero-linked-phone {
   display: flex;
@@ -275,7 +196,7 @@ a.beta-button--ios {
   border-radius: 32px;
   overflow: hidden;
   box-shadow: 6px 6px 0 var(--px-shadow);
-  font-size: 11px;
+  font-size: 12px;
 }
 .hero-phone-status {
   height: 32px;
@@ -339,14 +260,6 @@ a.beta-button--ios {
 .hero-phone-feed .app-approval-hint {
   display: none;
 }
-.hero-sync-note {
-  margin: 0;
-  padding: 8px;
-  text-align: center;
-  color: var(--app-soft);
-  font-size: 9px;
-  border-top: 1px solid var(--app-line);
-}
 .hero-phone-home {
   display: block;
   flex: none;
@@ -355,43 +268,6 @@ a.beta-button--ios {
   width: 65px;
   border-radius: 4px;
   background: var(--app-ink);
-}
-.hero-native-screen {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: white;
-}
-.hero-native-note {
-  margin: 8px 0 0;
-  text-align: center;
-  font-size: 10px;
-}
-.hero-linked-phone .phone-page {
-  min-height: 0;
-  flex: 1;
-  overflow: auto;
-  padding: 10px;
-  font-size: 11px;
-}
-.hero-linked-phone .phone-title {
-  font-size: 17px;
-}
-.hero-linked-phone .phone-qr {
-  width: 100%;
-  max-width: 125px;
-  margin: 12px auto;
-}
-.hero-linked-phone .phone-hint {
-  font-size: 11px;
-}
-.hero-linked-phone .phone-btn {
-  font-size: 11px;
-  padding: 8px;
-}
-.hero-device-switch {
-  display: none;
 }
 .android-beta-popover {
   color: var(--ink) !important;
@@ -445,94 +321,36 @@ a.beta-button--ios {
   font: 22px var(--pixel-font) !important;
   user-select: text;
 }
-.topbar--mobile-beta .header-actions {
-  gap: 12px;
-}
-@media (max-width: 1540px) {
-  .topbar--mobile-beta {
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 10px 20px;
-  }
-  .topbar--mobile-beta .topnav {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    justify-content: center;
-  }
-  .topbar--mobile-beta .header-actions {
-    grid-column: 2;
-    grid-row: 1;
+@media (min-width: 1081px) {
+  .hero-linked .hero-desktop .app-stack {
+    display: flex;
   }
 }
 @media (max-width: 1100px) {
-  .hero-layout {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
-    gap: 24px;
+  .hero-copy {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .hero-ecosystem {
+    text-align: left;
+    max-width: none;
   }
   .hero-linked {
-    grid-template-columns: minmax(0, 1fr) 190px;
-    gap: 10px;
-  }
-  .hero-linked > .hero-desktop {
-    height: 410px;
-  }
-  .hero-heading {
-    font-size: 38px;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 12px;
   }
 }
 @media (max-width: 900px) {
   .hero {
-    padding-top: 32px;
-  }
-  .hero-layout {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  .hero-copy {
-    max-width: 640px;
-  }
-  .hero-heading {
-    font-size: clamp(36px, 6vw, 52px);
-  }
-  .hero-linked {
-    grid-template-columns: minmax(0, 1fr) 230px;
-  }
-  .hero-linked > .hero-desktop {
-    height: 480px;
-  }
-  .topbar--mobile-beta .header-actions {
-    flex-wrap: wrap;
-    gap: 8px;
+    padding-top: 24px;
   }
 }
 @media (max-width: 600px) {
-  .topbar--mobile-beta {
-    grid-template-columns: 32px minmax(0, 1fr);
-  }
-  .topbar--mobile-beta .header-community-wrap {
-    display: none;
-  }
-  .topbar--mobile-beta .topnav {
-    justify-content: flex-start;
-  }
-  .topbar--mobile-beta .header-actions {
-    justify-content: flex-end;
-  }
-  .topbar--mobile-beta .beta-button {
-    min-height: 32px;
-    font-size: 11px;
-    padding: 6px 8px;
-  }
-  .hero-layout {
-    gap: 20px;
-  }
   .hero-heading {
-    font-size: 36px;
+    font-size: 38px;
   }
-  .hero-copy .lead {
-    font-size: 15px;
-  }
-  .hero-brand {
-    font-size: 28px;
+  .hero-ecosystem {
+    font-size: 14px;
   }
   .hero-linked {
     display: flex;
@@ -540,24 +358,89 @@ a.beta-button--ios {
     align-items: center;
     padding: 8px 0;
   }
-  .hero-device-switch {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 12px;
-  }
   .hero-linked[data-device='phone'] > .hero-desktop,
   .hero-linked[data-device='desktop'] > .hero-phone-wrap {
     display: none;
   }
   .hero-phone-wrap {
-    width: 250px;
+    width: 300px;
     max-width: 100%;
   }
+  .hero-linked {
+    min-height: 652px;
+  }
   .hero-linked > .hero-desktop {
-    height: 460px;
+    height: 652px;
   }
-  .hero-demo-label {
-    font-size: 12px;
-    line-height: 1.5;
+}
+
+/* A single story, with stable device frames rather than mode-switch controls. */
+.hero-phone-scene {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  animation: hero-scene-in 420ms ease-out both;
+}
+.hero-phone-intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  gap: 24px;
+  color: var(--app-ink);
+  font-size: 22px;
+}
+.hero-desktop-pair {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  justify-content: center;
+  align-items: center;
+  animation: hero-scene-in 420ms ease-out both;
+}
+.hero-desktop-pair .phone-page {
+  width: 100%;
+  max-width: 340px;
+  padding: 20px;
+}
+.hero-desktop-pair .phone-title {
+  font-size: 22px;
+}
+.hero-desktop-pair .phone-qr {
+  max-width: 150px;
+  margin: 16px auto;
+}
+.hero-desktop-pair .phone-hint,
+.hero-desktop-pair .phone-actions {
+  display: none;
+}
+.hero-desktop-pair .phone-page[data-manual] .phone-actions {
+  display: flex;
+}
+.hero-linked[data-phase='sync'] .hero-desktop .app-feed {
+  animation: hero-scene-in 420ms ease-out both;
+}
+@keyframes hero-scene-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-phone-scene,
+  .hero-desktop-pair,
+  .hero-linked[data-phase='sync'] .hero-desktop .app-feed {
+    animation: none;
+  }
+}
+
+.hero-linked .app-approval-hint {
+  display: none;
 }

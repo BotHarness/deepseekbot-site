@@ -5,7 +5,7 @@ import { setupPrompt } from '../src/setupPrompt.ts';
 import { DESKTOP_PACKAGE, DSH_VERSION } from '../src/installRelease.ts';
 
 test('TestFlight clicks identify platform and placement without URL query or user data', () => {
-  for (const placement of ['header', 'hero']) {
+  for (const placement of ['install']) {
     assert.deepEqual(
       mobileInstallEvent(new URL(TESTFLIGHT_URL + '?email=private@example.invalid'), placement),
       ['mobile_install_clicked', { platform: 'ios', destination: 'testflight', placement }],
@@ -20,7 +20,7 @@ test('unrelated and lookalike links cannot count as this TestFlight installation
     'https://testflight.apple.com/join/another',
     'https://discord.gg/aEB2Ayhu7B',
   ])
-    assert.equal(mobileInstallEvent(new URL(url), 'header'), null);
+    assert.equal(mobileInstallEvent(new URL(url), 'install'), null);
 });
 
 test('both setup prompts target the published package and desktop-owned Profile', () => {

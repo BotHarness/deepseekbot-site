@@ -9,10 +9,11 @@ import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
 import { LiveDemo } from './components/LiveDemo';
 import { Install } from './components/Install';
+import { MobileBeta } from './components/MobileBeta';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
-import { COPY, LINKS, VERSION } from './content';
+import { COPY, LINKS } from './content';
 import { HERO_COPY } from './heroCopy';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
@@ -54,27 +55,16 @@ export function App() {
           </div>
           <div className="hero-layout">
             <div className="hero-copy">
-              <a className="badge" href={`${changelogPath(lang)}#v${VERSION}`}>
-                {copy.hero.badge}
-              </a>
-              <p className="hero-brand">
-                Tobs <span>托布</span>
-              </p>
               <h1 className="hero-heading">
-                {hero.headline}
-                <br />
-                <em>{hero.headlineEnd}</em>
+                {hero.headline} <em>{hero.headlineEnd}</em>
               </h1>
-              <p className="lead">{hero.lead}</p>
               <HeroLinks lang={lang} />
               <a className="hero-ecosystem" href={LINKS.dsh} target="_blank" rel="noreferrer">
                 {hero.ecosystem} ↗
               </a>
             </div>
             <div className="hero-product">
-              <p className="hero-demo-label">{hero.demo}</p>
               <LiveDemo copy={copy} linkedPhone />
-              <p className="hero-demo-note">{hero.demoNote}</p>
             </div>
           </div>
           <Crew copy={copy} lang={lang} />
@@ -198,6 +188,7 @@ export function App() {
         <section className="section" id="install" aria-labelledby="install-title">
           <p className="kicker">{copy.install.kicker}</p>
           <h2 id="install-title">{copy.install.title}</h2>
+          <MobileBeta lang={lang} placement="install" />
           <Install copy={copy} lang={lang} />
         </section>
 

@@ -8,7 +8,7 @@ import { HERO_COPY } from '../heroCopy';
 import { TESTFLIGHT_URL } from '../mobileBeta';
 import { CommunityIcon } from './CommunityIcon';
 
-export function MobileBeta({ lang, placement }: { lang: Lang; placement: 'header' | 'hero' }) {
+export function MobileBeta({ lang, placement }: { lang: Lang; placement: 'install' }) {
   const t = HERO_COPY[lang];
   const [qq, setQq] = useState<'idle' | 'copied' | 'failed'>('idle');
   return (
@@ -61,7 +61,7 @@ export function MobileBeta({ lang, placement }: { lang: Lang; placement: 'header
           </div>
         }
       >
-        <button className="beta-button" type="button">
+        <button className="beta-button beta-button--android" type="button">
           {t.android}
           <ChevronDown size={14} aria-hidden="true" />
         </button>
