@@ -71,9 +71,10 @@ export function App() {
               </ul>
               <HeroLinks lang={lang} />
             </div>
-            <div className="hero-product">
+            <figure className="hero-product">
               <LiveDemo copy={copy} linkedPhone />
-            </div>
+              <figcaption className="hero-caption">{copy.hero.lead}</figcaption>
+            </figure>
           </div>
           <Crew copy={copy} lang={lang} />
           <div className="ground" aria-hidden="true" />

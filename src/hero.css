@@ -6,6 +6,7 @@
 }
 /* Product preview inside the existing pixel sky; app surfaces keep their native typography. */
 .hero {
+  font-family: var(--pixel-font);
   padding-top: 32px;
   gap: 16px;
 }
@@ -131,6 +132,15 @@ a.beta-button--ios {
 }
 .hero-product {
   min-width: 0;
+  margin: 0;
+}
+.hero-caption {
+  max-width: 1100px;
+  margin: 16px 0 0;
+  color: var(--ink-soft);
+  font: 400 16px/1.7 var(--pixel-font);
+  text-align: left;
+  -webkit-font-smoothing: none;
 }
 .hero-linked {
   --hero-phone-width: 280px;

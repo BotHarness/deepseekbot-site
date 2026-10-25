@@ -75,3 +75,5 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - 并排展示时，桌面窗口高度按手机当前宽度和1320:2868比例计算，比完整手机高32px；两者垂直居中，桌面上下各多16px。窄屏单设备展示保持原高度。
 
 - 用户最后调整：移除 Setup prompt 的可展开预览；按钮继续复制完整双语指令，失败时给出短提示和已有手动安装入口。英文 slogan 使用 “A team of bots (Tobs), each with its own identity, persona and memory, working together.”，并维护对应中文。恢复旧首页三个 chips，沿用旧 `.chips` 及日夜调色板；上游200k+ Stars并入 DSH chip。大标题使用正文色，核心安装按钮保持主题 primary 实心色以突出主要操作。
+
+- 在 Hero 联动演示正下方加入旧官网完整产品介绍，复用 `copy.hero.lead` 的中英文内容，以左对齐的像素字体图注呈现。Hero 营销文字统一继承像素字体，演示内部桌面与手机仍保留各自的真实界面字体。
