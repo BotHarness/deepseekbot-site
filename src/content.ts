@@ -269,7 +269,7 @@ const zh: Copy = {
   hero: {
     badge: `v${VERSION} 正式版`,
     title: 'Tobs',
-    tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
+    tagline: '托布 Tobs，一支各有身份、人格和记忆、彼此协作的 Bot 团队。',
     lead: 'Tobs（托布）意为 Team of bots，也寓意 Thousands of Bots，是 BotHarness 开发的个人 AI 智能体协作工具，作为 Tobs 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
@@ -642,7 +642,8 @@ const en: Copy = {
   hero: {
     badge: `v${VERSION} is out`,
     title: 'Tobs',
-    tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
+    tagline:
+      'A team of bots (Tobs), each with its own identity, persona and memory, working together.',
     lead: 'Tobs means Team of bots, with the ambition of Thousands of Bots. It is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the Tobs plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',

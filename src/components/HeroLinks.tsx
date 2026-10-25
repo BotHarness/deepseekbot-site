@@ -30,10 +30,6 @@ export function HeroLinks({ lang }: { lang: Lang }) {
           {t.failed}
         </p>
       ) : null}
-      <details className="setup-prompt" open={state === 'failed' ? true : undefined}>
-        <summary>{t.preview}</summary>
-        <pre tabIndex={0}>{prompt}</pre>
-      </details>
     </div>
   );
 }

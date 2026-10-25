@@ -55,13 +55,21 @@ export function App() {
           </div>
           <div className="hero-layout">
             <div className="hero-copy">
-              <h1 className="hero-heading">
-                {hero.headline} <em>{hero.headlineEnd}</em>
-              </h1>
+              <h1 className="hero-heading">{copy.hero.tagline}</h1>
+              <ul className="chips hero-chips">
+                {copy.hero.chips.map((chip, index) => (
+                  <li key={chip}>
+                    {index === 1 ? (
+                      <a href={LINKS.dsh} target="_blank" rel="noreferrer">
+                        {chip} · {hero.stars}
+                      </a>
+                    ) : (
+                      chip
+                    )}
+                  </li>
+                ))}
+              </ul>
               <HeroLinks lang={lang} />
-              <a className="hero-ecosystem" href={LINKS.dsh} target="_blank" rel="noreferrer">
-                {hero.ecosystem} ↗
-              </a>
             </div>
             <div className="hero-product">
               <LiveDemo copy={copy} linkedPhone />

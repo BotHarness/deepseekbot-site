@@ -2,14 +2,11 @@ import type { Lang } from './content';
 
 export const HERO_COPY = {
   zh: {
-    headline: '你的 AI 团队，',
-    headlineEnd: '随时在身边。',
-    ecosystem: '基于 DeepSeek Harness · 200k+ GitHub Stars',
+    stars: '200k+ GitHub Stars',
     setup: '让 AI 帮我安装',
     copied: '安装指令已复制',
     close: '关闭',
-    failed: '复制失败，请展开指令后手动复制。',
-    preview: '查看安装指令',
+    failed: '复制失败，请重试或使用手动安装。',
     manual: '手动安装 →',
     mobile: '移动端内测',
     ios: 'iOS',
@@ -59,14 +56,11 @@ export const HERO_COPY = {
     done: '已完成',
   },
   en: {
-    headline: 'Your AI team,',
-    headlineEnd: 'always with you.',
-    ecosystem: 'Built on DeepSeek Harness · 200k+ GitHub Stars',
+    stars: '200k+ GitHub Stars',
     setup: 'Ask your AI to set it up',
     copied: 'Setup prompt copied',
     close: 'Close',
-    failed: 'Copy failed. Expand the prompt and copy it manually.',
-    preview: 'View setup prompt',
+    failed: 'Couldn’t copy. Try again or install manually.',
     manual: 'Install manually →',
     mobile: 'Mobile beta',
     ios: 'iOS',

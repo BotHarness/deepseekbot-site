@@ -73,3 +73,5 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - 当前聊天请求通过共享审批端口进入 Activity，处理结果回写同一份聊天答案；其他两个来源的预设请求以各自环境限定的请求 ID 保存。环境过滤也会显示当前范围；同名 Bot 的聊天、重播和点击统计保留环境身份。新增两项双语回归覆盖身份区分及原审批流程保留。
 
 - 并排展示时，桌面窗口高度按手机当前宽度和1320:2868比例计算，比完整手机高32px；两者垂直居中，桌面上下各多16px。窄屏单设备展示保持原高度。
+
+- 用户最后调整：移除 Setup prompt 的可展开预览；按钮继续复制完整双语指令，失败时给出短提示和已有手动安装入口。英文 slogan 使用 “A team of bots (Tobs), each with its own identity, persona and memory, working together.”，并维护对应中文。恢复旧首页三个 chips，沿用旧 `.chips` 及日夜调色板；上游200k+ Stars并入 DSH chip。大标题使用正文色，核心安装按钮保持主题 primary 实心色以突出主要操作。
