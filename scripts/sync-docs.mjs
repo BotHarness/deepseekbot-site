@@ -32,7 +32,10 @@ const installVersion = existsSync(installIdentityPath)
   ? JSON.parse(readFileSync(installIdentityPath, 'utf8')).version
   : undefined;
 const reviewedInstallVersion =
-  installVersion === '1.4.0' || installVersion === '1.4.1' ? installVersion : undefined;
+  typeof installVersion === 'string' &&
+  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(installVersion)
+    ? installVersion
+    : undefined;
 const media = new Set();
 const siteMedia = new Map();
 // A site-owned asset directory also owns its transcripts, manifests and caption
@@ -110,7 +113,7 @@ const editorialBody = (body, slug, lang) => {
   if (slug === 'installation') {
     // 1.4.0/1.4.1 install-identity sync retains historical screenshot records upstream.
     // Correct only reviewed releases; future guides must be reviewed again.
-    if (reviewedInstallVersion) {
+    if (reviewedInstallVersion === '1.4.0' || reviewedInstallVersion === '1.4.1') {
       body = body
         .replace(
           lang === 'zh'

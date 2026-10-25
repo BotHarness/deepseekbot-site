@@ -16,12 +16,12 @@ export { QQ_GROUP };
 export type Lang = 'zh' | 'en';
 
 export { VERSION, DESKTOP_PACKAGE };
-export const DSH_VERSION = '0.2.1-rc.2';
+export const DSH_VERSION = '0.2.1-rc.3';
 
 export const LINKS = {
   github: COMMUNITY_LINKS.github,
   docs: 'https://botharness.ai',
-  npm: 'https://www.npmjs.com/package/deepseekbot',
+  npm: 'https://www.npmjs.com/package/@botharness/tobs',
   botpixel: 'https://github.com/BotHarness/BotPixel',
   dsh: 'https://github.com/deepseek-ai/deepseek-harness',
   issues: 'https://github.com/BotHarness/DeepSeekBot/issues',
@@ -271,7 +271,7 @@ const zh: Copy = {
     badge: `v${VERSION} 正式版`,
     title: 'Tobs',
     tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
-    lead: 'Tobs（托布）意为 Team of bots，也寓意 Thousands of Bots，是 BotHarness 开发的个人 AI 智能体协作工具，作为 deepseekbot 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
+    lead: 'Tobs（托布）意为 Team of bots，也寓意 Thousands of Bots，是 BotHarness 开发的个人 AI 智能体协作工具，作为 Tobs 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
     crewLabel: '一组正在工作的 PersonaBots，头像会变成它们正在使用的工具',
@@ -310,10 +310,10 @@ const zh: Copy = {
   features: {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
-    lead: `v${VERSION} 已发布：第一次进入 Bot 模式时，托布五步带你上手；主题配色、半透明面板和壁纸库让 Bot 模式换成你喜欢的样子；/compact 和空闲压缩让长对话保持轻快，快速搜索能直达任意设置项。`,
+    lead: `v${VERSION} 已发布：使用新的 Tobs 安装包，保留原有 DeepSeekBot 命令；Bot 可以统一向频道与外部聊天发送消息，后台任务完成后也能继续报告结果。`,
     release: {
-      text: 'Memory 可以预览图片和 Markdown，审批简化为「允许这次／始终允许／拒绝」，并修复了 Windows Desktop、活动中心和缩放的一批问题。',
-      label: '查看 1.4.1 更新日志',
+      text: '修复了聊天返回最新消息按钮、已安装命令启动，以及 Mac 桌面控制组件安装失败时的清理与错误提示。',
+      label: `查看 ${VERSION} 更新日志`,
       href: `/changelog/#v${VERSION}`,
     },
     items: [
@@ -575,7 +575,7 @@ const zh: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/harness/',
     },
-    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；${VERSION} 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2 与 0.2.1-rc.2 验证。声明安装范围为 >=0.2.0-rc.2 <0.3.0-0，不代表所有后续版本均已验证。`,
+    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；${VERSION} 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2、0.2.1-rc.2 和 0.2.1-rc.3 验证。声明安装范围为 >=0.2.0-0，不代表所有后续版本均已验证。`,
     steps: ['安装 DeepSeek Harness', '把 Tobs 装进 web Profile', '启动并打开 Bot mode'],
     next: {
       title: '装好了？选择接入方式与可选能力',
@@ -644,7 +644,7 @@ const en: Copy = {
     badge: `v${VERSION} is out`,
     title: 'Tobs',
     tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
-    lead: 'Tobs means Team of bots, with the ambition of Thousands of Bots. It is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the deepseekbot plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
+    lead: 'Tobs means Team of bots, with the ambition of Thousands of Bots. It is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the Tobs plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
     crewLabel: 'A crew of working PersonaBots whose avatars turn into the tool each one is using',
@@ -683,10 +683,10 @@ const en: Copy = {
   features: {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
-    lead: `v${VERSION} is out: Tob walks you through a five-step intro the first time you enter Bot mode; themes, see-through panels and a wallpaper library make Bot mode your own; /compact and Idle Compaction keep long conversations fast, and quick search reaches any setting.`,
+    lead: `v${VERSION} is out: install Tobs while keeping the supported DeepSeekBot command; Bots can send messages to Channels and external chats through one delivery path and report completed background work.`,
     release: {
-      text: 'Memory previews images and Markdown, approvals come down to Allow once, Always allow and Reject, and a batch of Windows Desktop, Activity and zoom issues are fixed.',
-      label: 'Read the 1.4.1 changelog',
+      text: 'Fixes cover the return-to-latest conversation button, installed command startup, and cleanup and error reporting when Mac desktop-control setup fails.',
+      label: `Read the ${VERSION} changelog`,
       href: `/en/changelog/#v${VERSION}`,
     },
     items: [
@@ -949,7 +949,7 @@ const en: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/en/harness/',
     },
-    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact ${VERSION} packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2 and 0.2.1-rc.2. Declared admission is >=0.2.0-rc.2 <0.3.0-0; later versions are not all runtime-qualified.`,
+    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact ${VERSION} packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2, 0.2.1-rc.2 and 0.2.1-rc.3. Declared admission is >=0.2.0-0; later versions are not all runtime-qualified.`,
     steps: [
       'Install DeepSeek Harness',
       'Add Tobs to the web Profile',

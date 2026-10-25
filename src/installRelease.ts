@@ -5,4 +5,8 @@ if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(identity.version)) {
 }
 
 export const VERSION = identity.version;
-export const DESKTOP_PACKAGE = `deepseekbot@${VERSION}`;
+const packageName = 'packageName' in identity ? identity.packageName : 'deepseekbot';
+if (packageName !== 'deepseekbot' && packageName !== '@botharness/tobs') {
+  throw new Error('Install identity must name a supported product package');
+}
+export const DESKTOP_PACKAGE = `${packageName}@${VERSION}`;

@@ -5,7 +5,9 @@ import { DESKTOP_PACKAGE, VERSION } from '../src/installRelease.ts';
 
 test('Hero and bilingual installation guides share the stable exact package spec', () => {
   assert.match(VERSION, /^\d+\.\d+\.\d+$/);
-  assert.equal(DESKTOP_PACKAGE, `deepseekbot@${VERSION}`);
+  const identity = JSON.parse(readFileSync('content/install-release.json', 'utf8'));
+  assert.ok(['deepseekbot', '@botharness/tobs'].includes(identity.packageName ?? 'deepseekbot'));
+  assert.equal(DESKTOP_PACKAGE, `${identity.packageName ?? 'deepseekbot'}@${VERSION}`);
   const copy = readFileSync('src/content.ts', 'utf8');
   assert.ok(copy.includes('dsh plugin --profile web add ${DESKTOP_PACKAGE}'));
   for (const lang of ['zh', 'en']) {
