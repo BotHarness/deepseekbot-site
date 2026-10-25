@@ -1261,3 +1261,9 @@
     scrollbar-color: var(--scroll-thumb) var(--scroll-track);
   }
 }
+
+/* Preserve native phone screenshot proportions in the 1.5 release article. */
+.blog-post-layout .mobile-release-figure {
+  max-width: 360px;
+  margin: 28px auto;
+}

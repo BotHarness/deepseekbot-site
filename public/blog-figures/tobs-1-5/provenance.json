@@ -1,0 +1,62 @@
+{
+  "kind": "Unmodified native iOS Simulator screenshots",
+  "device": "iPhone 18 Pro Max / iOS 27 Simulator",
+  "dimensions": [1320, 2868],
+  "context": "Historical Debug Simulator builds, not current store-binary or physical-device acceptance. Test data only. No UI was redrawn; CSS preserves the original aspect ratio.",
+  "files": [
+    {
+      "file": "chats-zh.png",
+      "batch": "ios-store-screenshots-86",
+      "sourceFile": "screenshots/01-chats.png",
+      "sourceRevision": "8418bad80a499213427606b23dcbc8e9ff2974ad",
+      "sha256": "bde003ef906206610e3fc56bf0156440f4e0d7d14439a61d07159619e99ed930",
+      "scene": "chats",
+      "locale": "zh"
+    },
+    {
+      "file": "group-zh.png",
+      "batch": "ios-store-screenshots-86",
+      "sourceFile": "screenshots/08-group-chat.png",
+      "sourceRevision": "8418bad80a499213427606b23dcbc8e9ff2974ad",
+      "sha256": "c23dade1b6c9066736bbd7f6618a546fbaf02ebdb83327c4b3381b481daaabae",
+      "scene": "group",
+      "locale": "zh"
+    },
+    {
+      "file": "market-zh.png",
+      "batch": "ios-store-screenshots-86",
+      "sourceFile": "screenshots/06-marketplace.png",
+      "sourceRevision": "8418bad80a499213427606b23dcbc8e9ff2974ad",
+      "sha256": "17143dcfb25fdf778c6eb039c5c28124355dd3ea9785b9c42203c4e9e57e5380",
+      "scene": "market",
+      "locale": "zh"
+    },
+    {
+      "file": "chats-en.png",
+      "batch": "ios-store-screenshots-en-87",
+      "sourceFile": "screenshots/01-chats-light.png",
+      "sourceRevision": "c15efff640991e71f6d20461ce69978ca0e6ef34",
+      "sha256": "dc137ce5a52a2d43ba694cb5e77794eda912dcc6783bdfccbd407083a74cbb12",
+      "scene": "chats",
+      "locale": "en"
+    },
+    {
+      "file": "group-en.png",
+      "batch": "ios-store-screenshots-en-87",
+      "sourceFile": "screenshots/08-idea-lab-light.png",
+      "sourceRevision": "c15efff640991e71f6d20461ce69978ca0e6ef34",
+      "sha256": "c0ec3ef44dd2b14edcd50a5dc5424ccffcca391138242358c8262c78034fc77b",
+      "scene": "group",
+      "locale": "en"
+    },
+    {
+      "file": "market-en.png",
+      "batch": "ios-store-screenshots-en-87",
+      "sourceFile": "screenshots/04-marketplace-light.png",
+      "sourceRevision": "c15efff640991e71f6d20461ce69978ca0e6ef34",
+      "sha256": "b46de0ea9dd3a7f03a58d27a858a46ca83bbb43edc1b1a1915146ecfb07ac6a7",
+      "scene": "market",
+      "locale": "en"
+    }
+  ]
+}

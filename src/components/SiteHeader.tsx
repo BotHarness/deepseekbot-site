@@ -52,10 +52,6 @@ export function SiteHeader({
             <Icon name="market" />
             {copy.nav.market}
           </a>
-          <a href={avatarPath(lang)} aria-current={page === 'avatar' ? 'page' : undefined}>
-            <Icon name="avatar" />
-            {copy.nav.avatar}
-          </a>
           <a href={docsPath(lang)}>
             <Icon name="docs" />
             {copy.nav.docs}

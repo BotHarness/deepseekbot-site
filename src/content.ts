@@ -10,13 +10,12 @@ import {
   type FeatureDemoCopy,
 } from './demoCopy';
 import { QQ_GROUP } from './communityLinks';
-import { VERSION, DESKTOP_PACKAGE } from './installRelease';
+import { VERSION, DESKTOP_PACKAGE, DSH_VERSION } from './installRelease';
 export { QQ_GROUP };
 
 export type Lang = 'zh' | 'en';
 
-export { VERSION, DESKTOP_PACKAGE };
-export const DSH_VERSION = '0.2.1-rc.3';
+export { VERSION, DESKTOP_PACKAGE, DSH_VERSION };
 
 export const LINKS = {
   github: COMMUNITY_LINKS.github,
@@ -125,6 +124,12 @@ export interface Copy {
     lead: string;
     release: { text: string; label: string; href: string };
     items: Feature[];
+  };
+  compare: {
+    kicker: string;
+    title: string;
+    note: string;
+    items: { title: string; description: string; href: string }[];
   };
   faq: {
     kicker: string;
@@ -270,7 +275,7 @@ const zh: Copy = {
   hero: {
     badge: `v${VERSION} 正式版`,
     title: 'Tobs',
-    tagline: '一组有各自身份、人格和记忆的 bots，一起做事。',
+    tagline: '托布 Tobs，一支各有身份、人格和记忆、彼此协作的 Bot 团队。',
     lead: 'Tobs（托布）意为 Team of bots，也寓意 Thousands of Bots，是 BotHarness 开发的个人 AI 智能体协作工具，作为 Tobs 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
@@ -395,6 +400,28 @@ const zh: Copy = {
       },
     ],
   },
+  compare: {
+    kicker: '产品对比',
+    title: '对比 Tobs',
+    note: '文章中的 DeepSeekBot 是 Tobs 的旧名称；对比以各篇注明的版本为准。',
+    items: [
+      {
+        title: 'Tobs vs Grok Bot',
+        description: '自托管、Git 记忆与模型选择',
+        href: '/blog/grokbot-alternative/',
+      },
+      {
+        title: 'Tobs vs DS Bot',
+        description: '同一 DSH 生态，不同的协作方式',
+        href: '/blog/deepseekbot-vs-ds-bot/',
+      },
+      {
+        title: '个人 AI Agent 怎么选',
+        description: 'Grok Bot、Muse、Dots 与 Cue',
+        href: '/blog/personal-ai-agents-comparison/',
+      },
+    ],
+  },
   faq: {
     kicker: 'FAQ',
     title: '常见问题',
@@ -429,6 +456,38 @@ const zh: Copy = {
         question: '如何安装并开始使用？',
         answer: `先安装 DeepSeek Harness ${DSH_VERSION}，在「插件 → 添加插件」中输入 ${DESKTOP_PACKAGE}，安装并启用。进入「Bot 模式」后，按 Home 引导配置模型，和托布创建 Bot、组建群聊，再学习开关与调整面板。`,
         links: [{ label: '安装教程', href: '/docs/installation/' }],
+      },
+      {
+        id: 'mobile-standalone',
+        question: '只下载手机版就能使用吗？',
+        answer:
+          '还不行。Tobs 的 Bot 运行在 Windows、Linux 或 macOS 电脑上，目前不能直接在手机上运行。移动端相当于一个遥控器：先在电脑上安装 DeepSeek Harness 和 Tobs，再连接手机，就能随时和电脑上的 Bot 协作。',
+        links: [{ label: '安装桌面端', href: '/docs/installation/' }],
+      },
+      {
+        id: 'mobile-features',
+        question: '手机上可以做什么？',
+        answer:
+          '可以和 Bot 私聊、参与群聊，接收消息通知，并在 Activity 中查看和处理工具审批。电脑负责运行 Bot，手机让你随时查看进展、回复和批准操作。',
+      },
+      {
+        id: 'mobile-host-online',
+        question: '用手机时，电脑必须一直开着吗？',
+        answer:
+          '需要让对应的电脑保持开机、联网，并运行 DeepSeek Harness 和 Tobs。电脑关机、休眠或应用退出后，手机无法继续连接这台电脑上的 Bot；重新上线后可以再连接。',
+      },
+      {
+        id: 'mobile-connection',
+        question: '手机和电脑必须在同一个 Wi-Fi 下吗？',
+        answer:
+          '不必。可以通过 Connect 登录同一个账号连接电脑，也可以按配对教程配置 Tailscale。配置好后，手机在外也能连接；两端都需要联网。',
+        links: [{ label: '手机连接教程', href: '/docs/mobile-pairing/' }],
+      },
+      {
+        id: 'mobile-multiple-hosts',
+        question: '一部手机可以连接多台电脑吗？',
+        answer:
+          '可以。每台电脑分别安装 Tobs 并完成连接后，手机可以切换电脑，也可以在全部聊天和 Activity 中查看多个环境的消息与待审批请求。每台电脑上的 Bot 和数据仍由各自的电脑保存。',
       },
       {
         id: 'models',
@@ -643,7 +702,8 @@ const en: Copy = {
   hero: {
     badge: `v${VERSION} is out`,
     title: 'Tobs',
-    tagline: 'A crew of bots, each with its own identity, persona and memory, working together.',
+    tagline:
+      'A team of bots (Tobs), each with its own identity, persona and memory, working together.',
     lead: 'Tobs means Team of bots, with the ambition of Thousands of Bots. It is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the Tobs plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
@@ -768,6 +828,28 @@ const en: Copy = {
       },
     ],
   },
+  compare: {
+    kicker: 'Compare',
+    title: 'Compare Tobs',
+    note: 'These articles use our former name, DeepSeekBot, and the versions stated in each comparison.',
+    items: [
+      {
+        title: 'Tobs vs Grok Bot',
+        description: 'Self-hosting, Git memory and model choice',
+        href: '/en/blog/grokbot-alternative/',
+      },
+      {
+        title: 'Tobs vs DS Bot',
+        description: 'One DSH ecosystem, different ways to collaborate',
+        href: '/en/blog/deepseekbot-vs-ds-bot/',
+      },
+      {
+        title: 'Choosing a personal AI agent',
+        description: 'Grok Bot, Muse, Dots and Cue',
+        href: '/en/blog/personal-ai-agents-comparison/',
+      },
+    ],
+  },
   faq: {
     kicker: 'FAQ',
     title: 'Frequently asked questions',
@@ -802,6 +884,38 @@ const en: Copy = {
         question: 'How do I install it and get started?',
         answer: `Install DeepSeek Harness ${DSH_VERSION} first. In Plugins → Add plugin, enter ${DESKTOP_PACKAGE}, then install and enable it. Open Bot mode and follow Home onboarding to configure a model, ask Tob to create a Bot and group, and learn the panel controls.`,
         links: [{ label: 'Installation guide', href: '/en/docs/installation/' }],
+      },
+      {
+        id: 'mobile-standalone',
+        question: 'Can I use Tobs with just the mobile app?',
+        answer:
+          'Not yet. Tobs Bots run on a Windows, Linux or macOS computer, not on your phone. Think of the mobile app as a remote control: install DeepSeek Harness and Tobs on your computer first, then connect your phone to work with your Bots from anywhere.',
+        links: [{ label: 'Install on your computer', href: '/en/docs/installation/' }],
+      },
+      {
+        id: 'mobile-features',
+        question: 'What can I do on my phone?',
+        answer:
+          'Chat with Bots, join group conversations, receive notifications, and review tool requests in Activity. Your computer runs the Bots; your phone lets you follow progress, reply and approve actions on the go.',
+      },
+      {
+        id: 'mobile-host-online',
+        question: 'Does my computer need to stay on?',
+        answer:
+          'Yes. Keep the computer awake and online, with DeepSeek Harness and Tobs running. If it shuts down, sleeps or the app quits, your phone cannot reach its Bots. Reconnect when the computer is back online.',
+      },
+      {
+        id: 'mobile-connection',
+        question: 'Do my phone and computer need the same Wi-Fi?',
+        answer:
+          'No. Sign in to the same account through Connect, or set up Tailscale using the pairing guide. Once configured, you can connect while away from your computer. Both devices need an internet connection.',
+        links: [{ label: 'Connect your phone', href: '/en/docs/mobile-pairing/' }],
+      },
+      {
+        id: 'mobile-multiple-hosts',
+        question: 'Can one phone connect to several computers?',
+        answer:
+          'Yes. Install Tobs and connect each computer separately. On your phone, switch computers or view messages and pending tool requests across environments in All Chats and Activity. Each computer still stores its own Bots and data.',
       },
       {
         id: 'models',

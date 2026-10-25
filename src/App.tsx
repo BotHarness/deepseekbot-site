@@ -8,12 +8,13 @@ import { FeatureDemo } from './components/FeatureDemos';
 import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
 import { LiveDemo } from './components/LiveDemo';
-import { QuickInstall } from './components/QuickInstall';
 import { Install } from './components/Install';
+import { MobileBeta } from './components/MobileBeta';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
-import { COPY, LINKS, VERSION } from './content';
+import { COPY, LINKS } from './content';
+import { HERO_COPY } from './heroCopy';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
 import { changelogPath, guidePath, initialMode, pathLang, write, type Mode } from './site';
@@ -22,6 +23,7 @@ export function App() {
   const lang = pathLang();
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
+  const hero = HERO_COPY[lang];
   const design = useAvatarDesign();
 
   useEffect(() => {
@@ -51,35 +53,32 @@ export function App() {
             <span className="cloud cloud--c" />
             <span className="star-field" />
           </div>
-          <div className="hero-copy">
-            <a className="badge" href={`${changelogPath(lang)}#v${VERSION}`}>
-              {copy.hero.badge}
-            </a>
-            <h1 className="wordmark">{copy.hero.title}</h1>
-            <p className="tagline">{copy.hero.tagline}</p>
-            <p className="lead">{copy.hero.lead}</p>
-            <ul className="chips">
-              {copy.hero.chips.map((chip) => (
-                <li key={chip}>{chip}</li>
-              ))}
-            </ul>
-            <QuickInstall copy={copy} />
-            <HeroLinks copy={copy} />
+          <div className="hero-layout">
+            <div className="hero-copy">
+              <h1 className="wordmark hero-title">{copy.hero.title}</h1>
+              <p className="hero-subtitle">{copy.hero.tagline}</p>
+              <ul className="chips hero-chips">
+                {copy.hero.chips.map((chip, index) => (
+                  <li key={chip}>
+                    {index === 1 ? (
+                      <a href={LINKS.dsh} target="_blank" rel="noreferrer">
+                        {chip} · {hero.stars}
+                      </a>
+                    ) : (
+                      chip
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <HeroLinks lang={lang} />
+            </div>
+            <figure className="hero-product">
+              <LiveDemo copy={copy} linkedPhone />
+              <figcaption className="hero-caption">{copy.hero.lead}</figcaption>
+            </figure>
           </div>
           <Crew copy={copy} lang={lang} />
           <div className="ground" aria-hidden="true" />
-        </section>
-
-        <section
-          className="section section--center demo-section"
-          id="demo"
-          aria-labelledby="demo-title"
-        >
-          <p className="kicker">{copy.demo.kicker}</p>
-          <h2 id="demo-title">{copy.demo.title}</h2>
-          <p className="section-lead">{copy.demo.lead}</p>
-          <LiveDemo copy={copy} />
-          <p className="demo-note">{copy.demo.note}</p>
         </section>
 
         <section
@@ -187,6 +186,7 @@ export function App() {
         <section className="section" id="install" aria-labelledby="install-title">
           <p className="kicker">{copy.install.kicker}</p>
           <h2 id="install-title">{copy.install.title}</h2>
+          <MobileBeta lang={lang} placement="install" />
           <Install copy={copy} lang={lang} />
         </section>
 
@@ -198,12 +198,36 @@ export function App() {
         </section>
 
         <Faq copy={copy} />
+
+        <section
+          className="section section--alt compare-section"
+          id="compare"
+          aria-labelledby="compare-title"
+        >
+          <p className="kicker">{copy.compare.kicker}</p>
+          <h2 id="compare-title">{copy.compare.title}</h2>
+          <ul className="compare-links">
+            {copy.compare.items.map((item) => (
+              <li key={item.href}>
+                <a className="compare-card frame" href={item.href}>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <span className="compare-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="compare-note">{copy.compare.note}</p>
+        </section>
       </main>
 
       <BotCompanion lang={lang} design={design} />
 
       <footer className="footer">
         <div className="footer-links">
+          <a href="#compare">{copy.compare.kicker}</a>
           <a href={LINKS.github} target="_blank" rel="noreferrer">
             GitHub
           </a>

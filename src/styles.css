@@ -195,9 +195,14 @@ a:where(:not(.astryx-button)) {
 .topnav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(10px, 1.2vw, 20px);
   font-size: 12px;
   margin-right: auto;
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 .topnav a {
   display: inline-flex;
@@ -229,7 +234,7 @@ a:where(:not(.astryx-button)) {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 18px;
+  gap: 12px;
   margin-left: auto;
 }
 .header-community {
@@ -1251,6 +1256,56 @@ a:where(:not(.astryx-button)) {
   list-style: none;
 }
 
+/* ---- comparison articles ---- */
+.compare-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+  margin: 32px 0 24px;
+  padding: 0;
+  list-style: none;
+}
+.compare-links li {
+  min-width: 0;
+}
+.compare-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  padding: 24px 32px 28px 20px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.compare-card h3 {
+  margin: 0 0 14px;
+  font: 20px/1.5 var(--pixel-font);
+}
+.compare-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.compare-arrow {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  color: var(--accent);
+  font: 24px var(--pixel-font);
+}
+.compare-card:hover h3 {
+  color: var(--accent);
+}
+.compare-card:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 6px;
+}
+.compare-note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
 /* ---- footer ---- */
 .footer {
   padding: 32px 24px 48px;
@@ -1320,7 +1375,7 @@ a:where(:not(.astryx-button)) {
 
 /* ---- small screens ---- */
 /* Keep actions beside the brand; navigation gets one dedicated second row. */
-@media (max-width: 1180px) {
+@media (max-width: 1080px) {
   .topbar {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px 16px;
@@ -1330,9 +1385,6 @@ a:where(:not(.astryx-button)) {
     grid-row: 2;
     gap: 14px;
     margin-right: 0;
-  }
-  .topnav .nav-icon-wrap {
-    display: none;
   }
   .header-actions {
     grid-column: 2;
@@ -1362,9 +1414,6 @@ a:where(:not(.astryx-button)) {
   }
   .toggles {
     gap: 8px;
-  }
-  .topnav .nav-changelog {
-    display: none;
   }
   .header-actions {
     position: relative;
@@ -2138,6 +2187,10 @@ a:where(:not(.astryx-button)) {
 
 .companion-consent {
   margin-top: 12px;
+}
+.companion-bubble .companion-consent button:last-child {
+  color: var(--accent-ink);
+  background: var(--accent);
 }
 .companion-bubble .companion-privacy {
   border: 0;

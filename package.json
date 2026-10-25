@@ -24,7 +24,7 @@
     "blog:covers:check": "node scripts/check-blog-artwork.mjs",
     "test:blog-artwork": "node --test scripts/blog-artwork.test.mjs",
     "test:docs-sync": "node --test scripts/sync-docs.test.mjs scripts/install.test.mjs",
-    "test:community": "node --test scripts/community.test.mjs scripts/github-stars.test.mjs",
+    "test:community": "node --test scripts/community.test.mjs scripts/github-stars.test.mjs scripts/mobile-beta.test.mjs scripts/hero-phone.test.mjs",
     "test:header": "node --test scripts/header.test.mjs",
     "test:companion": "node --test scripts/companion.test.mjs scripts/consent.test.mjs",
     "test:part-file": "node --test scripts/part-file.test.mjs",

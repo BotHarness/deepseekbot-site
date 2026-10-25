@@ -22,10 +22,19 @@ pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 For repeatable local model setup across product worktrees, see the
 [shared model wizard](planning/task-evidence/README.md).
 
-- **Live demo**: the simulated Bot mode window under the Hero and the demos beside each feature
-  (`src/components/LiveDemo.tsx`, `src/components/FeatureDemos.tsx`) play scripts from
-  `src/demoCopy.ts`; nothing talks to a model. Keep the scripts to what the copy already claims.
-- **Copy** lives in `src/content.ts`. It only claims what the BotHarness README, CONTEXT and
+- **Live demo**: the Hero pairs the complete desktop panel with a native-style phone presentation
+  (`src/components/LiveDemo.tsx`, `HeroPhoneChat.tsx`, `HeroPhoneHome.tsx`). Both share the script
+  and approval resolver from `src/demoCopy.ts`; nothing talks to a model. The separate duplicate
+  demo below the Hero has been removed. Keep the scripts to what the copy already claims.
+- **Native screenshots**: the 1.5 release article reuses historical iOS Simulator captures, with
+  source revisions, hashes and scope in `public/blog-figures/tobs-1-5/provenance.json`. Keep the
+  originals unchanged and display them at their original aspect ratio. They are not evidence of
+  the currently distributed mobile binary; the pixel-art cover is a separate illustration.
+- **AI-assisted setup**: `src/setupPrompt.ts` generates localized instructions from the qualified
+  install identity. It targets the desktop-owned Profile via the actual desktop app/bundled CLI;
+  copying is not installation. No installer runs in the browser. Keep the OS/user-confirmation,
+  compatibility, Profile preservation and Bot-mode verification boundaries when editing it.
+- **Copy** lives in `src/content.ts`, `src/heroCopy.ts` and `src/setupPrompt.ts`. It only claims what the BotHarness README, CONTEXT and
   CHANGELOG say has shipped; keep it that way when editing.
 - **Avatar Studio**: `/avatar` and `/en/avatar` (`avatar.html`, `src/AvatarApp.tsx`) hold the full avatar editor in three panels: stage and tools, parts and drawing, colors and shape. The home page keeps the name, stage and tool morphs and links there. Both read and write the same design in this browser (`src/avatarStore.ts`).
 - **Font**: Fusion Pixel 12px SC (OFL). Dev serves the whole font; `vite build` subsets it to the
@@ -70,6 +79,14 @@ For repeatable local model setup across product worktrees, see the
   (its license forbids commercial use).
 
 ## Analytics
+
+Homepage beta links use the existing analytics configuration and consent behavior:
+`mobile_install_clicked` carries only `platform: ios`, `destination: testflight` and `placement`;
+`mobile_beta_menu_opened` carries `platform: android` and `placement`. Android Discord selection
+uses the existing `discord_clicked` event, and successful QQ copies use `qq_group_copied`, both
+with `placement: android_beta_hero` or `android_beta_install`. `setup_prompt_copied` records only `placement: hero`, never
+the copied prompt or an email. The scripted Hero follows the existing demo interaction events without recording message text.
+These record website intent, not a completed app installation or beta membership.
 
 Anonymous PostHog analytics, as decided in BotHarness ADR-0132 (`src/analytics.ts`). A build sends nothing unless `VITE_POSTHOG_KEY` (the project's public `phc_…` key) is set, for example in `.env.production`; `VITE_POSTHOG_HOST` overrides the ingest proxy (default `https://t.botharness.ai`). Visitors get a consent box: accepting keeps an anonymous ID for cross-day attribution, declining falls back to PostHog's cookieless mode, which must also be enabled in the PostHog project settings. `?ref=<x>` is rewritten to `utm_source=<x>` before PostHog starts. `/privacy/` and `/en/privacy/` render from `content/privacy/{zh,en}.md`.
 

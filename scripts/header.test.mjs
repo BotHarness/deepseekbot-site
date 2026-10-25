@@ -230,13 +230,13 @@ test('all generated guides, privacy, changelog, blog and plugin pages retain the
       assert.match(header, /hrefLang="en"|hreflang="en"/);
       assert.match(header, /hrefLang="zh-Hans"|hreflang="zh-Hans"/);
       const nav = header.match(/<nav class="topnav"[\s\S]*?<\/nav>/)?.[0];
-      assert.equal([...nav.matchAll(/<a /g)].length, 7, path);
-      assert.ok(nav.includes(lang === 'zh' ? '头像工坊' : 'Avatar Studio'), path);
+      assert.equal([...nav.matchAll(/<a /g)].length, 6, path);
+      assert.doesNotMatch(nav, /Avatar Studio|头像工坊|href="[^"]*\/avatar/);
       assert.doesNotMatch(nav, /undefined/, path);
       assert.doesNotMatch(nav, /#community|#avatar|github\.com/);
       assert.match(
         nav,
-        /#features[\s\S]*#install[\s\S]*\/market[\s\S]*\/avatar[\s\S]*\/docs[\s\S]*\/changelog[\s\S]*\/blog/,
+        /#features[\s\S]*#install[\s\S]*\/market[\s\S]*\/docs[\s\S]*\/changelog[\s\S]*\/blog/,
       );
       if (path.includes('privacy')) assert.doesNotMatch(nav, /aria-current="page"/);
       else assert.match(nav, /aria-current="page"/);
