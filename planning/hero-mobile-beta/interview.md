@@ -90,3 +90,5 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - 参考 Codync 首页底部 Compare 区，在首页 FAQ 与页脚之间加入像素边框的三篇现有对比入口，双语分别链接 Grok Bot、DS Bot 和包含 Muse／Dots／Cue 的综合对比；页脚也加入区域锚点。仅新增文章发现入口，不改写已有比较事实或另建重复 SEO 页面；注明文章采用旧名称及各自版本范围。参考：https://www.codync.dev/ 。
 
 - 用户已认可 Hero 内完整桌面＋手机联动演示，撤销早期暂留第二组的要求：移除 Hero 下方单独的 LiveDemo 区块、标题和说明。Hero 后直接进入宣传片；保留 Hero 的同一份状态与交互。
+
+- Cookie 同意按钮改为主题 primary 实心背景与配套文字色，和其他页面已有 consent bar 一致；拒绝按钮保留次要样式，支持日夜主题。

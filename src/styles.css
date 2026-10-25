@@ -2188,6 +2188,10 @@ a:where(:not(.astryx-button)) {
 .companion-consent {
   margin-top: 12px;
 }
+.companion-bubble .companion-consent button:last-child {
+  color: var(--accent-ink);
+  background: var(--accent);
+}
 .companion-bubble .companion-privacy {
   border: 0;
   padding: 0;
