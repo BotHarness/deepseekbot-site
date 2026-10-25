@@ -125,6 +125,12 @@ export interface Copy {
     release: { text: string; label: string; href: string };
     items: Feature[];
   };
+  compare: {
+    kicker: string;
+    title: string;
+    note: string;
+    items: { title: string; description: string; href: string }[];
+  };
   faq: {
     kicker: string;
     title: string;
@@ -391,6 +397,28 @@ const zh: Copy = {
         title: '命令行管理 Host',
         body: 'deepseekbot CLI 可管理在线 Host 的模型、Bot、群组、Memory、定时任务、收件箱、IM 和 Bot 市场；浏览器、电脑及适用的 Bot 工具也能绕过模型直接调用，配合 bot-trace 排查问题。危险操作仍需确认，凭证不会打印。',
         tag: 'v1.4.0',
+      },
+    ],
+  },
+  compare: {
+    kicker: '产品对比',
+    title: '对比 Tobs',
+    note: '文章中的 DeepSeekBot 是 Tobs 的旧名称；对比以各篇注明的版本为准。',
+    items: [
+      {
+        title: 'Tobs vs Grok Bot',
+        description: '自托管、Git 记忆与模型选择',
+        href: '/blog/grokbot-alternative/',
+      },
+      {
+        title: 'Tobs vs DS Bot',
+        description: '同一 DSH 生态，不同的协作方式',
+        href: '/blog/deepseekbot-vs-ds-bot/',
+      },
+      {
+        title: '个人 AI Agent 怎么选',
+        description: 'Grok Bot、Muse、Dots 与 Cue',
+        href: '/blog/personal-ai-agents-comparison/',
       },
     ],
   },
@@ -797,6 +825,28 @@ const en: Copy = {
         title: 'Manage a Host from the CLI',
         body: 'The deepseekbot CLI manages models, Bots, groups, Memory, schedules, Inbox, IM and Marketplace on a live Host. Run Browser, Computer and applicable Bot tools directly without a model, and inspect bot-trace. Dangerous actions still require confirmation; credentials are never printed.',
         tag: 'v1.4.0',
+      },
+    ],
+  },
+  compare: {
+    kicker: 'Compare',
+    title: 'Compare Tobs',
+    note: 'These articles use our former name, DeepSeekBot, and the versions stated in each comparison.',
+    items: [
+      {
+        title: 'Tobs vs Grok Bot',
+        description: 'Self-hosting, Git memory and model choice',
+        href: '/en/blog/grokbot-alternative/',
+      },
+      {
+        title: 'Tobs vs DS Bot',
+        description: 'One DSH ecosystem, different ways to collaborate',
+        href: '/en/blog/deepseekbot-vs-ds-bot/',
+      },
+      {
+        title: 'Choosing a personal AI agent',
+        description: 'Grok Bot, Muse, Dots and Cue',
+        href: '/en/blog/personal-ai-agents-comparison/',
       },
     ],
   },

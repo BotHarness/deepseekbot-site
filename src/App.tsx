@@ -210,12 +210,36 @@ export function App() {
         </section>
 
         <Faq copy={copy} />
+
+        <section
+          className="section section--alt compare-section"
+          id="compare"
+          aria-labelledby="compare-title"
+        >
+          <p className="kicker">{copy.compare.kicker}</p>
+          <h2 id="compare-title">{copy.compare.title}</h2>
+          <ul className="compare-links">
+            {copy.compare.items.map((item) => (
+              <li key={item.href}>
+                <a className="compare-card frame" href={item.href}>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <span className="compare-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="compare-note">{copy.compare.note}</p>
+        </section>
       </main>
 
       <BotCompanion lang={lang} design={design} />
 
       <footer className="footer">
         <div className="footer-links">
+          <a href="#compare">{copy.compare.kicker}</a>
           <a href={LINKS.github} target="_blank" rel="noreferrer">
             GitHub
           </a>
