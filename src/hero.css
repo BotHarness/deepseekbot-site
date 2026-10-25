@@ -24,17 +24,22 @@
   gap: 20px;
   max-width: none;
   margin: 0;
-  text-align: left;
+  text-align: center;
+  justify-items: center;
   min-width: 0;
 }
-.hero-heading {
+.hero-title {
+  font-family: var(--pixel-font);
+}
+.hero-subtitle {
   grid-column: 1 / -1;
   margin: 0;
-  font: 400 clamp(32px, 3.2vw, 48px)/1.25 var(--pixel-font);
-  letter-spacing: -0.025em;
+  max-width: 1100px;
+  font: 400 clamp(20px, 2vw, 28px)/1.5 var(--pixel-font);
+  text-wrap: balance;
 }
 .hero-chips {
-  justify-content: flex-start;
+  justify-content: center;
   max-width: none;
   margin: 0;
 }
@@ -48,16 +53,17 @@
 .hero-actions {
   display: flex;
   align-items: center;
-  justify-items: start;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  gap: 12px;
   margin: 0;
 }
 .hero-primary-actions {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
+  justify-content: center;
+  width: 100%;
 }
 .setup-button,
 .beta-button {
@@ -79,9 +85,11 @@
 .setup-button {
   background: var(--accent);
   color: var(--accent-ink);
-  min-height: 56px;
-  padding: 14px 20px;
-  font-size: 20px;
+  min-height: 64px;
+  min-width: min(320px, 100%);
+  max-width: 100%;
+  padding: 16px 24px;
+  font-size: 22px;
   border-width: 3px;
 }
 .setup-button:hover,
@@ -128,9 +136,9 @@ a.beta-button--ios {
   font-size: 13px;
   color: var(--ink-soft);
 }
-.hero-primary-actions > a {
-  color: var(--ink);
-  font: 16px var(--pixel-font);
+.hero-manual {
+  color: var(--ink-soft);
+  font: 14px var(--pixel-font);
   text-underline-offset: 4px;
 }
 .hero-product {
@@ -139,10 +147,10 @@ a.beta-button--ios {
 }
 .hero-caption {
   max-width: 1100px;
-  margin: 16px 0 0;
+  margin: 16px auto 0;
   color: var(--ink-soft);
   font: 400 16px/1.7 var(--pixel-font);
-  text-align: left;
+  text-align: center;
   -webkit-font-smoothing: none;
 }
 .hero-linked {
@@ -523,8 +531,8 @@ a.beta-button--ios {
   }
 }
 @media (max-width: 600px) {
-  .hero-heading {
-    font-size: 30px;
+  .hero-subtitle {
+    font-size: 20px;
   }
   .hero-linked {
     display: flex;

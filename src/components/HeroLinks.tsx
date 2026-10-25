@@ -24,9 +24,11 @@ export function HeroLinks({ lang }: { lang: Lang }) {
         >
           <span aria-hidden="true">✦</span> {state === 'copied' ? t.copied : t.setup}
         </button>
-        <a href="#install">{t.manual}</a>
       </div>
       <MobileBeta lang={lang} placement="hero" />
+      <a className="hero-manual" href="#install">
+        {t.manual}
+      </a>
       {state === 'failed' ? (
         <p className="setup-hint" role="status">
           {t.failed}
