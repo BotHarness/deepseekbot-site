@@ -22,14 +22,14 @@ pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 For repeatable local model setup across product worktrees, see the
 [shared model wizard](planning/task-evidence/README.md).
 
-- **Live demo**: the simulated Bot mode window under the Hero and the demos beside each feature
-  (`src/components/LiveDemo.tsx`, `src/components/FeatureDemos.tsx`) play scripts from
-  `src/demoCopy.ts`; nothing talks to a model. Keep the scripts to what the copy already claims.
-- **Hero**: `src/components/LiveDemo.tsx` also renders a compact desktop/phone pair. Both screens
-  share the same script and approval resolver; the full demo below stays independent. The phone
-  can show the existing pairing illustration or an original native iOS screenshot (provenance in
-  `public/hero/provenance.json`). Those screenshots are historical Simulator UI, not evidence of
-  the currently distributed mobile binary. Do not stretch their aspect ratio.
+- **Live demo**: the Hero pairs the complete desktop panel with a native-style phone presentation
+  (`src/components/LiveDemo.tsx`, `HeroPhoneChat.tsx`, `HeroPhoneHome.tsx`). Both share the script
+  and approval resolver from `src/demoCopy.ts`; nothing talks to a model. The separate duplicate
+  demo below the Hero has been removed. Keep the scripts to what the copy already claims.
+- **Native screenshots**: the 1.5 release article reuses historical iOS Simulator captures, with
+  source revisions, hashes and scope in `public/blog-figures/tobs-1-5/provenance.json`. Keep the
+  originals unchanged and display them at their original aspect ratio. They are not evidence of
+  the currently distributed mobile binary; the pixel-art cover is a separate illustration.
 - **AI-assisted setup**: `src/setupPrompt.ts` generates localized instructions from the qualified
   install identity. It targets the desktop-owned Profile via the actual desktop app/bundled CLI;
   copying is not installation. No installer runs in the browser. Keep the OS/user-confirmation,

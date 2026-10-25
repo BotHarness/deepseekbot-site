@@ -92,3 +92,5 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - 用户已认可 Hero 内完整桌面＋手机联动演示，撤销早期暂留第二组的要求：移除 Hero 下方单独的 LiveDemo 区块、标题和说明。Hero 后直接进入宣传片；保留 Hero 的同一份状态与交互。
 
 - Cookie 同意按钮改为主题 primary 实心背景与配套文字色，和其他页面已有 consent bar 一致；拒绝按钮保留次要样式，支持日夜主题。
+
+- 新增双语 Tobs 1.5 移动端 Beta 博客，日期2026-10-26，桌面安装身份采用已发布 @botharness/tobs@1.5.2／DSH0.2.1-rc.3。每个语言3张原生 iOS27 历史截图（聊天／真实群聊／市场），保持1320:2868，附公开来源清单；封面单独用imagegen生成像素插画，不当作实际UI。iOS TestFlight直达；Android通过Discord／QQ群向开发者提供Google Play邮箱获取邀请。当前属于同一预览分支，未合并或部署。
