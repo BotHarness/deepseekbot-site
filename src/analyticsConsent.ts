@@ -33,14 +33,14 @@ export function createConsentPrompt() {
 export const analyticsConsent = createConsentPrompt();
 export const CONSENT_COPY = {
   zh: {
-    text: '允许保存匿名访问标识，帮助我们改进网站吗？',
+    text: '允许收集匿名浏览和使用统计，帮助我们改进网站吗？',
     accept: '好呀，同意',
     reject: '不用了，拒绝',
     more: '隐私说明',
     privacy: '/privacy/',
   },
   en: {
-    text: 'May we save an anonymous visitor ID to help improve this site?',
+    text: 'May we collect anonymous browsing and usage analytics to improve this site?',
     accept: 'Sure, accept',
     reject: 'No thanks, decline',
     more: 'Privacy',

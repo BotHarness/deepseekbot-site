@@ -64,7 +64,10 @@ test('mobile follow-up is opt-in and supplies installation, invitation and pairi
     assert.ok(prompt.includes('Google Play'));
     assert.ok(prompt.includes('Connect'));
     assert.ok(prompt.includes('Tailscale'));
-    assert.ok(prompt.indexOf('6.') > prompt.indexOf('5.'));
+    const desktopComplete = prompt.search(/^5\. /m);
+    const mobileFollowUp = prompt.search(/^6\. /m);
+    assert.ok(desktopComplete >= 0);
+    assert.ok(mobileFollowUp > desktopComplete);
   }
   assert.match(setupPrompt('en'), /If I decline, stop after desktop setup/);
   assert.match(setupPrompt('en'), /wait for my explicit permission/);

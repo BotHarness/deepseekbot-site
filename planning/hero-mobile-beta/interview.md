@@ -85,7 +85,7 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 
 - FAQ 补充五项双语移动端说明：手机不能独立运行 Bot，依赖 Windows／Linux／macOS Host；手机聊天和审批；Host 保持开机在线；Connect／Tailscale 跨网络连接；一部手机连接多个环境，数据仍留在各自电脑。安装和配对链接指向对应语言教程。
 
-- 恢复像素 Bot 的 Cookie／社区引导：原组件仍挂载，但已关闭的 Android 原生 Popover 被误判为模态框，且高 Hero 使角色等待地面进入视口。只让实际渲染的弹窗暂停角色，监听原生 toggle；高 Hero 初次进入时改用视口底部支撑，短 Hero 保留原地面动画。双语 Cookie 提示缩为一句匿名访问标识许可问句，保留同意／拒绝和隐私链接，以及选择后的 QQ／Discord 入口。
+- 恢复像素 Bot 的 Cookie／社区引导：原组件仍挂载，但已关闭的 Android 原生 Popover 被误判为模态框，且高 Hero 使角色等待地面进入视口。只让实际渲染的弹窗暂停角色，监听原生 toggle；高 Hero 初次进入时改用视口底部支撑，短 Hero 保留原地面动画。双语 Cookie 提示缩为一句匿名浏览和使用统计许可问句，保留同意／拒绝和隐私链接，以及选择后的 QQ／Discord 入口。
 
 - 参考 Codync 首页底部 Compare 区，在首页 FAQ 与页脚之间加入像素边框的三篇现有对比入口，双语分别链接 Grok Bot、DS Bot 和包含 Muse／Dots／Cue 的综合对比；页脚也加入区域锚点。仅新增文章发现入口，不改写已有比较事实或另建重复 SEO 页面；注明文章采用旧名称及各自版本范围。参考：https://www.codync.dev/ 。
 
