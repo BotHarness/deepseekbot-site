@@ -66,3 +66,8 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - 最新导航调整：移除顶部 Avatar Studio；市场、Docs、Changelog、Blog 保留图标和文字，宽屏尽量单行，窄屏保留横向滚动。移动端按钮移到 Install 区标题下，iOS 白色、Android 绿 #3DDC84；统计 placement 同步改为 install。颜色参考 [Android 官方品牌指引](https://developer.android.com/distribute/marketing-tools/brand-guidelines)。
 
 - 手机联动演示进一步对齐原生消息页：依据现有英文原生群聊截图及 `apps/mobile/src/ui/chat/{message-bubble,bubble-shape,speaker-row,header-chrome,composer-chrome.ios}.tsx` 和原生 palette，使用浮动返回圆钮／群标题胶囊、顶部自然淡出、蓝色人类气泡、浅灰 Bot 气泡、靠近气泡底边的头像及姓名、底部加号／输入框／实心麦克风。暗色使用相同的原生主题色。网页展示并非嵌入真实原生应用；麦克风和附件符号只展示界面，不请求设备权限。文字发送、返回列表／重进聊天及审批仍可交互，共用桌面演示状态。
+
+- Sync 之后加入首页与 Activity 演示：底部 Chats／Activity／Settings 三项，首页展示两台电脑 Studio Mac／Research PC；同名 Bot 的标题行带颜色图标与环境名。依据 [移动端 PR #2838](https://github.com/BotHarness/DeepSeekBot/pull/2838) 的两张已授权公开 Android 截图（d4570028b312）对齐来源标识；它们不是本轮 iOS 验收。
+- 未接管时自动顺序：同步聊天完成→全部聊天与多电脑→Activity→逐条演示允许两个来源的工具请求；用户点击或键盘进入后停止自动推进。手动可筛选电脑、切换底部三项、回聊天、允许／拒绝各条示例请求，操作不会连接真实电脑或执行命令。没有批量一键批准承诺。
+
+- 当前聊天请求通过共享审批端口进入 Activity，处理结果回写同一份聊天答案；其他两个来源的预设请求以各自环境限定的请求 ID 保存。环境过滤也会显示当前范围；同名 Bot 的聊天、重播和点击统计保留环境身份。新增两项双语回归覆盖身份区分及原审批流程保留。

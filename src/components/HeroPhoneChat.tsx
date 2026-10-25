@@ -1,10 +1,12 @@
 import { ArrowUp, ChevronLeft, Hash, Mic, Plus } from 'lucide-react';
-import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react';
+import { useEffect, type FormEvent, type ReactNode, type RefObject } from 'react';
 
 /** Web presentation of the native chat chrome; the parent owns the shared conversation. */
 export function HeroPhoneChat({
   title,
+  onBack,
   group,
+  source,
   avatar,
   feedRef,
   children,
@@ -15,7 +17,9 @@ export function HeroPhoneChat({
   labels,
 }: {
   title: string;
+  onBack: () => void;
   group: boolean;
+  source: ReactNode;
   avatar: ReactNode;
   feedRef: RefObject<HTMLDivElement | null>;
   children: ReactNode;
@@ -23,38 +27,22 @@ export function HeroPhoneChat({
   onChange: (value: string) => void;
   onSubmit: (event: FormEvent) => void;
   ready: boolean;
-  labels: { chats: string; back: string; composer: string; send: string };
+  labels: { back: string; composer: string; send: string };
 }) {
-  const [chat, setChat] = useState(true);
-  const navigated = useRef(false);
-  const backButton = useRef<HTMLButtonElement>(null);
-  const chatRow = useRef<HTMLButtonElement>(null);
-  const navigate = (next: boolean) => {
-    navigated.current = true;
-    setChat(next);
-  };
   useEffect(() => {
-    if (chat) {
-      const feed = feedRef.current;
-      if (feed) feed.scrollTo({ top: feed.scrollHeight });
-    }
-    if (navigated.current) (chat ? backButton.current : chatRow.current)?.focus();
-  }, [chat, feedRef]);
-  return chat ? (
+    const feed = feedRef.current;
+    if (feed) feed.scrollTo({ top: feed.scrollHeight });
+  }, [feedRef]);
+  return (
     <>
       <header className="hero-phone-head">
-        <button
-          type="button"
-          className="hero-phone-back"
-          ref={backButton}
-          aria-label={labels.back}
-          onClick={() => navigate(false)}
-        >
+        <button type="button" className="hero-phone-back" aria-label={labels.back} onClick={onBack}>
           <ChevronLeft size={21} strokeWidth={2.2} aria-hidden="true" />
         </button>
         <div className="hero-phone-title">
           {group ? <Hash size={19} aria-hidden="true" /> : avatar}
           <strong>{title}</strong>
+          {source}
         </div>
       </header>
       <div className="hero-phone-feed" ref={feedRef}>
@@ -88,19 +76,5 @@ export function HeroPhoneChat({
         )}
       </form>
     </>
-  ) : (
-    <div className="hero-phone-chats">
-      <h3>{labels.chats}</h3>
-      <button
-        type="button"
-        className="hero-phone-chat-row"
-        ref={chatRow}
-        onClick={() => navigate(true)}
-      >
-        {avatar}
-        <strong>{title}</strong>
-        <ChevronLeft size={16} className="hero-phone-row-chevron" aria-hidden="true" />
-      </button>
-    </div>
   );
 }

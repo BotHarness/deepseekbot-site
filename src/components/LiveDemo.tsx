@@ -33,6 +33,8 @@ import { track } from '../analytics';
 import { HERO_COPY } from '../heroCopy';
 import { PhonePair } from './FeatureDemos';
 import { HeroPhoneChat } from './HeroPhoneChat';
+import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
+import { phoneChannel, phoneChannelKey, type PhoneHostId } from '../heroPhoneData';
 import type { Copy } from '../content';
 import type { DemoChannel, DemoIcon, DemoStep, PanelSection } from '../demoCopy';
 import { DEEPSEEKBOT_RECIPE, recipeFor } from '../mascot';
@@ -267,27 +269,13 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const t = copy.demo;
   const lang = copy.htmlLang === 'en' ? 'en' : 'zh';
   const hero = HERO_COPY[lang];
+  const [phoneHost, setPhoneHost] = useState<PhoneHostId>('studio');
   const channels = useMemo(
     () =>
-      t.channels.map((channel, index) => {
-        if (!linkedPhone || index !== 0) return channel;
-        const approval = channel.steps.findIndex((step) => step.kind === 'approval');
-        if (approval < 0) return channel;
-        return {
-          ...channel,
-          steps: [
-            { kind: 'user' as const, text: hero.introPrompt },
-            {
-              kind: 'work' as const,
-              bot: channel.bots[0]!,
-              tools: ['thinking' as const, 'write' as const],
-            },
-            { kind: 'bot' as const, bot: channel.bots[0]!, text: hero.introReply },
-            ...channel.steps.slice(approval),
-          ],
-        };
-      }),
-    [t.channels, linkedPhone, hero.introPrompt, hero.introReply],
+      linkedPhone
+        ? t.channels.map((channel, index) => phoneChannel(channel, index, phoneHost, hero))
+        : t.channels,
+    [t.channels, linkedPhone, phoneHost, hero],
   );
   const root = useRef<HTMLDivElement>(null);
   const feed = useRef<HTMLDivElement>(null);
@@ -295,6 +283,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const answerWith = useRef<((answer: Answer) => void) | null>(null);
   const pairingWith = useRef<(() => void) | null>(null);
   const pendingReplies = useRef(new Set<number>());
+  const startSynced = useRef(false);
   // the visitor took over: stop moving on to the next chat by itself
   const touched = useRef(false);
 
@@ -319,7 +308,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const [range, setRange] = useState(1);
   // sidebar sections the visitor folded, by section id; they stay folded across chats
   const [folded, setFolded] = useState<Set<string>>(() => new Set());
-  const [phonePhase, setPhonePhase] = useState<'intro' | 'pair' | 'sync'>('intro');
+  const [phonePhase, setPhonePhase] = useState<'intro' | 'pair' | 'sync' | 'home' | 'activity'>(
+    'intro',
+  );
   const [isInteractive, setIsInteractive] = useState(false);
   const takeOver = () => {
     if (touched.current) return;
@@ -373,10 +364,11 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     setDone(false);
     setWorking(null);
     setDraft('');
-    setPhonePhase('intro');
+    const alreadyPaired = linkedPhone && startSynced.current;
+    setPhonePhase(alreadyPaired ? 'sync' : 'intro');
 
     void (async () => {
-      let paired = false;
+      let paired = alreadyPaired;
       await wait(500);
       for (let i = 0; i < channel.steps.length; i++) {
         const step = channel.steps[i]!;
@@ -455,8 +447,14 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       // with nobody at the controls, move on to the next chat like a carousel
       await wait(4500);
       if (!signal.aborted && !touched.current && !instant) {
-        if (linkedPhone) setRun((prev) => prev + 1);
-        else setActive((prev) => (prev + 1) % channels.length);
+        if (linkedPhone) {
+          setPhonePhase('home');
+          await wait(4500);
+          if (signal.aborted || touched.current) return;
+          setPhonePhase('activity');
+          await wait(8000);
+          if (!signal.aborted && !touched.current) setRun((prev) => prev + 1);
+        } else setActive((prev) => (prev + 1) % channels.length);
       }
     })();
 
@@ -476,10 +474,17 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         el.scrollTo({ top: el.scrollHeight, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   }, [shown, working, extra, answers, done, phonePhase]);
 
-  const open = (index: number) => {
+  const open = (index: number, synced = false, host: PhoneHostId = phoneHost) => {
+    setPhoneHost(host);
+    startSynced.current = synced;
+    setShown(0);
+    setAnswers({});
+    setWaiting(false);
     answerWith.current = null;
     touched.current = true;
-    track('demo_channel_opened', { channel: channels[index]!.id });
+    track('demo_channel_opened', {
+      channel: linkedPhone ? phoneChannelKey(host, t.channels[index]!.id) : channels[index]!.id,
+    });
     setView('chat');
     if (index === active) setRun((n) => n + 1);
     else setActive(index);
@@ -520,6 +525,19 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   };
 
   const steps = channel.steps.slice(0, shown);
+  const latestApproval = steps.findLastIndex((step) => step.kind === 'approval');
+  const approvalStep = steps[latestApproval];
+  const sharedRequest =
+    approvalStep?.kind === 'approval'
+      ? {
+          id: `${channel.id}:${run}:${latestApproval}`,
+          host: phoneHost,
+          bot: approvalStep.bot,
+          command: approvalStep.detail,
+          decision: answers[latestApproval],
+          onDecide: answer,
+        }
+      : undefined;
   const renderStep = (step: DemoStep, index: number) => (
     <Message
       key={`${channel.id}-${run}-${index}`}
@@ -595,7 +613,13 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       ref={root}
       onFocusCapture={takeOver}
       onPointerDownCapture={takeOver}
-      data-device={linkedPhone ? (phonePhase === 'sync' ? 'phone' : 'desktop') : undefined}
+      data-device={
+        linkedPhone
+          ? phonePhase === 'intro' || phonePhase === 'pair'
+            ? 'desktop'
+            : 'phone'
+          : undefined
+      }
       data-phase={linkedPhone ? phonePhase : undefined}
     >
       <div className="sky" aria-hidden="true">
@@ -1037,7 +1061,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 <BatteryFull size={16} />
               </span>
             </div>
-            <div className="hero-phone-scene" key={phonePhase}>
+            <div
+              className="hero-phone-scene"
+              key={phonePhase === 'intro' || phonePhase === 'pair' ? phonePhase : 'app'}
+            >
               {phonePhase === 'intro' ? (
                 <div className="hero-phone-intro">
                   <Avatar name="DeepSeekBot" size={88} />
@@ -1049,77 +1076,94 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   <strong>{hero.scanTitle}</strong>
                 </div>
               ) : (
-                <HeroPhoneChat
-                  title={channel.title}
-                  group={channel.bots.length > 1}
-                  avatar={
-                    channel.bots.length > 1 ? (
-                      <GroupAvatar bots={channel.bots} size={28} />
-                    ) : (
-                      <Avatar name={channel.bots[0]!} size={28} />
-                    )
+                <HeroPhoneHome
+                  lang={lang}
+                  autoScreen={
+                    phonePhase === 'home'
+                      ? 'chats'
+                      : phonePhase === 'activity'
+                        ? 'activity'
+                        : 'chat'
                   }
-                  feedRef={phoneFeed}
-                  value={draft}
-                  onChange={setDraft}
-                  onSubmit={send}
-                  ready={done}
-                  labels={{
-                    chats: hero.chats,
-                    back: hero.back,
-                    composer: fill(t.composer, {
-                      name: `${channel.bots.length > 1 ? '#' : ''}${channel.title}`,
-                    }),
-                    send: t.send,
-                  }}
-                >
-                  {steps.map((step, index) => (
-                    <Message
-                      key={`${channel.id}-${run}-${index}`}
-                      step={step}
-                      t={t}
-                      answer={answers[index]}
-                      waiting={waiting && index === shown - 1}
-                      onAnswer={answer}
-                      avatarSize={22}
-                      outcomeLabels={{
-                        allow: hero.approved,
-                        always: hero.alwaysApproved,
-                        deny: hero.rejected,
-                      }}
-                    />
-                  ))}
-                  {extra.map((item, index) => (
-                    <li
-                      className={
-                        item.kind === 'user' ? 'app-msg app-msg--user' : 'app-msg app-msg--bot'
+                  autoPlay={!isInteractive}
+                  sharedRequest={sharedRequest}
+                  onOpenChannel={(index, host) => open(index, true, host)}
+                  renderAvatar={(name, size) => <Avatar name={name} size={size} />}
+                  renderChat={(onBack) => (
+                    <HeroPhoneChat
+                      onBack={onBack}
+                      source={<HeroPhoneSource host={phoneHost} />}
+                      title={channel.title}
+                      group={channel.bots.length > 1}
+                      avatar={
+                        channel.bots.length > 1 ? (
+                          <GroupAvatar bots={channel.bots} size={28} />
+                        ) : (
+                          <Avatar name={channel.bots[0]!} size={28} />
+                        )
                       }
-                      key={`extra-${index}`}
+                      feedRef={phoneFeed}
+                      value={draft}
+                      onChange={setDraft}
+                      onSubmit={send}
+                      ready={done}
+                      labels={{
+                        back: hero.back,
+                        composer: fill(t.composer, {
+                          name: `${channel.bots.length > 1 ? '#' : ''}${channel.title}`,
+                        }),
+                        send: t.send,
+                      }}
                     >
-                      {item.kind === 'user' ? (
-                        <p className="app-bubble">{item.text}</p>
-                      ) : (
-                        <>
-                          <Avatar name={item.bot} size={22} />
-                          <div>
-                            <span className="app-msg-name">{item.bot}</span>
-                            <p className="app-bubble">{t.fallback}</p>
-                          </div>
-                        </>
-                      )}
-                    </li>
-                  ))}
-                  {working ? (
-                    <Working
-                      bot={working.bot}
-                      tool={working.tool}
-                      label={fill(t.working, {
-                        bot: working.bot,
-                        tool: copy.symbols[working.tool],
-                      })}
-                    />
-                  ) : null}
-                </HeroPhoneChat>
+                      {steps.map((step, index) => (
+                        <Message
+                          key={`${channel.id}-${run}-${index}`}
+                          step={step}
+                          t={t}
+                          answer={answers[index]}
+                          waiting={waiting && index === shown - 1}
+                          onAnswer={answer}
+                          avatarSize={22}
+                          outcomeLabels={{
+                            allow: hero.approved,
+                            always: hero.alwaysApproved,
+                            deny: hero.rejected,
+                          }}
+                        />
+                      ))}
+                      {extra.map((item, index) => (
+                        <li
+                          className={
+                            item.kind === 'user' ? 'app-msg app-msg--user' : 'app-msg app-msg--bot'
+                          }
+                          key={`extra-${index}`}
+                        >
+                          {item.kind === 'user' ? (
+                            <p className="app-bubble">{item.text}</p>
+                          ) : (
+                            <>
+                              <Avatar name={item.bot} size={22} />
+                              <div>
+                                <span className="app-msg-name">{item.bot}</span>
+                                <p className="app-bubble">{t.fallback}</p>
+                              </div>
+                            </>
+                          )}
+                        </li>
+                      ))}
+                      {working ? (
+                        <Working
+                          bot={working.bot}
+                          tool={working.tool}
+                          label={fill(t.working, {
+                            bot: working.bot,
+                            tool: copy.symbols[working.tool],
+                          })}
+                        />
+                      ) : null}
+                    </HeroPhoneChat>
+                  )}
+                />
               )}
             </div>
             <span className="hero-phone-home" aria-hidden="true" />

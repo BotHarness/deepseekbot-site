@@ -441,33 +441,6 @@ a.beta-button--ios {
   color: var(--app-soft);
   opacity: 0.8;
 }
-.hero-phone-chats {
-  flex: 1;
-  padding: 15px 10px;
-}
-.hero-phone-chats h3 {
-  margin: 0 0 24px;
-  font:
-    700 25px -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-}
-.hero-phone-chat-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 12px 0;
-  background: none;
-  border: 0;
-  border-bottom: 1px solid var(--phone-edge);
-  text-align: left;
-  cursor: pointer;
-}
-.hero-phone-row-chevron {
-  margin-left: auto;
-  rotate: 180deg;
-}
 .hero-phone-home {
   display: block;
   flex: none;
@@ -679,4 +652,338 @@ a.beta-button--ios {
 .hero-phone-card-line p {
   margin: 0;
   min-width: 0;
+}
+
+/* Native-style multi-computer Chats and Activity, following mobile PR #2838. */
+.hero-phone-app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.hero-phone-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: hero-scene-in 420ms ease-out both;
+}
+.hero-phone-page-head {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 51px;
+  padding: 6px 12px;
+}
+.hero-phone-page-head h3 {
+  margin: 0;
+  font:
+    600 20px -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+.hero-phone-host-picker {
+  position: relative;
+}
+.hero-phone-host-picker summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 0;
+  list-style: none;
+  cursor: pointer;
+  font-size: 17px;
+}
+.hero-phone-host-picker summary::-webkit-details-marker {
+  display: none;
+}
+.hero-phone-host-picker summary > svg:first-child {
+  color: var(--app-user);
+}
+.hero-phone-host-options {
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  left: 0;
+  width: 205px;
+  padding: 5px;
+  border-radius: 16px;
+  border: 1px solid var(--phone-edge);
+  background: var(--phone-glass);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 25px rgb(0 0 0 / 0.12);
+}
+.hero-phone-page-head h3 + .hero-phone-host-picker .hero-phone-host-options {
+  left: auto;
+  right: 0;
+}
+.hero-phone-host-options button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.hero-phone-host-options button:hover,
+.hero-phone-host-options button[aria-pressed='true'] {
+  background: var(--app-hover);
+}
+.hero-phone-page-feed {
+  flex: 1;
+  min-height: 0;
+  padding: 5px 10px 16px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.hero-phone-section-label {
+  margin: 5px 0 10px;
+  font-size: 10px;
+  color: var(--app-soft);
+}
+.hero-phone-conversations,
+.hero-phone-requests,
+.hero-phone-computers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.hero-phone-conversations > li > button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.hero-phone-conversations .pixel-avatar,
+.hero-phone-group-icon {
+  flex: none;
+  border-radius: 9px;
+  overflow: hidden;
+}
+.hero-phone-group-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  background: var(--app-bubble);
+  color: var(--app-soft);
+}
+.hero-phone-conversation-copy {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.hero-phone-conversation-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+.hero-phone-conversation-title > strong {
+  font-size: 12px;
+  white-space: nowrap;
+}
+.hero-phone-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--app-soft);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.hero-phone-source svg {
+  flex: none;
+  color: #6f81ff;
+}
+.hero-phone-source[data-host='research'] svg {
+  color: #4eae66;
+}
+.hero-phone-row-preview {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--app-soft);
+  font-size: 10px;
+}
+.hero-phone-tabbar {
+  display: flex;
+  flex: none;
+  align-items: stretch;
+  gap: 3px;
+  margin: 2px 8px 3px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--phone-edge);
+  background: var(--phone-glass);
+  backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+}
+.hero-phone-tabbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 2px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--app-soft);
+  font-size: 9px;
+  cursor: pointer;
+}
+.hero-phone-tabbar button[aria-pressed='true'] {
+  background: var(--app-hover);
+  color: var(--app-user);
+}
+.hero-phone-tabbar button > span {
+  position: relative;
+  display: inline-flex;
+}
+.hero-phone-tabbar i {
+  position: absolute;
+  top: -4px;
+  right: -9px;
+  min-width: 12px;
+  padding: 0 2px;
+  border-radius: 999px;
+  background: var(--app-user);
+  color: var(--app-user-ink);
+  font:
+    600 8px/12px -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+.hero-phone-activity-sections {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 -2px 13px;
+  border-bottom: 1px solid var(--phone-edge);
+  font-size: 11px;
+  color: var(--app-soft);
+}
+.hero-phone-activity-sections > * {
+  padding: 7px 4px;
+  white-space: nowrap;
+}
+.hero-phone-activity-sections > strong {
+  color: var(--app-ink);
+  border-bottom: 2px solid var(--app-user);
+}
+.hero-phone-requests > li {
+  margin-bottom: 17px;
+}
+.hero-phone-request-source {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 7px;
+  font-size: 12px;
+}
+.hero-phone-request-card {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 11px;
+  border-radius: 13px;
+  background: var(--app-bubble);
+  font-size: 11px;
+}
+.hero-phone-request-card code {
+  display: block;
+  padding: 7px;
+  border-radius: 7px;
+  background: var(--app-code);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+.hero-phone-request-card > div {
+  display: flex;
+  gap: 7px;
+}
+.hero-phone-request-card button {
+  flex: 1;
+  min-height: 28px;
+  padding: 5px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 10px;
+  cursor: pointer;
+  background: var(--app-hover);
+}
+.hero-phone-request-card button:first-child {
+  background: var(--app-user);
+  color: var(--app-user-ink);
+}
+.hero-phone-request-result,
+.hero-phone-caught-up {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--app-bubble);
+  color: var(--app-ok);
+  font-size: 12px;
+}
+.hero-phone-requests [data-decision='deny'] .hero-phone-request-result {
+  color: var(--app-soft);
+}
+.hero-phone-caught-up {
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 32px;
+  padding: 15px;
+  background: transparent;
+  color: var(--app-soft);
+}
+.hero-phone-computers li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--phone-edge);
+}
+.hero-phone-computers .hero-phone-source {
+  font-size: 12px;
+}
+.hero-phone-connected {
+  color: var(--app-ok);
+  font-size: 10px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-phone-page {
+    animation: none;
+  }
+}
+
+.hero-phone-title .hero-phone-source {
+  flex: none;
+  font-size: 8px;
+}
+.hero-phone-title .hero-phone-source svg {
+  width: 9px;
+  height: 9px;
 }
