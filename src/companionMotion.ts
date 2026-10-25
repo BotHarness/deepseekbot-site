@@ -68,7 +68,9 @@ export class SiteCompanionMotion {
       this.settle();
       return;
     }
-    if (!this.started && bounds.ground <= bounds.height + 24) {
+    if (!this.started) {
+      // A tall Hero must not keep the privacy/community guide below the fold.
+      if (bounds.ground > bounds.height + 24) this.support = 'viewport';
       this.started = true;
       this.y = this.floor;
       this.x = reduced ? 32 : -bounds.size;

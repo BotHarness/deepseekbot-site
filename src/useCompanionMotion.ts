@@ -200,7 +200,13 @@ export function useCompanionMotion(options: Options) {
       request();
     };
     const overlays = () => {
-      blocked = !!document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]');
+      // Native popovers stay mounted when closed; only rendered dialogs block the guide.
+      blocked = Array.from(
+        document.querySelectorAll('dialog[open], [role="dialog"][aria-modal="true"]'),
+      ).some((dialog) => {
+        const style = getComputedStyle(dialog);
+        return dialog.getClientRects().length > 0 && style.visibility === 'visible';
+      });
       el.style.visibility = blocked ? 'hidden' : '';
       if (blocked && frame) {
         cancelAnimationFrame(frame);
@@ -229,6 +235,7 @@ export function useCompanionMotion(options: Options) {
     viewport?.addEventListener('resize', resize);
     viewport?.addEventListener('scroll', resize);
     document.addEventListener('visibilitychange', visibility);
+    document.addEventListener('toggle', overlays, true);
     media.addEventListener('change', preference);
     preference();
     overlays();
@@ -245,6 +252,7 @@ export function useCompanionMotion(options: Options) {
       viewport?.removeEventListener('resize', resize);
       viewport?.removeEventListener('scroll', resize);
       document.removeEventListener('visibilitychange', visibility);
+      document.removeEventListener('toggle', overlays, true);
       media.removeEventListener('change', preference);
     };
   }, []);
