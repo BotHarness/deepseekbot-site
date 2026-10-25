@@ -26,6 +26,8 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { track } from '../analytics';
+import { HERO_COPY } from '../heroCopy';
+import { PhonePair } from './FeatureDemos';
 import type { Copy } from '../content';
 import type { DemoChannel, DemoIcon, DemoStep, PanelSection } from '../demoCopy';
 import { DEEPSEEKBOT_RECIPE, recipeFor } from '../mascot';
@@ -243,11 +245,14 @@ function Message({
  * A simulated Bot mode window: a message list, the chat and the Channel sidebar. Each chat plays a
  * script once it scrolls into view; visitors switch chats, answer approvals and type messages.
  */
-export function LiveDemo({ copy }: { copy: Copy }) {
+export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhone?: boolean }) {
   const t = copy.demo;
+  const lang = copy.htmlLang === 'en' ? 'en' : 'zh';
+  const hero = HERO_COPY[lang];
   const channels = t.channels;
   const root = useRef<HTMLDivElement>(null);
   const feed = useRef<HTMLDivElement>(null);
+  const phoneFeed = useRef<HTMLDivElement>(null);
   const answerWith = useRef<((answer: Answer) => void) | null>(null);
   // the visitor took over: stop moving on to the next chat by itself
   const touched = useRef(false);
@@ -273,6 +278,8 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   const [range, setRange] = useState(1);
   // sidebar sections the visitor folded, by section id; they stay folded across chats
   const [folded, setFolded] = useState<Set<string>>(() => new Set());
+  const [phoneTab, setPhoneTab] = useState<'chat' | 'pair' | 'native'>('chat');
+  const [device, setDevice] = useState<'desktop' | 'phone'>('phone');
 
   const channel = channels[active]!;
   const panel = useMemo(() => panelAt(channel, shown), [channel, shown]);
@@ -383,12 +390,13 @@ export function LiveDemo({ copy }: { copy: Copy }) {
 
   // keep the newest message in view, inside the window only (never scroll the page)
   useEffect(() => {
-    const el = feed.current;
-    if (el)
-      el.scrollTo({ top: el.scrollHeight, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-  }, [shown, working, extra, answers, done]);
+    for (const el of [feed.current, phoneFeed.current])
+      if (el)
+        el.scrollTo({ top: el.scrollHeight, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+  }, [shown, working, extra, answers, done, phoneTab, device]);
 
   const open = (index: number) => {
+    answerWith.current = null;
     touched.current = true;
     track('demo_channel_opened', { channel: channels[index]!.id });
     setView('chat');
@@ -397,13 +405,16 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   };
 
   const answer = (value: Answer) => {
+    const resolve = answerWith.current;
+    if (!resolve) return;
+    answerWith.current = null;
     touched.current = true;
     track('demo_approval_answered', {
       channel: channel.id,
       answer: value === 'deny' ? 'deny' : 'allow',
       scope: value === 'always' ? 'always' : 'once',
     });
-    answerWith.current?.(value);
+    resolve(value);
   };
 
   const send = (event: FormEvent) => {
@@ -426,6 +437,16 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   };
 
   const steps = channel.steps.slice(0, shown);
+  const renderStep = (step: DemoStep, index: number) => (
+    <Message
+      key={`${channel.id}-${run}-${index}`}
+      step={step}
+      t={t}
+      answer={answers[index]}
+      waiting={waiting && index === shown - 1}
+      onAnswer={answer}
+    />
+  );
   const statusOf = (index: number): RowStatus => {
     if (index !== active) return seen.has(channels[index]!.id) ? 'done' : undefined;
     if (waiting) return 'needs';
@@ -483,13 +504,41 @@ export function LiveDemo({ copy }: { copy: Copy }) {
   );
 
   return (
-    <div className="demo-stage demo-stage--hero" ref={root}>
+    <div
+      className={
+        linkedPhone ? 'demo-stage demo-stage--hero hero-linked' : 'demo-stage demo-stage--hero'
+      }
+      ref={root}
+      data-device={linkedPhone ? device : undefined}
+    >
+      {linkedPhone ? (
+        <div className="hero-device-switch" role="group" aria-label={hero.synced}>
+          <button
+            type="button"
+            aria-pressed={device === 'desktop'}
+            onClick={() => setDevice('desktop')}
+          >
+            {hero.desktop}
+          </button>
+          <button
+            type="button"
+            aria-pressed={device === 'phone'}
+            onClick={() => setDevice('phone')}
+          >
+            {hero.phone}
+          </button>
+        </div>
+      ) : null}
       <div className="sky" aria-hidden="true">
         <span className="cloud cloud--a" />
         <span className="cloud cloud--b" />
         <span className="star-field" />
       </div>
-      <div className="app" role="group" aria-label={t.windowLabel}>
+      <div
+        className={linkedPhone ? 'app hero-desktop' : 'app'}
+        role="group"
+        aria-label={t.windowLabel}
+      >
         <div className="app-titlebar" aria-hidden="true">
           <span className="app-lights">
             <i />
@@ -717,16 +766,7 @@ export function LiveDemo({ copy }: { copy: Copy }) {
                 <div className="app-feed" ref={feed}>
                   <ol className="app-msgs">
                     <li className="app-day">{t.today}</li>
-                    {steps.map((step, index) => (
-                      <Message
-                        key={`${channel.id}-${run}-${index}`}
-                        step={step}
-                        t={t}
-                        answer={answers[index]}
-                        waiting={waiting && index === shown - 1}
-                        onAnswer={answer}
-                      />
-                    ))}
+                    {steps.map(renderStep)}
                     {extra.map((item, index) =>
                       item.kind === 'user' ? (
                         <li key={`x${index}`} className="app-msg app-msg--user">
@@ -895,6 +935,90 @@ export function LiveDemo({ copy }: { copy: Copy }) {
           </div>
         </div>
       </div>
+      {linkedPhone ? (
+        <div className="hero-phone-wrap">
+          <div className="hero-phone-tabs" role="group" aria-label={hero.phone}>
+            {(['chat', 'pair', 'native'] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                aria-pressed={phoneTab === tab}
+                onClick={() => {
+                  setPhoneTab(tab);
+                  track('hero_demo_used', { action: tab });
+                }}
+              >
+                {hero[tab]}
+              </button>
+            ))}
+          </div>
+          <div
+            className="hero-linked-phone app"
+            role="group"
+            aria-label={`${hero.phone} · ${hero.synced}`}
+          >
+            {phoneTab === 'native' ? (
+              <img
+                className="hero-native-screen"
+                src={`/hero/ios-${lang}.png`}
+                width={1320}
+                height={2868}
+                alt={hero.nativeAlt}
+                loading="lazy"
+              />
+            ) : (
+              <>
+                <div className="hero-phone-status" aria-hidden="true">
+                  <span>9:41</span>
+                  <span className="hero-phone-island" />
+                  <span>▰</span>
+                </div>
+                {phoneTab === 'pair' ? (
+                  <PhonePair t={copy.featureDemos.mobile} onNext={() => setPhoneTab('chat')} />
+                ) : (
+                  <>
+                    <header className="hero-phone-head">
+                      <Avatar name={channel.bots[0]!} size={28} />
+                      <strong>{channel.title}</strong>
+                      <small>
+                        {waiting
+                          ? t.needsYou
+                          : done
+                            ? Object.values(answers).includes('deny')
+                              ? t.denied
+                              : hero.done
+                            : t.tob.states.working}
+                      </small>
+                    </header>
+                    <div className="hero-phone-feed" ref={phoneFeed}>
+                      <ol className="app-msgs">
+                        {steps.map(renderStep)}
+                        {extra.map((item, index) => (
+                          <li
+                            className={
+                              item.kind === 'user'
+                                ? 'app-msg app-msg--user'
+                                : 'app-msg app-msg--bot'
+                            }
+                            key={`extra-${index}`}
+                          >
+                            <p className="app-bubble">
+                              {item.kind === 'user' ? item.text : t.fallback}
+                            </p>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                    <p className="hero-sync-note">{hero.synced}</p>
+                  </>
+                )}
+                <span className="hero-phone-home" aria-hidden="true" />
+              </>
+            )}
+          </div>
+          {phoneTab === 'native' ? <p className="hero-native-note">{hero.nativeNote}</p> : null}
+        </div>
+      ) : null}
     </div>
   );
 }

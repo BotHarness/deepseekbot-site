@@ -8,12 +8,12 @@ import { FeatureDemo } from './components/FeatureDemos';
 import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
 import { LiveDemo } from './components/LiveDemo';
-import { QuickInstall } from './components/QuickInstall';
 import { Install } from './components/Install';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
 import { COPY, LINKS, VERSION } from './content';
+import { HERO_COPY } from './heroCopy';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
 import { changelogPath, guidePath, initialMode, pathLang, write, type Mode } from './site';
@@ -22,6 +22,7 @@ export function App() {
   const lang = pathLang();
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
+  const hero = HERO_COPY[lang];
   const design = useAvatarDesign();
 
   useEffect(() => {
@@ -51,20 +52,30 @@ export function App() {
             <span className="cloud cloud--c" />
             <span className="star-field" />
           </div>
-          <div className="hero-copy">
-            <a className="badge" href={`${changelogPath(lang)}#v${VERSION}`}>
-              {copy.hero.badge}
-            </a>
-            <h1 className="wordmark">{copy.hero.title}</h1>
-            <p className="tagline">{copy.hero.tagline}</p>
-            <p className="lead">{copy.hero.lead}</p>
-            <ul className="chips">
-              {copy.hero.chips.map((chip) => (
-                <li key={chip}>{chip}</li>
-              ))}
-            </ul>
-            <QuickInstall copy={copy} />
-            <HeroLinks copy={copy} />
+          <div className="hero-layout">
+            <div className="hero-copy">
+              <a className="badge" href={`${changelogPath(lang)}#v${VERSION}`}>
+                {copy.hero.badge}
+              </a>
+              <p className="hero-brand">
+                Tobs <span>托布</span>
+              </p>
+              <h1 className="hero-heading">
+                {hero.headline}
+                <br />
+                <em>{hero.headlineEnd}</em>
+              </h1>
+              <p className="lead">{hero.lead}</p>
+              <HeroLinks lang={lang} />
+              <a className="hero-ecosystem" href={LINKS.dsh} target="_blank" rel="noreferrer">
+                {hero.ecosystem} ↗
+              </a>
+            </div>
+            <div className="hero-product">
+              <p className="hero-demo-label">{hero.demo}</p>
+              <LiveDemo copy={copy} linkedPhone />
+              <p className="hero-demo-note">{hero.demoNote}</p>
+            </div>
           </div>
           <Crew copy={copy} lang={lang} />
           <div className="ground" aria-hidden="true" />

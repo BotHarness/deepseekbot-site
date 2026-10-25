@@ -10,6 +10,7 @@ import {
 } from '../site';
 import { navIconSvg, type NavIcon } from '../navIcons';
 import { HeaderCommunity } from './HeaderCommunity';
+import { MobileBeta } from './MobileBeta';
 
 export function SiteHeader({
   copy,
@@ -38,7 +39,7 @@ export function SiteHeader({
       <a className="skip" href="#main">
         {lang === 'zh' ? '跳到正文' : 'Skip to content'}
       </a>
-      <header className="topbar">
+      <header className={page === 'home' ? 'topbar topbar--mobile-beta' : 'topbar'}>
         <a className="brand" href={page === 'home' ? '#top' : homePath(lang)}>
           <span className="brand-logo">
             <img src="/logo.png" width={32} height={32} alt="" />
@@ -70,6 +71,7 @@ export function SiteHeader({
           </a>
         </nav>
         <div className="header-actions">
+          {page === 'home' ? <MobileBeta lang={lang} placement="header" /> : null}
           <HeaderCommunity lang={lang} />
           <div className="toggles">
             <nav className="lang-switch" aria-label={copy.langLabel}>

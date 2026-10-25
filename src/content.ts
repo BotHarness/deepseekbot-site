@@ -10,13 +10,12 @@ import {
   type FeatureDemoCopy,
 } from './demoCopy';
 import { QQ_GROUP } from './communityLinks';
-import { VERSION, DESKTOP_PACKAGE } from './installRelease';
+import { VERSION, DESKTOP_PACKAGE, DSH_VERSION } from './installRelease';
 export { QQ_GROUP };
 
 export type Lang = 'zh' | 'en';
 
-export { VERSION, DESKTOP_PACKAGE };
-export const DSH_VERSION = '0.2.1-rc.3';
+export { VERSION, DESKTOP_PACKAGE, DSH_VERSION };
 
 export const LINKS = {
   github: COMMUNITY_LINKS.github,

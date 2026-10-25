@@ -502,7 +502,7 @@ function StreamedReply({ lines, run }: { lines: string[]; run: string }) {
   return <>{out}</>;
 }
 
-function PhonePair({ t, onNext }: { t: Demos['mobile']; onNext: () => void }) {
+export function PhonePair({ t, onNext }: { t: Demos['mobile']; onNext: () => void }) {
   const [state, setState] = useState<'idle' | 'scanning' | 'paired'>('idle');
   useEffect(() => {
     if (state !== 'scanning') return;

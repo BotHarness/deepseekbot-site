@@ -4,6 +4,7 @@
 import type { PostHog } from 'posthog-js';
 import { pathLang } from './site';
 import { analyticsConsent, CONSENT_COPY } from './analyticsConsent';
+import { mobileInstallEvent } from './mobileBeta';
 
 const KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
 const HOST = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) ?? 'https://t.botharness.ai';
@@ -76,6 +77,8 @@ export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, un
       return [`${kind}_clicked`, { target: url.pathname, placement: at }];
     return null;
   }
+  const mobile = mobileInstallEvent(url, at);
+  if (mobile) return mobile;
   if (url.hostname === 'github.com')
     return ['github_clicked', { target: url.pathname, placement: at }];
   if (url.hostname === 'discord.gg' || url.hostname.endsWith('discord.com'))
