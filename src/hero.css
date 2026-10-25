@@ -151,8 +151,9 @@ a.beta-button--ios {
   min-width: 0;
 }
 .hero-linked {
+  --hero-phone-width: 280px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 1fr) var(--hero-phone-width);
   gap: 18px;
   align-items: center;
   position: relative;
@@ -168,7 +169,7 @@ a.beta-button--ios {
 }
 .hero-linked > .hero-desktop {
   width: 100%;
-  height: 460px;
+  height: calc(var(--hero-phone-width) * 2868 / 1320 + 32px);
   max-width: none;
   border: 2px solid var(--px-ink);
   border-radius: 14px;
@@ -517,7 +518,7 @@ a.beta-button--ios {
     max-width: none;
   }
   .hero-linked {
-    grid-template-columns: minmax(0, 1fr) 260px;
+    --hero-phone-width: 260px;
     gap: 12px;
   }
 }
