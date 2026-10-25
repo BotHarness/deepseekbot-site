@@ -4,6 +4,7 @@ import { copyText } from '../clipboard';
 import type { Lang } from '../content';
 import { HERO_COPY } from '../heroCopy';
 import { setupPrompt } from '../setupPrompt';
+import { MobileBeta } from './MobileBeta';
 
 export function HeroLinks({ lang }: { lang: Lang }) {
   const t = HERO_COPY[lang];
@@ -25,6 +26,7 @@ export function HeroLinks({ lang }: { lang: Lang }) {
         </button>
         <a href="#install">{t.manual}</a>
       </div>
+      <MobileBeta lang={lang} placement="hero" />
       {state === 'failed' ? (
         <p className="setup-hint" role="status">
           {t.failed}

@@ -113,6 +113,9 @@ a.beta-button--ios {
   flex-wrap: wrap;
   margin: 20px 0 28px;
 }
+.hero-actions .mobile-beta {
+  margin: 0;
+}
 .mobile-beta .beta-button {
   min-height: 48px;
   min-width: 132px;
@@ -449,6 +452,10 @@ a.beta-button--ios {
   border: 3px solid var(--px-ink) !important;
   border-radius: 0 !important;
   box-shadow: 4px 4px 0 var(--px-shadow) !important;
+}
+.android-beta-content {
+  font-family: var(--pixel-font);
+  text-align: left;
 }
 .android-beta-content h3 {
   margin: 0 0 10px;

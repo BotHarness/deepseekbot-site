@@ -8,7 +8,7 @@ import { HERO_COPY } from '../heroCopy';
 import { TESTFLIGHT_URL } from '../mobileBeta';
 import { CommunityIcon } from './CommunityIcon';
 
-export function MobileBeta({ lang, placement }: { lang: Lang; placement: 'install' }) {
+export function MobileBeta({ lang, placement }: { lang: Lang; placement: 'hero' | 'install' }) {
   const t = HERO_COPY[lang];
   const [qq, setQq] = useState<'idle' | 'copied' | 'failed'>('idle');
   return (

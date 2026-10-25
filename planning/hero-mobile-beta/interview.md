@@ -77,3 +77,6 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - 用户最后调整：移除 Setup prompt 的可展开预览；按钮继续复制完整双语指令，失败时给出短提示和已有手动安装入口。英文 slogan 使用 “A team of bots (Tobs), each with its own identity, persona and memory, working together.”，并维护对应中文。恢复旧首页三个 chips，沿用旧 `.chips` 及日夜调色板；上游200k+ Stars并入 DSH chip。大标题使用正文色，核心安装按钮保持主题 primary 实心色以突出主要操作。
 
 - 在 Hero 联动演示正下方加入旧官网完整产品介绍，复用 `copy.hero.lead` 的中英文内容，以左对齐的像素字体图注呈现。Hero 营销文字统一继承像素字体，演示内部桌面与手机仍保留各自的真实界面字体。
+
+- Hero 也加入 iOS／Android 安装入口，与下方 Install 区复用同一个组件，保持 iOS 白／Android 绿，统计区分 hero 与 install。
+- 双语复制 prompt 在桌面安装核验后主动询问是否需要移动端以及手机系统；仅用户选择继续后提供 TestFlight／Android 社区邀请步骤，再按当前配对指南协助 Connect 或 Tailscale 配对。保留桌面安装的完成边界；连接访问授权、手机权限及登录仍由用户明确确认，既有配对和网络发布不被覆盖。
