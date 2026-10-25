@@ -64,3 +64,5 @@ Bot、Memory、Plugin、Bundle、Profile 沿用现有产品和 DSH 定义，不�
 - Hero 当前使用可交互的预设画面，不显示历史原生截图；界面标题标明交互演示。
 
 - 最新导航调整：移除顶部 Avatar Studio；市场、Docs、Changelog、Blog 保留图标和文字，宽屏尽量单行，窄屏保留横向滚动。移动端按钮移到 Install 区标题下，iOS 白色、Android 绿 #3DDC84；统计 placement 同步改为 install。颜色参考 [Android 官方品牌指引](https://developer.android.com/distribute/marketing-tools/brand-guidelines)。
+
+- 手机联动演示进一步对齐原生消息页：依据现有英文原生群聊截图及 `apps/mobile/src/ui/chat/{message-bubble,bubble-shape,speaker-row,header-chrome,composer-chrome.ios}.tsx` 和原生 palette，使用浮动返回圆钮／群标题胶囊、顶部自然淡出、蓝色人类气泡、浅灰 Bot 气泡、靠近气泡底边的头像及姓名、底部加号／输入框／实心麦克风。暗色使用相同的原生主题色。网页展示并非嵌入真实原生应用；麦克风和附件符号只展示界面，不请求设备权限。文字发送、返回列表／重进聊天及审批仍可交互，共用桌面演示状态。
