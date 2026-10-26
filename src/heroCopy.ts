@@ -3,7 +3,9 @@ import type { Lang } from './content';
 export const HERO_COPY = {
   zh: {
     stars: '200k+ GitHub Stars',
-    setup: '让 AI 帮我安装',
+    setup: '复制提示词安装桌面端',
+    summary:
+      '免费开源，让一支有记忆的 Bot 团队在你自己的电脑上协作，兼顾编程与日常生活，模型由你选择。',
     copied: '安装指令已复制',
     close: '关闭',
     failed: '复制失败，请重试或使用手动安装。',
@@ -57,7 +59,9 @@ export const HERO_COPY = {
   },
   en: {
     stars: '200k+ GitHub Stars',
-    setup: 'Ask your AI to set it up',
+    setup: 'Copy prompt to install on desktop',
+    summary:
+      'Free and open source: a persistent bot team on your computer, for code and everyday life, with the models you choose.',
     copied: 'Setup prompt copied',
     close: 'Close',
     failed: 'Couldn’t copy. Try again or install manually.',
