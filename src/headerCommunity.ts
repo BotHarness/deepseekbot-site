@@ -29,15 +29,22 @@ export const HEADER_COMMUNITY_COPY = {
 } as const;
 
 /** Trusted local strings and geometry: identical markup for React and generated pages. */
-export function headerCommunityMarkup(lang: 'zh' | 'en'): string {
+export function headerCommunityMarkup(
+  lang: 'zh' | 'en',
+  placement: 'header' | 'hero' = 'header',
+): string {
   const t = HEADER_COMMUNITY_COPY[lang];
   const item = (brand: CommunityBrand) => {
-    const tip = `header-community-${brand}`;
+    const tip = `${placement}-community-${brand}`;
+    const label =
+      placement === 'hero'
+        ? `<span>${brand === 'github' ? 'GitHub' : brand === 'discord' ? 'Discord' : 'QQ'}</span>`
+        : '';
     const attributes = `class="header-community-control" aria-label="${t[brand]}" aria-describedby="${tip}"`;
     const control =
       brand === 'qq'
-        ? `<button type="button" ${attributes} data-header-qq>${communityIconSvg(brand)}</button>`
-        : `<a ${attributes} href="${COMMUNITY_LINKS[brand]}" target="_blank" rel="noreferrer"${brand === 'github' ? ' data-header-github' : ''}>${communityIconSvg(brand)}${brand === 'github' ? '<span class="header-github-stars" data-github-stars hidden aria-hidden="true"></span>' : ''}</a>`;
+        ? `<button type="button" ${attributes} data-header-qq>${communityIconSvg(brand)}${label}</button>`
+        : `<a ${attributes} href="${COMMUNITY_LINKS[brand]}" target="_blank" rel="noreferrer"${brand === 'github' ? ' data-header-github' : ''}>${communityIconSvg(brand)}${label}${brand === 'github' ? '<span class="header-github-stars" data-github-stars hidden aria-hidden="true"></span>' : ''}</a>`;
     return `<div class="header-community-item" data-community-item>
       ${control}
       <div class="header-community-tip" id="${tip}" role="tooltip" hidden>
@@ -47,5 +54,5 @@ export function headerCommunityMarkup(lang: 'zh' | 'en'): string {
       </div>
     </div>`;
   };
-  return `<nav class="header-community" aria-label="${t.nav}" data-header-community data-lang="${lang}" data-placement="header">${(['github', 'discord', 'qq'] as const).map(item).join('')}</nav>`;
+  return `<nav class="header-community${placement === 'hero' ? ' hero-community' : ''}" aria-label="${t.nav}" data-header-community data-lang="${lang}" data-placement="${placement}">${(['github', 'discord', 'qq'] as const).map(item).join('')}</nav>`;
 }

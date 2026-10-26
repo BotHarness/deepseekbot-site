@@ -57,6 +57,7 @@ export function App() {
             <div className="hero-copy">
               <h1 className="wordmark hero-title">{copy.hero.title}</h1>
               <p className="hero-subtitle">{copy.hero.tagline}</p>
+              <p className="hero-summary">{hero.summary}</p>
               <ul className="chips hero-chips">
                 {copy.hero.chips.map((chip, index) => (
                   <li key={chip}>

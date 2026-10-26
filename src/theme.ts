@@ -22,6 +22,16 @@ export const pixelTheme = defineTheme({
     '--color-border-emphasized': ['#3b2414', '#05070f'],
   },
   components: {
+    tooltip: {
+      base: {
+        border: '2px solid var(--px-ink)',
+        borderRadius: '0px',
+        boxShadow: '4px 4px 0 var(--px-shadow)',
+        backgroundColor: 'var(--bubble)',
+        color: 'var(--ink)',
+        fontFamily: PIXEL_FONT,
+      },
+    },
     button: {
       base: {
         borderRadius: '0px',

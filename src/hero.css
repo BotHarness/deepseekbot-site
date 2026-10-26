@@ -43,6 +43,61 @@
   max-width: none;
   margin: 0;
 }
+.hero-summary {
+  margin: -8px 0 0;
+  max-width: 920px;
+  color: var(--ink-soft);
+  font: 400 15px/1.7 var(--pixel-font);
+  text-wrap: balance;
+}
+.hero-community.header-community {
+  position: relative;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  outline: 0;
+  background: transparent;
+}
+.hero-community .header-community-item {
+  position: static;
+}
+.hero-community .header-community-item + .header-community-item {
+  border: 0;
+}
+.hero-community .header-community-control,
+.hero-community .header-community-control[data-header-github] {
+  width: auto;
+  height: auto;
+  min-height: 38px;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 2px solid var(--px-ink);
+  box-shadow: 3px 3px 0 var(--px-shadow);
+  font: 14px var(--pixel-font);
+  text-decoration: none;
+}
+.hero-community .header-community-control .community-icon {
+  width: 18px;
+  height: 18px;
+}
+.hero-community .header-community-tip {
+  left: 50%;
+  right: auto;
+  translate: -50% 0;
+  z-index: 5;
+}
+.setup-copy-feedback {
+  font: 14px/1.5 var(--pixel-font);
+}
+.setup-copy-announcement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .hero-chips a {
   color: inherit;
   text-decoration: none;
