@@ -68,7 +68,7 @@ body { width: 1200px; height: 630px; overflow: hidden; font-family: Px, sans-ser
     ? `<div class="tile tile--logo"><img src="${LOGO}" alt=""></div>`
     : `<div class="tile">${avatar(who, 108)}</div>`,
 ).join('')}</div>
-<p class="url">deepseekbot.app/blog/${slug}/</p>
+<p class="url">tobs.app/blog/${slug}/</p>
 </body></html>`;
 
 const browser = await chromium.launch(
