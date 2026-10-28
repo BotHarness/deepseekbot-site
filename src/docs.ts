@@ -7,7 +7,7 @@ import { initHeaderCommunity } from './headerCommunityEvents';
 
 void initAnalytics();
 initSearch();
-initHeaderCommunity(document, () => track('qq_group_copied', { placement: 'header' }));
+initHeaderCommunity(document, () => track('community:qq_group_copy', { placement: 'header' }));
 
 // The guide pages are static HTML; this adds the day/night switch and copy buttons.
 const root = document.documentElement;

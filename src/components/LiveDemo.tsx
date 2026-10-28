@@ -482,7 +482,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     setWaiting(false);
     answerWith.current = null;
     touched.current = true;
-    track('demo_channel_opened', {
+    track('demo:channel_open', {
       channel: linkedPhone ? phoneChannelKey(host, t.channels[index]!.id) : channels[index]!.id,
     });
     setView('chat');
@@ -495,7 +495,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     if (!resolve) return;
     answerWith.current = null;
     touched.current = true;
-    track('demo_approval_answered', {
+    track('demo:approval_submit', {
       channel: channel.id,
       answer: value === 'deny' ? 'deny' : 'allow',
       scope: value === 'always' ? 'always' : 'once',
@@ -508,7 +508,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     const text = draft.trim();
     if (!text || !done) return;
     touched.current = true;
-    track('demo_message_sent', { channel: channel.id });
+    track('demo:message_send', { channel: channel.id });
     setDraft('');
     const bot = channel.bots[0]!;
     setExtra((prev) => [...prev, { kind: 'user', text }]);

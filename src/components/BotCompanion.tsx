@@ -103,7 +103,7 @@ export function BotCompanion({ lang, design }: { lang: Lang; design: AvatarDesig
       }
       if (mounted.current) {
         setCopyState('copied');
-        track('qq_group_copied', { placement: 'companion' });
+        track('community:qq_group_copy', { placement: 'companion' });
       }
     } catch {
       if (mounted.current) setCopyState('failed');

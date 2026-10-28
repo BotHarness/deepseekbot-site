@@ -9,7 +9,7 @@ export function PromoVideo({ copy }: { copy: Copy }) {
 
   const start = () => {
     setStarted(true);
-    track('video_played');
+    track('demo:video_play');
     void video.current?.play();
   };
 

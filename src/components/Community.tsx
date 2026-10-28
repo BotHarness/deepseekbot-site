@@ -52,7 +52,7 @@ export function Community({ copy }: { copy: Copy }) {
               setCopyState('idle');
               const success = await copyText(QQ_GROUP);
               setCopyState(success ? 'copied' : 'failed');
-              if (success) track('qq_group_copied');
+              if (success) track('community:qq_group_copy');
             }}
           />
           <p className="community-copy-status" role="status">

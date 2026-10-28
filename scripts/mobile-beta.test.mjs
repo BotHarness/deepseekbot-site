@@ -9,7 +9,7 @@ test('TestFlight clicks identify platform and placement without URL query or use
   for (const placement of ['hero', 'install']) {
     assert.deepEqual(
       mobileInstallEvent(new URL(TESTFLIGHT_URL + '?email=private@example.invalid'), placement),
-      ['mobile_install_clicked', { platform: 'ios', destination: 'testflight', placement }],
+      ['mobile_beta:install_link_click', { platform: 'ios', destination: 'testflight', placement }],
     );
   }
 });

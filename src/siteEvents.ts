@@ -1,0 +1,47 @@
+/**
+ * Every event the site sends, named `category:object_action` like the app's tracking plan
+ * (BotHarness ADR-0270). `track` accepts only these names.
+ */
+export const SITE_EVENTS = [
+  'avatar_editor:avatar_download',
+  'avatar_editor:avatar_restore',
+  'avatar_editor:headpiece_select',
+  'avatar_editor:part_delete',
+  'avatar_editor:part_draw_cancel',
+  'avatar_editor:part_draw_start',
+  'avatar_editor:part_export',
+  'avatar_editor:part_import',
+  'avatar_editor:part_import_fail',
+  'avatar_editor:part_save',
+  'avatar_editor:part_wear',
+  'avatar_editor:preset_select',
+  'avatar_editor:species_select',
+  'avatar_editor:tab_select',
+  'community:discord_link_click',
+  'community:github_link_click',
+  'community:qq_group_copy',
+  'demo:approval_submit',
+  'demo:channel_open',
+  'demo:feature_demo_use',
+  'demo:message_send',
+  'demo:video_play',
+  'docs:search_open',
+  'docs:search_result_open',
+  'docs:search_submit',
+  'install:command_copy',
+  'install:cta_click',
+  'install:dsh_download_click',
+  'install:setup_prompt_copy',
+  'install:tab_select',
+  'marketplace:bot_open',
+  'marketplace:install_button_click',
+  'mobile_beta:install_link_click',
+  'mobile_beta:menu_open',
+  'navigation:avatar_link_click',
+  'navigation:changelog_link_click',
+  'navigation:docs_link_click',
+  'navigation:language_select',
+  'navigation:market_link_click',
+] as const;
+
+export type SiteEvent = (typeof SITE_EVENTS)[number];

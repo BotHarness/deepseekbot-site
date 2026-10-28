@@ -121,7 +121,7 @@ export function Playground({
             label={t.download}
             variant="primary"
             clickAction={() => {
-              track('avatar_downloaded', {
+              track('avatar_editor:avatar_download', {
                 edited,
                 species: recipe.species ?? 'human',
                 drawn_parts: CUSTOM_SLOTS.filter((slot) => wornPart(recipe, slot)).length,

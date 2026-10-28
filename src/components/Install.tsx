@@ -89,7 +89,7 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
         value={way}
         onChange={(value) => {
           const next = value === 'dev' ? 'dev' : 'desktop';
-          if (next !== way) track('install_tab_switched', { tab: next });
+          if (next !== way) track('install:tab_select', { tab: next });
           setWay(next);
         }}
       >
@@ -108,7 +108,7 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
                     command={DESKTOP_PACKAGE}
                     copy={copy}
                     shell={false}
-                    onCopy={() => track('install_command_copied', { tab: 'desktop', step: i + 1 })}
+                    onCopy={() => track('install:command_copy', { tab: 'desktop', step: i + 1 })}
                   />
                 ) : null}
               </Step>
@@ -133,7 +133,7 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
                 <Command
                   command={command}
                   copy={copy}
-                  onCopy={() => track('install_command_copied', { tab: 'dev', step: i + 1 })}
+                  onCopy={() => track('install:command_copy', { tab: 'dev', step: i + 1 })}
                 />
               </Step>
             ))}

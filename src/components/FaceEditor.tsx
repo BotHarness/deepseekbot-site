@@ -335,7 +335,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     onChange(next);
   };
   const begin = (next: Drawing, start: 'new' | 'edit' | 'piece') => {
-    track('avatar_part_draw_started', { slot: next.slot, start });
+    track('avatar_editor:part_draw_start', { slot: next.slot, start });
     drawn.current = recipe;
     setDrawing(next);
   };
@@ -354,14 +354,17 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
         onSave={(part, name) => {
           const saved = addPart(parts, part, name, drawing.parent);
           if (!saved) return false;
-          track('avatar_part_saved', { slot: drawing.slot, derived: drawing.parent !== undefined });
+          track('avatar_editor:part_save', {
+            slot: drawing.slot,
+            derived: drawing.parent !== undefined,
+          });
           setParts(saved.entries);
           setDrawing(undefined);
           onChange(withCustomPart(drawing.base, drawing.slot, saved.entry.part));
           return true;
         }}
         onCancel={() => {
-          track('avatar_part_draw_cancelled', { slot: drawing.slot });
+          track('avatar_editor:part_draw_cancel', { slot: drawing.slot });
           setDrawing(undefined);
           onChange(drawing.restore);
         }}
@@ -381,10 +384,10 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
         const saved = parts.find((entry) => entry.id === id);
         const file = saved ? fileOf(saved) : { part, name: '' };
         saveFile(partFileName(file), await encodePartFile(file), 'image/png');
-        track('avatar_part_exported', { scope: 'part', slot: part.slot, count: 1 });
+        track('avatar_editor:part_export', { scope: 'part', slot: part.slot, count: 1 });
       } else {
         saveFile('part-library.zip', await encodePartLibrary(parts.map(fileOf)), 'application/zip');
-        track('avatar_part_exported', { scope: 'library', count: parts.length });
+        track('avatar_editor:part_export', { scope: 'library', count: parts.length });
       }
     } catch {
       setLibraryNote(partText.exportFailed);
@@ -393,7 +396,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
   const importFiles = async (file: File | undefined) => {
     if (!file) return;
     if (file.size > MAX_PART_LIBRARY_FILE_BYTES) {
-      track('avatar_part_import_failed', { reason: 'too-large' });
+      track('avatar_editor:part_import_fail', { reason: 'too-large' });
       setLibraryNote(partText.importTooLarge);
       return;
     }
@@ -404,7 +407,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
       result = 'not-png' as const;
     }
     if (typeof result === 'string') {
-      track('avatar_part_import_failed', { reason: result });
+      track('avatar_editor:part_import_fail', { reason: result });
       setLibraryNote(
         result === 'too-large'
           ? partText.importTooLarge
@@ -416,11 +419,11 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
     }
     const saved = addParts(parts, result.files);
     if (!saved) {
-      track('avatar_part_import_failed', { reason: 'storage' });
+      track('avatar_editor:part_import_fail', { reason: 'storage' });
       setLibraryNote(partText.saveFailed);
       return;
     }
-    track('avatar_part_imported', {
+    track('avatar_editor:part_import', {
       count: result.files.length,
       added: saved.added,
       refused: result.refused,
@@ -492,7 +495,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
           {worn ? action(partText.exportPart, () => void exportParts(worn)) : null}
           {wornId && own.some((entry) => entry.id === wornId)
             ? action(partText.remove, () => {
-                track('avatar_part_deleted', { slot });
+                track('avatar_editor:part_delete', { slot });
                 setParts(removePart(parts, wornId));
               })
             : null}
@@ -533,7 +536,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             selected={wornId === entry.id}
             label={entry.name || partText.untitled!}
             onSelect={() => {
-              track('avatar_part_worn', { slot });
+              track('avatar_editor:part_wear', { slot });
               onChange(withCustomPart(recipe, slot, entry.part));
             }}
           />
@@ -630,7 +633,10 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             selected={JSON.stringify(preset) === JSON.stringify(recipe)}
             label={`${labels.parts.presets} ${i + 1}`}
             onSelect={() => {
-              track('avatar_preset_selected', { index: i, species: preset.species ?? 'human' });
+              track('avatar_editor:preset_select', {
+                index: i,
+                species: preset.species ?? 'human',
+              });
               onChange(preset);
             }}
           />
@@ -655,7 +661,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             selected={worn === value}
             label={option('headpiece', value)}
             onSelect={() => {
-              track('avatar_headpiece_selected', { headpiece: value });
+              track('avatar_editor:headpiece_select', { headpiece: value });
               onChange(withBuiltInHeadpiece(recipe, value));
             }}
           />
@@ -683,7 +689,7 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
             selected={(fields[category] ?? 'none') === value && !pieceWorn}
             label={option(category, value)}
             onSelect={() => {
-              if (category === 'species') track('avatar_species_selected', { species: value });
+              if (category === 'species') track('avatar_editor:species_select', { species: value });
               onChange(builtIn(category, value));
             }}
           />
@@ -711,7 +717,10 @@ export function FaceEditor({ copy, recipe, onChange, onReset, edited }: Props) {
               aria-pressed={category === key}
               onClick={() => {
                 if (key !== category)
-                  track('avatar_tab_selected', { tab: key, species: recipe.species ?? 'human' });
+                  track('avatar_editor:tab_select', {
+                    tab: key,
+                    species: recipe.species ?? 'human',
+                  });
                 setCategory(key);
               }}
             >

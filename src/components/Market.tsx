@@ -213,7 +213,7 @@ export function MarketList({
                     if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0)
                       return;
                     event.preventDefault();
-                    track('market_bot_opened', { bot: bot.id });
+                    track('marketplace:bot_open', { bot: bot.id });
                     onOpen(bot);
                   }}
                 >
@@ -425,7 +425,7 @@ export function MarketDetail({
                 copy={copy}
                 shell={false}
                 onCopy={() =>
-                  track('market_install_clicked', { bot: bot.id, action: 'copy_git_url' })
+                  track('marketplace:install_button_click', { bot: bot.id, action: 'copy_git_url' })
                 }
               />
               <ol className="detail-steps">
@@ -438,7 +438,7 @@ export function MarketDetail({
                 <a
                   href={lang === 'zh' ? '/#install' : '/en/#install'}
                   onClick={() =>
-                    track('market_install_clicked', { bot: bot.id, action: 'get_app' })
+                    track('marketplace:install_button_click', { bot: bot.id, action: 'get_app' })
                   }
                 >
                   {t.getApp} →
