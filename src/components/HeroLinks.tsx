@@ -40,7 +40,7 @@ export function HeroLinks({ lang }: { lang: Lang }) {
               const success = await copyText(prompt);
               setCopying(false);
               setNotice({ kind: success ? 'copied' : 'failed' });
-              if (success) track('setup_prompt_copied', { placement: 'hero' });
+              if (success) track('install:setup_prompt_copy', { placement: 'hero' });
             }}
           >
             <span aria-hidden="true">✦</span> {t.setup}

@@ -11,7 +11,7 @@ const fill = (template: string, values: Record<string, string>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? '');
 
 const used = (feature: keyof Demos, action: string) =>
-  track('feature_demo_used', { feature, action });
+  track('demo:feature_demo_use', { feature, action });
 
 function Avatar({ name, size }: { name: string; size: number }) {
   const recipe = useMemo(() => recipeFor(name), [name]);

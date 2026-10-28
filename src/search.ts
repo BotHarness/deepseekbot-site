@@ -193,16 +193,13 @@ export function initSearch() {
       status.hidden = hits.length > 0;
       select(0);
       // what people look for, once they stop typing
-      logged = setTimeout(
-        () => track('docs_search_queried', { query, results: hits.length }),
-        1000,
-      );
+      logged = setTimeout(() => track('docs:search_submit', { query, results: hits.length }), 1000);
     };
 
     const open = (i: number) => {
       const hit = hits[i];
       if (!hit) return;
-      track('docs_search_result_opened', {
+      track('docs:search_result_open', {
         query: input.value.trim(),
         position: i + 1,
         target: hit.entry.u,
@@ -248,7 +245,7 @@ export function initSearch() {
     document.documentElement.classList.add('search-locked');
     const input = dialog.querySelector('input')!;
     input.select();
-    track('docs_search_opened', { via });
+    track('docs:search_open', { via });
   };
 
   for (const button of openers) button.addEventListener('click', () => show('button'));

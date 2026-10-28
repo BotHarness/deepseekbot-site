@@ -27,7 +27,7 @@ export function QuickInstall({ copy }: { copy: Copy }) {
         value={way}
         onChange={(value) => {
           const next = value === 'dev' ? 'dev' : 'desktop';
-          if (next !== way) track('install_tab_switched', { tab: next, placement: 'hero' });
+          if (next !== way) track('install:tab_select', { tab: next, placement: 'hero' });
           setWay(next);
         }}
       >
@@ -38,7 +38,7 @@ export function QuickInstall({ copy }: { copy: Copy }) {
         command={way === 'desktop' ? DESKTOP_PACKAGE : INSTALL_STEPS[1]}
         copy={copy}
         shell={way === 'dev'}
-        onCopy={() => track('install_command_copied', { tab: way, placement: 'hero' })}
+        onCopy={() => track('install:command_copy', { tab: way, placement: 'hero' })}
       />
       <p className="quick-install-hint">{way === 'desktop' ? t.desktopHint : t.cliHint}</p>
     </div>

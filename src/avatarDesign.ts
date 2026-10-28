@@ -34,7 +34,7 @@ export function useAvatarDesign() {
   useEffect(() => {
     if (!saved || restoredReported) return;
     restoredReported = true;
-    track('avatar_restored', {
+    track('avatar_editor:avatar_restore', {
       edited: saved.recipe !== null,
       species: (saved.recipe ?? recipeFor(saved.name.trim() || DEFAULT_NAME, 2)).species ?? 'human',
     });

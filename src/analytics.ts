@@ -5,6 +5,7 @@ import type { PostHog } from 'posthog-js';
 import { pathLang } from './site';
 import { analyticsConsent, CONSENT_COPY } from './analyticsConsent';
 import { mobileInstallEvent } from './mobileBeta';
+import type { SiteEvent } from './siteEvents';
 
 const KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
 const HOST = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) ?? 'https://t.botharness.ai';
@@ -55,11 +56,11 @@ function placement(element: Element) {
  * install buttons, and the header links to the marketplace, docs and changelog appear on every page, including the static docs, so they are tracked by one
  * delegated listener instead of in each component.
  */
-export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, unknown>] | null {
+export function linkEvent(anchor: HTMLAnchorElement): [SiteEvent, Record<string, unknown>] | null {
   const at = placement(anchor);
   if (anchor.closest('.lang-switch')) {
     const to = anchor.hreflang.startsWith('zh') ? 'zh' : 'en';
-    return to === pathLang() ? null : ['language_switched', { to, placement: at }];
+    return to === pathLang() ? null : ['navigation:language_select', { to, placement: at }];
   }
   let url: URL;
   try {
@@ -69,22 +70,22 @@ export function linkEvent(anchor: HTMLAnchorElement): [string, Record<string, un
   }
   if (url.origin === location.origin) {
     if (url.pathname === location.pathname && url.hash === '#install')
-      return ['install_cta_clicked', { placement: at }];
+      return ['install:cta_click', { placement: at }];
     const kind = pageKind(url.pathname);
     // moving around within the marketplace or the docs is not a way in
     if (kind === pageKind(location.pathname)) return null;
     if (kind === 'market' || kind === 'avatar' || kind === 'docs' || kind === 'changelog')
-      return [`${kind}_clicked`, { target: url.pathname, placement: at }];
+      return [`navigation:${kind}_link_click` as const, { target: url.pathname, placement: at }];
     return null;
   }
   const mobile = mobileInstallEvent(url, at);
   if (mobile) return mobile;
   if (url.hostname === 'github.com')
-    return ['github_clicked', { target: url.pathname, placement: at }];
+    return ['community:github_link_click', { target: url.pathname, placement: at }];
   if (url.hostname === 'discord.gg' || url.hostname.endsWith('discord.com'))
-    return ['discord_clicked', { placement: at }];
+    return ['community:discord_link_click', { placement: at }];
   if (url.hostname === 'www.deepseek.com' && url.pathname.includes('/harness'))
-    return ['dsh_download_clicked', { placement: at }];
+    return ['install:dsh_download_click', { placement: at }];
   return null;
 }
 
@@ -154,7 +155,7 @@ function consentBar(posthog: PostHog, register: () => void) {
 }
 
 let client: PostHog | undefined;
-const queued: [string, Record<string, unknown> | undefined][] = [];
+const queued: [SiteEvent, Record<string, unknown> | undefined][] = [];
 
 export async function initAnalytics() {
   const normalized = normalizeRef(new URL(location.href));
@@ -194,7 +195,7 @@ export async function initAnalytics() {
 }
 
 /** Named site events (ADR-0132); a no-op when PostHog is not configured. */
-export function track(event: string, properties?: Record<string, unknown>) {
+export function track(event: SiteEvent, properties?: Record<string, unknown>) {
   if (!KEY) return;
   if (client) client.capture(event, properties);
   else queued.push([event, properties]);

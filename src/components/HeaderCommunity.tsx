@@ -16,7 +16,7 @@ export function HeaderCommunity({
   useEffect(() => {
     if (root.current)
       return initHeaderCommunity(root.current, () => {
-        track('qq_group_copied', { placement });
+        track('community:qq_group_copy', { placement });
       });
   }, [lang, placement]);
   return (

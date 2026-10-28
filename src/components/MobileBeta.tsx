@@ -32,7 +32,7 @@ export function MobileBeta({ lang, placement }: { lang: Lang; placement: 'hero' 
         onOpenChange={(open) => {
           if (open) {
             setQq('idle');
-            track('mobile_beta_menu_opened', { platform: 'android', placement });
+            track('mobile_beta:menu_open', { platform: 'android', placement });
           }
         }}
         content={
@@ -49,7 +49,8 @@ export function MobileBeta({ lang, placement }: { lang: Lang; placement: 'hero' 
               onClick={async () => {
                 const success = await copyText(QQ_GROUP);
                 setQq(success ? 'copied' : 'failed');
-                if (success) track('qq_group_copied', { placement: `android_beta_${placement}` });
+                if (success)
+                  track('community:qq_group_copy', { placement: `android_beta_${placement}` });
               }}
             >
               <CommunityIcon brand="qq" />
