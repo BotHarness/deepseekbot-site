@@ -246,7 +246,11 @@ test('an unreachable Marketplace still serves the page uncached for the browser 
     const response = await get('/market/bot/R_a');
     assert.equal(response.status, 200);
     assert.equal(response.headers.get('cache-control'), 'no-store');
-    assert.equal(await response.text(), shell('zh'));
+    const html = await response.text();
+    assert.match(html, /<title>市场 · Tobs<\/title>/);
+    assert.match(html, /<link rel="canonical" href="https:\/\/tobs.app\/market\/bot\/R_a"/);
+    assert.match(html, /hreflang="en" href="https:\/\/tobs.app\/en\/market\/bot\/R_a"/);
+    assert.doesNotMatch(html, /noindex|ld\+json/);
   } finally {
     api.restore();
   }
@@ -304,4 +308,11 @@ test('the sitemap is a retryable 503 while the Marketplace is down', async () =>
   } finally {
     api.restore();
   }
+});
+
+test('an oversized README with unclosed markup renders in bounded time', async () => {
+  const { readmeText } = await import('../worker/market.ts');
+  const started = Date.now();
+  readmeText('<!--<a'.repeat(200000));
+  assert.ok(Date.now() - started < 500);
 });

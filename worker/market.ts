@@ -90,7 +90,9 @@ const link = (href: string, text: string) =>
 
 /** README Markdown as escaped headings and paragraphs: readable text, never author markup. */
 export function readmeText(markdown: string): string {
+  // bound the input first: an author controls its size, and unclosed markup rescans the rest
   const plain = markdown
+    .slice(0, README_CHARS * 4)
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/```[\s\S]*?```/g, '')
     .replace(/<[^>]+>/g, '')
@@ -335,8 +337,14 @@ export async function marketPage(
   try {
     rendered = await renderView(lang, view);
   } catch {
-    // the Marketplace is unreachable: the page still loads and fetches for itself
-    return htmlResponse(html, 200, 'no-store', request.method);
+    // the Marketplace is unreachable: the page still loads and fetches for itself, under
+    // this view's own canonical and language links
+    return htmlResponse(
+      fillShell(html, lang, view, { status: 200, body: '' }),
+      200,
+      'no-store',
+      request.method,
+    );
   }
   return htmlResponse(
     fillShell(html, lang, view, rendered),
