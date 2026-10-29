@@ -4,7 +4,7 @@
   "description": "Install the verified Tobs package in DSH, enable Bot mode and create a Bot.",
   "order": 12,
   "source": "docs/installation.md",
-  "sourceRevision": "3fb61d01a0e3fbfc6ba7dee326380643c0a7d5c8"
+  "sourceRevision": "dd96ffeb7916af20d1fed2b59cd3b5a56314e488"
 }
 ---
 
