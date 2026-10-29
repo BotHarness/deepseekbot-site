@@ -3,8 +3,8 @@
   "title": "安装 Tobs",
   "description": "在 DSH 中安装 Tobs 插件、开启 Bot 模式并创建你的第一个 Bot。",
   "order": 12,
-  "source": "docs/installation.md",
-  "sourceRevision": "3fb61d01a0e3fbfc6ba7dee326380643c0a7d5c8"
+  "source": "docs/installation.zh.md",
+  "sourceRevision": "dd96ffeb7916af20d1fed2b59cd3b5a56314e488"
 }
 ---
 
@@ -58,8 +58,10 @@ _注意：截图展示的是早期版本的界面示例，实际安装时请务�
 
 点击左侧栏的 **Bot 模式**，在 **主页（Home）** 配置好模型后，向内置助手 Tob 发送创建请求，即可一步步创建出你的第一个 Bot 与群聊，并选择你喜欢的界面布局模式（默认选中 **简洁模式**）：
 
-- 在 **简洁模式** 下，点击最左侧控制栏的 **消息** 即可进入对话；
-- 在 **专家模式** 下，点击顶部的 **主页** 标题收起引导，即可回到与 Tob 的私聊界面。
+- **简洁模式**：最后在控制列选择 **Messages** 进入对话；
+- **高级模式**：最后点击 **Home 标题** 关闭 Home，返回与 Tob 的私聊。
+
+两种方式都会进入原来的 Tob 私聊。
 
 新建的 Bot 不会自动发送预设欢迎语。你可以主动发一句问候，确认它能正常调用模型回复。模型 API 密钥由 DSH 统一管理，更多关于模型配置与个性化设置可参考[配置 API 与 Bot 模型](/docs/model-setup)和[设置说明](/docs/settings)。
 
