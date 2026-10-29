@@ -15,14 +15,11 @@ import {
   type Section,
   type SectionName,
 } from '../marketApi';
+import { marketBase, marketHref } from '../marketRoutes';
 import { BotBanner, BotCard, BotFace, botName, fill, plainClick } from './Market';
 
 // The Daily Picks row shows the newest Digest large and the six before it, like the app.
 const DAILY_PICKS_SHOWN = 7;
-
-export const digestHref = (day: string) => `?digest=${encodeURIComponent(day)}`;
-export const PAST_PICKS_HREF = '?picks=past';
-export const sectionHref = (section: SectionName) => `?section=${section}`;
 
 const utcDay = (day: string) => Date.parse(`${day}T00:00:00Z`);
 
@@ -183,7 +180,7 @@ function DigestCard({
   return (
     <li className="digest-card-item" data-variant={variant}>
       <PageLink
-        href={digestHref(digest.day)}
+        href={marketHref(lang, { kind: 'digest', day: digest.day })}
         className="digest-card frame"
         label={fill(copy.market.discover.read, { title: digest.title })}
         onOpen={onOpen}
@@ -230,7 +227,11 @@ export function DailyPicks({
       <RowHead
         title={t.dailyPicks}
         link={
-          <PageLink href={PAST_PICKS_HREF} className="market-see-all" onOpen={onArchive}>
+          <PageLink
+            href={marketHref(lang, { kind: 'archive' })}
+            className="market-see-all"
+            onOpen={onArchive}
+          >
             {t.seePast} →
           </PageLink>
         }
@@ -247,7 +248,11 @@ export function DailyPicks({
           />
         ))}
         <li className="digest-card-item" data-variant="more">
-          <PageLink href={PAST_PICKS_HREF} className="digest-more frame" onOpen={onArchive}>
+          <PageLink
+            href={marketHref(lang, { kind: 'archive' })}
+            className="digest-more frame"
+            onOpen={onArchive}
+          >
             {t.seePast} →
           </PageLink>
         </li>
@@ -269,16 +274,18 @@ function Installs({ bot, copy }: { bot: MarketplaceEntry; copy: Copy }) {
 function PosterCard({
   bot,
   copy,
+  lang,
   onOpen,
 }: {
   bot: MarketplaceEntry;
   copy: Copy;
+  lang: Lang;
   onOpen: () => void;
 }) {
   return (
     <li className="poster-item">
       <PageLink
-        href={`?bot=${encodeURIComponent(bot.id)}`}
+        href={marketHref(lang, { kind: 'bot', id: bot.id })}
         className="poster-card frame"
         label={fill(copy.market.open, { name: botName(bot) })}
         onOpen={onOpen}
@@ -301,17 +308,19 @@ function PosterCard({
 function CompactCard({
   bot,
   copy,
+  lang,
   onOpen,
 }: {
   bot: MarketplaceEntry;
   copy: Copy;
+  lang: Lang;
   onOpen: () => void;
 }) {
   const bio = bot.bio ?? bot.description;
   return (
     <li className="compact-item">
       <PageLink
-        href={`?bot=${encodeURIComponent(bot.id)}`}
+        href={marketHref(lang, { kind: 'bot', id: bot.id })}
         className="compact-card frame"
         label={fill(copy.market.open, { name: botName(bot) })}
         onOpen={onOpen}
@@ -368,7 +377,7 @@ export function RankingRows({
                 title={title}
                 link={
                   <PageLink
-                    href={sectionHref(section.section)}
+                    href={marketHref(lang, { kind: 'section', section: section.section })}
                     className="market-see-all"
                     onOpen={() => onSeeAll(section.section)}
                   >
@@ -385,6 +394,7 @@ export function RankingRows({
                     key={bot.id}
                     bot={bot}
                     copy={copy}
+                    lang={lang}
                     onOpen={() => onOpen(bot, section.section)}
                   />
                 ))}
@@ -396,11 +406,19 @@ export function RankingRows({
   );
 }
 
-export function BackLink({ label, onBack }: { label: string; onBack: () => void }) {
+export function BackLink({
+  label,
+  lang,
+  onBack,
+}: {
+  label: string;
+  lang: Lang;
+  onBack: () => void;
+}) {
   return (
     <a
       className="market-back"
-      href="?"
+      href={marketBase(lang)}
       onClick={(event) => {
         event.preventDefault();
         onBack();
@@ -469,7 +487,7 @@ export function DigestPage({
 
   return (
     <div className="market-subpage">
-      <BackLink label={copy.market.back} onBack={onBack} />
+      <BackLink label={copy.market.back} lang={lang} onBack={onBack} />
       <Status
         state={state}
         copy={copy}
@@ -517,7 +535,11 @@ export function DigestPage({
             </section>
           ))}
           <p className="digest-end">
-            <PageLink href={PAST_PICKS_HREF} className="market-see-all" onOpen={onArchive}>
+            <PageLink
+              href={marketHref(lang, { kind: 'archive' })}
+              className="market-see-all"
+              onOpen={onArchive}
+            >
               {t.seePast} →
             </PageLink>
           </p>
@@ -548,7 +570,7 @@ export function PastPicksPage({
 
   return (
     <div className="market-subpage" data-market-digest="archive">
-      <BackLink label={copy.market.back} onBack={onBack} />
+      <BackLink label={copy.market.back} lang={lang} onBack={onBack} />
       <h1 className="market-title">{t.pastPicks}</h1>
       <Status state={state} copy={copy} onRetry={() => setAttempt((n) => n + 1)} />
       {state.status === 'ready' ? (
@@ -597,7 +619,7 @@ export function SectionPage({
 
   return (
     <div className="market-subpage" data-market-ranking={section}>
-      <BackLink label={copy.market.back} onBack={onBack} />
+      <BackLink label={copy.market.back} lang={lang} onBack={onBack} />
       <h1 className="market-title">{title}</h1>
       <Status state={state} copy={copy} onRetry={() => setAttempt((n) => n + 1)} />
       {state.status === 'ready' ? (

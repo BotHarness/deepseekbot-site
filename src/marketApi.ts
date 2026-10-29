@@ -1,4 +1,5 @@
 import type { Lang } from './content';
+import type { SectionName } from './marketRoutes';
 
 // Public read API of the Bot Marketplace Worker (BotHarness packages/market, "Public read API (v1)").
 export const MARKET_ORIGIN = 'https://market.botharness.ai';
@@ -55,9 +56,7 @@ export interface Digest extends DigestSummary {
   sections: { heading: string; body: string; bot: MarketplaceEntry | null }[];
 }
 
-export type SectionName = 'hot' | 'new' | 'rising';
-
-export const SECTIONS: SectionName[] = ['hot', 'new', 'rising'];
+export { SECTIONS, type SectionName } from './marketRoutes';
 
 export interface Section {
   section: SectionName;

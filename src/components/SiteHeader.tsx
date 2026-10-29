@@ -26,13 +26,13 @@ export function SiteHeader({
 }) {
   // on the home page the sections are anchors; elsewhere they lead back to them
   const home = page === 'home' ? '' : homePath(lang);
-  // the same page in the other language (a marketplace detail keeps its ?bot=)
+  // the same page in the other language (a marketplace view keeps its path under /market)
   const sameIn = (to: Lang) =>
     page === 'home'
       ? homePath(to)
       : page === 'avatar'
         ? avatarPath(to)
-        : marketPath(to) + location.search;
+        : marketPath(to) + location.pathname.replace(/^(?:\/en)?\/market/, '') + location.search;
   return (
     <>
       <a className="skip" href="#main">

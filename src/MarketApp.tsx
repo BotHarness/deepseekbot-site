@@ -5,41 +5,21 @@ import { MarketDetail, MarketList } from './components/Market';
 import {
   DailyPicks,
   DigestPage,
-  digestHref,
-  PAST_PICKS_HREF,
   PastPicksPage,
   RankingRows,
   SectionPage,
-  sectionHref,
 } from './components/MarketDiscover';
 import { SiteHeader } from './components/SiteHeader';
 import { COPY } from './content';
-import { SECTIONS, type MarketplaceEntry, type SectionName } from './marketApi';
+import type { MarketplaceEntry } from './marketApi';
+import { legacyMarketView, marketHref, parseMarketPath, type MarketView } from './marketRoutes';
 import { initialMode, marketPath, pathLang, pluginsPath, write, type Mode } from './site';
 import { pixelTheme } from './theme';
 
-// Every view is a query on the same page, so a shared link opens it directly and the static
-// site needs no per-Bot routes: ?bot=<GitHub node ID>, ?digest=<YYYY-MM-DD>, ?picks=past
-// and ?section=<hot|new|rising>.
-type View =
-  | { kind: 'home' }
-  | { kind: 'bot'; id: string }
-  | { kind: 'digest'; day: string }
-  | { kind: 'archive' }
-  | { kind: 'section'; section: SectionName };
-
-const viewOf = (search: string): View => {
-  const params = new URLSearchParams(search);
-  const bot = params.get('bot');
-  if (bot) return { kind: 'bot', id: bot };
-  const day = params.get('digest');
-  if (day) return { kind: 'digest', day };
-  if (params.get('picks') === 'past') return { kind: 'archive' };
-  const section = params.get('section');
-  if (SECTIONS.includes(section as SectionName))
-    return { kind: 'section', section: section as SectionName };
-  return { kind: 'home' };
-};
+// Every view has its own path under /market (see marketRoutes.ts), which the Worker also
+// pre-renders for search engines; the page swaps views in place and keeps history in step.
+const viewHere = (): MarketView =>
+  parseMarketPath(location.pathname)?.view ?? legacyMarketView(location.search) ?? { kind: 'home' };
 
 // how many views deep this tab is, so going back restores where each one was scrolled to
 const depthOf = (state: unknown) =>
@@ -51,7 +31,7 @@ export function MarketApp() {
   const lang = pathLang();
   const copy = COPY[lang];
   const [mode, setMode] = useState<Mode>(initialMode);
-  const [view, setView] = useState<View>(() => viewOf(location.search));
+  const [view, setView] = useState<MarketView>(viewHere);
   const preview = useRef<MarketplaceEntry | null>(null);
   const depth = useRef(depthOf(history.state));
   const scrolls = useRef<number[]>([]);
@@ -70,7 +50,7 @@ export function MarketApp() {
       const next = depthOf(history.state);
       const back = next < depth.current;
       depth.current = next;
-      setView(viewOf(location.search));
+      setView(viewHere());
       const y = back ? (scrolls.current[next] ?? 0) : 0;
       requestAnimationFrame(() => scrollTo(0, y));
     };
@@ -78,29 +58,37 @@ export function MarketApp() {
     return () => removeEventListener('popstate', onPop);
   }, []);
 
-  const go = (next: View, href: string) => {
+  // an older ?bot= style link (the Worker redirects these; the dev server does not)
+  useEffect(() => {
+    if (location.search && parseMarketPath(location.pathname)?.view.kind === 'home') {
+      const legacy = legacyMarketView(location.search);
+      if (legacy) history.replaceState(history.state, '', marketHref(lang, legacy));
+    }
+  }, [lang]);
+
+  const go = (next: MarketView) => {
     scrolls.current[depth.current] = scrollY;
     depth.current += 1;
-    history.pushState({ depth: depth.current }, '', href);
+    history.pushState({ depth: depth.current }, '', marketHref(lang, next));
     setView(next);
     scrollTo(0, 0);
   };
   const openBot = (bot: MarketplaceEntry) => {
     preview.current = bot;
-    go({ kind: 'bot', id: bot.id }, `?bot=${encodeURIComponent(bot.id)}`);
+    go({ kind: 'bot', id: bot.id });
   };
   const openDigest = (day: string, entry: 'hero' | 'archive') => {
     track('marketplace:digest_open', { entry });
-    go({ kind: 'digest', day }, digestHref(day));
+    go({ kind: 'digest', day });
   };
   const openArchive = () => {
     track('marketplace:digest_archive_open');
-    go({ kind: 'archive' }, PAST_PICKS_HREF);
+    go({ kind: 'archive' });
   };
   const back = () => {
     // a view opened on this page pops history; one opened from a shared link goes home
     if (depth.current > 0) history.back();
-    else go({ kind: 'home' }, location.pathname);
+    else go({ kind: 'home' });
   };
 
   const home = view.kind === 'home';
@@ -154,7 +142,7 @@ export function MarketApp() {
                   track('marketplace:bot_open', { bot: bot.id, entry: section });
                   openBot(bot);
                 }}
-                onSeeAll={(section) => go({ kind: 'section', section }, sectionHref(section))}
+                onSeeAll={(section) => go({ kind: 'section', section })}
               />
             </>
           }
