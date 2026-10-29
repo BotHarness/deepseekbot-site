@@ -1,7 +1,8 @@
 import type { Lang } from './content';
 
 // Public read API of the Bot Marketplace Worker (BotHarness packages/market, "Public read API (v1)").
-export const MARKET_API = 'https://market.botharness.ai/v1';
+export const MARKET_ORIGIN = 'https://market.botharness.ai';
+export const MARKET_API = `${MARKET_ORIGIN}/v1`;
 
 export interface MarketplaceEntry {
   id: string;
@@ -17,8 +18,11 @@ export interface MarketplaceEntry {
   description: string | null;
   // bot.json `banner`: a pixel-banner recipe, or the uploaded image as a raw GitHub URL
   banner?: MarketplaceBanner | null;
+  // bot.json `avatar`: an avatar recipe, or the uploaded image; null draws the name's seeded face
+  avatar?: MarketplaceAvatar | null;
   topics: string[];
   stars: number;
+  installs?: number;
   pushedAt: string;
   htmlUrl: string;
   cloneUrl: string;
@@ -27,6 +31,39 @@ export interface MarketplaceEntry {
 }
 
 export type MarketplaceBanner = { recipe: { scene: string; seed: number } } | { image: string };
+
+export type MarketplaceAvatar = { recipe: unknown } | { image: string };
+
+// A Bot a Marketplace Digest picks, as the cover draws it.
+export interface DigestPick {
+  id: string;
+  displayName: string | null;
+  banner: MarketplaceBanner | null;
+  avatar: MarketplaceAvatar | null;
+}
+
+export interface DigestSummary {
+  day: string;
+  lang: Lang;
+  title: string;
+  lede: string;
+  picks: DigestPick[];
+}
+
+export interface Digest extends DigestSummary {
+  // `bot` is null once the listing is hidden or blocked
+  sections: { heading: string; body: string; bot: MarketplaceEntry | null }[];
+}
+
+export type SectionName = 'hot' | 'new' | 'rising';
+
+export const SECTIONS: SectionName[] = ['hot', 'new', 'rising'];
+
+export interface Section {
+  section: SectionName;
+  day: string | null;
+  entries: { bot: MarketplaceEntry; score: number }[];
+}
 
 export interface MarketplacePage {
   bots: MarketplaceEntry[];
@@ -80,3 +117,35 @@ export const listTopics = (signal?: AbortSignal) =>
 
 export const getBot = (id: string, lang: Lang, signal?: AbortSignal) =>
   get<MarketplaceDetail>(`/bots/${encodeURIComponent(id)}?lang=${lang}`, signal);
+
+// The Daily Picks row and the past-picks page read the same list, so one request serves both.
+const digestLists = new Map<Lang, Promise<DigestSummary[]>>();
+
+export const listDigests = (lang: Lang) => {
+  let list = digestLists.get(lang);
+  if (!list) {
+    list = get<{ digests: DigestSummary[] }>(`/digests?lang=${lang}`).then((r) => r.digests);
+    list.catch(() => digestLists.delete(lang));
+    digestLists.set(lang, list);
+  }
+  return list;
+};
+
+export const getDigest = (day: string, lang: Lang, signal?: AbortSignal) =>
+  get<{ digest: Digest }>(`/digests/${encodeURIComponent(day)}?lang=${lang}`, signal).then(
+    (r) => r.digest,
+  );
+
+// A section opened from its row keeps the entries it showed; a shared link loads them.
+const sectionLists = new Map<string, Promise<Section>>();
+
+export const getSection = (section: SectionName, lang: Lang) => {
+  const key = `${section}:${lang}`;
+  let loaded = sectionLists.get(key);
+  if (!loaded) {
+    loaded = get<Section>(`/sections/${section}?lang=${lang}`);
+    loaded.catch(() => sectionLists.delete(key));
+    sectionLists.set(key, loaded);
+  }
+  return loaded;
+};
