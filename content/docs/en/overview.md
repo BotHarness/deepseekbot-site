@@ -1,38 +1,33 @@
 ---
 {
   "title": "Overview",
-  "description": "What BotHarness is, why it exists, and what it is made of.",
+  "description": "What BotHarness is, why it exists, and how its core pieces fit together.",
   "order": 10,
   "source": "apps/docs/src/content/docs/docs/overview.mdx",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
+BotHarness is a **plugin layer built on top of DeepSeek Harness (DSH)** that gives LLM agents a persistent identity: the **PersonaBot**.
 
-BotHarness is a **plugin layer on top of DeepSeek Harness (DSH)** that gives LLM agents a persistent identity: the **PersonaBot**.
+Most agent harnesses work one session at a time—at best sharing a loose "cloud memory" between chats, without a persistent Bot that keeps its own persona and carries work across conversations. BotHarness fills that gap:
 
-Existing harnesses work one session at a time — across sessions there is at most a "cloud memory", with no Bot entity that has a persona and can work across conversations. That is the layer BotHarness fills:
+- **PersonaBot**: a first-class digital teammate with its own persona, cross-session memory, state, channel bindings, and the ability to handle multiple sessions at once
+- **File-first memory**: stored as local Markdown files with frontmatter, directory-tree context injection, tool-driven updates, and Git version history
+- **Delegation and background work**: mention `@PersonaBot` to hand off a task; the Bot works on it in the background, reports back when done, and asks for tiered approval when needed
+- **No DSH fork required**: delivered as a standard SDK and plugin bundle, with messaging integrations powered by providers like `dsh-im`
 
-- **PersonaBot**: a first-class entity — persona, cross-session memory, state, channel bindings, and several Sessions handled at once
-- **Memory**: file-first (front-matter, directory-tree injection, tool-driven writes, git versioning)
-- **How work happens**: delegation (@PersonaBot hands work off, executes it in the background, and reports back), with tiered approvals
-- **No DSH fork**: delivered as an SDK + bundle; capabilities like IM come from bases such as dsh-im
-
-## Two products
+## Two names to know
 
 | Name | What it is |
 | --- | --- |
-| **BotHarness** | The platform layer (this repository): PersonaBot entities, memory, state, and how work happens |
-| **DeepSeekBot** | The first app: brings PersonaBots into the DSH sidebar (create, @-delegate, keep working) and connects Feishu / Lark |
+| **BotHarness** | The platform layer: PersonaBot entities, memory, state management, and task orchestration |
+| **Tobs (formerly DeepSeekBot)** | The flagship app plugin: brings PersonaBots into the DSH sidebar (create Bots, `@`-delegate tasks, collaborate across chats) and connects external messaging apps like Lark / Feishu, QQ, WeChat, and Slack |
 
 ## Where to start
 
-- [Concepts](/docs/concepts): BOT mode, channels, sections, inboxes, bridges, sessions, Builder
-- [Quickstart](/docs/quickstart): install the public plugin, configure models and create your first Bot
-- [Channel sidebar](/docs/channel-sidebar): Memory, Sessions, Inbox, folders, groups and display controls
-- [Developer docs](/dev): choose Design, verified Guides, current-code Reference, or Architecture Decisions
-- [Architecture & data flow](/dev/design/architecture): system context, modules, data flow, boundaries (kept current)
-- [BotHarness Product Context](/dev/design/context): canonical product terms, distinct from DSH and Cordis vocabulary
-- [BotHarness Runtime Architecture](/dev/design/bot-runtime): PersonaBot, Inbox, Orchestrator, Work, and DSH execution boundaries
-- [Decision records](/dev/adr/0015-botharness-is-a-dsh-plugin-layer): why things are the way they are
-- [Changelog](/changelog): what changed in each version
+- [Concepts](/docs/concepts): BOT mode, channels, sections, inboxes, bridges, sessions, and Builder
+- [Quickstart](/docs/quickstart): install the plugin, configure a model provider, and create your first Bot
+- [Channel sidebar](/docs/channel-sidebar): Memory files and evolution, Sessions, Bot Inbox, Workspace Grants, groups, and display controls
+- [Connections and optional tools](/docs/capabilities): messaging app integrations, daily browser collaboration, and desktop control
+- [Changelog](/changelog): see what shipped in each release

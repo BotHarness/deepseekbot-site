@@ -39,7 +39,7 @@ The switch does not change Orchestrator permissions. Per-folder Orchestrator wri
 
 **Developer mode** exposes additional controls such as a manually entered Host path, registered folders and revoked-grant history. Ordinary setup uses **Add folder**; do not infer a grant from a saved text path alone.
 
-The screenshot shows the actual initial state. This tutorial capture did not add a folder or enable broader permissions. For a task refusal, open its [Session](/docs/channel-sidebar/sessions) and inspect the selected folder, access mode and actual tool result rather than assuming that a visible folder guarantees execution.
+For a task refusal, open its [Session](/docs/channel-sidebar/sessions) and inspect the selected folder, access mode, and actual tool result.
 
 ## While an Assignment awaits approval
 

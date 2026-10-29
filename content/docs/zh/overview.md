@@ -1,38 +1,33 @@
 ---
 {
   "title": "概览",
-  "description": "BotHarness 是什么，为什么存在，以及它由哪几块组成。",
+  "description": "了解 BotHarness 是什么、解决什么问题，以及它的核心组成。",
   "order": 10,
-  "source": "apps/docs/src/content/docs-zh/docs/overview.mdx",
+  "source": "apps/docs/src/content/docs/docs/overview.mdx",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
+BotHarness 是构建在 **DeepSeek Harness（DSH）之上的插件层**，它为大模型 Agent 赋予了跨会话持续存在的身份：**PersonaBot**。
 
-BotHarness 是 **DeepSeek Harness（DSH）之上的插件层**，给 LLM agent 一份持久身份：**PersonaBot**。
+传统的 Agent 工具大多以单次会话（Session）为单位工作——会话之间最多共享一层“云端记忆”，并没有一个真正拥有独立人设、能够跨多条对话持续跟进工作的 Bot 实体。BotHarness 补齐的正是这一层：
 
-现有 harness 都以 session 为单位——跨 session 至多是一份"云记忆"，没有带人格、可跨会话工作的 Bot 实体。BotHarness 补的就是这一层：
+- **PersonaBot**：作为一等公民存在的数字伙伴，拥有独立人设、跨会话记忆、运行状态、频道绑定，并能同时处理多个 Session 的工作
+- **文件优先的记忆体系**：基于本地 Markdown 文件（支持 Frontmatter、目录树按需注入、工具读写与 Git 版本管理）
+- **自然的分工与委派**：在对话中 `@PersonaBot` 即可交代任务，Bot 会在后台自动推进并向你汇报结果，遇到敏感操作时按权限分级请求审批
+- **无需修改 DSH 核心**：以标准 SDK + 插件包形式交付，IM 连接等扩展能力由 `dsh-im` 等底座组件提供
 
-- **PersonaBot**：一等实体——persona、跨 session 记忆、状态、频道绑定，可同时处理多个 Session
-- **记忆**：文件优先（front-matter、目录树注入、工具写、git 版本化）
-- **工作方式**：委派制（@PersonaBot 交付工作，后台执行并汇报），审批分级
-- **不 fork DSH**：以 SDK + bundle 形态交付，IM 等能力由 dsh-im 等基座提供
+## 两个核心名称
 
-## 两个产品
-
-| 名字 | 是什么 |
+| 名称 | 定位 |
 | --- | --- |
-| **BotHarness** | 平台层（本仓库）：PersonaBot 实体、记忆、状态与工作方式 |
-| **DeepSeekBot** | 首个应用：把 PersonaBot 带进 DSH sidebar（创建、@委派、持续工作），并接入飞书 / Lark |
+| **BotHarness** | 平台层：定义 PersonaBot 实体、记忆体系、状态管理与工作流编排机制 |
+| **Tobs（原 DeepSeekBot）** | 首款开箱即用的应用插件：把 PersonaBot 带入 DSH 侧栏（创建 Bot、`@` 委派任务、持续协作），并支持接入飞书 / Lark、QQ、微信、Slack 等外部消息渠道 |
 
 ## 从哪里开始
 
-- [概念](/docs/concepts)：BOT 模式、Channel、Channel section、inbox、Bridge、Session、Builder
-- [快速开始](/zh/docs/quickstart)：安装公共插件、配置模型并创建第一个 Bot
-- [Channel sidebar](/zh/docs/channel-sidebar)：记忆、会话、收件箱、文件夹、群聊与显示设置
-- [开发文档](/zh/dev)：选择 Design、已核验 Guides、当前代码 Reference 或 Architecture Decisions
-- [架构与数据流](/zh/dev/design/architecture)：系统上下文、模块、数据流、边界（持续维护）
-- [BotHarness 产品术语](/zh/dev/design/context)：规范产品词汇，并与 DSH、Cordis 术语区分
-- [BotHarness Runtime 架构](/zh/dev/design/bot-runtime)：PersonaBot、Inbox、Orchestrator、Work 与 DSH execution 的边界
-- [决策记录](/zh/dev/adr/0015-botharness-is-a-dsh-plugin-layer)：为什么这么做
-- [Changelog](/zh/changelog)：每个版本的变更
+- [基本概念](/docs/concepts)：了解 BOT 模式、频道、分组、收件箱、桥接、会话与 Builder
+- [快速开始](/docs/quickstart)：安装公开插件、配置模型并创建你的第一个 Bot
+- [对话侧栏](/docs/channel-sidebar)：记忆文件与演进、工作会话、Bot 收件箱、工作目录授权、群组管理与界面显示设置
+- [连接与可选工具](/docs/capabilities)：查看支持的 IM 渠道、日常浏览器协同与桌面控制能力
+- [更新日志](/changelog)：查看每个版本的新功能与改进

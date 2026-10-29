@@ -1,26 +1,25 @@
 ---
 {
   "title": "Slides",
-  "description": "Watch the BotHarness intro deck, presented as slides.",
+  "description": "Watch the BotHarness and DeepSeekBot intro deck as interactive slides.",
   "order": 12,
   "source": "apps/docs/src/content/docs/docs/slides.mdx",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
+You can view the interactive BotHarness intro deck right in your browser:
 
-The BotHarness intro deck ships with the docs site and is rebuilt from the repo:
+- [Open the intro deck](https://botharness.ai/slides/s/botharness-intro) — start from the cover and press `F` for fullscreen presentation mode
+- [Browse all decks](https://botharness.ai/slides/) — see every published presentation deck
 
-- [Open the intro deck](https://botharness.ai/slides/s/botharness-intro) — start from the cover, press `F` for fullscreen present mode
-- [All decks](https://botharness.ai/slides/) — every deck under `apps/presentations/slides/`
+## Preview and edit slides locally
 
-## Iterate on the deck
-
-Decks are React components on a fixed 1920×1080 canvas (open-slide). The authoring rules live in `apps/presentations/AGENTS.md`.
+If you are contributing to the presentations, decks live under `apps/presentations/slides/` and are built as React components on a fixed `1920×1080` canvas (`open-slide`). See `apps/presentations/AGENTS.md` for authoring guidelines.
 
 ```bash
-pnpm slides:dev # iterate at http://localhost:5173/s/<id>
-pnpm slides:build # rebuild the botharness.ai/slides/ embed
+pnpm slides:dev   # preview locally at http://localhost:5173/s/<id>
+pnpm slides:build # rebuild the static slides bundle for the docs site
 ```
 
-`pnpm docs:build` rebuilds the embed automatically. The generated output under `apps/docs/public/slides/` is never committed — the deck sources are the authority.
+Running `pnpm docs:build` automatically rebuilds the embedded slide decks into `apps/docs/public/slides/` (which is generated at build time and not committed to Git).

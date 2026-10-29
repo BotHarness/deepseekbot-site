@@ -1,72 +1,84 @@
 ---
 {
   "title": "分享浏览器标签页",
-  "description": "将日常浏览器的一个标签页明确借给 PersonaBot 只读观察。",
+  "description": "将日常浏览器的标签页或 Profile 授权给 PersonaBot 查看或操作。",
   "order": 22,
   "source": "docs/daily-browser.zh.md",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-> **版本范围：当前源码教程。** 本页同步自当前源码（正式版现已发布至 deepseekbot v1.4.1）；文中的旧测试包版本和 DSH 0.2.0-rc.1 截图属于历史验证记录。正式版与各能力的版本范围见[接入与可选能力](/docs/capabilities)。
+通过日常浏览器（Daily Browser）功能，你可以将自己正在使用的 Chrome 或 Edge 浏览器中的页面分享给 PersonaBot，直接复用当前页面的登录状态，而无需在隔离浏览器中重新登录。
 
-Daily Browser 让一个 PersonaBot 读取你在 Chrome 或 Edge 中明确分享的标签页，复用该页当前的登录状态。首版支持只读观察，不能点击、输入、导航或读取其他标签页。你随时可以归还。
+根据你的使用需求，DeepSeekBot 提供三种不同粒度的日常浏览器连接模式：
 
-## 安装扩展
+1. **日常浏览器（只读分享单个标签页）**：最轻量、最安全，Bot 只能读取你指定的单个标签页内容，不能点击、输入或跳转。
+2. **日常 Chrome · 控制（控制单个标签页）**：借助微软官方 Playwright 扩展，允许 Bot 在你指定的单个标签页中读取内容、输入文字和点击元素。
+3. **日常 Chrome · 整个 Profile（控制整个浏览器配置）**：允许 Bot 查看并切换该 Chrome Profile 下的各个普通网页标签页，执行导航、读取、输入和点击。
 
-使用在 `http://127.0.0.1:<端口>` 或 `http://localhost:<端口>` 打开的本地 DSH Web 实例。扩展只连接运行在你电脑上的 DSH Host。
+无论使用哪种模式，你都可以随时暂停 Bot 或收回标签页权限。
 
-1. 找到 BotHarness 仓库中的 `packages/browser/extension`，或已安装 Browser 包内的 `extension` 目录。
-2. 在 Chrome 打开 `chrome://extensions`，或在 Edge 打开 `edge://extensions`。
-3. 开启开发者模式，选择“加载已解压的扩展程序”，选择上述目录。
-4. 可将 **BotHarness Daily Browser** 固定到工具栏，方便打开。
+---
 
-当前以未打包源码分发；扩展商店发布留待后续。Edge 使用同一组 MV3 API；本切片的真实端到端证据来自 Chrome for Testing，尚未单独完成 Edge E2E。
+## 模式一：只读分享单个标签页
 
-## 分享并观察
+这种模式适合让 Bot 帮你阅读、总结或分析已经登录的网页内容，Bot 无法对页面做任何修改或点击操作。
 
-1. 在 Bot settings 中选择 **Browser Target → 日常浏览器**。同一 DSH Profile 的 Bot 共用此设置；切换后需要重新批准动作。
-2. 为目标 Bot 开启 Browser Access，并展开 Channel 侧栏的 Browser。无需 Computer Access。
-3. 选择“连接浏览器扩展”。配对码五分钟后过期，且只能使用一次。
-4. 在日常浏览器打开要分享的页面，点击扩展图标，填写本地 BotHarness 地址和配对码，选择 **Connect**。
-5. 核对扩展显示的 Bot 名称和当前页面，再选择 **Share current tab read-only**。仅连接不会分享页面内容。
-6. 让该 Bot 调用 `browser_observe`，在原有 Browser 审批出现时批准首次动作。Bot 读取当前文档内有界的可见文字和控件名称，不接收 Cookie 或输入框的值。
+### 1. 安装只读浏览器扩展
 
-侧栏显示当前分享的标题和地址；扩展分享期间显示 **READ**。Human 仍可正常浏览，但修改地址或刷新该文档会结束借用。
+请确保你在本机通过 `http://127.0.0.1:<端口>` 或 `http://localhost:<端口>` 访问本地 DSH Web 实例（扩展仅连接运行在你本机上的 DSH 服务）。
 
-## 归还与重连
+1. 找到已安装的 Browser 插件包内的 `extension` 目录（或源码仓库中的 `packages/browser/extension`）。
+2. 在 Chrome 中打开 `chrome://extensions`，或在 Edge 中打开 `edge://extensions`。
+3. 开启右上角的**开发者模式**，点击**加载已解压的扩展程序**，选择上述 `extension` 目录。
+4. 建议将 **BotHarness Daily Browser** 固定到浏览器工具栏，方便随时点击分享。
 
-点击扩展或 BotHarness 侧栏中的“归还标签页”。原标签页保持打开。导航、刷新、关闭标签页、关闭 Browser Access、切换 Browser Target、Host／浏览器重启或断线也会结束借用。单次借用最长三十分钟；四十五秒未轮询的连接失效，每次操作及后台十秒清理间隔都会检查。再次借用需重新配对并明确分享。
+### 2. 配对并分享标签页
 
-浏览器内部页面、扩展页面和浏览器自带查看器不能通过此入口分享。配对失败时检查本地地址、生成新配对码，并在普通 HTTP／HTTPS 页面打开扩展。
+1. 在 **Bot 设置** 中将 **Browser 操作目标（Browser Target）** 设为 **日常浏览器**（同一 DSH 环境下的 Bot 共用此目标设置）。
+2. 为目标 Bot 开启 **Browser Access**，并在右侧 Channel sidebar 展开 **Browser** 分区（无需开启 Computer Access）。
+3. 点击 **连接浏览器扩展** 生成一次性配对码（配对码有效期为 5 分钟）。
+4. 在日常浏览器中切换到你想分享的网页，点击工具栏上的扩展图标，填入本地地址和配对码，点击 **Connect**。
+5. 核对扩展弹窗中显示的 Bot 名称和当前网页标题，点击 **Share current tab read-only**（仅连接扩展不会自动分享页面内容）。
+6. 在私聊中让 Bot 查看页面（首次调用 `browser_observe` 时按提示批准操作）。Bot 只会读取当前页面的可见文本和控件名称，不会读取你的 Cookie 或密码输入框内容。
 
-## 控制一个已有的日常 Chrome 文档
+分享期间，右侧栏会显示当前分享的网页标题和地址，浏览器扩展图标也会显示 **READ** 标记。你仍然可以正常浏览网页；如果你跳转到其他地址或刷新页面，本次只读借用会自动结束。
 
-在 Bot 设置 → Browser 操作目标中选择 **日常 Chrome · 控制**。此选项与上面的只读扩展独立。
+### 3. 归还标签页
 
-1. 在日常使用的 Chrome Profile 安装微软官方 [Playwright 扩展 0.4.0](https://chromewebstore.google.com/detail/playwright-extension/mmlmfjhmonkocbjadbfplnigmagldckm)。它申请 debugger、tabs、tabGroups 和所有站点权限。
-2. 为目标 PersonaBot 开启 Browser Access；Computer Access 可以保持关闭。
-3. 在 Browser entry 点 **连接现有页面**，再在 Chrome 官方连接页面选择一个已有 HTTP(S) 标签页。保留每次连接确认；BotHarness 不使用跳过确认的 token。
-4. 回到 BotHarness 核对页面标题与 URL。**已连接，尚未允许操作** 时 Bot 仍不能读取或操作；再明确点 **允许控制此页面**。
-5. 在 DM 中要求 Bot 读取或编辑此页面，并通过现有原生 Session 审批批准首次 Browser 操作。此目标仅提供读取、文本输入和基于最新观察 ref 的点击。
-6. 点 **暂停 Bot** 后可自行编辑页面，再点 **继续**。Bot 必须重新观察后才能操作。
-7. 点 **归还标签页** 结束授权；Human 标签保留。
+点击浏览器扩展或右侧栏中的 **归还标签页** 即可随时结束分享，你的原标签页会保持打开状态。
 
-导航／刷新、关闭或移出所选标签、扩展断连、关闭 Access、切换 Target／Profile 和 Host 重启也会结束控制，需要重新连接并授权。向扩展标签组加入其他标签不会扩大 Bot 的文档授权。Human 继续在自己的 Chrome 窗口操作；此目标不提供 Container Viewer、截图、导航或其他受管 Browser 工具。
+此外，页面跳转、刷新、关闭标签页、关闭 Browser Access、切换 Browser Target、重启浏览器或单次借用满 30 分钟，都会自动结束分享。下次需要分享时，重新生成配对码并点击分享即可。
 
-连接器固定为 `playwright-core@1.64.0-alpha-1790635538000`、官方扩展 protocol 2。等待选择页面时，可在 Browser entry 取消连接。连接错误也显示在那里；缺少扩展时先在 Chrome 实际打开的 Profile 安装后重试。本机／Docker Browser 和只读日常浏览器保留现有功能。
+> **提示**：浏览器内部设置页（如 `chrome://`）、扩展页以及内置文档查看器不支持分享，请在普通 `http://` 或 `https://` 网页上打开扩展进行配对。
 
-输入和点击会唤起已授权的标签页；观察不会切换标签页。
+---
 
-## Chrome Profile 控制
+## 模式二：控制单个已有 Chrome 标签页
 
-选择 **Browser Target → 日常 Chrome · 整个 Profile**，明确授权更大的范围。它与只读借用扩展及微软的单文档扩展分别独立。
+如果你希望 Bot 在你已经打开的某一个网页里帮你填写表单或点击按钮，但不想让它访问其他标签页，可以使用单页面控制模式。
 
-1. 在 **chrome://extensions → 开发者模式 → 加载已解压的扩展程序** 中选择 `packages/browser/profile-extension`，或已安装 Browser 包中的 `profile-extension`。当前分发方式是源码目录，尚未上架 Chrome 商店；权限包含 tabs、scripting、debugger、本地存储和普通 HTTP(S) 网站，排除无痕标签页。
-2. 在 BotHarness 点击 **配对 Chrome Profile**，将本地地址和五分钟内有效的一次性配对码填入 **BotHarness Chrome Profile Control** 扩展，勾选允许整个 Profile 后配对。仅安装不会自动配对或授权 Bot。
-3. 为目标 PersonaBot 开启 Browser Access，并批准其原生 Session 操作，除非你明确启用了自动 Browser 审批。此 Profile 内所有已有和新开的普通网页都可发现；导航和刷新后无需重新配对，Computer Access 可以保持关闭。
-4. 本切片提供 `browser_tabs` list/select、在选中标签页导航或刷新的 `browser_open`、`browser_observe`、基于 ref 的输入和点击。选择、导航、Human 编辑、继续以及每次修改后都重新观察。创建／关闭标签页、截图、键盘、滚动和上传尚未提供。
-5. 编辑前点击 **暂停 Bot**，它等待已发出的操作结束再确认。继续后需要重新观察。多个授权 Bot 共享此 Profile，操作串行，各有选择与引用。
-6. 关闭 Browser Access 阻止该 Bot；**解除 Profile 配对** 则撤销所有 Bot 的共享绑定。浏览器或 Host 重启保留配对，但清除选择、引用和原生 Session 授权。连接中断可在扩展点击 Reconnect。DevTools 或其他调试器占用时，Chrome 可能拒绝输入，请关闭冲突调试器再观察。
+1. 在你日常使用的 Chrome 中安装微软官方的 [Playwright 扩展](https://chromewebstore.google.com/detail/playwright-extension/mmlmfjhmonkocbjadbfplnigmagldckm)。
+2. 在 **Bot 设置 → Browser 操作目标** 中选择 **日常 Chrome · 控制**，并为目标 Bot 开启 **Browser Access**。
+3. 在右侧栏的 Browser 分区点击 **连接现有页面**，然后在 Chrome 弹出的选择页中点选你要授权的那个 HTTP(S) 标签页。
+4. 回到 DeepSeekBot 核对页面标题与 URL。此时状态为 **已连接，尚未允许操作**，确认无误后点击 **允许控制此页面**。
+5. 在私聊中让 Bot 读取或操作该页面，并在首次执行时批准会话工具请求。在此模式下，Bot 可以在该页面上读取内容、输入文字以及点击页面元素（点击和输入时会将该标签页切到前台，仅读取时不会切换焦点）。
+6. 如果你需要中途自己操作页面，点击 **暂停 Bot** 即可接管；操作完成后点击 **继续**，Bot 会在重新读取页面状态后继续工作。
+7. 完成后点击 **归还标签页** 即可收回控制权，原标签页会保持打开。
 
-只支持本机 HTTP Host；45 秒没有轮询则连接不可用，命令超时为 12 秒。页面变化或拒绝后重新观察。输入时可能出现 Chrome 原生调试提示。本切片通过 Chrome for Testing 验证，不代表 Edge 或 Local／Container 的完整工具能力已经相同。
+如果该标签页发生地址跳转、刷新、关闭，或者连接断开，控制授权会自动结束；如需继续操作，重新连接并点击授权即可。
+
+---
+
+## 模式三：控制整个 Chrome Profile
+
+如果你希望 Bot 能够在你的日常 Chrome 中自由查看标签页列表、切换标签页并在页面间导航操作，可以使用整个 Profile 控制模式。
+
+1. 在 Chrome 中打开 `chrome://extensions`，开启**开发者模式**，点击**加载已解压的扩展程序**，选择已安装 Browser 包中的 `profile-extension` 目录（或源码仓库中的 `packages/browser/profile-extension`）。该扩展支持访问当前 Profile 下的普通 HTTP(S) 网页标签页，自动排除无痕窗口。
+2. 在 **Bot 设置 → Browser 操作目标** 中选择 **日常 Chrome · 整个 Profile**。
+3. 在右侧栏点击 **配对 Chrome Profile**，将本地地址和 5 分钟内有效的一次性配对码填入 **BotHarness Chrome Profile Control** 扩展弹窗中，勾选允许控制整个 Profile 后完成配对。
+4. 为目标 Bot 开启 **Browser Access**。配对成功后，Bot 可以列出和切换当前 Chrome Profile 中的所有普通网页标签页（`browser_tabs`）、在选中标签页中导航或刷新（`browser_open`）、读取页面内容（`browser_observe`），以及在页面上输入文字和点击按钮。页面跳转或刷新后无需重新配对。
+5. 当你需要手动操作网页时，可随时点击 **暂停 Bot**，待当前动作完成后即可自由编辑；点击 **继续** 后 Bot 会重新读取最新页面状态。
+6. 若要停止单个 Bot 的访问，关闭该 Bot 的 **Browser Access** 即可；若要彻底解除绑定，点击 **解除 Profile 配对** 即可撤销所有 Bot 对该 Chrome Profile 的访问权限。
+
+> **排查提示**：如果连接中断，可以在浏览器扩展弹窗中点击 **Reconnect** 恢复连接。如果在操作页面时遇到报错，请检查该标签页是否同时打开了 Chrome 开发者工具（DevTools）或其他调试器——关闭冲突的调试窗口后让 Bot 重新读取即可。

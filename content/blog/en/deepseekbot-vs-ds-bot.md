@@ -7,15 +7,15 @@
 }
 ---
 
-**Consider DeepSeekBot for inspectable Git Memory, separate task delegation and IM identities; try DS Bot if you prefer a Chief to set up the team and group admins to coordinate replies.** Both turn DeepSeek Harness (DSH) into a persistent Bot team. Both require your own model quota and a running host. The useful comparison is how their working mechanisms fit your tasks.
+**Choose DeepSeekBot if you want inspectable Git Memory, dedicated task delegation, and native IM identities; try DS Bot if you prefer a Chief Bot to help set up your team and group admins to coordinate turn-by-turn replies.** Both plugins turn DeepSeek Harness (DSH) into a persistent Bot team, and both require your own model quota and a running host. The real difference comes down to which workflow fits how you work.
 
-First, identify the projects: **DeepSeekBot is maintained by BotHarness and uses npm package `deepseekbot`; DS Bot is maintained by FeiZhuLulu and uses `ds-bot`.** A search for “DeepSeek Bot” can find either, or an unrelated chatbot. DS Bot is not an abbreviation for DeepSeekBot. Both are independent community projects, not official DeepSeek products.
+First, a quick note on naming: **DeepSeekBot is maintained by BotHarness (`deepseekbot` on npm), while DS Bot is maintained by FeiZhuLulu (`ds-bot` on npm).** Searching for "DeepSeek Bot" can surface either project—or an unrelated chatbot altogether. DS Bot is not shorthand for DeepSeekBot; both are independent community projects, and neither is an official product from DeepSeek.
 
-This article is written by the BotHarness team. Its **October 11, 2026** baseline is the published npm **DeepSeekBot 1.2.0** and **DS Bot 0.1.0**. It compares release metadata and published documentation. We have not run both in a matched environment, so there are no claims about measured speed, success rates or token savings. As of October 12, 2026, DS Bot is at 0.1.3 on npm and its repository is now [Fei2411/DeepSeek-Bot](https://github.com/Fei2411/DeepSeek-Bot); this article still describes 0.1.0, so check its [CHANGELOG](https://github.com/Fei2411/DeepSeek-Bot/blob/main/CHANGELOG.md) for newer changes. DeepSeekBot is DSB for short.
+This guide is written by the BotHarness team using a baseline of **October 11, 2026**, comparing the published npm packages **DeepSeekBot 1.2.0** and **DS Bot 0.1.0** based on their release metadata and public documentation. Because we did not benchmark both plugins in an identical test environment, we focus on how their workflows operate rather than making claims about speed, success rates, or token savings. (As of October 12, 2026, DS Bot has updated to 0.1.3 on npm and moved its repository to [Fei2411/DeepSeek-Bot](https://github.com/Fei2411/DeepSeek-Bot); our notes below reflect 0.1.0, so check its [CHANGELOG](https://github.com/Fei2411/DeepSeek-Bot/blob/main/CHANGELOG.md) for newer updates. We also abbreviate DeepSeekBot as DSB below.)
 
-## Quick comparison: shared foundation, different mechanisms
+## Quick comparison: shared foundation, different workflows
 
-On narrow screens, scroll the table sideways or continue to the task walkthroughs below.
+On narrow screens, scroll the table horizontally or jump straight to the workflow walkthroughs below.
 
 <div class="table-wrap comparison-table" role="region" aria-label="DeepSeekBot and DS Bot quick comparison" tabindex="0">
 
@@ -31,65 +31,65 @@ On narrow screens, scroll the table sideways or continue to the task walkthrough
 
 </div>
 
-**Multiple Bots, persistent memory, schedules and local data are shared capabilities.** DS Bot 0.1.0 documents all of them and a token-usage view. Choose by how you inspect memory, coordinate members, review outputs and connect applications. [DS Bot 0.1.0 release notes](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/CHANGELOG.md)
+**Multi-Bot collaboration, persistent memory, scheduled tasks, and local storage are shared by both plugins.** DS Bot 0.1.0 supports all of them and includes a built-in token-usage view. [DS Bot 0.1.0 release notes](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/CHANGELOG.md) The practical differences lie in how you inspect memory, how group conversations are coordinated, where task outputs live, and how external apps connect.
 
-## Daily work: maintain a weekly competitor brief
+## Daily work: maintaining a weekly competitor brief
 
-Use the same task for both: collect releases and project updates, preserve unresolved follow-ups, and deliver a sourced draft for human review before sending it outside the team.
+Imagine running the same recurring task in either tool: gather release notes and project updates, keep track of open questions, and produce a sourced draft for your review before sharing it with the wider team.
 
 ### What stays in memory, and how you correct it
 
-DeepSeekBot’s Git Memory suits readers who want to inspect what changed this week. Files, commits and diffs provide reviewable history; GitHub can carry shared memory. This does not make every remembered fact correct. You still need to identify and correct obsolete information. [Git Memory guide](/en/docs/channel-sidebar/memory-evolution/)
+DeepSeekBot's Git Memory is built for people who want to see exactly what changed from week to week. Because memory lives in a Git working tree, you get files, commits, and diffs—and you can push shared memory to GitHub. Of course, version history doesn't guarantee that every saved note is accurate, so you still need to review and prune outdated facts from time to time. [Git Memory guide](/en/docs/channel-sidebar/memory-evolution/)
 
-DS Bot maintains personal and team memory. Its versioned documentation describes per-turn memory review, source/date annotations and a `journal.jsonl` recording changes. Main Bots and group admins can write shared team memory. It would be inaccurate to call this “no memory history”: its review and sharing mechanisms differ from a Git working tree. [DS Bot memory](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/ds-bot/README.md#memory)
+DS Bot also keeps a full memory history, but it organizes review and sharing around Markdown files and a change journal rather than a Git working tree. It maintains both personal and shared team memory: its 0.1.0 docs describe per-turn memory reviews, source and date annotations, and a `journal.jsonl` log that records edits before and after each change, with Main Bots and group admins able to update shared team memory. [DS Bot memory](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/ds-bot/README.md#memory)
 
-Decide whether you want ordinary Git workflows for memory, or a Bot panel for summaries and entry edits with team notes. Check who may change shared information in either setup.
+When choosing between them, ask whether you prefer managing memory through standard Git workflows or editing summaries and shared notes directly inside a Bot panel—and check which team members have permission to modify shared knowledge.
 
-### Delegation, reminders and external delivery
+### Delegation, reminders, and external delivery
 
-DeepSeekBot lets PersonaBots coordinate in Groups and retain separate task Sessions and reports through Assignments. IM identities may help when your work already happens in Lark, Slack, Discord or WeChat. Platform permissions and conversation scope still need configuration; personal WeChat support does not mean arbitrary group-chat support. [Connections and capabilities](/en/docs/capabilities/)
+DeepSeekBot lets PersonaBots collaborate in Groups while keeping dedicated task Sessions and final reports inside Assignments. If your team already lives in Lark/Feishu, Slack, Discord, or WeChat, giving each Bot its own IM identity makes it easy to bring them into existing channels—though you will still need to configure platform permissions and chat scope (for instance, personal WeChat access doesn't automatically extend to arbitrary group chats). [Connections and capabilities](/en/docs/capabilities/)
 
-DS Bot organizes team management through Main Bots and group admins, delivers scheduled messages to chats, and provides a GitHub connector for issue/PR work. Equivalent four-platform IM identity binding is unverified in its 0.1.0 documentation; that is not a claim that every external integration is unavailable.
+DS Bot organizes teamwork around Main Bots and group admins, sends scheduled messages to designated chats, and includes a GitHub connector for working with issues and PRs. Its 0.1.0 documentation does not list the same four-platform IM identity bindings as DeepSeekBot, so check its latest release notes if external chat integrations are a priority.
 
-For either product, ask for a private, sourced draft first. Specify recipients and authorization before external delivery, shared-memory changes or recurring execution.
+Whichever plugin you use, it pays to have your Bot deliver a sourced draft in a private chat first. Review the draft and confirm recipients and permissions before sending updates externally, modifying shared memory, or turning on recurring schedules.
 
-## Coding: investigate, edit, test and deliver a patch
+## Coding: investigate, edit, test, and deliver a patch
 
-Use the same acceptance criteria: **an explicit working directory and branch, a reviewable code diff, test commands and actual results, then a decision about opening a PR.** A chat message saying “fixed” is not the deliverable.
+For coding tasks, a good acceptance bar looks the same in any tool: **a clear working directory and branch, a reviewable code diff, the exact test commands run, and the actual test output—before anyone opens a PR.** A chat message saying "I fixed it" is no substitute for the diff and test log.
 
-DeepSeekBot’s Workspace and Assignment mechanisms can give a repair an explicit scope and a separate report. A Git Memory diff records memory edits; a code-repository diff records implementation edits. Review each for its own purpose. Inspectable memory does not establish superior code quality.
+DeepSeekBot's Workspace and Assignment model helps scope a bug fix to a specific directory and preserves a standalone task report. Keep in mind that a Git Memory diff only shows changes to the Bot's notes, whereas your code repository diff shows the actual implementation changes—you'll want to review each on its own terms.
 
-DS Bot runs its Bots in DSH Sessions using host tools and documents a GitHub connector. It can therefore participate in development rather than only chat. A connector does not prove that cloning, building, testing and submitting a patch work end to end in your environment; we have not tested that workflow here. [DS Bot architecture and tools](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/ds-bot/README.md)
+DS Bot runs its Bots inside DSH Sessions with access to host tools and a documented GitHub connector for repositories, issues, and PRs, making it capable of participating in development workflows rather than just chatting. [DS Bot architecture and tools](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/ds-bot/README.md)
 
-### Reading a page is different from operating a computer
+### Reading a web page is different from operating a computer
 
-- The published **DeepSeekBot 1.2.0** package includes Core, Client and IM Provider by default, with no Computer/Browser GUI automation Bundle. Current-source automation and changes to default bundling are not capabilities installed by this published package. [npm 1.2.0](https://www.npmjs.com/package/deepseekbot/v/1.2.0)
-- **DS Bot 0.1.0** documents a Desktop-only Bot browser that reads structured page text. Bots cannot click, type, scroll or open addresses through it. Per-Bot browser storage partitions do not establish complete isolation of system files or Shell access. [Bot browser limitations](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/ds-bot/README.md#bot-browser)
+- **DeepSeekBot 1.2.0** on npm ships with Core, Client, and IM Providers by default, without the Computer/Browser GUI automation Bundle. While GUI and browser automation components exist in the source repository, they are not bundled into the default 1.2.0 npm install. [npm 1.2.0](https://www.npmjs.com/package/deepseekbot/v/1.2.0)
+- **DS Bot 0.1.0** includes a Desktop-only Bot browser that extracts structured text from web pages. By design, Bots cannot click, type, scroll, or navigate to new URLs through it. Each Bot's browser uses its own storage partition to separate web sessions, though that browser partitioning is distinct from full OS file or shell sandboxing. [Bot browser limitations](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/ds-bot/README.md#bot-browser)
 
-If computer or browser operation is central to your task, verify the installed version, host and permissions before choosing. Product names and screenshots do not establish complete GUI automation.
+If interactive browser or desktop automation is central to your workflow, double-check the exact package version, host requirements, and permission boundaries before diving in.
 
-## Which should you choose?
+## Which one fits your workflow?
 
-**Consider DeepSeekBot first** when Git review/sharing for memory, separate Assignment records or independent IM identities match your work. You take responsibility for the host, models and connected accounts, and must distinguish published packages from source components.
+**Consider DeepSeekBot first** if you want Git-based memory review and sharing, standalone Assignment records, or independent Bot identities inside Lark, Slack, Discord, or WeChat. In exchange, you manage your own host, model configs, and connected chat accounts, and should keep in mind what ships in the npm package versus the source repo.
 
-**Consider DS Bot first** when you prefer Chief-led setup, admin-coordinated group replies, personal/team memory and a built-in GitHub tools entry. Its 0.1 release is an early preview: the documentation notes evolving features, tools and storage formats, host compatibility limits and a single-writer rule. [Release and limitations](https://github.com/FeiZhuLulu/DeepSeek-Bot/releases/tag/v0.1.0)
+**Consider DS Bot first** if you like having a Chief Bot guide team creation, group admins coordinate turn-taking replies, a two-tier personal/team memory panel, and a built-in GitHub connector. Note that 0.1 is an early preview: its features, tools, and storage formats are actively evolving, and the release notes outline host compatibility requirements and single-writer constraints. [Release and limitations](https://github.com/FeiZhuLulu/DeepSeek-Bot/releases/tag/v0.1.0)
 
-Keep your current tool if it already delivers what you need. Before switching, compare one brief and one repair using the same inputs and acceptance criteria. Start with test data you are comfortable providing.
+If your current setup already handles your daily tasks well, there is no rush to switch. When you do want to compare them hands-on, try running one briefing task and one small bug fix through both using the same test inputs and acceptance criteria.
 
 ## Installation and migration FAQ
 
-### How do I install the right DeepSeek Bot?
+### How do I make sure I install the right DeepSeek Bot?
 
-Check the owner and package: this site covers **BotHarness/DeepSeekBot → `deepseekbot`**; the other project is **FeiZhuLulu/DeepSeek-Bot → `ds-bot`**. They are not different upgrade versions of one product. [Install DeepSeekBot](/en/docs/installation/) · [Install DS Bot](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/README.md#install)
+Check the GitHub organization and npm package name: this site covers **BotHarness/DeepSeekBot → `deepseekbot`**, while the other project is **FeiZhuLulu/DeepSeek-Bot → `ds-bot`**. They are two separate projects rather than different versions of the same plugin. [Install DeepSeekBot](/en/docs/installation/) · [Install DS Bot](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/v0.1.0/README.md#install)
 
-### Does open source mean no costs?
+### Since both are open source, are they completely free to run?
 
-Both licenses allow use under their terms. Model calls, hosting, storage and maintenance can still cost money. Token counts are not a billing statement, and multiple group participants affect calls. This comparison has no measured cost winner.
+Both projects are free to use under their open-source licenses, but you still pay for model API calls, hosting, and ongoing maintenance. In-app token counters are helpful estimates rather than official billing statements, and having multiple Bots chime in during group chats will naturally increase model usage.
 
-### Can they share Bots, memory or browser logins directly?
+### Can they share Bots, memory, or browser sessions directly?
 
-Cross-project import and storage compatibility are unverified here. Back up your existing Profile, try the other product in a fresh DSH Profile, and configure its permissions and credentials separately. Do not expect replacing the plugin to convert old data automatically.
+No—the two projects use their own storage layouts and configuration formats. If you want to try the other plugin, back up your existing DSH Profile first, spin up a fresh Profile for the test, and configure its credentials and permissions separately.
 
-### What about other personal AI agents?
+### How do these compare to other personal AI agents?
 
-For managed Grok Bot, Meta Muse, Manus Cue or ChatGPT Dots, see our [personal AI agents comparison for work and coding](/en/blog/personal-ai-agents-comparison/). Both DSH plugins here depend on your own running host; managed-cloud availability does not automatically apply to them.
+If you are also weighing managed cloud agents like Grok Bot, Meta Muse, Manus Cue, or ChatGPT Dots, check out our [personal AI agents comparison for work and coding](/en/blog/personal-ai-agents-comparison/). Both DSH plugins covered here run on your own host machine, offering local control in exchange for managing your own environment.

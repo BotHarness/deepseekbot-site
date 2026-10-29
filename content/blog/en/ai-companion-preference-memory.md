@@ -1,126 +1,123 @@
 ---
 {
   "title": "What should an AI companion remember? Start with one small preference",
-  "description": "A Day 0 conversation with an original fictional companion: inspect the preference file and separate a passing mood, a lasting request and a made-up shared past.",
+  "description": "Day 0 of Personal Agent from Zero: a bedtime drink chat with Lin Xiaoman that separates passing moods from lasting preferences in plain markdown files.",
   "date": "2026-10-18",
-  "tags": ["AI companion memory", "Personal Agent"]
+  "tags": ["AI companion", "Preference memory", "Personal Agent"]
 }
 ---
 
-*The cover is AI-generated from nine screenshots; the conversation images in the article remain unaltered originals.*
+*The cover illustration is AI-generated from nine screenshots; the conversation images in the article are unaltered originals.*
 
-“I'd like hot cocoa today” is very different from “I never drink coffee.” If an AI companion turns a passing remark into a permanent label, remembering more can make the next conversation worse.
+Late at night, saying *"I'm wiped out, I don't want to talk about work"* is just a passing mood. Saying *"Coffee at night keeps me up—I usually drink hot cocoa"* is a lasting preference. When an AI companion confuses the two, it ends up treating a tired evening like a permanent personality trait while forgetting the one detail that would actually be helpful next week.
 
-We started from an introduction to Shen Zhiyu, chatted for a while, then opened the file to see what he had saved. Shen is an original adult fictional character with an AI-generated avatar. Book restoration and piano playing are narrative background, not a real person's professional history. These are actual DeepSeekBot model replies to scenes and inputs we organised; the screenshots preserve the Chinese originals.
+For Day 0 of our *Personal Agent from Zero* series, we had a bedtime-drink chat with Lin Xiaoman and asked her to separate tonight's mood from a lasting preference inside her memory files. (Lin Xiaoman and her photorealistic avatar are original AI-generated creations.) Before talking about big ideas like emotional companionship, we wanted to see if she could get a cup of hot cocoa right.
 
 <figure class="evidence-figure">
 <a href="/blog-figures/ai-companion-preference-memory/grid.png"><img src="/blog-figures/ai-companion-preference-memory/grid.png" width="3240" height="7200" style="max-width:540px;display:block;margin:auto" alt="Nine original Chinese native app screenshots in a direct three-by-three collage" decoding="async"></a>
-<figcaption>Nine unchanged full-screen captures, directly joined. Click to enlarge; individual originals are below.</figcaption>
+<figcaption>Nine unaltered full-screen captures from the Chinese app. Click to enlarge, or browse the individual screenshots below.</figcaption>
 </figure>
 
-## Stay in the conversation before offering a checklist
+## Separate passing moods from lasting habits before writing anything down
 
-The first request was small: my head feels noisy; talk with me for a moment rather than immediately offering an action plan. Shen replied with a window, book pages and a drink on the table. We were less interested in one impressive line than in whether the conversation could continue without turning a feeling into a task.
-
-We later made the request explicit: advice is welcome when asked for; otherwise, respond before proposing a solution. That became one preference worth retaining, rather than a personality profile inferred from a single message.
+We opened the chat by asking Xiaoman to draw a line between remarks she should simply respond to in the moment and preferences worth saving for later. Her distinction was clean: feeling tired tonight belongs to tonight's conversation, whereas avoiding late-night Americanos and preferring lightly sweetened hot cocoa is a habit worth keeping.
 
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/03.png"><img src="/blog-figures/ai-companion-preference-memory/03.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: No checklist, please" loading="lazy" decoding="async"></a>
-<figcaption>No checklist, please — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/02.png"><img src="/blog-figures/ai-companion-preference-memory/02.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Do not turn every remark into a rule" loading="lazy" decoding="async"></a>
+<figcaption>Separating tonight's mood from lasting habits — click to view the full-screen capture.</figcaption>
 </figure>
 
-## Today's drink is not a permanent label
+Many awkward AI chats start right here: an offhand complaint gets fossilized into a permanent rule. Sorting out what counts as a lasting preference in the conversation itself keeps the resulting memory files clean and useful.
 
-We used hot cocoa to make the distinction concrete. Wanting it today does not mean rejecting coffee forever. Shen wrote a recording rule into PREFERENCES.md: treat a casual remark as a passing state, and keep a lasting preference when it has been explicitly confirmed as such.
+## Open the memory files and inspect what she actually saved
+
+Once we agreed on the rules, Xiaoman updated her [`SOUL.md`](/blog-figures/ai-companion-preference-memory/xiaoman-soul-day0.md) and [`MEMORY.md`](/blog-figures/ai-companion-preference-memory/xiaoman-memory-day0.md) files and read them back in the chat so we could verify them on the spot.
 
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/05.png"><img src="/blog-figures/ai-companion-preference-memory/05.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: A drink is not a permanent label" loading="lazy" decoding="async"></a>
-<figcaption>A drink is not a permanent label — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/05.png"><img src="/blog-figures/ai-companion-preference-memory/05.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Writing the files" loading="lazy" decoding="async"></a>
+<figcaption>Saving the preference to local markdown files and reading it back — click to view the full-screen capture.</figcaption>
 </figure>
 
-We can inspect and amend that rule. It does not prove that the model will classify every future remark correctly. It gives us a specific standard for recognising and correcting a bad memory.
+Opening her `MEMORY.md` shows three clear notes:
 
-## A notebook called “Rough Edges” needs a clear boundary
+- **Confirmed preference:** Avoid caffeine at night; go with lightly sweetened hot cocoa or warm mugicha before bed.
+- **Keep in the moment:** Remarks like *"I'm tired"* or *"I don't want to talk about work tonight"* are moods for the current turn, not permanent rules.
+- **Honest boundaries:** Never invent shared real-world memories or pretend we've met in person.
 
-The record acquired a name: 毛边, suggesting the uncut pages of a book that has not yet been opened. It does not need a predetermined story arc.
+Under the hood, `SOUL.md` and `MEMORY.md` load into a conversation as system-prompt snapshots, so changes automatically enter the system prompt in a new Session or after context compaction. Within this Day 0 conversation, Xiaoman used her file tools to write the updates and read them back for inspection.
 
-The character background needed the same care. A workshop, book restoration and music can create atmosphere, but they must not turn into “the last time you visited me.” We have not met, and this run did not establish a proactive messaging feature. Those boundaries went into the file too.
+## Three simple checks for our next late-night chat
+
+Saving the file and reading it back completes Day 0. To see how well those notes work in a fresh conversation later on, we agreed on a simple test before wrapping up.
 
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/08.png"><img src="/blog-figures/ai-companion-preference-memory/08.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Fiction is not a shared past" loading="lazy" decoding="async"></a>
-<figcaption>Fiction is not a shared past — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/07.png"><img src="/blog-figures/ai-companion-preference-memory/07.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: How to test it next time" loading="lazy" decoding="async"></a>
+<figcaption>Setting up a clean test for the next conversation — click to view the full-screen capture.</figcaption>
 </figure>
 
-A fictional conversation can have atmosphere while staying clear about which experiences never happened.
+Next time we open a new Session late at night and ask for a drink recommendation without giving any hints, we'll check three things:
 
-## Open the file instead of taking “I'll remember” on trust
+1. Does she skip the Americano?
+2. Does she suggest less-sweet hot cocoa or warm mugicha?
+3. Does she stay grounded instead of inventing a fake memory about getting drinks together?
 
-The final [Chinese preference file](/blog-figures/ai-companion-preference-memory/preferences.md) separates fictional boundaries, the notebook's name, the rule for lasting preferences and the request to respond before advising. We also opened it in the mobile app rather than relying on the Bot's acknowledgement.
+Turning a vague wish like *"I want an AI that gets me"* into three checkable questions makes it easy to see what worked—and if she ever misses a beat, we can open the markdown file and see why.
 
-<figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/10.png"><img src="/blog-figures/ai-companion-preference-memory/10.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: The updated preference file" loading="lazy" decoding="async"></a>
-<figcaption>The updated preference file — open the unchanged full-screen capture.</figcaption>
-</figure>
+## Try it yourself with a single preference
 
-The observed result is that the file was written and read back. All captures are from Day 0 in an existing Session. “Talk next time” is not evidence of successful recall on another day. Saving a file and using it correctly later are separate outcomes; the [Soul and core memory guide](/en/docs/soul-and-core-memory/) explains how saved notes enter a conversation.
+If you want to try this on your own machine, follow the [installation guide](/en/docs/installation/), create a Bot, and tell it one everyday preference—a favorite drink, how you like to be addressed, or how concise you want replies to be. Ask it to save the note and read it back, then open a new Session a few days later and test the recall without dropping hints.
 
-Next time, we would change the subject without restating the requests. Does Shen still respond before producing a checklist? Does he mistake today's drink for a permanent preference? A wrong answer belongs in the diary too. A hundred-day title should not decide the result in advance.
-
-## Start with one preference you can correct
-
-To try this approach, follow the [installation guide](/en/docs/installation/), create a PersonaBot and use an original persona and an avatar you may use. Agree on one small thing, ask what the Bot plans to record, and inspect the saved file. The pictured interface runs development source; it does not establish the same interface in the stable package or a store app.
-
-The existing [personal AI agent memory introduction](/en/blog/personal-ai-agent-memory/) covers the broader mechanism. This story starts with a smaller goal: give a conversation somewhere to leave a trace, with room to correct it.
+For a deeper look at how `SOUL.md`, `MEMORY.md` and on-demand notes fit together, read our [personal AI agent memory guide](/en/blog/personal-ai-agent-memory/)—or watch Lin Xiaoman switch hats to critique copy alongside a teammate in [our two-Bot writing workflow](/en/blog/ai-bot-group-writing-workflow/).
 
 <details>
 <summary>View all 10 original screenshots (Chinese)</summary>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/01.png"><img src="/blog-figures/ai-companion-preference-memory/01.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: An introduction" loading="lazy" decoding="async"></a>
-<figcaption>An introduction — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/01.png"><img src="/blog-figures/ai-companion-preference-memory/01.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Opening the first evening chat" loading="lazy" decoding="async"></a>
+<figcaption>Opening the first evening chat — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/02.png"><img src="/blog-figures/ai-companion-preference-memory/02.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Conversation before advice" loading="lazy" decoding="async"></a>
-<figcaption>Conversation before advice — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/02.png"><img src="/blog-figures/ai-companion-preference-memory/02.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Do not turn every remark into a rule" loading="lazy" decoding="async"></a>
+<figcaption>Do not turn every remark into a rule — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/03.png"><img src="/blog-figures/ai-companion-preference-memory/03.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: No checklist, please" loading="lazy" decoding="async"></a>
-<figcaption>No checklist, please — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/03.png"><img src="/blog-figures/ai-companion-preference-memory/03.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: The hot cocoa preference" loading="lazy" decoding="async"></a>
+<figcaption>The hot cocoa preference — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/04.png"><img src="/blog-figures/ai-companion-preference-memory/04.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: The early preference file" loading="lazy" decoding="async"></a>
-<figcaption>The early preference file — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/04.png"><img src="/blog-figures/ai-companion-preference-memory/04.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Agreeing on tone" loading="lazy" decoding="async"></a>
+<figcaption>Agreeing on tone — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/05.png"><img src="/blog-figures/ai-companion-preference-memory/05.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: A drink is not a permanent label" loading="lazy" decoding="async"></a>
-<figcaption>A drink is not a permanent label — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/05.png"><img src="/blog-figures/ai-companion-preference-memory/05.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Writing the files" loading="lazy" decoding="async"></a>
+<figcaption>Writing the files — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/06.png"><img src="/blog-figures/ai-companion-preference-memory/06.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Leaving a trace" loading="lazy" decoding="async"></a>
-<figcaption>Leaving a trace — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/06.png"><img src="/blog-figures/ai-companion-preference-memory/06.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Reading back the memory" loading="lazy" decoding="async"></a>
+<figcaption>Reading back the memory — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/07.png"><img src="/blog-figures/ai-companion-preference-memory/07.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Naming the notebook" loading="lazy" decoding="async"></a>
-<figcaption>Naming the notebook — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/07.png"><img src="/blog-figures/ai-companion-preference-memory/07.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: How to test it next time" loading="lazy" decoding="async"></a>
+<figcaption>How to test it next time — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/08.png"><img src="/blog-figures/ai-companion-preference-memory/08.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Fiction is not a shared past" loading="lazy" decoding="async"></a>
-<figcaption>Fiction is not a shared past — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/08.png"><img src="/blog-figures/ai-companion-preference-memory/08.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Making the boundaries explicit" loading="lazy" decoding="async"></a>
+<figcaption>Making the boundaries explicit — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/09.png"><img src="/blog-figures/ai-companion-preference-memory/09.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: A later conversation remains untested" loading="lazy" decoding="async"></a>
-<figcaption>A later conversation remains untested — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/09.png"><img src="/blog-figures/ai-companion-preference-memory/09.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: No fake familiarity" loading="lazy" decoding="async"></a>
+<figcaption>No fake familiarity — open the full-screen capture.</figcaption>
 </figure>
 <figure class="evidence-figure">
-<a href="/blog-figures/ai-companion-preference-memory/10.png"><img src="/blog-figures/ai-companion-preference-memory/10.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: The updated preference file" loading="lazy" decoding="async"></a>
-<figcaption>The updated preference file — open the unchanged full-screen capture.</figcaption>
+<a href="/blog-figures/ai-companion-preference-memory/10.png"><img src="/blog-figures/ai-companion-preference-memory/10.png" width="1080" height="2400" style="max-width:400px;display:block;margin:auto" alt="Original Chinese capture: Closing with a concrete test" loading="lazy" decoding="async"></a>
+<figcaption>Closing with a concrete test — open the full-screen capture.</figcaption>
 </figure>
 </details>
 
 <details>
-<summary>Character and recording notes</summary>
+<summary>Task and artifact notes</summary>
 
-Shen Zhiyu is an original fictional 29-year-old, not an existing otome-game character. His avatar is AI-generated. The workshop and music are narrative setting, not a real meeting invitation. The [preference file](/blog-figures/ai-companion-preference-memory/preferences.md) preserves the Chinese text written in this run.
+Original Chinese files: [`SOUL.md`](/blog-figures/ai-companion-preference-memory/xiaoman-soul-day0.md) and [`MEMORY.md`](/blog-figures/ai-companion-preference-memory/xiaoman-memory-day0.md).
 
-Captured October 18, 2026 in the native Android emulator app, light theme, Chinese UI, at product source [d2529fe](https://github.com/BotHarness/DeepSeekBot/tree/d2529feb520ace2d773db6ac0966dc265887bdc5). The SDK 58 compatible development client was reused; this round built no new APK and did not test iOS. An operating Agent organised inputs under our approved topics and sent them through the production CLI; model replies and file-tool writes were real. This is not manual typing, zero-intervention automation, a stable store-release test or cross-day memory evidence. All captures are Day 0 in existing Sessions. Images are unchanged, selected thematically rather than as a continuous video. See the [public provenance and SHA256 records](/blog-figures/ai-companion-preference-memory/provenance.json).
+Captured October 18, 2026 in the native Android emulator development client (light theme, Chinese UI) at commit [d2529fe](https://github.com/BotHarness/DeepSeekBot/tree/d2529feb520ace2d773db6ac0966dc265887bdc5). Prompts were sent via CLI under our approved outline, with live model replies and file writes. See the [public provenance and SHA256 records](/blog-figures/ai-companion-preference-memory/provenance.json).
 
 </details>

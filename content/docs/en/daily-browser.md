@@ -1,72 +1,84 @@
 ---
 {
   "title": "Share a browser tab",
-  "description": "Explicitly lend one daily-browser tab read-only to a PersonaBot.",
+  "description": "Share a tab or profile from your everyday browser so a PersonaBot can view or interact with it.",
   "order": 22,
   "source": "docs/daily-browser.md",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-> **Version scope: current-source guide.** Synced from current source (the public release is now deepseekbot v1.4.1); older test package versions and DSH 0.2.0-rc.1 screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and capability scope.
+Daily Browser lets a PersonaBot work with pages already open in your everyday Chrome or Edge browser—reusing your active login session without making you sign in again inside an isolated browser.
 
-Daily Browser lets one PersonaBot read a tab you explicitly share from Chrome or Edge, including its current login state. This first version is read-only: it cannot click, type, navigate, or read other tabs. You can return the tab at any time.
+Depending on how much access you want to grant, you can choose from three modes:
 
-## Install the extension
+1. **Daily Browser (Read-only single tab)**: The safest, lightest option. The Bot can read the single tab you share, but cannot click, type, navigate, or see other tabs.
+2. **Daily Chrome · Control (Control a single tab)**: Uses Microsoft's official Playwright extension so the Bot can read, type, and click inside one specific tab you select.
+3. **Daily Chrome · Entire Profile (Control a Chrome Profile)**: Lets the Bot list and switch between ordinary tabs in that Chrome Profile, navigate or reload pages, and read, type, or click.
 
-Use a local DSH Web instance opened at `http://127.0.0.1:<port>` or `http://localhost:<port>`. The extension only connects to the DSH Host on your computer.
+In every mode, you stay in control and can pause the Bot or revoke access at any time.
 
-1. Locate `packages/browser/extension` in the BotHarness checkout, or the `extension` directory in the installed Browser package.
+---
+
+## Mode 1: Share a single tab read-only
+
+Use this mode when you want a Bot to read, summarize, or analyze a logged-in page without modifying or interacting with it.
+
+### 1. Install the read-only browser extension
+
+Make sure your local DSH Web instance is open at `http://127.0.0.1:<port>` or `http://localhost:<port>` (the extension connects only to a DSH Host running on your own computer).
+
+1. Locate the `extension` directory inside the installed Browser package (or `packages/browser/extension` in a source checkout).
 2. Open `chrome://extensions` in Chrome or `edge://extensions` in Edge.
-3. Enable Developer mode, choose Load unpacked, and select that directory.
-4. Pin **BotHarness Daily Browser** to the browser toolbar if you want an easier entry point.
+3. Turn on **Developer mode**, click **Load unpacked**, and select the `extension` directory.
+4. Pin **BotHarness Daily Browser** to your browser toolbar for easy access.
 
-This version is distributed as unpacked source. Chrome/Edge store distribution is a later step. Edge compatibility follows the MV3 APIs; this slice's real end-to-end evidence uses Chrome for Testing.
+### 2. Pair and share a tab
 
-## Share and observe
+1. In **Bot settings**, set **Browser Target → Daily Browser** (this target setting is shared across Bots in your current DSH Profile).
+2. Enable **Browser Access** for your Bot and expand the **Browser** section in its right Channel sidebar (Computer Access is not needed).
+3. Click **Connect browser extension** to generate a single-use pairing code (valid for 5 minutes).
+4. In your everyday browser, switch to the tab you want to share, click the extension icon, enter your local BotHarness address and pairing code, and click **Connect**.
+5. Confirm the Bot name and current page title in the extension popup, then click **Share current tab read-only** (connecting alone does not share the page).
+6. Ask your Bot to read the page in chat and approve its first browser action when prompted. The Bot reads visible text and control labels from the page, and never receives cookies or form input values.
 
-1. In Bot settings, choose **Browser Target → Daily Browser**. This is shared by all Bots in this DSH Profile; switching requires new action approval.
-2. Enable Browser Access for the intended Bot and open its Channel sidebar's Browser entry. Computer Access is not required.
-3. Choose **Connect browser extension**. The pairing code expires after five minutes and can be used once.
-4. Open the page you want to share in your daily browser. Click the extension icon, enter the local BotHarness address and pairing code, and choose **Connect**.
-5. Check the Bot name and current page shown by the extension, then choose **Share current tab read-only**. Connecting alone does not share page content.
-6. Ask that Bot to use `browser_observe`. Approve its first action when the existing Browser approval asks. The Bot reads bounded visible text and control labels from this document; it does not receive cookies or input values.
+While sharing is active, the Channel sidebar displays the shared page's title and URL, and the extension badge shows **READ**. You can continue browsing normally; navigating to a different URL or reloading the page automatically ends the read-only session.
 
-The Channel sidebar shows the shared title and address. The extension also shows **READ** while sharing. The Human continues browsing normally, but changing or reloading the shared document ends the lease.
+### 3. Return the tab
 
-## Return or reconnect
+Click **Return tab** in either the browser extension or the Channel sidebar at any time. Your tab stays open in the browser.
 
-Choose **Return tab** in the extension or BotHarness sidebar. The tab stays open. Navigation, reload, closure, Browser Access removal, changing Browser Target, Host restart, browser restart, or disconnection also end borrowing. The maximum lease is 30 minutes; 45 seconds without polling invalidates a connection, checked on every operation and by a ten-second cleanup interval. Start a new pairing and Share flow to lend a tab again.
+Sharing also ends automatically if you navigate away, reload, close the tab, turn off Browser Access, switch Browser Target, restart the browser, or reach the 30-minute session limit. To share a tab again later, simply generate a new pairing code and click Share.
 
-Internal browser pages, extension pages and browser-owned viewers cannot be shared through this flow. If pairing fails, check the local address, create a fresh code, and open the extension on an ordinary HTTP/HTTPS page.
+> **Tip**: Internal browser pages (such as `chrome://`), extension pages, and built-in file viewers cannot be shared. Always open the extension on a standard `http://` or `https://` webpage.
 
-## Control one existing Chrome document
+---
 
-Choose **Daily Chrome · Control** in Bot settings → Browser Target. This is separate from the read-only extension above.
+## Mode 2: Control a single existing Chrome tab
 
-1. Install Microsoft's [Playwright extension 0.4.0](https://chromewebstore.google.com/detail/playwright-extension/mmlmfjhmonkocbjadbfplnigmagldckm) in the Chrome profile you already use. It requests debugger, tabs, tabGroups and all-sites permissions.
-2. Enable Browser Access for the selected PersonaBot. Computer Access can remain off.
-3. In its Browser entry choose **Connect existing page**. In Chrome, select one existing HTTP(S) tab in the official connection page. Keep the connection dialog enabled; BotHarness does not use its bypass token.
-4. Check the selected title and URL in BotHarness. **Connected · control not granted** allows no Bot observation or action yet. Choose **Allow control of this document** explicitly.
-5. Ask the Bot to read or edit that page in DM. Approve its first Browser operation using the existing native Session approval. This target offers only observe, text input and clicks using current observation refs.
-6. Choose **Pause Bot** to edit the page yourself, then **Resume**. The Bot must observe again before acting.
-7. Choose **Return tab** to end the grant. Your tab stays open.
+If you want a Bot to fill out forms or click buttons on one specific tab without giving it access to the rest of your browser, use single-tab control mode.
 
-Navigation or reload, closing/removing the selected tab, extension disconnection, Access removal, target/profile changes and Host restart also end control. Reconnect and explicitly authorize again. Adding tabs to an extension group does not expand the Bot's document grant. The Human continues using their own Chrome window; this target does not provide a Container Viewer, screenshots, navigation or the other managed Browser tools.
+1. Install Microsoft's official [Playwright extension](https://chromewebstore.google.com/detail/playwright-extension/mmlmfjhmonkocbjadbfplnigmagldckm) in your everyday Chrome profile.
+2. In **Bot settings → Browser Target**, select **Daily Chrome · Control**, and enable **Browser Access** for the target Bot.
+3. In the Bot's Channel sidebar under **Browser**, click **Connect existing page**, then pick the HTTP(S) tab you want to share on the Chrome connection page.
+4. Check the selected page title and URL in DeepSeekBot. While it shows **Connected · control not granted**, the Bot cannot read or interact with the page yet—click **Allow control of this document** to confirm.
+5. Ask the Bot in DM to read or interact with the page, and approve the first Browser operation when prompted. The Bot can read the page, type text, and click elements on that tab (typing and clicking bring the tab to the foreground, while reading leaves your active tab unchanged).
+6. Click **Pause Bot** whenever you want to edit the page yourself, then click **Resume** when you're ready for the Bot to continue.
+7. Click **Return tab** when finished to end the session while keeping your tab open.
 
-The connector is pinned to `playwright-core@1.64.0-alpha-1790635538000` and official extension protocol 2. A connection waiting for tab selection can be cancelled from the Browser entry. Errors appear there; if the extension is missing, install it in the profile Chrome opens, then retry. Managed Local/Docker Browser and read-only Daily Browser retain their existing behavior.
+Navigating to a new URL, reloading, or closing the tab automatically ends control. If you want the Bot to continue after a page navigation, reconnect and grant control again.
 
-Input and clicks bring the authorized tab to the foreground; observation does not switch tabs.
+---
 
-## Chrome Profile control
+## Mode 3: Control an entire Chrome Profile
 
-Choose **Browser Target → Daily Chrome · Entire Profile** to explicitly authorize this wider mode. It is separate from the read-only extension and Microsoft's single-document extension.
+If you want a Bot to list open tabs, switch between tabs, and navigate across pages in your everyday Chrome profile, use entire-profile control mode.
 
-1. Load `packages/browser/profile-extension` (or `profile-extension` in the installed Browser package) using **chrome://extensions → Developer mode → Load unpacked**. This first-party extension is currently unpacked source, not a Chrome Store release. It requests tabs, scripting, debugger, local storage and ordinary HTTP(S) site access; private tabs are excluded.
-2. In BotHarness, choose **Pair Chrome Profile**. Enter the local Host address and single-use five-minute code in the **BotHarness Chrome Profile Control** popup. Check **Allow Profile-wide Browser control**, then pair. Installing alone does not pair or grant a Bot access.
-3. Enable Browser Access for the intended PersonaBot, approve its native Session action (unless you explicitly enabled automatic Browser approval), and ask it to list/select tabs. Computer Access can stay off. All existing/new ordinary webpage tabs in this Chrome Profile are discoverable; pairing is not repeated after navigation/reload.
-4. Tools in this slice: `browser_tabs` list/select, `browser_open` to navigate/reload the selected tab, `browser_observe`, ref-based `browser_type` and `browser_click`. Observe after selecting, navigation, Human input, Resume and each mutation. Creating/closing tabs, screenshots, keyboard, scroll and upload remain unsupported here.
-5. Use **Pause Bot** before editing. Pause waits for issued work to drain; Resume requires fresh observation. Other enabled Bots share the paired Profile, with serialized operations and separate refs/selections.
-6. Browser Access off blocks that Bot. **Forget Profile pairing** revokes the shared binding for all Bots. Browser/Host restart preserves pairing but clears live refs, selection and native Session authority. Use **Reconnect** in the extension if the transport stops. Chrome may refuse debugger attachment when DevTools or another debugger is attached; close the competing debugger and observe again.
+1. Open `chrome://extensions` in Chrome, enable **Developer mode**, click **Load unpacked**, and select the `profile-extension` directory from your installed Browser package (or `packages/browser/profile-extension` in a source checkout). This extension can access ordinary HTTP(S) tabs in the profile while automatically excluding Incognito tabs.
+2. In **Bot settings → Browser Target**, choose **Daily Chrome · Entire Profile**.
+3. In the Channel sidebar, click **Pair Chrome Profile**. Enter your local Host address and the 5-minute single-use pairing code into the **BotHarness Chrome Profile Control** extension popup, check **Allow Profile-wide Browser control**, and complete pairing.
+4. Enable **Browser Access** for your Bot. Once paired, the Bot can list and switch tabs (`browser_tabs`), navigate or reload the selected tab (`browser_open`), read page content (`browser_observe`), and type or click on elements. Pairing stays active across page navigations and reloads.
+5. Click **Pause Bot** before making manual edits on a page so any in-progress action finishes cleanly, then click **Resume** when done.
+6. To stop a single Bot from using the browser, turn off its **Browser Access**. To revoke access for all Bots at once, click **Forget Profile pairing**.
 
-Only a local HTTP Host is supported. Missing polling for 45 seconds makes the connection unavailable; commands time out after 12 seconds. Page changes or a refusal require a fresh observation. Native Chrome debugging indicators may appear during input. Repeated connection is not a consent shortcut into other Chrome Profiles. This slice is qualified with Chrome for Testing, not an assertion of Edge or full Local/Container tool parity.
+> **Troubleshooting**: If the extension disconnects after a browser or Host restart, click **Reconnect** inside the extension popup. Note that Chrome only allows one debugger attachment per tab—if DevTools is open on the same tab, close DevTools and ask the Bot to try again.

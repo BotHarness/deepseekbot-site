@@ -88,8 +88,6 @@ The result distinguishes platform acceptance, a definite refusal and an unknown 
 
 Closing and reopening the picker retains unresolved requests. If a response was lost, an explicit retry keeps the original request ID; an unknown outcome remains blocked for the same group and message. After a definite result, clicking **Post to group** again is a new requested post. A failed conversation-list refresh does not change an accepted send result.
 
-The rebuilt Lark slice passed a fresh-group first post and a blocked zero-send check on 2026-10-13; the same qualified Provider `.20` is published on `next` and its downloaded archive is byte-identical to the accepted package. This capability does not establish QQ proactive permission or own Echo.
-
 ## Edit, reconnect or unbind
 
 Click an app row to open **Edit identity**.

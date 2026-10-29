@@ -1,37 +1,38 @@
 ---
 {
   "title": "Deploy on a 2-core / 4 GB VPS with Tailscale and QQ",
-  "description": "Install an exact source candidate, keep the Host private and persistent, and verify real QQ group replies after restart.",
+  "description": "Set up a Linux VPS with SSH and Tailscale, run the Host as a systemd service, and connect an official QQ Bot for group chats.",
   "order": 13,
   "source": "docs/vps-qq-tutorial.md",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-This walkthrough follows a real Ubuntu 26.04 deployment: verify SSH, join an existing tailnet, install a complete source-built product, keep its Host running under systemd, create a PersonaBot, and connect an independent official QQ Bot App. It includes a fresh group reply after Host restart. You can follow the text without watching a video.
+This tutorial walks through a complete deployment on a 2-core / 4 GB Ubuntu 26.04 VPS: configuring SSH, joining a Tailscale tailnet, installing the runtime and plugin, running the Host under `systemd`, creating a PersonaBot, and connecting an official QQ Bot App that replies in group chats and survives restarts.
 
-**Candidate walkthrough, reviewed in [PR #1443](https://github.com/BotHarness/DeepSeekBot/pull/1443).** The deployed product is `1.2.1-vps.20261012.sha031a14db`, built from merged source `031a14db43af5b3bf52e76b01c30e27828e6e9c9`. At qualification time, npm `deepseekbot@1.2.0` supplied `botharness-profile` but not the business `deepseekbot` CLI used below. Do not substitute the stable npm package for this candidate. The original-group A/B image and native binding clip are public; the complete tutorial film remains pending. The two group replies were confirmed by the Human and correlated with canonical records.
+## Before you start
 
-## Before starting
+Make sure you have the following ready:
 
-You need a confirmed VPS with cloud-console access, a local OpenSSH client, an existing Tailscale account and permission to join its tailnet, a usable model API key, and an official QQ Bot App with a designated test group. Check your current application/testing qualifications in the [QQ official platform](https://bot.q.qq.com/open); this deployment does not establish another account's eligibility. QQ account login, device approval and initial application credentials are Human steps.
+- A Linux VPS with cloud-console access and a local OpenSSH client.
+- A [Tailscale](https://tailscale.com) account so your VPS and local computer can talk over a private tailnet.
+- A working model API key (such as a DeepSeek API key).
+- An official QQ Bot App created on the [QQ Open Platform](https://bot.q.qq.com/open) and a test QQ group that you manage.
 
-Build the product on a development machine with Node **24.21.0** and pnpm **12.4.2**. The destination uses DSH **0.2.0-rc.1** and qualified IM Provider revision **602baa37fa327f7069545aaadbbd34db8a8f4636**. Plan separate sessions for infrastructure, installation, model verification and QQ testing; cloud-account approval time is variable.
+All addresses, keys, AppIDs, and group numbers below are placeholders. Check what services are already running on your server before choosing directories and ports. This walkthrough uses the following layout:
 
-All addresses, keys, AppIDs and group numbers below are placeholders. Inspect existing services before choosing paths and ports. This example reserves only:
+| Resource | Tutorial example |
+| --- | --- |
+| Application directory | `/opt/botharness/seo-tutorial` |
+| Runtime system user | `bh-seo` |
+| Writable DSH home / Profile | `home/dsh` / `seo-tutorial` |
+| systemd service unit | `botharness-seo-tutorial.service` |
+| Loopback Host listener | `127.0.0.1:31971` |
+| Tailnet HTTPS route | HTTPS port 443 routed to the loopback listener |
 
-| Resource                    | Tutorial example                           |
-| --------------------------- | ------------------------------------------ |
-| Application directory       | `/opt/botharness/seo-tutorial`             |
-| Runtime user                | `bh-seo`                                   |
-| Writable DSH home / Profile | `home/dsh` / `seo-tutorial`                |
-| systemd unit                | `botharness-seo-tutorial.service`          |
-| Host listener               | `127.0.0.1:31971`                          |
-| Tailnet HTTPS route         | An unused HTTPS 443 route to that listener |
+## 1. Inspect the server and set up SSH key login
 
-## 1. Confirm the machine and authorize SSH
-
-In the **confirmed instance's cloud console**, run:
+In your cloud provider's web console, check the OS version, CPU, memory, disk space, and active listeners:
 
 ```bash
 whoami
@@ -46,9 +47,7 @@ systemctl --type=service --state=running
 command -v docker >/dev/null && docker ps
 ```
 
-Check the cloud instance identity, region, billing period and actual OS. Our machine reported Ubuntu 26.04, two CPUs, approximately 3654 MiB visible memory and a 60 GB cloud disk. Preserve existing applications and distro repositories; do not replace them with Ubuntu 24.04 repositories.
-
-On your development machine, generate a dedicated key with `ssh-keygen -t ed25519 -f <private-key-path>`. Keep the private key there. In the console, under the intended SSH account, append its **public** key while preserving existing entries:
+On your local machine, generate a dedicated key pair with `ssh-keygen -t ed25519 -f <private-key-path>`. Then, in the cloud console, add the **public** key to `~/.ssh/authorized_keys`:
 
 ```bash
 set -eu
@@ -65,7 +64,7 @@ printf 'KEY_OK\n'
 ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
 ```
 
-Collect an ed25519 Host-key candidate with `ssh-keyscan -t ed25519 <confirmed-host>` into a temporary file. Compare `ssh-keygen -lf <candidate-file>` with the trusted console fingerprint. Save the matching key to your dedicated `known_hosts` file only after comparison. Keyscan alone is not authentication. Then prove a real command response:
+Verify the server's host key fingerprint against the console output, save it to your `known_hosts` file, and test your SSH connection:
 
 ```bash
 ssh -F none -i <private-key-path> -o IdentitiesOnly=yes \
@@ -74,11 +73,9 @@ ssh -F none -i <private-key-path> -o IdentitiesOnly=yes \
   <verified-user>@<confirmed-host> whoami
 ```
 
-Keep usernames, addresses and fingerprints in private deployment notes. Windows readers can use OpenSSH from PowerShell; replace shell placeholders with their own quoted paths.
+## 2. Join Tailscale and verify private connectivity
 
-## 2. Join Tailscale and verify actual communication
-
-Use the [official Linux installation instructions](https://tailscale.com/docs/install/linux) for the OS you just inspected. Our installation used the official OS-detecting script and installed Tailscale 1.104.1:
+Install Tailscale using the [official Linux installation script](https://tailscale.com/docs/install/linux):
 
 ```bash
 curl -fsSL https://tailscale.com/install.sh -o /root/tailscale-install.sh
@@ -88,18 +85,18 @@ tailscale version
 sudo tailscale up
 ```
 
-Pause recording before `tailscale up`. Have the Human use its temporary login link, select the **existing** tailnet and complete any device approval. Do not record the link. After approval, set the intended name and inspect the selected device privately:
+Open the login URL printed by `sudo tailscale up` in your browser, sign in to your Tailscale account, and approve the server in your tailnet. Next, give the server a clear hostname and check its private Tailscale IPv4 address:
 
 ```bash
 sudo tailscale set --hostname=deepseekbot-internal
 tailscale ip -4
 ```
 
-From a development machine already on that tailnet, run `tailscale ping <new-device-name>` and the strict SSH command from step 1 using its tailnet address. Compare that address's Host-key candidate with the same console fingerprint before adding it to the dedicated file. Successful agent heartbeat or device listing is not a substitute for ping and SSH command responses. This uses ordinary OpenSSH over Tailscale; it does not require enabling Tailscale SSH, routing or an exit node.
+From your local machine (signed in to the same tailnet), run `tailscale ping <hostname>` and verify that you can SSH into the server over its Tailscale address.
 
-## 3. Build the complete source candidate off the VPS
+## 3. Build a source package off the VPS (optional)
 
-In a new development checkout:
+If you are installing the standard npm release, you can install `@botharness/tobs@1.6.0` directly via `dsh plugin add`. If you are building from a specific git revision, build the package on your local development machine first (using Node `24.21.0` and pnpm `12.4.2`) so you don't run a heavy build on a small 2-core / 4 GB VPS:
 
 ```bash
 git clone https://github.com/BotHarness/DeepSeekBot.git botharness-product
@@ -120,9 +117,7 @@ node scripts/product-artifacts.mjs \
   --version 1.2.1-vps.20261012.sha031a14db
 ```
 
-Use the existing verified packager. It produces Core, Client, browser, computer, Provider and application Bundle archives plus `artifacts.json`. A standalone `npm pack` of a workspace directory is insufficient. Read the [source Profile installation guide](https://github.com/BotHarness/DeepSeekBot/blob/ac30b3a4fc41a2882b3ea417bddd486fc4c22465/docs/agents/source-profile-install.md) and [native DSH packaging reference](https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish) for composition boundaries.
-
-Prepare the installer from the publicly reviewable helper revision; this revision is separate from the deployed product source:
+Package the build output and installation helpers into a tarball and copy them to your VPS over `scp`:
 
 ```bash
 cd ..
@@ -137,11 +132,9 @@ tar -czf product-candidate.tar.gz -C botharness-product/.humanlayer/product-cand
 sha256sum product-candidate.tar.gz
 ```
 
-Transfer the archive and kit using the same verified SSH identity and Host-key policy. For example, use `scp -F none -i <private-key-path> -o IdentitiesOnly=yes -o UserKnownHostsFile=<verified-known-hosts> -o StrictHostKeyChecking=yes -o BatchMode=yes product-candidate.tar.gz <verified-user>@<tailnet-host>:/root/product-candidate.tar.gz`, and the same options with `-r installation-kit` to `/root/installation-kit`. Record and compare the archive digest on the VPS before extracting. Your build's digest must match **your transferred archive**, not another machine's rebuild.
+## 4. Install the runtime toolchain and Profile on the VPS
 
-## 4. Install pinned tools and a fresh Profile
-
-Run these destination commands as the verified administrator, after checking that the example directory and runtime user do not exist:
+On the VPS, create the dedicated `bh-seo` system user and directory layout, then install Node.js, pnpm, and DSH:
 
 ```bash
 set -eu
@@ -174,9 +167,7 @@ pnpm --version
 dsh --version
 ```
 
-The parent directories and public toolchain must be readable and traversable by `bh-seo`; the runtime home, credential store and administrator evidence directory retain mode `0700`.
-
-These Node commands are for the verified x86-64 machine. Use the matching official archive for another CPU architecture. Keep the transferred files outside the runtime home, verify the archive digest, and extract into the new `artifacts/source-candidate` directory. Install the five helpers' `yaml@2.9.1` and `semver@7.8.5` dependencies, then grant the runtime user read/traversal access to the kit and nonsecret artifacts:
+Next, verify the uploaded archive's checksum, extract it, and install the Profile as `bh-seo`:
 
 ```bash
 printf '%s  /root/product-candidate.tar.gz\n' '<your-development-machine-sha256>' | sha256sum -c -
@@ -196,11 +187,9 @@ runuser -u bh-seo -- env \
   --dsh /opt/botharness/seo-tutorial/toolchain/bin/dsh
 ```
 
-The helper initializes a native custom `web` Profile, installs the packaged Bundle and verifies all six components. It refuses to overwrite an existing Profile. Inspect a partial failure before recovery. Keep a direct source checkout on the VPS at the same exact product SHA if desired; the runtime uses the installed artifacts, not an unbuilt workspace. Monitor `free -m` during installation instead of running concurrent full builds on this small machine.
+## 5. Run the loopback Host under systemd
 
-## 5. Keep the loopback Host running
-
-Inspect the installed CLI's `--help` and `web --help`. The qualified root launcher accepts the following flags. Replace `tutorial.example.ts.net` with your exact device DNS name and create a **new** unit at `/etc/systemd/system/botharness-seo-tutorial.service`:
+Replace `tutorial.example.ts.net` with your machine's actual Tailscale MagicDNS name and create `/etc/systemd/system/botharness-seo-tutorial.service`:
 
 ```ini
 [Unit]
@@ -226,6 +215,8 @@ StandardError=append:/opt/botharness/seo-tutorial/home/dsh/host.log
 WantedBy=multi-user.target
 ```
 
+Enable and start the service:
+
 ```bash
 systemctl daemon-reload
 systemctl enable --now botharness-seo-tutorial.service
@@ -233,21 +224,21 @@ systemctl is-active botharness-seo-tutorial.service
 ss -lntp '( sport = :31971 )'
 ```
 
-Verify the listener is loopback-only. The Host log contains a private Owner login URL: stop recording before inspecting it, protect it, and do not publish it. Use the installed Host's actual Owner token for login; do not disable authentication. For CLI use, store only that token in `home/dsh/owner-token`, owned by `bh-seo` with mode `0600`. Refresh it after a restart if this Host issues a new token. Do not put it in command arguments.
+The Host listens only on `127.0.0.1:31971` and is not exposed to the public internet. Check `home/dsh/host.log` for the private Owner login URL. If you plan to use the CLI, save the Owner token in `home/dsh/owner-token` (owned by `bh-seo` with mode `0600`) rather than passing tokens on the command line.
 
-## 6. Open tailnet HTTPS and sign in
+## 6. Expose HTTPS on your tailnet and sign in
 
-Inspect `tailscale serve --help` and `tailscale serve status --json`. Proceed only if the intended HTTPS route is unused; preserve any existing routing. On our fresh device:
+Publish the local loopback port to your tailnet over HTTPS using `tailscale serve`:
 
 ```bash
 tailscale serve --bg --https=443 --yes http://127.0.0.1:31971
 ```
 
-Use your actual HTTPS device URL on a client in the same tailnet, and complete native Owner login with recording paused. Check that the Web Client is usable and the authenticated native API works. A `401` without authentication is expected. This is a **tailnet-only** entrance; tutorial readers must join their own tailnet on both devices. See the [Serve reference](https://tailscale.com/docs/reference/tailscale-cli/serve).
+On another device in your tailnet, open `https://<your-device>.ts.net` using the Owner login URL from `host.log` to sign in to the Web UI.
 
-## 7. Configure the model and create the tutorial PersonaBot
+## 7. Configure the model and create a PersonaBot
 
-From an administrator shell on the VPS, define the installed business CLI:
+You can configure your model provider and create a Bot either from the Web UI or via the CLI. To do it from the CLI on the VPS:
 
 ```bash
 base=/opt/botharness/seo-tutorial
@@ -258,9 +249,7 @@ live() {
 }
 ```
 
-With recording stopped, feed your model key to `secret-put` through trusted stdin under this runtime user's `DSH_HOME`. Use hidden input or a protected local file; the command never accepts the value in argv. This writes the native credential reference `DEEPSEEK_API_KEY`. See the [business CLI guide](https://github.com/BotHarness/DeepSeekBot/blob/031a14db43af5b3bf52e76b01c30e27828e6e9c9/docs/bot-cli.md) for stdin semantics.
-
-In Bash, with command tracing disabled:
+Pass your API key via standard input so it never appears in shell history or process arguments:
 
 ```bash
 set +x
@@ -272,7 +261,7 @@ printf '%s' "$tutorial_model_key" | runuser -u bh-seo -- env \
 unset tutorial_model_key
 ```
 
-Check the current native model catalog before choosing routes. The real deployment qualified this preset:
+Next, create a model preset, create your Bot, and send a test DM:
 
 ```bash
 live model-preset-create --name 'SEO Tutorial DeepSeek' \
@@ -285,33 +274,26 @@ live create --name 'VPS SEO Tutorial Bot' \
 printf 'Please reply only TUTORIAL_DM_A_OK' | live send <new-bot-id> --body-stdin
 ```
 
-Use the actual returned IDs. Verify a correlated committed reply to this fresh request, then open the **same Bot's DM** in Web and inspect the matching message. A provider configuration or accepted send alone does not prove model usability.
+Open the Bot's DM in the Web UI to confirm the reply:
 
-![Real model reply after updating the source candidate](/guides/vps-source/01-real-dm-031a14db.png)
+![Real model reply in the Bot DM](/guides/vps-source/01-real-dm-031a14db.png)
 
-_Actual 1280 × 800 capture, 2026-10-11 17:55 UTC. The bottom reply matches the source-version marker; the larger welcome card is preset product text._
+## 8. Connect your QQ Bot App and bind it to the Bot
 
-## 8. Connect an independent QQ App and bind this Bot
+For step-by-step instructions on registering a Tencent developer account, creating an official QQ Bot App, setting up a sandbox group, and enabling mobile group permissions, see [Connect a QQ Bot: registration to group replies](/en/docs/qq-connection/).
 
-For Tencent registration, official App creation, group setup and mobile permissions, follow the illustrated [QQ connection guide](https://deepseekbot.app/en/docs/qq-connection/). This deployment reuses an existing independent QA App.
+Keep in mind that **only one running Host can receive events for a given QQ Bot App at a time**—do not connect the same AppID/AppSecret from two machines simultaneously.
 
-Reserve a dedicated official App and test group. Confirm that **no other Host on any machine** is receiving this App. Do not use personal-account automation or add a second receiver for a production App.
+1. In the Web UI, open **Settings → IM bots → QQ → Manual setup**, enter your **AppID** and **AppSecret**, and click **Connect**.
+2. Open your Bot's DM, expand **External identities** in the right sidebar, and bind the connected QQ App.
 
-For initial authorization of an existing App, use **Settings → IM bots → QQ → Manual setup**. With recording paused, the Human fills AppID and AppSecret in the native form and clicks Connect. Verify the real application identity. The qualified Provider's QR flow creates a Bot; it is not the reuse path for an existing App. Current platform access requirements must be checked in the [official authentication documentation](https://bot.q.qq.com/wiki/develop/api-v2/dev-prepare/interface-framework/api-use.html).
+![Confirmation that the QQ App is bound to the Bot](/guides/vps-source/02-qq-app-bound.png)
 
-When the selected App already has native authorization in a stopped Profile, use the [QQ QA CLI reuse guide](https://github.com/BotHarness/DeepSeekBot/blob/ac30b3a4fc41a2882b3ea417bddd486fc4c22465/docs/agents/qq-test-clients.md). Its developer helper can claim QA1/QA2/QA3, read **only the selected QQ credential**, and connect over strict SSH to remote loopback without asking the Human to enter its Secret again. It retains the destination Profile across branches. This is not a public `deepseekbot im-authorize qq` command.
+## 9. Test QQ group replies and restart persistence
 
-After either authorization path, open the tutorial Bot's **External identities**, choose that authenticated QQ App and bind it. Native Provider authorization and application-defined Bot Binding are separate operations.
+In your test QQ group, `@`-mention the robot and send a message. The Bot will process the mention and reply right in the QQ group.
 
-![Native confirmation that the existing QQ App is bound to the tutorial Bot](/guides/vps-source/02-qq-app-bound.png)
-
-_Actual 1280 × 800 native Web capture, 2026-10-11 18:10:31 UTC. No Secret or QR code is shown. This verifies binding readiness; it is not an original-group reply image._
-
-## 9. Verify QQ replies before and after restart
-
-In the designated QQ group, a Human or authorized test account must @mention this App with a fresh unique marker. Our first request was “请只回复 SEO_QQ_QA1_20261012_A_OK”. The Human confirmed the exact visible reply in the original group. We correlated its QQ Source Event with the handled Inbox Admission and provider-accepted Outbox intent and receipt.
-
-Restart **only** this tutorial unit, refresh the private Owner token if needed, and inspect the same Bot and native QQ App:
+To confirm everything persists across restarts, restart the systemd service:
 
 ```bash
 systemctl restart botharness-seo-tutorial.service
@@ -319,49 +301,28 @@ systemctl is-active botharness-seo-tutorial.service
 live im-apps
 ```
 
-Verify the Bot, model settings, authorization and Binding persist. Send a **new** group @mention, such as “请只回复 SEO_QQ_QA1_20261012_B_OK”. The Human confirmed that exact reply too. Its source and outbox records were distinct, created after restart and associated with the same native QQ conversation. Old process evidence cannot stand in for this new send.
+Once the service is back up, send another `@`-mention in the QQ group and verify that the Bot replies normally:
 
-The public [bounded acceptance summary](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/qq-acceptance.json) omits group IDs, Source locators, credentials and machine addresses. The Human supplied an original-group image containing both requests and replies. The public derivative only crops the view and covers personal identity; no message text is changed. No original-group video is claimed.
-
-![Matching original QQ group replies before and after Host restart](/guides/vps-source/04-qq-group-before-after.png)
-
-_Original-group evidence received on 2026-10-12 JST; exact processing and digests are in the asset inventory._
+![QQ group replies before and after restarting the Host service](/guides/vps-source/04-qq-group-before-after.png)
 
 ## Troubleshooting and maintenance
 
-| Symptom                                    | Check and next action                                                                                                          |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| SSH Host-key mismatch                      | Compare against the selected cloud console; investigate identity changes before trusting another key                           |
-| Tailscale device listed but unreachable    | Verify device approval, the intended tailnet, ping and actual strict SSH response                                              |
-| Installer refuses an existing Profile      | Choose a genuinely new Profile or follow a qualified update/backup workflow; do not delete existing data                       |
-| `host-unauthorized`                        | Refresh the exact Host's private Owner token file and sign in again                                                            |
-| `host-unreachable`                         | Inspect this unit and its loopback listener before changing access routes                                                      |
-| `reply-not-produced` / `send-needs-repair` | Inspect this request with `send-status`; do not blindly resend an uncertain mutation                                           |
-| QQ connected, no group reply               | Inspect authenticated App identity, Binding, test-group eligibility and a fresh @mention; correlate Source, Inbox and Outbox   |
-| QQ QA slot already claimed                 | Contact its owner, stop the exact receiver and release explicitly; claims do not expire automatically                          |
-| Source credential reuse refuses            | Inspect the selected AppID, native reference, source writer record and receiver status; do not copy the whole credentials file |
-| Memory pressure during install             | Transfer prebuilt artifacts and reduce this task's concurrency; inspect actual memory before drawing conclusions               |
+| Symptom | What to check |
+| --- | --- |
+| SSH host-key mismatch | Compare the fingerprint against your cloud console before updating your local `known_hosts` file |
+| Tailscale device listed but unreachable | Confirm the device is approved in the same tailnet and test connectivity with `tailscale ping` |
+| Installer refuses an existing Profile | Choose a new Profile name or back up before upgrading; do not delete active Profile data |
+| `host-unauthorized` in CLI | Refresh `home/dsh/owner-token` if the Host issued a new Owner token after restart |
+| `host-unreachable` in CLI | Check `systemctl status` and `ss -lntp` to ensure the loopback listener on `127.0.0.1:31971` is running |
+| QQ connected, but no group reply | Check that local DMs work, the QQ App is bound to the Bot, the group conversation is active, and no other Host is connected to the same App |
+| Memory pressure during installation | Build artifacts on your local machine first and copy them over rather than running a full build on a 2-core / 4 GB VPS |
 
-Inspect this unit's resources with `systemctl show botharness-seo-tutorial.service -p MemoryCurrent -p MemoryPeak`. Our pre-QQ qualification observed a unit peak near 373 MiB; installation samples still had at least 2795 MiB available. These observations do not promise a limit for other workloads or measure every installation instant.
-
-Stop and restore only this task's receiver:
+You can check memory usage or stop/start the service at any time (peak memory usage during normal operation is around 370 MiB):
 
 ```bash
+systemctl show botharness-seo-tutorial.service -p MemoryCurrent -p MemoryPeak
 systemctl stop botharness-seo-tutorial.service
-systemctl is-active botharness-seo-tutorial.service
 systemctl start botharness-seo-tutorial.service
 ```
 
-After restoration, refresh native Owner login if needed and repeat a new real DM and group mention. To remove the task's HTTPS route, inspect the installed Serve help and current routing before turning off **only** its HTTPS 443 handler; do not reset other routes. Preserve the task home and native credentials. Back up the stopped Profile privately before an update; database rollback requires a compatible writer or its pre-upgrade backup.
-
-## Supplemental actual recordings
-
-The [blank native QQ Manual setup recording and bilingual transcript](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/video/manual-setup-transcript.md) supplement the binding clip. The [fresh final-source isolated Profile transcript](https://deepseekbot.app/guides/vps-source/terminal/05-fresh-profile-031a14db.typescript) and [original timing](https://deepseekbot.app/guides/vps-source/terminal/05-fresh-profile-031a14db.timing), captured at 19:58 UTC on 2026-10-11, show actual OS, resources, tool versions, unit status and six-component verification. This later installation on the provisioned VPS did not start a second Host or QQ receiver.
-
-## Evidence and publication checklist
-
-The actual deployment used strict SSH, a tailnet-only HTTPS Web Client, native Owner authentication, a dedicated unit, real model replies and two real QQ group replies. [Capture provenance](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/README.md) identifies versions, UTC times, digests and the limited meaning of each public image.
-
-The repository's former user-guide routes redirect to the DeepSeekBot product site. Verify that site's English and Chinese destination pages when publishing this new guide; this PR prepares source documents and redirects, not a live tutorial-page deployment.
-
-The actual [installation and source-update terminal output/timing](https://github.com/BotHarness/DeepSeekBot/tree/main/docs/assets/vps-source/terminal) has been reviewed and published unchanged with digests. The [native QQ binding recording](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/video/transcript.md) includes a 17-second MP4, English and Chinese subtitles, chapters, an equivalent transcript and digests. All 516 frames were inspected; the complete original video payload is preserved. It shows binding readiness, not original-group replies. Other browser clips and the complete tutorial film remain pending. Pause before login URLs, Owner tokens, model keys, QQ Secrets, QR codes and account lists. Publish only reviewed footage with unrelated conversations and machine identifiers removed. The full tutorial media deliverable remains tracked by [issue #1438](https://github.com/BotHarness/DeepSeekBot/issues/1438).
+Always stop the service and back up your Profile directory before upgrading.

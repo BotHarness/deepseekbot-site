@@ -1,68 +1,69 @@
-# QQ 机器人接入教程：申请、配置与群聊验收
+---
+{
+  "title": "接入 QQ 机器人：从注册到群内回复",
+  "description": "完成腾讯开放平台注册与官方 QQ 机器人创建，在 DeepSeekBot 中连接绑定、开启手机端群权限并实现群内互动回复。",
+  "order": 25,
+  "source": "https://github.com/BotHarness/deepseekbot-site/blob/main/content/site-guides/zh/qq-connection.md"
+}
+---
 
-完成 **腾讯开发者认证 → 创建官方 QQ 机器人 → DeepSeekBot 连接和绑定 → 手机群权限 → 群里真实问答**。已有官方应用可以从第 4 步开始。
+接入官方 QQ 机器人只需五个步骤：**腾讯开发者实名认证 → 创建官方 QQ 机器人应用 → 在 DeepSeekBot 中连接并绑定 → 开启手机 QQ 群权限 → 在群内 `@` 机器人测试回复**。如果你已经创建好了官方 QQ 机器人应用，可以直接从第 4 步开始。
 
-点击步骤图片可查看原尺寸。
+点击文中任意配图均可查看原图大图。
 
 ## 开始前准备
 
-- 可登录 [QQ 开放平台](https://bot.q.qq.com/open) 的管理员账号，以及有管理权限的专用测试群。
-- 已运行的 DeepSeekBot、可用模型和目标 Bot。先在本地 DM 取得真实模型回复；参见[安装](/docs/installation/)、[模型设置](/docs/model-setup/)和 [2 核 4GB VPS 教程](/docs/vps-qq-tutorial/)。
-- **一个 App 只交给一个运行中的 Host 接收。** 多分支同时测试请分配独立 QA App，切换前停止原接收器。
+- 一个 [QQ 开放平台](https://bot.q.qq.com/open) 开发者账号，以及一个你拥有群主或管理员权限的测试 QQ 群。
+- 已安装并运行的 DeepSeekBot、可用的模型以及目标 PersonaBot。建议先在本地私聊中确认 Bot 能正常回复（参考[安装指南](/docs/installation)、[模型配置](/docs/model-setup)与 [2 核 4 GB VPS 部署指南](/docs/vps-qq-tutorial)）。
+- **同一个 QQ 机器人应用同一时间只能由一个运行中的 Host 实例接收消息。** 如果你在另一台机器或测试环境上连接过同一个应用，请先停用旧实例再切换。
 
-**版本范围：** 本页流程适用于 DeepSeekBot 1.4.1（npm `deepseekbot`）、DSH `0.2.1-rc.2` 和产品自带的 QQ Provider `4.32.0-botharness.21`。第 4、5、7 步的产品截图和录屏来自历史候选构建 `1.2.1-vps.20261012.sha031a14db`（提交 `031a14db43af5b3bf52e76b01c30e27828e6e9c9`、DSH `0.2.0-rc.1`、QQ Provider `4.32.0-botharness.19`）的真实群聊验收，按钮位置和文案可能略有不同，以你实际安装的版本为准，参见[接入与可选能力](/docs/capabilities/)。腾讯平台说明于 2026-10-12 核对。
+## 1. 注册并完成开发者认证
 
-## 1. 腾讯平台注册与主体认证
-
-打开 [QQ 开放平台](https://bot.q.qq.com/open)。已有开发者账号直接登录；首次注册按实际身份选择**个人**或**企业**，完成邮箱激活和管理员实名绑定。企业还需按页面要求完成工商资料与对公账户验证。证件、手机号、邮箱验证码和授权二维码由账号持有人私下填写，输入前暂停录屏。
+打开 [QQ 开放平台](https://bot.q.qq.com/open)。已有开发者账号可直接登录；新用户请根据自身情况选择 **个人** 或 **企业** 主体注册，完成邮箱激活与管理员实名认证（企业主体还需完成营业执照与对公账户认证）。
 
 <figure>
-<a href="/guides/qq/03-subject-type.png"><img src="/guides/qq/03-subject-type.png" alt="腾讯官方文档的主体选择页面，提供企业与个人两个入口" loading="lazy" decoding="async"></a>
-<figcaption>腾讯官方文档示例。红框来自原图，不表示必须选择企业。</figcaption>
+<a href="/guides/qq/03-subject-type.png"><img src="/guides/qq/03-subject-type.png" alt="腾讯官方展示个人与企业开发者主体选择" loading="lazy" decoding="async"></a>
+<figcaption>在开放平台选择个人或企业主体完成注册与实名认证。</figcaption>
 </figure>
 
-当前[腾讯接入指南](https://bot.q.qq.com/wiki/)列出了个人和企业的 QQ 群开发场景，后续接口资格仍有差异。检查应用管理页的认证状态和待办提示；企业资质未完成时继续按平台要求处理。不要沿用“个人只能做频道机器人”的旧说法。
+根据目前的[官方指引](https://bot.q.qq.com/wiki/)，个人与企业开发者均支持开发 QQ 群机器人（后续部分高级接口权限可能因主体类型而异）。请在应用管理后台确认认证已通过后再继续。
 
-## 2. 创建官方 QQ 机器人
+## 2. 创建官方 QQ 机器人应用
 
-在应用管理页点击**创建机器人**，填写名称、头像、说明并提交。成功后生成 AppID，点击该应用进入管理页。这是 QQ 平台应用，稍后还需要绑定到 DeepSeekBot 里的 Bot。
+进入应用管理后台，点击 **创建机器人**，填写机器人的名称、头像与简介。创建成功后进入应用详情页，系统会为其生成唯一的 `AppID`。
 
 <figure>
-<a href="/guides/qq/04-create-app.png"><img src="/guides/qq/04-create-app.png" alt="腾讯应用管理页的创建机器人按钮" loading="lazy" decoding="async"></a>
-<figcaption>腾讯官方示例：从应用列表创建机器人。</figcaption>
+<a href="/guides/qq/04-create-app.png"><img src="/guides/qq/04-create-app.png" alt="腾讯应用管理页面的创建机器人按钮" loading="lazy" decoding="async"></a>
+<figcaption>在应用列表中点击“创建机器人”。</figcaption>
 </figure>
 
 <figure>
-<a href="/guides/qq/05-bot-details.png"><img src="/guides/qq/05-bot-details.png" alt="腾讯机器人资料表单，包括名称、头像、说明和下一步按钮" loading="lazy" decoding="async"></a>
-<figcaption>腾讯官方示例：填写机器人资料。这些图不是本次重新注册或创建应用的记录。</figcaption>
+<a href="/guides/qq/05-bot-details.png"><img src="/guides/qq/05-bot-details.png" alt="填写腾讯机器人名称、头像与介绍表单" loading="lazy" decoding="async"></a>
+<figcaption>填写机器人的名称、头像与简介信息。</figcaption>
 </figure>
 
-在管理页的**开发设置 / 开发基础信息**查找 AppID 与 AppSecret，稍后只在 DeepSeekBot 原生表单输入。不要把 QQ 号、AppID、Token 和 AppSecret 混用；本页不展示凭据页，也不需要你把 Secret 发给他人。
+接着在 **开发设置** 中找到 **AppID** 和 **AppSecret**。稍后我们只需要把这两个值填入本机的 DeepSeekBot 设置中。请注意区分 QQ 号、AppID、Token 与 AppSecret，并妥善保管好 AppSecret，不要泄露给他人或发到公开截图中。
 
-## 3. 配置 QQ 群场景与测试环境
+## 3. 配置 QQ 群场景与沙箱测试群
 
-在**开发 → 沙箱配置**选择 QQ 群场景、保存专用测试群。由管理员在手机 QQ 的群设置中选择**群机器人 → 添加测试机器人**。找不到应用时核对当前管理员、所选 App 和连接环境。
+在开放平台后台打开 **开发 → 沙箱配置**，勾选 QQ 群场景并添加你的测试群。保存后，该群的群主或管理员即可打开手机 QQ，进入 **群设置 → 群机器人 → 添加测试机器人**，将刚刚创建的机器人拉入群内。
 
 <figure>
-<a href="/guides/qq/06-sandbox.png"><img src="/guides/qq/06-sandbox.png" alt="腾讯沙箱配置页面，分别提供频道和 QQ 群测试环境" loading="lazy" decoding="async"></a>
-<figcaption>腾讯官方示例：群场景配置不能用频道配置代替。</figcaption>
+<a href="/guides/qq/06-sandbox.png"><img src="/guides/qq/06-sandbox.png" alt="腾讯沙箱配置中独立的频道与 QQ 群配置" loading="lazy" decoding="async"></a>
+<figcaption>在沙箱配置中选择“在 QQ 群配置”（注意不要误选为仅配置频道）。</figcaption>
 </figure>
 
-[官方沙箱要求](https://bot.q.qq.com/wiki/)包括群主或管理员权限及群人数限制，按当前控制台检查。**平台环境必须与已安装 Provider 的连接环境一致。** 本次复用已有 QA App 的成功回复不证明任意新沙箱 App 都可直接使用；Provider 没有相应环境选择时先核对支持，不要自行拼 URL 或隐藏 RPC。
+沙箱测试群通常对群主/管理员身份及群成员人数上限有一定要求，具体以开放平台后台提示为准。后续如果你需要将机器人发布到正式群，还需按平台要求提交自测报告、完成审核上架；如果开启了生产环境的 **IP 白名单**，请填写运行 DeepSeekBot 机器的公网出口 IP（而非 `127.0.0.1` 或 Tailscale 内网 IP）。
 
-正式群使用还需完成平台配置、自测报告、审核与上线，核对使用范围或白名单。正式环境若启用 **IP 白名单**，应填 Host 访问腾讯接口时的公网出口 IP，不能填 loopback 或 Tailscale 私网地址。沙箱测试通过不等于正式上线；创建 App 也不等于任意群可添加。
+## 4. 在 DeepSeekBot 中连接 QQ 应用
 
-## 4. 在 DeepSeekBot 连接 QQ App
+确认 Bot 在本地私聊能正常回复后，点击左下角 **设置 → IM 机器人 → QQ → 手动接入**，填入刚才获取的 **AppID** 与 **AppSecret**，点击 **绑定并连接**。
 
-先确认本地模型 DM 正常，再打开 **Settings → IM bots → QQ → Manual setup**。复用已有应用时填入该 App 的 **AppID** 和 **AppSecret**，点击 **Connect**。凭据输入前暂停录屏，完成后清空或关闭表单再采集。
-
-当前验证版本的扫码入口用于创建 Bot；复用已有 App 走手动连接。找不到 QQ 或 Manual setup 时核对实际 qualified Provider 与版本，不要用其他平台的授权命令代替。
-
-连接后核对真实应用身份与 connected 状态。**Provider 授权、绑定目标 Bot、原群收到回复是三个检查点。** 首次授权由账号持有人完成。开发者已有停止的原生 Profile 时，可以用 [QQ QA 客户端复用脚本](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/agents/qq-test-clients.md)分配 QA1/QA2/QA3，读取所选原生凭据并认领独占接收器；这是开发 helper，不是已发布的 `deepseekbot im-authorize qq` 命令。
+> 提示：界面上的扫码入口用于快速新建机器人；如果你要接入自己在开放平台创建的现有机器人，请使用 **手动接入**。
 
 <figure>
-<a href="/guides/qq/09-manual-setup.png"><img src="/guides/qq/09-manual-setup.png" alt="实际 QQ 手动接入表单，AppID 与 AppSecret 均为空" loading="lazy" decoding="async"></a>
-<figcaption>实际补录：设置 → IM机器人 → QQ → 手动接入。中文提交按钮为「绑定并连接」；它连接 Provider，之后仍需绑定 Bot。</figcaption>
+<a href="/guides/qq/09-manual-setup.png"><img src="/guides/qq/09-manual-setup.png" alt="QQ 手动接入界面，包含空白的 AppID 与 AppSecret 输入框" loading="lazy" decoding="async"></a>
+<figcaption>路径：设置 → IM 机器人 → QQ → 手动接入，填入 AppID 与 AppSecret 后点击“绑定并连接”。</figcaption>
 </figure>
 
 <video controls preload="metadata" playsinline poster="/guides/qq/09-manual-setup.png">
@@ -71,15 +72,15 @@
 <track kind="subtitles" src="/guides/qq/qq-manual-setup.en.vtt" srclang="en" label="English">
 </video>
 
-[文字稿与章节](/guides/qq/manual-setup-transcript.md)：只录入口和空表单，凭据输入前停止。经严格 SSH 转发访问同一 VPS，不替代 HTTPS 验证。
+## 5. 将 QQ 应用绑定给你的 PersonaBot
 
-## 5. 绑定到目标 Bot
+连接成功后，打开目标 Bot 的私聊窗口，在右侧栏展开 **外部身份（External identities）** → **绑定应用（Bind app）**，选择刚才连接好的 QQ 应用并确认。
 
-打开目标 Bot 的 DM 侧栏 → **External identities（外部身份）** → QQ，选择已连接应用并确认绑定。按实际界面选择新会话接收方式；使用“先询问”时还要接受新群会话。参见[外部身份](/docs/channel-sidebar/external-identities/)。
+如果你的新会话准入策略设为 **先询问（Ask first）**，首次在群里 `@` 机器人后，记得在外部身份的会话列表里点击允许该群聊（默认 **自动** 模式则无需手动批准）。详情参见[外部身份与会话管理](/docs/channel-sidebar/external-identities)。
 
 <figure>
-<a href="/guides/qq/07-app-bound.png"><img src="/guides/qq/07-app-bound.png" alt="DeepSeekBot 确认 QQ QA 应用已绑定到 VPS SEO Tutorial Bot" loading="lazy" decoding="async"></a>
-<figcaption>本次实际原生截图：应用绑定成功；没有 Secret、二维码或机器地址。</figcaption>
+<a href="/guides/qq/07-app-bound.png"><img src="/guides/qq/07-app-bound.png" alt="DeepSeekBot 显示 QQ 应用已成功绑定到目标 Bot" loading="lazy" decoding="async"></a>
+<figcaption>在 Bot 私聊侧栏中将已连接的 QQ 应用绑定给该 Bot。</figcaption>
 </figure>
 
 <video controls preload="metadata" playsinline poster="/guides/qq/07-app-bound.png">
@@ -88,73 +89,60 @@
 <track kind="subtitles" src="/guides/qq/qq-binding.en.vtt" srclang="en" label="English">
 </video>
 
-17 秒真实绑定实录，不含凭据输入或群聊发送。[字幕与等价文字稿](/guides/qq/binding-transcript.md)可独立阅读。
+## 6. 在手机 QQ 中检查群机器人权限
 
-## 6. 手机 QQ 群机器人权限
+把机器人拉进测试群后，群主或管理员可以在手机 QQ 上管理它在群内的接收与发言权限。
 
-以下**两张原有手机截图完整保留**。每个应用、每个群分别设置；必要时由群主或有权限的管理员操作。
+### 从机器人资料卡打开设置
 
-### 从资料页进入设置
-
-手机 QQ 打开目标群，进入机器人资料页，点击**右上角齿轮**。红色箭头标出入口。
+在手机 QQ 中打开测试群，点击机器人的头像打开资料卡，再点击右上角的 **齿轮图标**（下图中红色箭头处）：
 
 <figure>
-<a href="/guides/qq/01-mobile-bot-profile-settings.png"><img src="/guides/qq/01-mobile-bot-profile-settings.png" alt="手机 QQ 机器人资料页，红色箭头指向右上角设置齿轮" width="360" loading="lazy" decoding="async"></a>
-<figcaption>原手机图 1：进入群内机器人资料页，再打开设置。</figcaption>
+<a href="/guides/qq/01-mobile-bot-profile-settings.png"><img src="/guides/qq/01-mobile-bot-profile-settings.png" alt="手机 QQ 机器人资料卡，红色箭头指向右上角设置齿轮" width="360" loading="lazy" decoding="async"></a>
+<figcaption>在群内打开机器人的资料卡，点击右上角设置按钮。</figcaption>
 </figure>
 
-### 接收范围与主动发言分别设置
+### 按需设置消息接收范围与主动发言
 
-第一项**机器人可获取的群聊消息范围**决定 QQ 向应用推送哪些消息。图中选择“获取群内全部消息”；基础 @ 回复不必开启全部消息接收，普通消息处理还取决于版本与本地会话策略。
+在权限设置页中，有两个常用开关：
 
-第二项**机器人主动在群聊内发言**允许平台侧主动发送，图中为蓝色开启。需要主动发送时开启，并另外核对 DeepSeekBot 的本地发送授权。**基础 @ 回复验收不要求同时打开这两项。** 不要只凭其他页面的“接收机器人推送”判断主动发言已开启。
+- **机器人可获取的群聊消息范围**：控制 QQ 向机器人推送哪些消息。如果你只需要最基础的“`@` 机器人后回复”，保持默认即可；如果你希望机器人能看到未 `@` 的普通群消息（用于观察上下文或定时总结），可以切换为 **获取群内全部消息**。
+- **机器人主动在群聊内发言**：控制机器人是否可以在没有被即时 `@` 的情况下向群内主动发送消息（例如耗时超过 5 分钟的任务完成后回传结果）。需要时可将该蓝色开关打开。
 
 <figure>
-<a href="/guides/qq/02-mobile-group-permissions.jpg"><img src="/guides/qq/02-mobile-group-permissions.jpg" alt="手机 QQ 设置页，显示获取群内全部消息及已开启的主动发言开关" width="360" loading="lazy" decoding="async"></a>
-<figcaption>原手机图 2：顶部两项分别控制接收范围和主动发言。</figcaption>
+<a href="/guides/qq/02-mobile-group-permissions.jpg"><img src="/guides/qq/02-mobile-group-permissions.jpg" alt="手机 QQ 群机器人权限页面，展示消息接收范围与主动发言开关" width="360" loading="lazy" decoding="async"></a>
+<figcaption>手机 QQ 端可分别设置“消息接收范围”与“主动在群聊内发言”。</figcaption>
 </figure>
 
-这两张图来自 2026-10-09 QQ 验收，手机版本可能改变文案与布局，请操作自己的应用。
+## 7. 在群内 `@` 机器人测试回复
 
-## 7. 在原群验证真实回复与重启恢复
-
-用 QQ 的 @ 选择器选中正确机器人，发送 `请只回复 TUTORIAL_QQ_A_OK`，等待**同一群内该机器人的匹配回复**。纯文本写机器人名字、Connect 成功或发送 API accepted 都不能替代这个检查。
+回到测试 QQ 群，输入 `@` 并从弹出的成员列表中选中你的机器人（注意要通过列表选中真正的 `@` 提及，而不是纯手打名字文字），发送一条测试消息，即可在同一个群里看到机器人的回复。
 
 <figure>
-<a href="/guides/qq/08-group-before-after.png"><img src="/guides/qq/08-group-before-after.png" alt="QQ 原群两次 @ DeepSeekBot QQ QA 的 A、B marker 请求分别得到匹配回复，其中 B 在 Host 重启后发送" loading="lazy" decoding="async"></a>
-<figcaption>本次原群实测：首次 A 问答和重启后新发的 B 问答均可见。测试者提供原图，仅裁剪和遮盖个人身份，消息内容未改写；请使用自己的新 marker。</figcaption>
+<a href="/guides/qq/08-group-before-after.png"><img src="/guides/qq/08-group-before-after.png" alt="真实 QQ 群内 @ 机器人后的回复效果，包含服务重启前后的两次对话" loading="lazy" decoding="async"></a>
+<figcaption>在 QQ 群内 @ 机器人后收到实时回复，重启 Host 服务后绑定与回复能力依然保持。</figcaption>
 </figure>
 
-持久化部署只重启自己的 Host，确认 Bot 与绑定保留，再发送新 marker，例如 `请只回复 TUTORIAL_QQ_B_OK`，核对新回复。精确服务与 Owner 登录更新方式见 [VPS 教程](/docs/vps-qq-tutorial/)。不要重启其他人的服务。
+## 更多进阶用法
 
-排错时关联 Source Event、Bot Inbox 与发送结果；Provider receipt 是过程证据。本次验收覆盖文字 @ 问答，不宣称图片、普通群消息处理或任意主动推送都已验证。
+基础的群内 `@` 回复跑通后，你还可以按需开启以下能力：
 
-## 接入后还能做什么
+- **同步到本地群聊**：在首次 `@` 互动后，打开外部身份的会话列表，点击该 QQ 群右侧的 **同步（Sync）**，选择一个包含该 Bot 的本地群聊。之后群里的提及也会同步显示在本地群里，而 Bot 的回复依然会发回原 QQ 群。你也可以随时对该群设置 **免打扰（Mute）** 或 **屏蔽（Block）**。
+- **同一个 QQ 群里放多个 Bot**：为每个 PersonaBot 分别绑定各自独立的 QQ 机器人应用，再把它们同步到同一个本地群聊中，每个 Bot 都会用自己的 QQ 机器人身份在群内发言。
+- **超过 5 分钟的长任务结果回传**：QQ 官方对被动回复有 5 分钟的时效限制。当后台任务耗时超过 5 分钟才完成时，只要你开启了群内的主动发言权限并授权了发送目标，Bot 会在任务完成后把结果主动发回原群（受平台每小时主动消息配额限制）。
+- **图片、文件与语音处理**：在 `@` 机器人的消息中附带图片，或引用群内的文件、语音消息并 `@` 机器人，Bot 即可读取内容、调用工具处理并在群里回传结果（识别图片需为 Bot 配置支持视觉输入的模型）。
+- **接收群内普通消息**：默认情况下机器人只接收 `@` 它的消息。如果你在手机 QQ 上开启了 **获取群内全部消息**，并在该群会话的 **规则（Rules）** 中允许接收普通消息，Bot 就能静默收集群聊上下文或按批处理。
 
-基础 @ 问答跑通后，可以按需打开下面这些能力。完整操作和当前限制见产品仓库的 [QQ 接入说明](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/qq-connection.md)。
+注：目前暂不支持 QQ 一对一私聊（C2C），如需使用私聊斜杠指令，可在本地私聊或飞书、微信、Slack 中使用。
 
-- **同步到本地群聊：** 第一次被 @ 后，在应用的「编辑身份」会话列表里选择「同步」，把这个 QQ 群接到包含该 Bot 的本地群聊。之后的 @ 会出现在本地群聊里，回复仍发回原 QQ 群。「静音」只接收不唤醒，「屏蔽」停止接收。
-- **一个 QQ 群里放两个 Bot：** 每个 Bot 绑定自己的 QQ 应用，再把两个会话同步到同一个本地群聊。每个 Bot 只用自己的应用回复。
-- **超过 5 分钟的结果：** QQ 被动回复只有 5 分钟窗口。任务做完时已超时，结果会保留下来；Bot 可以通过已授权的原群发送目标主动补发，受每小时额度限制。
-- **图片、文件和语音（开发候选）：** 在 @ 消息里带图片，或引用一条文件、语音消息再 @ Bot，Bot 可以读取、处理并回传图片或文件；看图需要支持图片的模型。这些能力仍在验证中，以实际版本为准。
-- **普通群消息（开发候选）：** 默认只收 @ 消息。手机上开启「获取群内全部消息」并在会话中明确选择后，Bot 才会收集普通群消息，用于观察和定时汇总。
+## 常见问题排查
 
-QQ 私聊目前不在接入范围内，私聊斜杠命令等功能请使用其他平台或本地私聊。
-
-## 排错
-
-| 现象 | 先检查什么 |
+| 现象 | 排查方向 |
 | --- | --- |
-| 无法创建或加群 | 主体认证、审核/上线、使用范围、管理员与群场景资格。 |
-| 找不到沙箱机器人 | 群管理员、人数条件、平台与 Provider 环境，再从手机群机器人列表添加。 |
-| Connect 失败或断开 | AppID/Secret 是否匹配、Provider、服务器出网及正式环境 IP 白名单；只查看不含凭据的摘要。 |
-| connected 但 @ 无回复 | 真实模型 DM、Bot 绑定、待接受新会话、真实 @、是否有第二个接收器。 |
-| 开全量后 @ 失效 | 当前 Provider 是否支持全量消息事件，不靠反复重发结果不明的旧任务绕过错误。 |
-| 主动发送失败 | 手机开关、平台发送限制、本地授权分别检查，先验证基础 @ 回复。 |
-| 重启后 Web 未授权 | 私下使用新的 Owner 登录链接，不截图 token、不取消原生认证。 |
+| 无法创建机器人或无法拉入群 | 检查开放平台实名认证状态、沙箱群配置，以及操作人是否为该群的群主或管理员。 |
+| 手机添加测试机器人列表为空 | 确认开放平台沙箱配置中已保存该群号、群人数符合平台沙箱要求，且当前登录的是群主/管理员账号。 |
+| 手动接入报错或频繁断开 | 核对 AppID 与 AppSecret 是否填反或有空格、服务器外网出口是否正常，以及是否开启了 IP 白名单但未放行当前机器公网 IP。 |
+| 显示已连接但群内 `@` 无回复 | 检查本地私聊模型是否正常、QQ 应用是否已绑定到该 Bot、新会话是否在等待手动允许，以及是否有另一台机器占用了同一个 AppID。 |
+| 主动发言失败 | 检查手机 QQ 群设置中是否已开启 **机器人主动在群聊内发言**，并留意平台的主动消息频率限制。 |
 
-## 来源与素材说明
-
-四张腾讯平台图来自[官方接入指南](https://bot.q.qq.com/wiki/)，属于官方公开示例，不是本次替账号持有人完成实名注册的录像。绑定图、实录与 QQ A/B 图来自本次真实候选构建验收。两张手机原图保持原样。新增素材的来源、SHA-256 和隐私处理见[素材清单](/guides/qq/manifest.json)。
-
-延伸阅读：[官方群聊消息接口](https://bot.q.qq.com/wiki/develop/api-v2/autogen/api/v2_groups_group_openid_messages.post.html)、[全量群消息事件](https://bot.q.qq.com/wiki/develop/api-v2/autogen/event/group_message_create.html)、[QQ 接入规格 #1149](https://github.com/BotHarness/DeepSeekBot/issues/1149)。
+延伸阅读：[QQ 机器人官方群消息接口文档](https://bot.q.qq.com/wiki/develop/api-v2/autogen/api/v2_groups_group_openid_messages.post.html) · [群消息事件文档](https://bot.q.qq.com/wiki/develop/api-v2/autogen/event/group_message_create.html)

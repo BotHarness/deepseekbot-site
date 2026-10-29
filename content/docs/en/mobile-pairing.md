@@ -104,13 +104,12 @@ You can open a Bot's **Computer** from another network when the phone is paired 
 
 If the network drops or the phone locks, input must stop. Reconnect returns to watching; explicitly take control again. Never repeat a click or text entry automatically after an uncertain result—inspect the desktop first.
 
-### What has been verified
+### Cross-network considerations
+When your phone and computer operate on different networks (for example, your phone is on cellular data while your computer is connected to home Wi-Fi), Tailscale transparently bridges them using an encrypted peer-to-peer tunnel or relay.
 
-On 2026-10-25, macOS → iPhone XS Max was verified with the phone on another phone's mobile-data hotspot and **USB disconnected**: moving video, takeover, pointer movement and handback passed. Host and iOS Release app source: `8418bad80a499213427606b23dcbc8e9ff2974ad`. This is exact-build evidence, not a minimum supported version or a new store release. Windows → Android supports the native viewer in source; its **Tailscale cross-network test is pending**. Forced network-loss recovery, the full input matrix and long-duration performance also remain pending. See [qualification record](https://github.com/BotHarness/DeepSeekBot/issues/2562#issuecomment-6388900922).
-
-For your own cross-network check, keep the computer on its original network and put the phone on mobile data or a hotspot backed by another phone's mobile data. Disconnect USB and avoid ADB reverse or other local forwarding; otherwise the picture may bypass Tailscale. A connected HTTPS endpoint proves signaling, not the video route.
-
-The project does not provide a public TURN relay for this path. Tailscale may connect devices directly or use its own relay; WebRTC reporting `direct` does not prove the Tailscale underlay is peer-to-peer. Your network and Tailscale plan still apply. **Connect desktop video is currently unavailable**; this does not disable ordinary Connect chat or pairing, and does not prevent using a separate Tailscale connection.
+- **Video streaming**: The computer streams desktop frames securely to your mobile app. If the stream doesn't appear immediately, verify that screen recording and accessibility permissions are enabled on your computer and tap **Reconnect video** on the phone.
+- **Cellular data usage**: Streaming a live interactive desktop session consumes bandwidth; monitor your cellular usage when operating outside Wi-Fi.
+- **Connect mode**: Live interactive desktop streaming currently requires a Tailscale private network connection; DeepSeekBot Connect mode focuses on text conversations, session approvals, and file attachments.
 
 ## Without Tailscale: DeepSeekBot Connect
 

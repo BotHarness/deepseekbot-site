@@ -8,238 +8,232 @@
 }
 ---
 
-> **Version scope: current-source guide.** Synced from current source (the public release is now deepseekbot v1.4.1); older test package versions and DSH 0.2.0-rc.1 screenshots are historical verification records. See [Connections and optional tools](/docs/capabilities) for release and capability scope.
-
-This guide covers non-IM settings in the public **deepseekbot** package on DSH **0.2.1-rc.2**: where to open them, what each field does, and when changes apply. Complete [installation](/docs/installation) and [API / Bot model setup](/docs/model-setup) first. Slack and Lark account/connection fields remain in their connection guides. Screenshots show the verified Chinese UI.
+This guide covers all non-IM settings in **DeepSeekBot**: where to find them, what each option does, and when changes take effect. Make sure you have completed [Installation](/docs/installation) and [API and Bot models](/docs/model-setup) first. For Slack, Lark / Feishu, and other IM integrations, see their dedicated connection guides.
 
 ## Find the right settings page
 
-| Setting                                                       | Location                                                                    |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| DSH appearance, language, default permissions, input behavior | Bottom-left Settings → General settings.                                    |
-| API providers and model catalogs                              | Settings → Models; see [Model setup](/docs/model-setup).                    |
-| Native Agent tools and working style                          | Settings → Agent presets.                                                   |
-| Bot icon, motion, sorting, concurrency, your name             | Bot settings beside Bot mode, or Settings → Bot settings.                   |
-| One Bot's name and avatar                                     | Its DM header name/avatar → View details.                                   |
-| One Bot's models and wake policy                              | Model and Wake policy in its DM's Channel settings (header ··· menu).       |
-| Right sidebar layout and session views                        | Gear at the top of Channel sidebar.                                         |
-| One Bot's work folders and task permissions                   | Workspace grants in the DM's Channel settings.                              |
-| An existing DSH Session's model and permissions               | Open it from Sessions in the right sidebar and inspect its native controls. |
+| What you want to configure | Where to find it |
+| --- | --- |
+| DSH appearance, language, default permissions, input behavior | Bottom-left **Settings → General settings**. |
+| API providers and model catalogs | **Settings → Models**; see [API and Bot models](/docs/model-setup). |
+| Native Agent tools and working style | **Settings → Agent presets**. |
+| Bot icon, motion, sorting, concurrency, your default display name | **Bot settings** next to Bot mode, or **Settings → Bot settings**. |
+| A single Bot's name and avatar | Click the Bot's name/avatar in its DM header → **View details**. |
+| A single Bot's models and wake policy | **Model** and **Wake policy** in its DM's Channel settings (header `···` menu). |
+| Right sidebar layout and session views | Gear icon at the top of the Channel sidebar. |
+| A single Bot's work folders and task permissions | **Workspace grants** in the DM's Channel settings. |
+| An existing DSH Session's model and permissions | Open the session from **Sessions** in the right sidebar and check its native controls. |
 
 ## Complete environment backup and restore
 
-Open **Bot settings → Complete environment backup and restore → Manage backups**.
-**Preview export** lists all historical Bot identities, managed-file count, estimated bytes and
-omitted native Sessions. **Download verified backup** captures the full BotHarness database,
-retained Memory repositories (including custom paths and deleted identities), current referenced
-attachment bytes and identity bindings, reachable legacy CAS, model presets and independent Bot
-plans, runtime dependencies, hashes and the canonical Content Purge checkpoint. The completed
-download shows its actual compressed size.
+If you want to move your entire DeepSeekBot environment to a new computer or create a full snapshot, you can export a verified environment backup.
 
-The file contains sensitive chats, source content, account descriptors, grants/triggers and
-Outbox/audit history. Keep it private. Credentials, executable Plugins, Workspace contents and
-native DSH Session transcripts are excluded. Session ownership remains visible as unavailable
-historical references. Source-local Git configuration is replaced with safe defaults and hooks
-are quarantined on restore. A missing retained repository or referenced file fails export;
-intentional Memory erasure remains distinct. This is a Profile backup, separate from a Bot's
-Profile details and from single-Bot Zip/Git sharing, which creates a new identity.
+Open **Bot settings → Complete environment backup and restore → Manage backups**:
 
-Select a `.botharness-backup` file to inspect its manifest, database integrity, count, final size
-and SHA-256. Hashes establish integrity rather than source authenticity. Restore through the
-trusted installed local command, substituting your file and a directory that does not exist:
+1. **Preview export**: Shows the total number of Bot identities (including historical ones), managed file count, estimated size, and the number of underlying native DSH Sessions (which are not included in the archive).
+2. **Download verified backup**: Packages your environment into a `.botharness-backup` file and displays the final compressed size when complete.
+
+### What is included (and excluded)
+
+- **Included**: The full BotHarness database, all Bot Memory repositories (including custom paths and retained repositories from deleted Bots), chat attachments and file bindings, model presets and per-Bot model plans, runtime metadata, and integrity checksums.
+- **Excluded**: API keys and credentials, executable plugins, external Workspace folder contents, and native DSH Session transcripts. Local Git configs from the source machine are reset to safe defaults, and any Git hooks are quarantined on restore.
+
+> **Privacy note**: Your backup archive contains private chat messages, memory files, account descriptors, permissions, and activity history. Store it securely. Note that a full environment backup is different from single-Bot `.bot.zip` or Git sharing, which clones a single Bot into a brand-new identity.
+
+### Restore to a new directory
+
+You can select a `.botharness-backup` file on the Manage backups page to inspect its manifest, database integrity, item count, size, and SHA-256 hash. To restore the backup, run the local restore command in your terminal, pointing to your backup file and a **new directory that does not exist yet**:
 
 ```text
 botharness-profile restore --file "environment.botharness-backup" --new-home "new-environment"
 ```
 
-For a source checkout, use `node scripts/profile-restore.mjs` with the same arguments. No Host is
-started by restore. Launch the new home using trusted DSH **0.2.0-rc.1** and the matching BotHarness
-Bundle; development checkouts use `node scripts/dev-instance.mjs --home <new-home> --port <port>`.
-The launcher creates native Profile composition from the trusted pinned CLI rather than loading
-executable configuration from the backup. Live Settings cannot choose a destination or replace
-its own environment. Existing targets are refused, and the staging database uses the existing
-Profile Writer Lease before validation/migration and publication.
+If you are running from a source checkout, use `node scripts/profile-restore.mjs` with the same arguments. For safety, the restore command never overwrites an existing directory or replaces a running environment in place.
 
-The restored environment starts in **Disaster Restore** posture: Bots paused; account bindings,
-provider triggers, Service Grants, saved tool approvals and schedules suspended; Workspaces need
-new mapping; Browser/Computer access is off. Old Session, Inbox and Outbox work never replays.
-Cold Channel history and Memory remain readable. In Settings → Models, configure target-local
-credentials, and save an explicit model plan in the Bot's Profile. Return to Manage backups,
-review readiness, **Authorize this target model**, acknowledge possible simultaneous operation
-of the old device, and **Activate this Bot**. Send a new DM; it uses a fresh Orchestrator Session
-under the preserved identity. Missing models or changed plan revisions gate new requests instead
-of silently falling back. External account repair is a separate explicit authorization flow.
+### Safely activating Bots after restore
 
-The package applies its own real Purge checkpoint before Messaging opens. An older offline file
-cannot know deletions accepted after its export. Limits are 512 MiB of unpacked bytes and 60,000
-entries; export refuses insufficient staging space, changed files, an overlong capture or an
-existing output. Close/cancel an operation to abort before publication; after a lost download,
-preview and export again. Supported forward schema migrations happen only in staging; a newer
-unsupported schema, damaged file, unsafe path/link or missing closure refuses the restore and
-leaves no committed destination. Planned transfer and replacement of existing homes are later
-capabilities.
+Once the restore finishes, launch DSH pointing to the new home directory (in development checkouts, run `node scripts/dev-instance.mjs --home <new-home> --port <port>`).
+
+To prevent two machines from running the same Bot simultaneously and causing duplicate replies or conflicts, a restored environment starts in **safe recovery mode (Disaster Restore)**:
+
+- All Bots start paused; external account bindings, triggers, saved tool approvals, and schedules are suspended.
+- Workspace folders need to be re-mapped on the new machine, Browser and Computer access are turned off, and old message queues are not replayed.
+- Your chat history and Memory files are immediately readable.
+
+**To re-activate a Bot:**
+
+1. Go to **Settings → Models** to enter your API credentials on the new machine, and confirm the Bot's model configuration.
+2. Return to **Manage backups**, refresh the readiness check, and click **Authorize this target model**.
+3. Confirm that the old machine is no longer actively running the same Bot identity, then click **Activate this Bot**.
+4. Send a new DM to resume chatting with your Bot under its preserved identity. To reconnect external IM accounts, re-authorize them through their respective connector settings.
 
 ## DSH general settings
 
-These are native DSH settings. Initial values below were observed in a clean RC1 Profile; existing Profiles may retain different choices. Selectors and switches save directly. Fields with a Save button require that button.
+These are native DSH settings. Dropdowns and toggles save immediately; text fields with a **Save** button apply when you click Save.
 
 ![Native DSH general settings](/guides/settings/settings-general-zh.webp)
 
-| Field                                                | Options / initial value                                              | Purpose and scope                                                                                                                                                 |
-| ---------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Permissions                                          | Read-only / workspace write / full access; initially workspace write | Default for new native sessions. Bot task permissions are configured separately under Workspace grants; this label does not prove an existing task's permissions. |
-| Language                                             | Chinese or English; screenshots use Chinese                          | Interface language.                                                                                                                                               |
-| Appearance                                           | Light / dark / system; initially system                              | Interface theme.                                                                                                                                                  |
-| Font size                                            | Initially 14 px; increase/decrease buttons                           | Conversation content font only.                                                                                                                                   |
-| Working steps                                        | Concise / standard / detailed / fully expanded; initially detailed   | How much tool-call detail is shown; does not grant tool permissions.                                                                                              |
-| Performance and usage                                | Concise / detailed; initially detailed                               | Detail level for performance and token information.                                                                                                               |
-| Code working tools                                   | On/off; initially on                                                 | Shows traces, current-turn code changes, and Agent preset switching in new conversations.                                                                         |
-| Keyboard shortcuts                                   | Edit shortcuts                                                       | View and edit bindings; follow conflict hints, save, or restore defaults.                                                                                         |
-| Send behavior while busy                             | Initially queue; can select steer                                    | Enter / Send behavior while an Agent runs. Cmd/Ctrl+Enter uses the alternative. Separate from a Bot's wake policy.                                                |
-| Upload Session Log when using the official model API | On/off; native initial value was on                                  | Whether session logs are uploaded through the official API to improve models and products; choose your preference.                                                |
-| Open configuration file                              | Button                                                               | Native entry to the current Profile configuration. Use the relevant forms for everyday changes.                                                                   |
+| Field | Options / default | Purpose and scope |
+| --- | --- | --- |
+| Permissions | Read-only / workspace write / full access (default: workspace write) | Default permission level for new native sessions. Bot task permissions are configured separately under **Workspace grants**. |
+| Language | Chinese / English | Changes the UI display language. |
+| Appearance | Light / dark / system (default: system) | Changes the DSH interface theme. |
+| Font size | Default 14 px; adjust with increase/decrease buttons | Changes the font size of conversation content. |
+| Working steps | Concise / standard / detailed / fully expanded (default: detailed) | Controls how much tool-call detail is shown in chat; does not change tool permissions. |
+| Performance and usage | Concise / detailed (default: detailed) | Controls the detail level for performance metrics and token usage. |
+| Code working tools | On / off (default: on) | Shows execution traces, current-turn code diffs, and the Agent preset switcher in new conversations. |
+| Keyboard shortcuts | **Edit shortcuts** | View and customize key bindings, resolve conflicts, or restore defaults. |
+| Send behavior while busy | Default: Queue; optional: Steer | Controls what pressing Enter / Send does while an Agent is running (`Cmd/Ctrl + Enter` performs the alternative action). Independent of a Bot's wake policy. |
+| Upload Session Log when using the official model API | On / off | Controls whether session logs are uploaded when using the official model API to help improve models and products. |
+| Open configuration file | Button | Opens the underlying configuration file for the current Profile. For everyday adjustments, use the UI settings forms instead. |
 
 ## Agent presets and built-in plugins
 
-**Agent presets** select native tools and working style. “Set as default for new tasks” applies to subsequent native tasks. Review each preset's configuration, description, and usage instructions first. These are separate from [Bot model presets](/docs/model-setup).
+**Agent presets** configure the native Agent's toolset and working style. Clicking **Set as default for new tasks** on a preset applies it to future native tasks. Agent presets are separate from [Bot model presets](/docs/model-setup).
 
 ![Native Agent presets select tools and working style](/guides/settings/settings-agent-presets-zh.webp)
 
-| Preset                     | Use                                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------------------- |
-| Standard (initial default) | Most code, file, and research tasks.                                                              |
-| PTC                        | Batch tool calls and filtering, deduplicating, counting, or summarizing results.                  |
-| Minimal                    | Terminal-based tasks; baseline testing and comparison.                                            |
-| Creation / Cordis          | Write DSH plugins and compose tools/prompts to extend DSH.                                        |
-| Custom                     | Use “Let an Agent help me create a preset”; inspect its configuration and instructions afterward. |
+| Preset | When to use it |
+| --- | --- |
+| Standard (default) | Everyday coding, file handling, and research tasks. |
+| PTC | Tasks that batch tool calls and filter, deduplicate, count, or summarize large result sets. |
+| Minimal | Terminal-only tasks, useful for baseline testing and comparisons. |
+| Creation / Cordis | Authoring DSH plugins and combining tools/prompts to extend DSH. |
+| Custom | Click **Let an Agent help me create a preset** to build a tailored workflow. |
 
-**Built-in plugins** supports search, Session/Global plugin groups, selection of the Agent preset to inspect, and plugin status/details. Third-party fields depend on each installed plugin and are not all required DeepSeekBot settings. Install/enable packages using [Installation](/docs/installation). Advanced deployment layers and BotHarness configuration keys are linked at the end of this page.
+The **Built-in plugins** page lets you search installed plugins, filter by Session or Global scope, and inspect plugin status and parameters for each Agent preset. To install or enable plugin packages, see [Installation](/docs/installation).
 
 ## Global Bot settings
 
 ![Bot appearance, sorting, developer mode, and task concurrency](/guides/settings/settings-bot-global-zh.webp)
 
-| Field                         | Default / options                                       | Save and effect                                                                                                                                                           |
-| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Bot icon                      | DeepSeekBot mascot; simple, generated, or generic robot | Click to save. Changes the app/sidebar settings marker, not each Bot's avatar.                                                                                            |
-| Motion                        | System; reduced or full                                 | Selection saves immediately. The preview reports effective motion.                                                                                                        |
-| Bot list sorting              | Recently updated; manual                                | Default sorting; drag rows for manual order. Pinned areas/sections may have their own sort choice.                                                                        |
-| Developer mode                | Off                                                     | Shows workspace grant history and advanced options; grants no file access.                                                                                                |
-| Auto-accept Group invitations | On                                                      | Join invited BotHarness Groups without waking the Bot. When off, the invited Bot decides. Does not configure an IM connection.                                            |
-| Assignment concurrency limit  | 8; integer 1–32                                         | Enter and Save. Shared across Bots; limits executing tasks, not historical sessions. Lowering it does not stop running tasks.                                             |
-| DeepSeekBot version           | Shows the running version                               | Check for updates queries npm; Update now installs a new release, and on the web Restart now loads it. See [Update DeepSeekBot](/docs/update-deepseekbot).                |
-| My default name               | Empty → Human; maximum 128 characters                   | Save name for chat, mentions, and Bot context. Restore default or save empty to return to Human.                                                                          |
-| Anonymous usage statistics    | On                                                      | Switch saves immediately and applies without a restart; locked off when config or environment disables it. See [Anonymous usage statistics](#anonymous-usage-statistics). |
+| Field | Default / options | How it works |
+| --- | --- | --- |
+| Bot icon | DeepSeekBot mascot; simple, generated, or generic robot | Saves on click. Changes the Bot mode icon in the app navigation bar, without affecting individual Bot avatars. |
+| Motion | System; reduced or full | Saves immediately and previews the active animation style below. |
+| Bot list sorting | Recently updated; manual | Sets the default list order. Choose manual to drag rows into order; pinned areas and custom sections can also maintain their own sorting. |
+| Developer mode | Off | Reveals workspace grant history and advanced diagnostic options; does not grant extra file permissions. |
+| Auto-accept Group invitations | On | Automatically joins invited local BotHarness Groups without waking the Bot. When off, the invited Bot decides whether to join. |
+| Assignment concurrency limit | Default 8 (integer 1–32) | Shared limit across all Bots for simultaneously running background tasks. Lowering this limit does not interrupt tasks already in progress. |
+| DeepSeekBot version | Displays the running version | Click **Check for updates** to query npm, **Update now** to install a new release, and **Restart now** (on Web) to reload. See [Update DeepSeekBot](/docs/update-deepseekbot). |
+| My default name | Empty (`Human`); up to 128 characters | Click **Save name** to set how you are addressed in chat, mentions, and Bot context. Click **Restore default** or save an empty value to reset to `Human`. |
+| Anonymous usage statistics | On | Saves and takes effect immediately without a restart. See [Anonymous usage statistics](#anonymous-usage-statistics) below. |
 
-The lower “External platform defaults” area belongs to IM intake/identity settings; see [Lark / Feishu](/docs/lark-connection), [Slack](/docs/slack-connection), and Discord. Each platform has independent defaults and revisions. Profile identities and group intake policies can inherit these values or retain custom choices; restoring inheritance uses the current platform defaults. Discord ordinary intake still requires Message Content Intent and verified delivery; changing defaults does not grant either.
+The **External platform defaults** section at the bottom configures default intake and identity rules for connected IM platforms; see the [Lark / Feishu](/docs/lark-connection) and [Slack](/docs/slack-connection) guides for details.
 
 ## Appearance and wallpaper
 
-Open **Bot settings → Appearance** (⌘, on macOS or Ctrl+, elsewhere opens Bot settings in Bot mode). Everything on this page is saved on this device only; the Web client and the Desktop app keep separate copies, and the DSH theme is not changed.
+Open **Bot settings → Appearance** (`⌘,` on macOS or `Ctrl+,` on Windows/Linux opens Bot settings directly while in Bot mode). Appearance settings are saved locally per device and client (Web and Desktop keep separate preferences) and do not alter your native DSH theme.
 
-| Field                | Options                                                          | Effect                                                                                                                                                                               |
-| -------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Theme                | Light, dark or system                                            | Bot mode's own theme.                                                                                                                                                                |
-| Palette and Primary  | Classic Blue, Mist Purple, Forest Green, Warm Amber; any Primary | Chosen separately for light and dark mode.                                                                                                                                           |
-| Panel header / body  | Background color, opacity, background blur                       | Applies to every panel in the current mode. Text and message bubbles keep their own colors.                                                                                          |
-| Wallpaper library    | Up to 24 images (20 MB each) or silent videos (100 MB each)      | Click **Add wallpaper** or drop several files. Pick one, or **None**. **Adjust crop** sets position and zoom. The first wallpaper makes untuned panels see-through.                  |
-| Switch automatically | Off, every 1, 5, 15 or 30 minutes, every hour; **Shuffle**       | Rotates through the library. Videos loop without sound and pause in the background; if playback fails, the saved poster shows with the reason.                                       |
-| Appearance recovery  | **Clear panel settings**, **Restore defaults…**                  | Clear removes per-panel settings in the current mode. Restore defaults asks first, then resets both modes and empties the wallpaper library. Bots, data and layout are not affected. |
+| Setting | Options | Effect |
+| --- | --- | --- |
+| Theme | Light, dark, or system | Sets the color scheme for Bot mode. |
+| Palette and Primary | Classic Blue, Mist Purple, Forest Green, Warm Amber, or any custom primary color | Configured independently for light and dark modes. |
+| Panel header / body | Background color, opacity, background blur | Applies to all panels in the current mode while keeping text and message bubbles legible. |
+| Wallpaper library | Up to 24 images (max 20 MB each) or silent videos (max 100 MB each) | Click **Add wallpaper** or drag files in, then pick one or choose **None**. Use **Adjust crop** to position and zoom. Adding your first wallpaper automatically makes uncustomized panels semi-transparent. |
+| Switch automatically | Off, every 1 / 5 / 15 / 30 minutes, or hourly; **Shuffle** | Rotates through your wallpaper library. Video wallpapers loop silently and pause when the window is in the background. |
+| Appearance recovery | **Clear panel settings**, **Restore defaults…** | **Clear panel settings** resets per-panel overrides in the current mode. **Restore defaults…** prompts for confirmation before resetting both light and dark modes and emptying the wallpaper library (your Bots, data, and layout are untouched). |
 
-To style one panel, open its header menu → **Appearance settings**. Each field can follow the global value or be set for that panel, and **Reset this panel** removes its own settings. The `deepseekbot` appearance and wallpaper commands target one open Client; see the [CLI guide](https://github.com/BotHarness/BotHarness/blob/main/docs/bot-cli.md#device-local-deepseekbot-appearance).
+To customize an individual panel, open its header menu → **Appearance settings**. Every property can either follow the global theme or use a custom override for that panel, and **Reset this panel** clears its overrides. You can also control appearance and wallpapers from the terminal; see the [CLI guide](https://github.com/BotHarness/BotHarness/blob/main/docs/bot-cli.md#device-local-deepseekbot-appearance).
 
 ## Context compaction
 
-A Bot's main session (its Orchestrator Session) grows with every turn. Compaction replaces the long history with a summary so the next message re-reads less.
+A Bot's main conversation (its Orchestrator Session) grows with every turn. Compaction replaces older conversation history with a concise summary so subsequent turns use fewer tokens and respond faster.
 
-- **Compact now:** type `/compact` in the Bot's DM composer, send `/compact` (or `/压缩`) in an IM DM, or run `deepseekbot bot-compact <bot-id>`. The result shows tokens before and after. It is refused while the Bot is working; stop the turn or wait.
-- **Compact idle conversations early:** **Bot settings → Models & execution**, on by default. When a Bot has been quiet for half of its model's prompt-cache lifetime (never before 15 minutes; DeepSeek models assume 2 hours until observed), the Host compacts the session while the cache is still warm, which costs less than compacting a cold session later. Nothing shows in the chat; each run appears in the Bot's activity. Details and per-model overrides are in the [CLI guide](https://github.com/BotHarness/BotHarness/blob/main/docs/bot-cli.md#idle-compaction).
+- **Compact now**: Type `/compact` in the Bot's DM composer, send `/compact` (or `/压缩`) in an IM DM, or run `deepseekbot bot-compact <bot-id>`. You will see the token count before and after compaction. If the Bot is currently busy, wait for the turn to finish or stop it first.
+- **Compact idle conversations early**: Found in **Bot settings → Models & execution** (enabled by default). When a Bot has been idle for half of its model's prompt-cache lifetime (at least 15 minutes), the Host automatically compacts the session while the prompt cache is still warm—which is much cheaper than compacting after the cache expires. Idle compactions happen quietly in the background and are logged in the Bot's activity overview. For details and per-model overrides, see the [CLI guide](https://github.com/BotHarness/BotHarness/blob/main/docs/bot-cli.md#idle-compaction).
 
-If a turn still fails because the context is full, the failed-turn notice says so; retry with a smaller request.
+If a single turn still exceeds the model's context window, you will see a clear notice in chat so you can retry with a smaller request.
 
 ## Quick search and shortcuts
 
-Press **Alt+K** (Option+K on macOS) in Bot mode to search Bots, groups, Channels and individual Bot settings rows; Ctrl+K or ⌘K also works where the browser passes it through. Chinese names match by full pinyin or initials. Choosing a settings result opens its page with the row highlighted. Press `?` or Ctrl/⌘+/ for the full shortcut list, and change shortcuts in **Bot settings → Keyboard shortcuts**.
+Press **Alt+K** (`Option+K` on macOS, or `Ctrl+K` / `⌘K` where supported by your browser) in Bot mode to quickly jump to any Bot, group, Channel, or individual setting row. Selecting a settings result opens the right page and highlights the matching setting.
+
+Press `?` or `Ctrl/⌘ + /` to view all keyboard shortcuts, or customize them under **Bot settings → Keyboard shortcuts**.
 
 ## Create a Bot and edit its Profile
 
-Use “Create your first PersonaBot” in Bot mode or the list's New menu.
+Click **Create your first PersonaBot** in Bot mode or use the **New** button at the top of the Bot list.
 
-| Field            | Configuration                                                                                                                                       |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Source           | Empty creates a new Memory Repository. Git import takes an accessible Git URL and uses that repository rather than showing blank-persona templates. |
-| Name             | Required display name; rename later using the edit button beside the Profile name.                                                                  |
-| Roles            | Optional badges; Enter/comma confirms a badge and its close button removes it. Badges do not grant capabilities.                                    |
-| About            | Optional short introduction shown in the Profile.                                                                                                   |
-| Persona template | Blank / colleague / roleplay seed for the creation text.                                                                                            |
-| Persona          | Editable identity and communication instructions at creation; not model, API, or permission configuration.                                          |
+| Field | How to configure |
+| --- | --- |
+| Source | **Empty** initializes a fresh Memory Repository. **Git import** clones an accessible Git URL and uses its existing persona and memory files. |
+| Name | Required display name. You can rename the Bot anytime using the edit button next to its name in the Profile. |
+| Roles | Optional role tags. Press Enter or comma to add a tag, or click its close button to remove it. |
+| About | Optional short bio shown on the Bot's Profile card. |
+| Persona template | Starter templates (Blank, Colleague, Roleplay) to pre-fill the initial persona instructions. |
+| Persona | Editable instructions that define the Bot's identity and communication style at creation. |
 
 ![Bot creation fields and persona templates](/guides/install/06-create-bot-zh.webp)
 
-After creation, open **View details**:
+After creating a Bot, click its name or avatar in the chat header → **View details** to customize its profile:
 
-- **Change avatar**: choose PNG, JPEG, or WebP; adjust the crop and save. An uploaded avatar can be removed.
-- **Design avatar**: choose illustrated/line style, presets, parts, shape sliders, and colors. Save applies the preview; cancel discards the draft. An uploaded image takes display precedence.
-- **Activity overview**: pins select cards in the Profile popover. Token usage switches between **Daily total** and **By model**, with a 7 / 30 / 90 days / All range and a custom range in the **⋯** menu; hover a bar for the cached, uncached input and output split. These only change the statistics view, not the model. Unavailable usage is unknown rather than zero.
-- **Persona / memory files**: use Memory files in the right sidebar to inspect files and their available edit/preview actions. The Profile does not repeat every creation field as an editing form.
-- **Standing memory limits** now live in the Channel sidebar: **Bot DM → Memory files → Standing memory limits** sets the character limits for `SOUL.md` and `MEMORY.md`, applied from the next Session or the next compaction of the current Session; see [Bot Soul and Core Memory](/docs/soul-and-core-memory).
-- **External identities and connectors** also moved out of the Profile, into the Bot DM's Channel sidebar: see [External identities](/docs/channel-sidebar/external-identities) and [External connectors](/docs/channel-sidebar/external-connectors).
+- **Change avatar**: Upload a PNG, JPEG, or WebP image, crop it, and save. You can remove an uploaded avatar at any time.
+- **Design avatar**: Customize an illustrated or line-art avatar using presets, facial features, shape sliders, and colors. Click Save to apply; if an uploaded image is also present, the uploaded image takes display priority.
+- **Activity overview**: Pin your favorite metric cards to the Profile popover. **Token usage** toggles between **Daily total** and **By model**, with 7 / 30 / 90 days, All time, or custom date ranges in the **⋯** menu. Hover over any bar to see the breakdown of cached input, uncached input, and output tokens.
+- **Persona and memory files**: Open **Memory files** in the right sidebar to read, preview, and edit `SOUL.md`, `MEMORY.md`, and other files in the Bot's memory repository.
+- **Standing memory limits**: Located in **Bot DM → Memory files → Standing memory limits**, where you can configure the character limits for `SOUL.md` and `MEMORY.md` (applied on the next Session or next compaction); see [Bot Soul and Core Memory](/docs/soul-and-core-memory).
+- **External identities and connectors**: Located in the Bot DM's Channel sidebar; see [External identities](/docs/channel-sidebar/external-identities) and [External connectors](/docs/channel-sidebar/external-connectors).
 
 ## Bot wake policy and local Groups
 
-A Bot's **Wake policy** now lives in the Channel sidebar of its DM. Open **Bot DM → Channel sidebar → Wake policy**, click a source row, choose the rule and Save; Restore default removes that source's change. [Wake policy](/docs/channel-sidebar/wake-policy) lists every source, option and limit.
+A Bot's **Wake policy** is managed in the Channel sidebar of its DM. Open **Bot DM → Channel sidebar → Wake policy**, click a source row, choose when the Bot should wake up, and click **Save** (or **Restore default** to reset). See [Wake policy](/docs/channel-sidebar/wake-policy) for all available sources and options.
 
-Local Groups allow an ordinary-message override for each Bot under **Group header → View details**. Inherit uses that Bot's default; edits/restoring inheritance are scoped to that Group. Group member controls manage invitations, join requests, and membership. These policies do not change API providers, models, or workspace permissions.
+In local Groups, you can override how each member Bot responds to ordinary group messages under **Group header → View details**, as well as manage invitations, join requests, and group members.
 
 ## Channel sidebar display settings
 
-The [Channel sidebar chapter](/docs/channel-sidebar) provides step-by-step feature guides; see [Display and layout](/docs/channel-sidebar/display) for tabs, ordering and visibility.
+See the [Channel sidebar overview](/docs/channel-sidebar) for feature guides, and [Display and layout](/docs/channel-sidebar/display) for details on customizing tabs, order, and visibility.
 
-The chat header's **···** menu → **Channel settings…** opens the chat's Model, Workspace Grants, Wake policy, External identities, External connectors or Group management. Sidebar display options sit in the gear at the right of each section title; they are browser display preferences that do not change durable Bot memory or task authorization.
+Clicking the chat header's **··· → Channel settings…** opens the current chat's Model, Workspace Grants, Wake policy, External identities, External connectors, or Group management. The gear icons next to section titles in the right sidebar adjust your local browser display preferences without affecting Bot memory or permissions.
 
 ![Sidebar layout, memory terminology, and session view menus](/guides/settings/settings-sidebar-zh.webp)
 
-| Field                          | Default / effect                                                                                                             |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| + Views (beside the tabs)      | Tick the tabs to show and drag them into order; applies at once. Bot DMs and Groups can use different layouts.               |
-| Edit sidebar (narrow overlay)  | Drag entries into order, select visible entries, then finish.                                                                |
-| Memory evolution → Terminology | Memory terms by default; Git terms rename the same underlying commit view.                                                   |
-| Bot Inbox → Show               | By time by default; optionally group by source.                                                                              |
-| Sessions → Scope               | Current by default; All expands the filter for that Bot's session view.                                                      |
-| Sessions → Layout              | By status (Working / Idle) by default; optionally group by workspace.                                                        |
-| Sidebar width                  | 320 px by default; drag the divider within 260–560 px. The selected tab, split heights and expanded states are retained too. |
+| Option | Default and effect |
+| --- | --- |
+| `+ Views` (next to tabs) | Check which tabs to show and drag them to reorder. Bot DMs and Groups remember separate layouts. |
+| Edit sidebar (narrow window) | Drag entries to reorder, toggle visibility, and click Done. |
+| Memory evolution → Terminology | Defaults to friendly **Memory terms**; switch to **Git terms** to view the same history using standard Git labels. |
+| Bot Inbox → Show | Defaults to sorting **By time**; can be switched to group **By source**. |
+| Sessions → Scope | Defaults to **Current** sessions; switch to **All** to view the Bot's full session list. |
+| Sessions → Layout | Defaults to grouping **By status** (Working / Idle); can be switched to group **By workspace**. |
+| Sidebar width | Defaults to 320 px; drag the divider between 260–560 px. Your chosen tab, split heights, and expanded sections are remembered automatically. |
 
 ## Workspace grants and task permissions
 
-Open **Workspace grants** in the target Bot DM's **Channel settings** (header **···** menu → **Channel settings…**). Memory Repository is its memory directory. Use **Add folder** to choose extra task folders on the DSH Host; a remote browser does not substitute its own local paths.
+Open **Workspace grants** from a Bot DM's **Channel settings** (header **··· → Channel settings…**). Every Bot has its own **Memory Repository** by default. Click **Add folder** to grant the Bot access to additional project folders on the machine running DSH.
 
 ![Workspace grants with no extra folder authorization](/guides/settings/settings-workspace-grants-zh.webp)
 
-| Field / action                          | Effect and scope                                                                                                                                                                                             |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Add folder                              | Choose and confirm a task directory this Bot may use. Grants are managed separately for each Bot.                                                                                                            |
-| Revoke/remove directory                 | Revoke its authorization for subsequent work; does not delete the directory's files.                                                                                                                         |
-| Allow all file access for new work      | Off by default: new Assignments use workspace write and ask for approvals. Enabling requires explicit confirmation and applies full file access to new tasks, not existing permission snapshots.             |
-| Tool approval rules                     | The actual prompt offers one-time approval, remembered exact operations, or broader rules. Inspect Bot, role, directory, and operation scope before confirming. Existing rules can be inspected and revoked. |
-| Developer-mode history/advanced options | Inspect revoked grants and history. Showing them does not restore authorization.                                                                                                                             |
+| Action / setting | Effect and scope |
+| --- | --- |
+| Add folder | Grants this Bot permission to work in a specific folder on the Host machine. Managed independently per Bot. |
+| Revoke / remove directory | Revokes the Bot's access to that folder for future work (never deletes your actual files on disk). |
+| Allow all file access for new work | Off by default, meaning new background Assignments are restricted to authorized workspaces and prompt for approval when needed. Turning this on (after confirmation) grants full filesystem access to newly created tasks. |
+| Tool approval rules | When a tool requires approval, you can allow it once, remember the exact operation, or save a broader rule. You can inspect or revoke saved rules here at any time. |
+| Developer-mode history / advanced options | When Developer mode is enabled, lets you view historical and revoked workspace grants. |
 
-For a first task, choose one specific directory, retain default permissions, and verify an actual task. Model choice, directory authorization, and task permissions are separate settings.
+When getting started, we recommend granting a single project folder and keeping the default task permissions.
 
 ## Anonymous usage statistics
 
-DeepSeekBot sends anonymous usage statistics from the DSH Host by default; Bot mode explains this once in a notice the first time it opens. Events are tied only to a random install ID stored in `$DSH_HOME/botharness/telemetry.json`:
+DeepSeekBot sends lightweight, anonymous usage telemetry from the DSH Host by default, and shows a one-time notice the first time you open Bot mode. Events are associated only with a random installation ID stored locally in `$DSH_HOME/botharness/telemetry.json`:
 
-- `plugin_started`: plugin version, DSH version, operating system and architecture.
-- `bot_created`, `bot_archived`, `bot_deleted`, `marketplace_bot_installed` and `avatar_edited`: only that the action happened.
-- `connector_enabled`: only the connector type (`feishu`, `lark`, `slack`, `discord`, `weixin` or `other`).
-- First-entry intro and tutorial: `intro_shown`; `intro_step_viewed` (step name); `intro_dismissed` (step and whether Skip or Close was used); `intro_completed` (which starter prompt was picked, not its text); `intro_theme_changed` (only `scheme`, `preset` or `wallpaper`); `intro_model_saved` (only whether the Advanced task model was used); `intro_community_clicked` (`github`, `discord` or `qq`); and `tutorial_action` (`start`, `pause`, `skip`, `continue`, `restart` or `finish`). No model names, wallpaper files or typed text are included.
-- `daily_usage`: at most once a day, the number of PersonaBots, the number of new Sessions and messages since the previous summary, and that window's length in whole hours. No event is sent per message.
-- `$exception`: when the Host hits an unhandled error in BotHarness code, the error type and its stack's functions and line numbers, with each file reduced to its package-relative name (such as `@botharness/core/dist/index.mjs`) or just its file name. Errors without a BotHarness frame are dropped. The report is saved on the device and sent on the next start; the error message is never included.
+- `plugin_started`: Plugin version, DSH version, operating system, and CPU architecture.
+- `bot_created`, `bot_archived`, `bot_deleted`, `marketplace_bot_installed`, and `avatar_edited`: Records only that the event occurred.
+- `connector_enabled`: Records only the connector type (`feishu`, `lark`, `slack`, `discord`, `weixin`, or `other`).
+- First-time intro and onboarding tutorial: Step views, completion/skip actions, high-level theme action category (`scheme`, `preset`, or `wallpaper`), whether Advanced task model mode was used, and community link clicks (`github`, `discord`, or `qq`). **Never includes** model names, wallpaper files, or any text you type.
+- `daily_usage`: Sent at most once per day with total PersonaBot count, new session and message counts since the last summary, and the window duration in whole hours. No event is sent per message.
+- `$exception`: When an unhandled error occurs in BotHarness code, records only the error type, function names, line numbers, and package-relative file paths (such as `@botharness/core/dist/index.mjs`). Error messages and personal file paths are never included.
 
-Names, Persona or Memory content, conversations, prompts, tool arguments, repository URLs, connector accounts or workspaces, your file paths, credentials and IP addresses are never sent. To turn it off, open **Bot settings** and switch off **Anonymous usage statistics**; it takes effect at once without a restart, queued events are dropped, and the choice is saved in the same `telemetry.json` so it survives restarts. Switching it back on resumes without a restart. Deployments can force it off with `telemetry: false` on the BotHarness core plugin (see Advanced parameters below) or by starting DSH with `DO_NOT_TRACK=1` or `BOTHARNESS_TELEMETRY=0`; the switch is then shown off and disabled with a note naming the setting. Details: [privacy](https://deepseekbot.botharness.ai/en/privacy) and [source](https://github.com/BotHarness/BotHarness/tree/main/packages/core/src/telemetry).
+**What is never sent**: Your name, Persona or Memory contents, chat messages, prompts, tool arguments, Git repository URLs, connector accounts, workspace paths, credentials, or IP addresses.
+
+**How to opt out**: Open **Bot settings** and toggle off **Anonymous usage statistics**. This takes effect immediately without a restart, drops any queued events, and persists across restarts. Administrators can also disable telemetry globally by setting `telemetry: false` on the BotHarness core plugin or launching DSH with `DO_NOT_TRACK=1` or `BOTHARNESS_TELEMETRY=0`. For full details, see the [Privacy Policy](https://deepseekbot.botharness.ai/en/privacy) and the [telemetry source code](https://github.com/BotHarness/BotHarness/tree/main/packages/core/src/telemetry).
 
 ## Advanced parameters and optional capabilities
 
-The public npm package **`deepseekbot`** bundles Core, Client, Browser, Computer, and the qualified IM Provider; IM accounts start disconnected and per-Bot Browser/Computer Access stays off until you enable it for a Bot. The generated [Core configuration reference](/dev/reference/config) covers `enabled`, `agentPreset` (session tool preset, default standard), `activityDetailConsumers` (trusted Host plugins allowed to read activity details, initially empty), and `telemetry` (anonymous usage statistics, default on). Browser target, driver, path, headless, and idle-stop fields are defined in [Browser configuration](https://github.com/BotHarness/BotHarness/blob/main/packages/browser/src/index.ts); Computer target, desktop resources, export directory, and action authorization fields are defined in [Computer configuration](https://github.com/BotHarness/BotHarness/blob/main/packages/computer/src/index.ts). Operational guides cover [daily browser sharing](/docs/daily-browser) and [Computer export/transfer](/docs/computer-export).
+The public **`deepseekbot`** npm package includes Core, Client, Browser, Computer, and IM Providers out of the box. All external IM accounts start disconnected, and Browser and Computer access start turned off for each Bot until you explicitly enable them.
 
-Check the installed version, then inspect the relevant plugin under **Settings → Built-in plugins** for its details/parameters. Deployment fields without a form are configured through Profile/Patch layers as described by the [official DSH documentation](https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish). The website's development reference can be newer than the npm release; optional capabilities there are not a claim about what this package includes.
+- **Core configuration**: See the [Core configuration reference](/dev/reference/config) for keys such as `enabled`, `agentPreset`, `activityDetailConsumers`, and `telemetry`.
+- **Browser and Computer configuration**: See the [Browser configuration schema](https://github.com/BotHarness/BotHarness/blob/main/packages/browser/src/index.ts) and [Computer configuration schema](https://github.com/BotHarness/BotHarness/blob/main/packages/computer/src/index.ts), as well as the user guides for [Share a browser tab](/docs/daily-browser) and [Computer export and transfer](/docs/computer-export).
+- For headless or declarative deployments, you can configure plugin fields in your Profile or Patch layers as documented in the [official DSH documentation](https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish).

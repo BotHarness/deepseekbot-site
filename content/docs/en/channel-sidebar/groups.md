@@ -51,6 +51,6 @@ For a digest, set **Message count** and **Maximum wait (seconds)**, then use **S
 
 Open **Channel settings… → Group management** to change the group name and click **Save**, or choose a PNG/JPEG/WebP avatar and complete the crop/save flow. Removing an uploaded avatar restores the fallback group image.
 
-**More Group management actions → Disband group** opens a confirmation. This removes members’ access to this group; hiding a roster entry or closing the sidebar does not disband it. The tutorial demonstrates the management interface without removing members or disbanding the example group.
+**More Group management actions → Disband group** opens a confirmation prompt. Disbanding removes members' access to this group; hiding a roster entry or closing the sidebar does not disband it.
 
 Related: [Display and layout](/docs/channel-sidebar/display), [sidebar overview](/docs/channel-sidebar).

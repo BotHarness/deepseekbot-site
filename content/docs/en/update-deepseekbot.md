@@ -14,9 +14,9 @@
 
 ## Automatic compatible-update notices
 
-The update-notice change in [#2173](https://github.com/BotHarness/DeepSeekBot/issues/2173) checks for compatible releases when you enter Bot mode. The modal distinguishes your running DeepSeekBot version, your DSH version and the exact offered version. It waits for onboarding and installed-version release notes. Dismissing a target suppresses its automatic notice in that local Profile; **Bot settings → About** still offers it, and a newer target can notify again. Offline or incomplete checks never mean “up to date”.
+When you enter Bot mode, DeepSeekBot automatically checks in the background for new versions compatible with your DSH installation. When an update is available, a prompt clearly displays your current DeepSeekBot version, DSH version, and the recommended target version along with release notes.
 
-Published 1.3.1 and older Clients do not gain this code when a new npm version appears. Use their existing **Bot settings → DeepSeekBot version → Check for updates**, or the manual command below, for the first transition. Unpublished 1.4.0 test metadata is not evidence that 1.4.0 is available. DSH Desktop's own update badge refers to DSH, not DeepSeekBot.
+Dismissing the prompt suppresses repeated notices for that release, allowing you to upgrade whenever you are ready via **Bot settings → About**. If you are offline or the check fails to complete, the system will retain your current setup and recheck next time. Note that DSH Desktop's own update indicator applies to the host application itself, independently of the DeepSeekBot plugin.
 
 ## Check your version
 

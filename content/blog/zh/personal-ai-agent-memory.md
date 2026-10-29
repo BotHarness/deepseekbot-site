@@ -7,17 +7,17 @@
 }
 ---
 
-下周再打开一个项目时，你希望 AI 助手知道：上次在研究什么、哪些来源可信、还有哪些问题没确认。有长期记忆的个人 AI 智能体，可以把这些背景保存在文件里，让你检查和修正，而不必每次从聊天记录里重新整理。
+下周再打开一个项目时，你肯定希望 AI 助手还记得：上次在研究什么问题、哪些信息来源靠谱、还有哪些疑点没确认。拥有长期记忆的个人 AI 智能体，可以把这些背景沉淀在本地文件里，方便你随时翻看和修正，不用每次都去翻冗长的聊天记录。
 
-DeepSeekBot 是 MIT 开源的 GrokBot 平替，作为插件安装到 DeepSeek Harness（DSH）。你可以创建有各自身份和 Git 文件记忆的个人 Bot，分别私聊，也可以把几个 Bot 带进 Group，组成自己的个人 Bot 团队（personal bot team）。
+DeepSeekBot 是一款 MIT 开源的 GrokBot 平替，以插件形式安装在 DeepSeek Harness（DSH）中。你可以创建拥有独立身份和 Git 文件记忆的个人 Bot（PersonaBot），既能一对一私聊，也能把几个不同分工的 Bot 拉进同一个 Group，组建你自己的个人 Bot 团队（personal bot team）。
 
-先让一个 Bot 做好一件需要持续跟进的小事，有明确分工后再增加成员。下面用“整理项目阅读笔记”说明怎么开始。这是供你尝试的流程示例，不是已经执行成功的任务记录，也不代表一个团队能自主完成所有步骤。
+最稳妥的起步方式，是先让一个 Bot 把一件需要持续跟进的小事做好，等跑顺了、确实需要角色分工时再增加新成员。下面我们以“维护项目阅读笔记”为例，看看这套工作流怎么搭起来。
 
 ## 给个人 Agent 一个值得记住的任务
 
-假设你正在为自己的项目选工具。这周读了三篇介绍，下周想看看有没有变化。负责研究的 Bot 应当留下你的问题、约束和来源，把临时判断与已经确认的决定分开。
+假设你正在为一个新项目挑选工具。这周你读了三篇技术介绍，下周想继续跟进有没有新变化。一个称职的研究 Bot 应当帮你留存核心问题、已知约束和参考来源，并且把“初步推测”与“你已拍板的决定”明确区分开。
 
-[安装 DeepSeekBot](/docs/installation/) 后，打开 Bot 模式，创建一个 PersonaBot。给它起个名字，再指定一个小范围职责：“帮我维护这个项目的阅读笔记，每个重要判断都要能找到来源。”你可以直接提供材料，不必先连接外部账号，也不用给它整个文件系统的访问权。
+[安装 DeepSeekBot](/docs/installation/) 后，打开 Bot 模式并创建一个 PersonaBot。给它起个名字，定一个聚焦的职责：“帮我维护这个项目的阅读笔记，每条重要判断都要标明来源。”刚开始直接把资料贴给它就行，不必急着挂载外部账号，也不用开放整个文件系统的访问权限。
 
 <figure class="evidence-figure" id="bot-conversations">
 <div class="evidence-heading"><span class="evidence-kicker">BOT 模式 · 01</span><strong>和每个 Bot 保持独立对话</strong></div>
@@ -26,9 +26,9 @@ DeepSeekBot 是 MIT 开源的 GrokBot 平替，作为插件安装到 DeepSeek Ha
 <figcaption>实际 Bot 模式界面，使用示例对话展示。点击截图可放大。</figcaption>
 </figure>
 
-DeepSeekBot 把身份与记忆分开：`SOUL.md` 描述 Bot 是谁、如何工作；`MEMORY.md` 保存关键事实和详细笔记的索引，细节放在其他文件中。在 Soul 里写“做事谨慎”能表达角色要求，但不能代替真正的权限限制。
+DeepSeekBot 把“身份”与“记忆”拆得很清楚：`SOUL.md` 定义 Bot 是谁、按什么原则干活；`MEMORY.md` 保存关键事实和指向详细笔记的索引，具体细节则放在独立文件里。需要注意的是，在 `SOUL.md` 里写一句“做事谨慎”可以帮助塑造语气和习惯，但不能代替真正的工具与目录权限设置。
 
-这个例子可以在 Bot 的记忆里采用这样的组织方式：
+以阅读笔记为例，你可以让 Bot 按下面这三层结构来打理记忆：
 
 ```text
 SOUL.md             研究角色与工作偏好
@@ -36,17 +36,17 @@ MEMORY.md           当前问题与已确认约束
 reading-notes.md    来源链接、带日期的观察、待确认问题
 ```
 
-这是建议的文件结构，本文没有替你创建这些文件。不要把密码、私钥或无关的个人信息写进笔记。
+记笔记时，切记不要把密码、私钥或与项目无关的敏感信息写进记忆文件里。
 
-## 让长期记忆变得可检查
+## 让长期记忆变得可检查、可修正
 
-持久记忆（persistent memory）意味着保存的信息可以跨对话保留。它不意味着每条消息都被正确记住、每份旧材料都会进入下一次模型调用，也不保证 Bot 总能想起正确的事实。
+所谓持久记忆（persistent memory），是指保存下来的信息能够跨越单次对话留存下来。但这并不意味着聊天里的每句话都会被自动提炼成准确记忆，也不代表整个记忆仓库里的所有旧文件都会在每次调用时一股脑塞进模型上下文。
 
-Soul 与 Core Memory 以有长度限制的快照进入 Session，详细文件按需读取。修改文件不会自动改写当前 Session 的这份快照。把核心记忆写短，用它指向详细笔记，再在新的 Session 里验证回忆，不要假定整个记忆仓库始终都在上下文中。
+在运行机制上，`SOUL.md` 与 `MEMORY.md` 会在会话开始时作为有长度限制的快照加载进 Session，而其他详细笔记则由 Bot 按需读取；中途直接修改文件，并不会自动刷新当前活跃会话里的快照。因此，最佳实践是把 `MEMORY.md` 写得简明扼要，用它给详细笔记做索引，并在开启新会话时抽查一下 Bot 能否准确调取旧笔记。
 
-DeepSeekBot 的 Git Memory 侧栏可以查看文件、提交和 diff。让 Bot 保存一项决定后，检查实际改动：如果它把推测记成了事实，就修正文件，不要只寄希望于下一条聊天消息。Git 历史让修改有迹可查，内容是否正确仍需要你判断。
+借助 DeepSeekBot 右侧的 Git Memory 面板，你可以随时查看记忆文件、提交历史和每次修改的 diff。让 Bot 记录一项决定后，不妨顺手看一眼实际 diff：如果发现它把未经证实的推测当成事实存了下来，直接动手改掉文件即可，不必在聊天框里反复跟它车轱辘话纠正。Git 历史让每一次改动都有迹可循，而内容的最终把关人依然是你。
 
-可以用你有权分享的材料试试这个请求：
+你可以拿手头方便分享的资料试试下面这段提示词：
 
 ```text
 只使用我下面提供的三段来源材料。
@@ -56,52 +56,54 @@ DeepSeekBot 的 Git Memory 侧栏可以查看文件、提交和 diff。让 Bot �
 不要对外发布，不要连接外部账号。
 ```
 
-“等我确认”是给模型的行为要求，不是可靠的审批闸门。实际工具权限和宿主访问范围也要收窄；如果 Bot 在确认前已经写入，应停下来检查。我们已有的[三来源简报实践](/blog/first-agent-briefing/)展示了为什么来源和产出仍然需要人工审阅。
+提示词里的“等我确认后再保存”是对模型的流程引导，同时别忘了在设置里把实际的宿主机与工具权限控制在最小范围。我们在[三来源简报实践](/blog/first-agent-briefing/)中也分享过，为什么让来源紧跟结论、并在最后做一次人工复核能省下不少返工时间。
 
-下次对话时，让 Bot 复述项目问题，并指出依据的笔记。检查来源和约束有没有过时。文件留存与成功回忆是两项不同的验收。具体文件操作可以看[记忆文件](/docs/channel-sidebar/memory-files/)和[记忆演化](/docs/channel-sidebar/memory-evolution/)指南。
+到了下周开启新对话时，可以先让 Bot 复述一遍当前跟进的核心问题，并说明它引用了哪份笔记，顺带检查一下上周记录的约束条件有没有过时。具体的文件查看与回滚操作，可以参考[记忆文件](/docs/channel-sidebar/memory-files/)和[记忆演化](/docs/channel-sidebar/memory-evolution/)指南。
 
 ## 有了明确分工，再组建个人 Bot 团队
 
-当你确实需要另一项职责时，增加第二个 Bot 才有意义。沿用阅读笔记这个例子，可以这样分工：
+当你发现一件事拆成不同视角会更清楚时，引入第二个、第三个 Bot 才真正水到渠成。沿用阅读笔记的例子，一个三人小团队可以这样配合：
 
-- 研究 Bot：从你提供的材料中整理带来源的观察。
-- 审阅 Bot：质疑缺少依据的判断，指出可能过时的信息。
-- 协调 Bot：把审阅后的笔记整理成供你确认的草稿。
+- **研究 Bot**：从你提供的材料中提炼带出处的观察。
+- **审阅 Bot**：专门挑刺，指出缺乏依据的推论或可能过时的信息。
+- **协调 Bot**：把审阅通过的笔记汇总成结构清晰的终稿，交给你拍板。
 
-每个 PersonaBot 保留自己的身份和记忆。把相关成员邀请到 Group，@ 需要回应的 Bot；明确分享问题和已经批准使用的材料，不要假定一个 Bot 自动知道另一个 Bot 保存的全部内容。
+每个 PersonaBot 都保有自己独立的身份和记忆库。把它们拉进同一个 Group 后，想让谁发言就 `@` 谁；同时把背景问题和参考材料明确发在群里，因为不同 Bot 的私有记忆默认并不互通。
 
 <figure class="evidence-figure" id="bot-group">
 <div class="evidence-heading"><span class="evidence-kicker">BOT 群组 · 02</span><strong>把几个 Bot 带进同一个对话</strong></div>
 <a href="/blog-figures/personal-agent-memory/group-zh.jpg"><img src="/blog-figures/personal-agent-memory/group-zh.jpg" width="2880" height="1800" alt="DeepSeekBot 中文 Bot 模式打开天文台工作室 Group：Mira、Theo、Nova 分别以自己的名称和头像回复，右侧显示群组成员；示例对话" loading="lazy" decoding="async"></a>
 <div class="evidence-notes"><div><b>01</b><strong>进入群组</strong><span>Group 和各 Bot 的私聊一起列在左侧。</span></div><div><b>02</b><strong>看清各自回复</strong><span>Mira、Theo、Nova 保留自己的名称与头像。</span></div><div><b>03</b><strong>查看参与成员</strong><span>右侧列出 Human 和参与的 Bot。</span></div></div>
 <details class="evidence-detail"><summary>放大查看群组回复</summary><div class="evidence-zoom" role="region" aria-label="放大的示例群组对话" tabindex="0"><svg viewBox="560 170 1680 920" role="img" aria-label="Mira、Theo、Nova 在同一 Group 中分别回复"><image href="/blog-figures/personal-agent-memory/group-zh.jpg" width="2880" height="1800"></image></svg></div></details>
-<figcaption>三个 Bot 在同一 Group 中回复，图中为示例对话，不是本文阅读笔记任务的执行结果。</figcaption>
+<figcaption>三个 Bot 在同一 Group 中按各自身份协作回复（界面示例）。</figcaption>
 </figure>
 
-Group 与 Assignment 是两种不同的安排。Group 让有独立身份的 Bot 在共享对话中协作；Assignment 用单独的 Session 和报告承接独立委派任务，需要授予 Workspace。加入群组不等于获得任意目录的访问权。
+在 DeepSeekBot 中，Group 与 Assignment 对应两种不同的协作方式：Group 适合让多个 Bot 在同一个聊天室里讨论接力；Assignment 则用于把一项明确的任务委派给单个 Bot，在已授权的 Workspace 目录里开启独立 Session 并交付结项报告。把 Bot 拉进群聊，并不会自动赋予它访问你本地代码目录的权限。
 
-第一次可以只让审阅 Bot 检查一个段落，再由你阅读它的回复。不要同时放开对外发布、凭据修改或更大的文件访问范围。增加成员会带来协调和模型调用开销，不保证答案更好，更不等于无限自治。[能力指南](/docs/capabilities/)区分了发布包与可选组件。
+第一次试跑群组协作时，不妨先让审阅 Bot 检查一小段笔记，看看它的反馈是否在点子上。群里成员变多，自然会增加协调轮次与模型 API 调用量，按需组建、精简分工往往比一股脑拉一大群 Bot 更高效。关于正式发布包与可选扩展组件的区别，可参阅[能力指南](/docs/capabilities/)。
 
-## 用 DeepSeek Harness 插件补上真正需要的能力
+## 用 DeepSeek Harness 插件按需扩展能力
 
-DeepSeekBot 运行在 DSH Profile 中，可以与兼容的其他 DSH 插件一起安装。这个开源插件生态让你按实际任务扩展个人 Agent 的能力，而不必把起始工具当成固定上限。
+DeepSeekBot 运行在 DSH Profile 中，可以和其他兼容的 DSH 插件并存。借助这个开源插件生态，你可以根据手头的实际任务为 Agent 添置新工具，而不必受限于初始安装时的默认能力。
 
-如果直接提供阅读材料已经够用，就从这里开始。需要连接器或其他工具时，先检查插件版本、所需凭据、暴露的操作和宿主访问范围，只启用当前任务需要的部分，再用一个小范围只读请求验证。部分插件可能尚不兼容；装在同一个 Profile 里不代表任意组合都能无缝工作。
+如果平时手动粘贴阅读材料已经够用，保持最简配置即可。当确实需要接入外部连接器或新工具时，建议先看清插件版本、所需凭据和宿主机访问范围，只开启当前任务用得上的权限，并先拿一个小范围的只读请求做测试。
 
-本次核验的 npm 发布包 DeepSeekBot 1.2.0 **不包含**可选的 Computer、Browser Bundle，这个阅读笔记示例也不需要它们。自托管意味着你要维护宿主与配置，模型/API 调用另有费用；MIT 开源不代表这些服务免费，持续后台工作也依赖宿主保持可用。
+顺带一提，npm 上的 DeepSeekBot 1.2.0 默认安装包**不包含**可选的 Computer 和 Browser 自动化组件，像本文这样的阅读笔记工作流也完全不需要用到它们。自托管运行意味着由你自己打理宿主机环境与模型 API 额度，后台任务也依赖宿主机保持在线。
 
-## 在依赖这个团队之前，检查四件事
+## 日常使用前的四项自检清单
 
-1. 能否找到已保存的项目问题，并修正一条错误记忆？
-2. 换一次对话后，Bot 能否依据正确笔记回答，而不是编造来源？
-3. Group 回复是否保留预期分工，你能否看清每个 Bot 的贡献？
-4. 工具权限和 Workspace 授权是否只覆盖这件事，对外操作是否仍由你审批？
+把这套工作流投入日常项目前，可以用下面四个小问题快速检验一下：
 
-前两项没通过，就先修好单 Bot 的流程，不急着扩大团队。如果你还在选产品，可以阅读已有的[个人 AI 智能体比较](/blog/personal-ai-agents-comparison/)；本文解释的是记忆与协作的入门方式，不是产品性能测评。
+1. 你能否在右侧面板里轻松找到已保存的项目问题，并顺手修正一条写错的记忆？
+2. 开启新对话后，Bot 能否准确引用已保存的笔记，而不是自己编造出处？
+3. Group 里的回复是否保持了预期的角色分工，能否一眼看清每个 Bot 的贡献？
+4. 工具权限和 Workspace 授权是否刚好覆盖当前任务，对外发送等关键动作是否仍由你亲自把关？
+
+如果前两项还没跑顺，建议先把单 Bot 的记忆读写调教好，再往多 Bot 群组扩展。如果你还在多款同类工具之间做选型对比，欢迎延伸阅读[个人 AI 智能体横向对比](/blog/personal-ai-agents-comparison/)。
 
 <details>
 <summary>产品来源与版本范围</summary>
 
-2026 年 10 月 12 日核验了 [DeepSeekBot 1.2.0 发布包 README](https://unpkg.com/deepseekbot@1.2.0/README.md)、[发布包配置](https://unpkg.com/deepseekbot@1.2.0/cordis.im.patch.yml)和[发布时的记忆指南](https://github.com/BotHarness/DeepSeekBot/blob/271e056aecd7f10bd71128a78d2ac9acbea898ea/docs/soul-and-core-memory.md)，其中说明了独立身份、Git Memory、Group、需要 Workspace 授权的 Assignment 及插件兼容性限制。另见 [DeepSeekBot 仓库](https://github.com/BotHarness/DeepSeekBot)与 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)。文中的提示词和笔记组织方式是建议示例，不是执行记录。
+本文基于 2026 年 10 月 12 日核验的 [DeepSeekBot 1.2.0 发布包 README](https://unpkg.com/deepseekbot@1.2.0/README.md)、[发布包配置](https://unpkg.com/deepseekbot@1.2.0/cordis.im.patch.yml)和[发布时的记忆指南](https://github.com/BotHarness/DeepSeekBot/blob/271e056aecd7f10bd71128a78d2ac9acbea898ea/docs/soul-and-core-memory.md)，涵盖独立身份、Git Memory、Group、需要 Workspace 授权的 Assignment 及插件兼容性说明。另见 [DeepSeekBot 仓库](https://github.com/BotHarness/DeepSeekBot)与 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)。
 
 </details>

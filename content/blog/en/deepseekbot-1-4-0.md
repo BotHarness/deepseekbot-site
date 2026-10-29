@@ -61,6 +61,6 @@ Separately, development/UAT cloud collaboration now has workspaces, channels, in
 
 Back up your Profile before upgrading. This release includes schema upgrades, so returning to an older binary may require restoring the pre-upgrade backup. Start with the [installation guide](/en/docs/installation/) or the [GitHub Release](https://github.com/BotHarness/DeepSeekBot/releases/tag/v1.4.0).
 
-### Sources
+### Related links
 
-This article follows the [released 1.4.0 source](https://github.com/BotHarness/DeepSeekBot/tree/df454d5cebda2a8e4c1300f939267f295571f0f9) and [canonical changelog](https://github.com/BotHarness/DeepSeekBot/blob/df454d5cebda2a8e4c1300f939267f295571f0f9/CHANGELOG.md), including the merged [onboarding #2200](https://github.com/BotHarness/DeepSeekBot/pull/2200) and [window/panel drag fix #2206](https://github.com/BotHarness/DeepSeekBot/pull/2206). Package qualification is recorded in the [successful release workflow](https://github.com/BotHarness/DeepSeekBot/actions/runs/39146814921).
+For complete release details and source changes, explore the [canonical changelog](https://github.com/BotHarness/DeepSeekBot/blob/df454d5cebda2a8e4c1300f939267f295571f0f9/CHANGELOG.md) and the [GitHub Release](https://github.com/BotHarness/DeepSeekBot/releases/tag/v1.4.0).

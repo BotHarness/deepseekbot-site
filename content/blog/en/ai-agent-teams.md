@@ -7,35 +7,37 @@
 }
 ---
 
-An AI agent team is useful when a job has parts that deserve different treatment. Gathering evidence, writing a clear explanation and checking its claims are related jobs, but they need different instructions and different standards of completion.
+An AI agent team earns its keep when a job has stages that call for different mindsets. Pulling verified facts from rough notes, turning them into readable prose, and fact-checking the draft are closely related, yet each step works best with its own instructions and definition of done.
 
-In Tobs, named Bots have their own identities, models and memory. Bring them into a Group to discuss the work, then use Assignments for separate tasks and reports. Tobs, formerly DeepSeekBot, is an open-source plugin for DeepSeek Harness on a computer you operate.
+In Tobs, each Bot has its own name, model and memory. You can bring several Bots into a Group to talk through an approach, then hand out Assignments when you want individual Bots to do focused work and report back. Tobs (formerly DeepSeekBot) runs as an open-source plugin on DeepSeek Harness, right on your own computer.
 
-Start with a small deliverable and a visible handoff. The example below is a setup you can try, not a report of a team we ran or a benchmark of its results.
+You don't need a sprawling org chart on day one. Start with a single deliverable and make the handoffs visible. Below is a practical workflow you can try on your own machine to see how research, writing and review fit together.
 
 ## Start with one brief, not a roster of specialists
 
-Suppose you need a short project update from three sets of notes: what changed, why it matters and what remains uncertain. Using supplied notes keeps web search and connected accounts outside this first attempt.
+Suppose you have three sets of rough project notes and want to turn them into a short status update: what changed, why it matters, and what is still up in the air. Working from local notes keeps the first run simple—no web search or external accounts required.
 
-Use three roles:
+Here is a clean three-way split:
 
-| Bot | Job | What you should receive |
+| Bot | Job | What you review |
 | --- | --- | --- |
-| Mira, researcher | Extract supported facts from the supplied notes | A source-linked brief with unresolved questions |
-| Theo, writer | Turn the approved brief into an update | A draft that distinguishes facts from proposed wording |
-| Nova, reviewer | Check the draft against the brief and notes | Specific corrections, with the passages that support them |
+| Mira, researcher | Pull supported facts from the raw notes | A source-linked brief that separates facts from open questions |
+| Theo, writer | Turn the approved brief into a readable update | A draft that stays faithful to the brief's scope |
+| Nova, reviewer | Check the draft against both the brief and the notes | Specific corrections backed by exact passages |
 
-Each role should justify adding a Bot; three copies of “be helpful” may produce three similar answers. Keep the deliverable to one page. Define its audience, length and allowed sources. You remain the editor who approves it.
+Every Bot you add should have a distinct job. If you give three Bots the same vague prompt to "be helpful," you'll mostly get three variations of the same answer—and still end up doing the synthesis yourself.
 
-## Put the conversation and the work in the right places
+Keep your first deliverable to a single page. Set the target audience, length and allowed sources upfront, while keeping the final editorial sign-off for yourself.
 
-A Group gives the team a shared place to discuss the question. An Assignment gives a Bot a separate task to carry out and report on. An [AI group chat](/en/blog/ai-group-chat/) can be useful without a formal deliverable; an agent team needs a way to follow the work beyond the conversation.
+## Use Groups for discussion and Assignments for focused work
 
-After [installing Tobs](/en/docs/installation/), create the Bots and invite them into a Group. Check the member list: a pending invitation is not membership. Set each member’s attention policy; a direct mention addresses one Bot, while other members’ policies still govern their responses.
+A Group gives your Bots a shared room to hash out ideas. An Assignment gives a single Bot a self-contained job to execute and report on. While an [AI group chat](/en/blog/ai-group-chat/) is great for open-ended brainstorming, an agent team needs a clear way to track deliverables outside the chat stream.
 
-For a file-based Assignment, authorize the intended folder for the Bot doing the work. [Workspace Grants](/en/docs/channel-sidebar/workspaces/) belong to individual Bots. A folder in the app’s workspace list, a path typed into chat or a Group invitation does not grant every member access to it.
+After [installing Tobs](/en/docs/installation/), create your Bots and invite them into a Group. Check the member list to make sure they have joined, then configure each Bot's attention policy so casual messages don't wake the whole room at once. When you want a specific Bot to chime in, mention it with `@`.
 
-Use a dedicated folder for the notes and deliverables, keeping unrelated files outside it. Grant each Bot the access its task requires. Ask Mira first:
+Whenever an Assignment touches local files, grant the working Bot access to that folder. In Tobs, [Workspace Grants](/en/docs/channel-sidebar/workspaces/) are configured per Bot—typing a path in chat or inviting a Bot to a Group doesn't automatically hand out file permissions to everyone in the room.
+
+Create a dedicated task folder for your three notes and the upcoming outputs, leaving unrelated files outside. Once Mira has access to the folder, hand her the first Assignment:
 
 ```text
 Read the three notes in this task folder.
@@ -45,30 +47,28 @@ List unresolved questions separately. Do not fill the gaps by guessing.
 Report the file you produced and anything that blocked the task.
 ```
 
-The request describes the job; actual folder and tool permissions control what the Bot can do.
+## Make every handoff explicit
 
-## Make the handoff explicit
+Read Mira's brief before passing the baton to Theo. If a point in the notes is ambiguous, settle it right there or keep it explicitly marked as an open question. Passing a flawed brief downstream faster only buries the mistake in smoother prose.
 
-Read Mira’s brief before asking Theo to write. If a source is ambiguous, resolve that question or leave it marked as uncertain. Passing a mistaken brief along faster does not improve it.
+When you assign the draft to Theo, point it to the approved `brief.md`, specify the audience, length and output filename, and remind it not to turn open questions into settled announcements. Once the draft is ready, hand Nova the draft, the brief and the original notes, asking it to flag any unsupported claims or shifts in meaning.
 
-Give Theo the approved brief and the audience, length and destination. Tell it to preserve unresolved questions. Then give Nova the draft, brief and notes: ask it to flag unsupported claims and wording that changes their meaning.
+Be explicit about which files each Bot should read. Every Bot in Tobs maintains its own private memory repository—joining a Group doesn't merge their memories into a single shared notebook, and describing a role in `SOUL.md` doesn't mean the Bot has automatically read files produced by another teammate.
 
-Share those inputs deliberately. Each Bot has its own memory; joining a Group does not combine everyone’s private memory into one shared notebook. A role in `SOUL.md` describes how a Bot should work. It is not a permission grant or proof that the Bot has seen another member’s files.
+You can track all delegated tasks in the Group's [Work view](/en/docs/channel-sidebar/groups/), which shows each Assignment and its latest report. When a task moves to "Done," take a moment to open the report and check the output file, since completed, failed and manually stopped runs all land in the finished list.
 
-The Group’s [Work view](/en/docs/channel-sidebar/groups/) lists Assignments and their latest reports. “Done” includes completed, failed and stopped work: inspect the report and output before calling it a successful delivery.
+## Save lasting conventions, not temporary drafts
 
-## Keep the useful lessons, not every draft
+Over a few runs, you'll uncover habits worth keeping: who your usual audience is, how you like to flag uncertainty, or which file holds your approved terminology. Review those lessons before saving them into a Bot's memory—you don't want a one-off launch date or a rejected paragraph turning into a permanent rule.
 
-The team may learn durable preferences: which audience you write for, how you label uncertainty or which file holds the approved terminology. Review those before saving them to a Bot’s memory. An outdated launch date or rejected paragraph should not become a standing instruction.
+Tobs stores a Bot's persona and operating principles in `SOUL.md` and its core facts in `MEMORY.md`, with additional notes read on demand. Because standing files are loaded into a Session as a snapshot, edits take effect in new Sessions or after the next context compaction (see the [Soul and Core Memory guide](/en/docs/soul-and-core-memory/) for details).
 
-Tobs keeps a Bot’s persona in `SOUL.md` and core memory in `MEMORY.md`, with other files available when needed. These standing files enter a Session as a snapshot; edits apply to a new Session or the next compaction rather than rewriting a reply already in progress. The [memory guide](/en/docs/soul-and-core-memory/) explains the limits and timing.
+You can also [assign different models to different Bots or tasks](/en/docs/model-setup/). In practice, a pricier model isn't automatically a sharper reviewer—judge each setup by the actual corrections it catches, and keep in mind that extra Bots and review rounds add model calls and runtime.
 
-You can [choose models per Bot and task](/en/docs/model-setup/), but a more expensive reviewer is not automatically a more reliable one. Check the actual corrections. Additional Bots, discussion and retries can add model calls and coordination time. The software’s MIT license does not include model credits, and the computer must remain available while work runs.
+## Nail one handoff before growing the team
 
-## Try one handoff before expanding the team
+If a researcher and a writer are enough to get the job done, start with just the two of them. Bring in a reviewer when you have a concrete checking step you'd rather not do by hand, and keep the role only if its catches genuinely save you time.
 
-Begin with a researcher and a writer if that is enough. Add a reviewer when there is a clear checking job, and keep it only if its output helps you make a better decision.
+A good first test is simple: can you trace every claim in the draft back to a source note, see which Bot wrote what, and get actionable fixes when something drifts? Nailing that loop with two or three Bots beats managing a crowded room of vague roles every time.
 
-For the first trial, can you trace a draft sentence to its source, see who produced it and find the correction when it is wrong? That is a useful contribution you can check.
-
-Read [Team of Bots](/en/blog/team-of-bots/) for the idea behind Tobs, or [AI character chat](/en/blog/ai-character-chat/) if you want to start with one character and its memory. A team earns its place one useful contribution at a time.
+To learn more about the philosophy behind Tobs, read [Team of Bots](/en/blog/team-of-bots/)—or if you'd rather start by shaping a single persona with long-term memory, check out our [AI character chat guide](/en/blog/ai-character-chat/).

@@ -10,9 +10,9 @@
 }
 ---
 
-For our first task with a DeepSeek agent, we chose something familiar: organizing a few project introductions into a short briefing. We had three documents and wanted to understand what each project did, how they related, and which questions needed more research.
+For our first real task with a DeepSeek agent, we picked something we do all the time: turning a few project write-ups into a short briefing. We had three READMEs in front of us and wanted to clarify what each project did, how they related to one another, and what still needed hands-on testing.
 
-DeepSeekBot returned a draft with three observations, two open questions and source references. We still needed to check the references and shorten the prose. Here is what happened, and how we would approach the next briefing.
+DeepSeekBot came back with a sourced draft containing three main observations and two open questions. Having a draft in hand made it much easier to verify the claims against the original docs and trim the wordier explanations. Here is how that first run went, along with a prompt template you can adapt for your own reading pile.
 
 <figure class="evidence-figure" id="product-overview">
 <div class="evidence-heading"><span class="evidence-kicker">GETTING STARTED · 01</span><strong>Start with a conversation</strong></div>
@@ -22,9 +22,9 @@ DeepSeekBot returned a draft with three observations, two open questions and sou
 <figcaption>The DeepSeekBot interface, shown with a sample conversation. Click the image to enlarge.</figcaption>
 </figure>
 
-## Give the briefing a question to answer
+## Start with a concrete question
 
-The question came from two easily confused names: DeepSeekBot and DS Bot. They are independent projects by different maintainers. We wanted to understand them and their relationship to DeepSeek Harness before choosing what to try.
+Our test question grew out of an easy point of confusion: DeepSeekBot and DS Bot sound nearly identical, yet they are completely separate projects maintained by different authors. Before testing either one, we wanted to map out how they differed and how both plugged into DeepSeek Harness.
 
 | Document | What we wanted to learn |
 | --- | --- |
@@ -32,13 +32,13 @@ The question came from two easily confused names: DeepSeekBot and DS Bot. They a
 | [FeiZhuLulu’s DS Bot](https://github.com/FeiZhuLulu/DeepSeek-Bot/blob/f87575d76e0d9d807cec17fd6964c9be6d9dca17/README.md) | How the other similarly named project coordinates group work |
 | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness/blob/d743267388641bc76f17c45ce8b4c231aed1d32c/README.md) | The underlying software these plugins run on |
 
-We selected relevant passages and added notes about which claims the documents supported, then supplied them together. The Bot worked from those prepared materials; it did not search the web for sources. Meeting notes, project updates or a few technical articles offer a similar starting point: choose a question and material you already know well enough to check.
+We pulled the relevant passages from each README, added brief notes on what each excerpt covered, and handed the packet to the Bot. Because the Bot worked strictly from the material we supplied rather than searching the web on its own, it was easy for us to audit the output. If you're summarizing meeting notes, project updates, or design docs, scoping the input to material you already know well is a great way to start.
 
-## Ask for a draft with its sources attached
+## Ask for a draft with sources attached
 
-Our request was for a Chinese briefing of roughly 700 characters, with three observations, two open questions and a source for each important claim. It would return to our private conversation so we could keep working on it.
+We asked for a concise Chinese briefing of roughly 700 characters, structured around three observations and two open questions, with citations for every key claim. Keeping the draft inside a private chat made it easy to iterate before sharing anything more widely.
 
-Here is a template to adapt:
+Here is the prompt template we used:
 
 ```text
 Prepare a one-page briefing from these three documents:
@@ -51,17 +51,17 @@ Cite each important claim and separate facts from inferences.
 Use only the material I supplied and return a draft to this conversation.
 ```
 
-You can use the same approach for a project update or a technical decision. Tell the Bot what you want to understand, and ask it to keep the sources close to the claims.
+You can reuse this structure for competitor roundups, architecture comparisons, or weekly status updates. The two things that matter most are telling the Bot what decision you're trying to make and requiring it to keep citations attached to each point.
 
-## The useful work came after the draft arrived
+## The real value came during the review pass
 
-The original reply organized the material around project identity, collaboration, and questions about cost and data. We followed its references before making recommendations.
+The initial draft neatly grouped the material into project identity, team collaboration, and open questions around cost and data handling. Rather than treating the output as finished advice, we used its source tags to double-check a few nuances against the original READMEs.
 
-The package names mattered: `deepseekbot` and `ds-bot` belong to different projects, and neither is an official DeepSeek product. The READMEs described how collaboration was designed, but could not tell us which tool would save more time in practice. Local memory storage also did not mean that relevant content would stay on the machine when sent to a remote model.
+First, package names matter: `deepseekbot` and `ds-bot` belong to different maintainers, and neither is an official DeepSeek product. Second, while the READMEs explain how each author designed group collaboration, documentation alone can't tell you which workflow will feel faster in daily use. Finally, keeping memory files on your local disk doesn't prevent relevant context from being sent over the wire when calling a cloud model.
 
-Checking these points gave us a useful list of findings and things to investigate next. You can [read the original Chinese reply](/task-evidence/2026-10-11/briefing-original.txt).
+Verifying those points turned the raw draft into a solid checklist of what we knew and what we still needed to test. You can [read the original Chinese reply here](/task-evidence/2026-10-11/briefing-original.txt).
 
-Length was the clearest problem. Our roughly 700-character request produced 1,672 characters. Later, we tried a shorter version with DeepSeek V4 Flash through OpenCode Go: a maximum of 200 characters produced 264. Those counts include Latin text, punctuation and line breaks. A short briefing still needed a human editing pass.
+Brevity was the main thing the model struggled with. Asking for roughly 700 characters gave us a 1,672-character draft. Even when we followed up using DeepSeek V4 Flash via OpenCode Go and asked for a strict 200-character cap, the reply came back at 264 characters (including Latin text, punctuation, and line breaks). If you want a tight executive summary, plan on doing a quick human edit at the end.
 
 <figure class="evidence-figure" id="briefing-result">
 <div class="evidence-heading"><span class="evidence-kicker">THE DRAFT · 02</span><strong>A second attempt at a shorter briefing</strong></div>
@@ -72,23 +72,23 @@ Length was the clearest problem. Our roughly 700-character request produced 1,67
 <figcaption>The shorter reply is shown in its original Chinese. <a href="/task-evidence/2026-10-11/briefing-go.txt">Read the full text</a>.</figcaption>
 </figure>
 
-## Edit toward the next decision
+## Edit toward your next decision
 
-After combining repeated explanations, we kept this summary. It is our edited version, translated into English:
+After trimming the repetition, we distilled the draft into this short takeaway (translated from our edited Chinese note):
 
-> Check the maintainer and package first: BotHarness’s DeepSeekBot (deepseekbot) and FeiZhuLulu’s DS Bot (ds-bot) are independent projects, neither official DeepSeek products. The former describes memory, groups and task delegation; the latter emphasizes group coordination. These documents do not establish practical efficiency or cost, so try a small task of your own next. When using a remote model, consider what content will be sent with its requests.
+> Check the maintainer and package name first: BotHarness's DeepSeekBot (`deepseekbot`) and FeiZhuLulu's DS Bot (`ds-bot`) are separate community projects, and neither is an official DeepSeek product. DeepSeekBot focuses on Git memory, groups, and task delegation, while DS Bot centers on group coordination. Since READMEs alone can't tell you real-world speed or cost, test them on a small task of your own—and remember that calling a remote model still sends relevant context over the network.
 
-We would treat the first reply as a starting point for discussion. The Bot organizes the material; we decide what to keep and what to ask next. If you want a weekly briefing, try this editing loop first. Collecting new sources and sending scheduled updates need separate trials.
+The biggest takeaway from this first run is to treat an agent's initial draft as a starting point for discussion. Let the Bot gather the threads and cite the passages, then step in to decide what holds up and what to ask next. Once you're comfortable with that loop, you can experiment with automated source gathering or scheduled briefings.
 
-Start with the [installation guide](/en/docs/installation/), or try a coding task next with [our experience adding tests to one function](/en/blog/agent-unit-test-handoff/).
+Ready to try it yourself? Start with the [installation guide](/en/docs/installation/), or see how the agent handled a coding task in [our walkthrough on adding unit tests to a function](/en/blog/agent-unit-test-handoff/).
 
 <details class="evidence-detail"><summary>Run details and original records</summary>
 
-We used the [DeepSeekBot v1.2.0 source release](https://github.com/BotHarness/DeepSeekBot/commit/271e056aecd7f10bd71128a78d2ac9acbea898ea) with DSH 0.2.0-rc.1 on Windows, without desktop or browser operation components. Input documents came from the fixed versions linked above.
+We ran the [DeepSeekBot v1.2.0 source release](https://github.com/BotHarness/DeepSeekBot/commit/271e056aecd7f10bd71128a78d2ac9acbea898ea) on Windows with DSH 0.2.0-rc.1, without desktop or browser automation components, using the fixed document versions linked above.
 
-The first reply used `deepseek-official/deepseek-flash`; the shorter attempt used `opencode-go/deepseek-v4-flash` with the [Windows launcher fix](https://github.com/BotHarness/DeepSeekBot/pull/1410). Both returned private replies, without scheduling work or updating memory. Character counts use the original strings’ UTF-16 lengths.
+The initial draft used `deepseek-official/deepseek-flash`, while the shorter follow-up used `opencode-go/deepseek-v4-flash` with the [Windows launcher fix](https://github.com/BotHarness/DeepSeekBot/pull/1410). Both runs returned replies in a private chat without scheduling tasks or writing to persistent memory.
 
-The briefing, test-writing task and diagnostics together made 22 DeepSeek API requests, at an estimated US$0.0197. This estimate does not include OpenCode Go. Self-hosting also requires maintaining the environment and your model quota.
+Across the briefing task, the unit-test task, and troubleshooting, we made 22 DeepSeek API requests at an estimated cost of US$0.0197 (excluding OpenCode Go usage). Self-hosting also means maintaining your own runtime environment and model quota.
 
 [Full run record](/task-evidence/2026-10-11/evidence.json) · [Image sources](/blog-figures/first-task/provenance.json)
 
