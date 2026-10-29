@@ -133,7 +133,13 @@ the canonical domain: canonical links, share cards, the sitemap and `SITE` in `v
 `scripts/docs.ts` and `scripts/changelog.ts` use it. `www.tobs.app`, `deepseekbot.app`, `www.deepseekbot.app`, `deepseekbot.dev`,
 `www.deepseekbot.dev` and the original `deepseekbot.botharness.ai` stay bound as custom domains and
 301 to the same path on tobs.app through the small Worker in `worker/index.ts` (it runs before
-the assets; preview URLs are served directly). The Marketplace API and the analytics ingest proxy
+the assets; preview URLs are served directly). It also renders the Bot Marketplace for search engines: every view
+has a path (`/market`, `/market/bot/<id>`, `/market/picks[/<YYYY-MM-DD>]`, `/market/hot|new|rising`,
+and the same under `/en/`), and `worker/market.ts` fills the built market page with that view's
+title, description, canonical and hreflang links, JSON-LD and readable text from the Marketplace API
+(edge-cached for five minutes) before the page's script takes over. Older `?bot=`, `?digest=`,
+`?picks=past` and `?section=` links 301 to their paths, a missing Bot or Digest is a `noindex` 404,
+and `/sitemap-market.xml` (listed in `robots.txt`) covers every Bot and Digest in both languages. The Marketplace API and the analytics ingest proxy
 (BotHarness `packages/market`, `packages/ingest`) must allow the site's origin for CORS.
 
 Missing pages and files return HTTP 404 (`assets.not_found_handling: "none"`). The site uses

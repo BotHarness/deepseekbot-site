@@ -70,7 +70,12 @@ function siteCharacters(): string {
 function pixelAssets(): Plugin {
   return {
     name: 'deepseekbot-pixel-assets',
+    // Marketplace views have their own paths; in production the Worker serves them the page
+    configurePreviewServer(server) {
+      server.middlewares.use(marketShell);
+    },
     configureServer(server) {
+      server.middlewares.use(marketShell);
       server.middlewares.use(FONT_URL, (_req, res) => {
         res.setHeader('Content-Type', 'font/woff2');
         res.end(fontFile());
@@ -95,6 +100,13 @@ function pixelAssets(): Plugin {
         });
     },
   };
+}
+
+function marketShell(req: { url?: string }, _res: unknown, next: () => void) {
+  const [path = '', query] = (req.url ?? '').split('?');
+  if (/^(?:\/en)?\/market\/[^.]+$/.test(path))
+    req.url = `${path.startsWith('/en/') ? '/en/market.html' : '/market.html'}${query ? `?${query}` : ''}`;
+  next();
 }
 
 const sitemap = () => `<?xml version="1.0" encoding="UTF-8"?>

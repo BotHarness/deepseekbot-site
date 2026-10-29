@@ -10,6 +10,7 @@ import {
   type FeatureDemoCopy,
 } from './demoCopy';
 import { QQ_GROUP } from './communityLinks';
+import { MARKET_LABELS } from './marketRoutes';
 import { VERSION, DESKTOP_PACKAGE, DSH_VERSION } from './installRelease';
 export { QQ_GROUP };
 
@@ -214,7 +215,7 @@ export interface Copy {
       seePast: string;
       noPast: string;
       digestMissing: string;
-      sections: { hot: string; new: string; rising: string };
+      sections: { readonly hot: string; readonly new: string; readonly rising: string };
       seeAll: string;
       sectionEmpty: string;
       allBots: string;
@@ -553,7 +554,7 @@ const zh: Copy = {
   },
   market: {
     pageTitle: '市场 · Tobs',
-    kicker: '市场',
+    kicker: MARKET_LABELS.zh.kicker,
     title: '找一个现成的 Bot',
     lead: '这里收录了大家放在公开 GitHub 仓库里的 Bot。在 Tobs 里安装后，它会成为一个新的 Bot，带着作者写好的 Memory。',
     shelvesLabel: '市场分类',
@@ -580,8 +581,8 @@ const zh: Copy = {
       docs: '分享 Bot 教程：发布前检查、一键复制给 Bot 的提示词、名称和头像设置',
     },
     open: '查看 {name} 详情',
-    back: '← 返回市场',
-    github: '在 GitHub 查看',
+    back: MARKET_LABELS.zh.back,
+    github: MARKET_LABELS.zh.github,
     stars: '★ {count}',
     updated: '更新于 {date}',
     notFound: '这个 Bot 已不在市场中。',
@@ -598,16 +599,16 @@ const zh: Copy = {
     commit: '最新提交 {sha} · {date}',
     getApp: '还没装 Tobs？',
     discover: {
-      dailyPicks: '每日精选',
+      dailyPicks: MARKET_LABELS.zh.dailyPicks,
       read: '阅读每日精选：{title}',
-      pastPicks: '往期精选',
+      pastPicks: MARKET_LABELS.zh.pastPicks,
       seePast: '查看往期精选',
       noPast: '还没有往期精选。',
       digestMissing: '这期精选不存在。',
-      sections: { hot: '热门', new: '新上架', rising: '上升最快' },
+      sections: MARKET_LABELS.zh.sections,
       seeAll: '查看全部',
       sectionEmpty: '这里暂时还没有 Bot。',
-      allBots: '全部 Bot',
+      allBots: MARKET_LABELS.zh.allBots,
       installs: '↓ {count}',
       installsLabel: '{count} 次安装',
     },
@@ -995,7 +996,7 @@ const en: Copy = {
   },
   market: {
     pageTitle: 'Bot Marketplace · Tobs',
-    kicker: 'Marketplace',
+    kicker: MARKET_LABELS.en.kicker,
     title: 'Find a ready-made Bot',
     lead: 'Bots that people share as public GitHub repositories. Install one in Tobs and it becomes a new Bot with the Memory its author wrote.',
     shelvesLabel: 'Marketplace shelves',
@@ -1022,8 +1023,8 @@ const en: Copy = {
       docs: 'Share a Bot: checks before publishing, a prompt to paste to your Bot, name and avatar',
     },
     open: 'Open {name}',
-    back: '← Back to the Marketplace',
-    github: 'View on GitHub',
+    back: MARKET_LABELS.en.back,
+    github: MARKET_LABELS.en.github,
     stars: '★ {count}',
     updated: 'Updated {date}',
     notFound: 'This Bot is no longer in the Marketplace.',
@@ -1040,16 +1041,16 @@ const en: Copy = {
     commit: 'Latest commit {sha} · {date}',
     getApp: 'Don’t have Tobs yet?',
     discover: {
-      dailyPicks: 'Daily picks',
+      dailyPicks: MARKET_LABELS.en.dailyPicks,
       read: 'Read the daily picks: {title}',
-      pastPicks: 'Past picks',
+      pastPicks: MARKET_LABELS.en.pastPicks,
       seePast: 'See past picks',
       noPast: 'No past picks yet.',
       digestMissing: 'This edition of the daily picks does not exist.',
-      sections: { hot: 'Hot', new: 'New', rising: 'Rising' },
+      sections: MARKET_LABELS.en.sections,
       seeAll: 'See all',
       sectionEmpty: 'No Bots here yet.',
-      allBots: 'All Bots',
+      allBots: MARKET_LABELS.en.allBots,
       installs: '↓ {count}',
       installsLabel: '{count} installs',
     },

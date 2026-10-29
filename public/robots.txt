@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://tobs.app/sitemap.xml
+Sitemap: https://tobs.app/sitemap-market.xml

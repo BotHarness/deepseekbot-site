@@ -1,3 +1,5 @@
+import { MARKET_SITEMAP_PATH, marketPage, marketSitemap } from './market.ts';
+
 const CANONICAL_HOST = 'tobs.app';
 const NAVER_VERIFICATION_PATH = '/naver2c42ccd37d36f1ee05627e66c5827ac4.html';
 const REDIRECT_HOSTS: ReadonlySet<string> = new Set([
@@ -73,6 +75,12 @@ export default {
       url.pathname = url.pathname.slice(0, -'.html'.length);
       return env.ASSETS.fetch(new Request(url, request));
     }
+    if (url.pathname === MARKET_SITEMAP_PATH && ['GET', 'HEAD'].includes(request.method))
+      return marketSitemap();
+    if (/^(?:\/en)?\/market(?:\/|$)/.test(url.pathname))
+      return marketPage(request, url, env.ASSETS).then(
+        (response) => response ?? env.ASSETS.fetch(request),
+      );
     return env.ASSETS.fetch(request);
   },
 };

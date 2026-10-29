@@ -225,20 +225,21 @@ test('HTTP requests on the canonical product host permanently redirect to HTTPS'
   }
 });
 
+// the Marketplace's own rendering is covered in market-worker.test.mjs
 test('tobs.app, preview URLs and local dev are served from the assets', async () => {
   for (const url of [
-    'https://tobs.app/market',
-    'https://abc123-deepseekbot-site.example.workers.dev/market',
-    'http://localhost:8787/market',
+    'https://tobs.app/avatar',
+    'https://abc123-deepseekbot-site.example.workers.dev/avatar',
+    'http://localhost:8787/avatar',
   ]) {
     const response = await worker.fetch(new Request(url), { ASSETS: assets });
     assert.equal(response.status, 200);
-    assert.equal(await response.text(), 'asset /market');
+    assert.equal(await response.text(), 'asset /avatar');
   }
 });
 
 test('device tunnel subdomains are outside website redirect ownership', async () => {
-  const response = await worker.fetch(new Request('https://device.deepseekbot.dev/market'), {
+  const response = await worker.fetch(new Request('https://device.deepseekbot.dev/avatar'), {
     ASSETS: assets,
   });
   assert.equal(response.status, 200);

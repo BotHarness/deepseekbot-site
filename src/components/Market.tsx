@@ -27,6 +27,7 @@ import {
   type MarketplaceEntry,
   type Sort,
 } from '../marketApi';
+import { marketBase, marketHref } from '../marketRoutes';
 import { pixelTileSvg } from '../pixelTile';
 import { Command } from './Install';
 
@@ -151,7 +152,7 @@ export function BotCard({
   return (
     <a
       className="bot-card frame"
-      href={`?bot=${encodeURIComponent(bot.id)}`}
+      href={marketHref(lang, { kind: 'bot', id: bot.id })}
       aria-label={fill(t.open, { name: botName(bot) })}
       onClick={(event) => {
         if (!plainClick(event)) return;
@@ -421,7 +422,7 @@ export function MarketDetail({
     <div className="market-detail">
       <a
         className="market-back"
-        href="?"
+        href={marketBase(lang)}
         onClick={(event) => {
           event.preventDefault();
           onBack();
