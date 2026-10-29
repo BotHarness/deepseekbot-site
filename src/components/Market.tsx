@@ -3,8 +3,15 @@ import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/Segme
 import { TextInput } from '@astryxdesign/core/TextInput';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { isPixelBannerRecipe, pixelBannerPixels } from '@botharness/pixel-banner';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { isPixelAvatarRecipe } from '@botharness/pixel-avatar';
+import {
+  BANNER_HEIGHT,
+  BANNER_WIDTH,
+  isPixelBannerRecipe,
+  pixelBannerPixels,
+  seededBannerRecipe,
+} from '@botharness/pixel-banner';
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import { track } from '../analytics';
 import type { Copy, Lang } from '../content';
 import { recipeFor } from '../mascot';
@@ -12,7 +19,10 @@ import {
   getBot,
   listBots,
   listTopics,
+  MARKET_ORIGIN,
   MarketError,
+  type MarketplaceAvatar,
+  type MarketplaceBanner,
   type MarketplaceDetail,
   type MarketplaceEntry,
   type Sort,
@@ -20,40 +30,86 @@ import {
 import { pixelTileSvg } from '../pixelTile';
 import { Command } from './Install';
 
-const fill = (template: string, values: Record<string, string | number>) =>
+export const fill = (template: string, values: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ''));
 
 const dateFormat = (lang: Lang) =>
   new Intl.DateTimeFormat(lang === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'medium' });
 
-const botName = (bot: MarketplaceEntry) => bot.displayName ?? bot.name;
+export const botName = (bot: MarketplaceEntry) => bot.displayName ?? bot.name;
 
-function BotFace({ bot, size }: { bot: MarketplaceEntry; size: number }) {
+// Author art is shown only from GitHub's raw files or the Marketplace itself.
+const artUrl = (url: string) =>
+  url.startsWith('https://raw.githubusercontent.com/') || url.startsWith(`${MARKET_ORIGIN}/`)
+    ? url
+    : null;
+
+// The author's avatar recipe or image when bot.json sets one, else the face seeded from `seed`.
+export function BotFace({
+  avatar,
+  seed,
+  size,
+}: {
+  avatar: MarketplaceAvatar | null | undefined;
+  seed: string;
+  size: number;
+}) {
+  const recipe =
+    avatar && 'recipe' in avatar && isPixelAvatarRecipe(avatar.recipe) ? avatar.recipe : null;
+  const image = avatar && 'image' in avatar ? artUrl(avatar.image) : null;
+  const [failed, setFailed] = useState<string | null>(null);
   const svg = useMemo(
     () =>
-      pixelTileSvg(recipeFor(bot.fullName)).replace(
-        'width="512" height="512"',
-        `width="${size}" height="${size}"`,
-      ),
-    [bot.fullName, size],
+      image && image !== failed
+        ? null
+        : pixelTileSvg(recipe ?? recipeFor(seed)).replace(
+            'width="512" height="512"',
+            `width="${size}" height="${size}"`,
+          ),
+    [recipe, seed, size, image, failed],
   );
-  return <span className="bot-face" aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg }} />;
+  if (svg === null && image)
+    return (
+      <span className="bot-face" aria-hidden="true">
+        <img
+          src={image}
+          alt=""
+          width={size}
+          height={size}
+          loading="lazy"
+          decoding="async"
+          onError={() => setFailed(image)}
+        />
+      </span>
+    );
+  return (
+    <span className="bot-face" aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg ?? '' }} />
+  );
 }
 
 const botBio = (bot: MarketplaceEntry) => bot.bio ?? bot.description;
 
 // A pixel-scene banner is drawn here from its recipe; an uploaded one is the repository's
-// .botharness/banner.png. Bots without one get the neutral strip.
-function BotBanner({ bot, className }: { bot: MarketplaceEntry; className: string }) {
+// .botharness/banner.png. Bots without one get the neutral strip, or with `seed` the scene
+// that name always draws, as the app's covers and posters do.
+export function BotBanner({
+  banner,
+  className,
+  seed,
+}: {
+  banner: MarketplaceBanner | null | undefined;
+  className: string;
+  seed?: string;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const recipe = bot.banner && 'recipe' in bot.banner ? bot.banner.recipe : null;
+  const recipe =
+    banner && 'recipe' in banner
+      ? banner.recipe
+      : !banner && seed !== undefined
+        ? seededBannerRecipe(seed)
+        : null;
   const [failed, setFailed] = useState<string | null>(null);
-  const uploaded =
-    bot.banner &&
-    'image' in bot.banner &&
-    bot.banner.image.startsWith('https://raw.githubusercontent.com/')
-      ? bot.banner.image
-      : null;
+  const uploaded = banner && 'image' in banner ? artUrl(banner.image) : null;
   const image = uploaded !== failed ? uploaded : null;
   useEffect(() => {
     const context = canvas.current?.getContext('2d');
@@ -67,11 +123,67 @@ function BotBanner({ bot, className }: { bot: MarketplaceEntry; className: strin
       aria-hidden="true"
       data-banner={recipe ? 'scene' : image ? 'image' : 'none'}
     >
-      {recipe ? <canvas ref={canvas} width={150} height={50} /> : null}
+      {recipe ? <canvas ref={canvas} width={BANNER_WIDTH} height={BANNER_HEIGHT} /> : null}
       {image ? (
         <img src={image} alt="" loading="lazy" decoding="async" onError={() => setFailed(image)} />
       ) : null}
     </span>
+  );
+}
+
+// Plain clicks open the Bot in place; modified clicks keep the link's own behavior.
+export const plainClick = (event: MouseEvent) =>
+  !(event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0);
+
+export function BotCard({
+  bot,
+  copy,
+  lang,
+  onOpen,
+}: {
+  bot: MarketplaceEntry;
+  copy: Copy;
+  lang: Lang;
+  onOpen: (bot: MarketplaceEntry) => void;
+}) {
+  const t = copy.market;
+  const dates = dateFormat(lang);
+  return (
+    <a
+      className="bot-card frame"
+      href={`?bot=${encodeURIComponent(bot.id)}`}
+      aria-label={fill(t.open, { name: botName(bot) })}
+      onClick={(event) => {
+        if (!plainClick(event)) return;
+        event.preventDefault();
+        onOpen(bot);
+      }}
+    >
+      <BotBanner banner={bot.banner} className="bot-card-banner" />
+      <span className="bot-card-head">
+        <BotFace avatar={bot.avatar} seed={bot.fullName} size={72} />
+        <span className="bot-card-id">
+          <span className="bot-card-name">{botName(bot)}</span>
+          <span className="bot-card-repo" title={bot.fullName}>
+            {bot.fullName}
+          </span>
+        </span>
+      </span>
+      {botBio(bot) ? (
+        <span className="bot-card-desc" title={bot.bioGenerated ? t.generatedBio : undefined}>
+          {botBio(bot)}
+        </span>
+      ) : null}
+      <span className="bot-card-meta">
+        {bot.roles.map((role) => (
+          <span key={role} className="tag">
+            {role}
+          </span>
+        ))}
+        <span>{fill(t.stars, { count: bot.stars })}</span>
+        <span>{fill(t.updated, { date: dates.format(new Date(bot.pushedAt)) })}</span>
+      </span>
+    </a>
   );
 }
 
@@ -84,11 +196,14 @@ export function MarketList({
   copy,
   lang,
   hidden,
+  discover,
   onOpen,
 }: {
   copy: Copy;
   lang: Lang;
   hidden: boolean;
+  // the Daily Picks and ranking rows, shown while the list is neither searched nor filtered
+  discover?: ReactNode;
   onOpen: (bot: MarketplaceEntry) => void;
 }) {
   const t = copy.market;
@@ -99,7 +214,6 @@ export function MarketList({
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [state, setState] = useState<ListState>({ status: 'loading' });
   const [attempt, setAttempt] = useState(0);
-  const dates = dateFormat(lang);
 
   useEffect(() => {
     const abort = new AbortController();
@@ -189,6 +303,13 @@ export function MarketList({
         {q ? <p className="market-hint">{t.relevance}</p> : null}
       </div>
 
+      {filtered ? null : (
+        <>
+          {discover}
+          <h2 className="market-row-title market-all-title">{t.discover.allBots}</h2>
+        </>
+      )}
+
       {state.status === 'loading' ? (
         <p className="market-status" aria-live="polite">
           {t.loading}
@@ -205,46 +326,15 @@ export function MarketList({
           <ul className="bot-grid">
             {state.bots.map((bot) => (
               <li key={bot.id}>
-                <a
-                  className="bot-card frame"
-                  href={`?bot=${encodeURIComponent(bot.id)}`}
-                  aria-label={fill(t.open, { name: botName(bot) })}
-                  onClick={(event) => {
-                    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0)
-                      return;
-                    event.preventDefault();
-                    track('marketplace:bot_open', { bot: bot.id });
-                    onOpen(bot);
+                <BotCard
+                  bot={bot}
+                  copy={copy}
+                  lang={lang}
+                  onOpen={(opened) => {
+                    track('marketplace:bot_open', { bot: opened.id });
+                    onOpen(opened);
                   }}
-                >
-                  <BotBanner bot={bot} className="bot-card-banner" />
-                  <span className="bot-card-head">
-                    <BotFace bot={bot} size={72} />
-                    <span className="bot-card-id">
-                      <span className="bot-card-name">{botName(bot)}</span>
-                      <span className="bot-card-repo" title={bot.fullName}>
-                        {bot.fullName}
-                      </span>
-                    </span>
-                  </span>
-                  {botBio(bot) ? (
-                    <span
-                      className="bot-card-desc"
-                      title={bot.bioGenerated ? t.generatedBio : undefined}
-                    >
-                      {botBio(bot)}
-                    </span>
-                  ) : null}
-                  <span className="bot-card-meta">
-                    {bot.roles.map((role) => (
-                      <span key={role} className="tag">
-                        {role}
-                      </span>
-                    ))}
-                    <span>{fill(t.stars, { count: bot.stars })}</span>
-                    <span>{fill(t.updated, { date: dates.format(new Date(bot.pushedAt)) })}</span>
-                  </span>
-                </a>
+                />
               </li>
             ))}
           </ul>
@@ -353,9 +443,9 @@ export function MarketDetail({
       ) : (
         <div className="detail-layout">
           <article className="detail-main">
-            <BotBanner bot={bot} className="detail-banner" />
+            <BotBanner banner={bot.banner} className="detail-banner" />
             <header className="detail-head" data-banner={bot.banner ? 'shown' : 'none'}>
-              <BotFace bot={bot} size={96} />
+              <BotFace avatar={bot.avatar} seed={bot.fullName} size={96} />
               <div>
                 <h1>{botName(bot)}</h1>
                 <p className="bot-card-repo">{bot.fullName}</p>

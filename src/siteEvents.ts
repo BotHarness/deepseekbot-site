@@ -34,6 +34,8 @@ export const SITE_EVENTS = [
   'install:setup_prompt_copy',
   'install:tab_select',
   'marketplace:bot_open',
+  'marketplace:digest_archive_open',
+  'marketplace:digest_open',
   'marketplace:install_button_click',
   'mobile_beta:install_link_click',
   'mobile_beta:menu_open',

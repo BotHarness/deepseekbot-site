@@ -206,6 +206,21 @@ export interface Copy {
     risk: string;
     commit: string;
     getApp: string;
+    // the discovery rows above the full list, matching the Tobs app's Bot Marketplace
+    discover: {
+      dailyPicks: string;
+      read: string;
+      pastPicks: string;
+      seePast: string;
+      noPast: string;
+      digestMissing: string;
+      sections: { hot: string; new: string; rising: string };
+      seeAll: string;
+      sectionEmpty: string;
+      allBots: string;
+      installs: string;
+      installsLabel: string;
+    };
   };
   playground: {
     kicker: string;
@@ -582,6 +597,20 @@ const zh: Copy = {
     risk: '这是第三方仓库：它的文件会成为新 Bot 的 Memory，可能包含有害内容或会被 Bot 执行的指令。请只安装你信任的仓库。',
     commit: '最新提交 {sha} · {date}',
     getApp: '还没装 Tobs？',
+    discover: {
+      dailyPicks: '每日精选',
+      read: '阅读每日精选：{title}',
+      pastPicks: '往期精选',
+      seePast: '查看往期精选',
+      noPast: '还没有往期精选。',
+      digestMissing: '这期精选不存在。',
+      sections: { hot: '热门', new: '新上架', rising: '上升最快' },
+      seeAll: '查看全部',
+      sectionEmpty: '这里暂时还没有 Bot。',
+      allBots: '全部 Bot',
+      installs: '↓ {count}',
+      installsLabel: '{count} 次安装',
+    },
   },
   playground: {
     kicker: 'BotPixel',
@@ -1010,6 +1039,20 @@ const en: Copy = {
     risk: 'This is a third-party repository: its files become the new Bot’s Memory and may contain harmful content or instructions the Bot will follow. Install only repositories you trust.',
     commit: 'Latest commit {sha} · {date}',
     getApp: 'Don’t have Tobs yet?',
+    discover: {
+      dailyPicks: 'Daily picks',
+      read: 'Read the daily picks: {title}',
+      pastPicks: 'Past picks',
+      seePast: 'See past picks',
+      noPast: 'No past picks yet.',
+      digestMissing: 'This edition of the daily picks does not exist.',
+      sections: { hot: 'Hot', new: 'New', rising: 'Rising' },
+      seeAll: 'See all',
+      sectionEmpty: 'No Bots here yet.',
+      allBots: 'All Bots',
+      installs: '↓ {count}',
+      installsLabel: '{count} installs',
+    },
   },
   playground: {
     kicker: 'BotPixel',
