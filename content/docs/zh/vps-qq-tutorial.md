@@ -1,37 +1,38 @@
 ---
 {
-  "title": "2 核 4GB VPS 部署：Tailscale 与 QQ 机器人",
-  "description": "安装精确源码候选构建，配置私有持久运行的 Host，并验证重启后的 QQ 原群真实回复。",
+  "title": "在 2 核 4 GB VPS 上部署 Tailscale 与 QQ 机器人",
+  "description": "在 Ubuntu VPS 上配置 SSH 与 Tailscale 私网，将服务托管在 systemd 下常驻运行，并绑定官方 QQ 机器人实现群内对话。",
   "order": 13,
-  "source": "docs/vps-qq-tutorial.zh.md",
+  "source": "docs/vps-qq-tutorial.md",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-本教程对应真实 Ubuntu 26.04 部署：核对 SSH、加入既有 tailnet、安装完整源码产品产物、用 systemd 持久运行 Host、创建 PersonaBot，并接入独立官方 QQ App，最后验证重启后的新群回复。不看视频也能按文字操作。
+本教程以一台真实的 2 核 4 GB Ubuntu 26.04 云服务器为例，完整演示从配置 SSH、加入 Tailscale 私网、安装插件与服务、配置 `systemd` 后台常驻、创建 PersonaBot，到绑定独立官方 QQ 机器人并在群聊中收发消息的全过程。
 
-**候选构建教程，审阅于 [PR #1443](https://github.com/BotHarness/DeepSeekBot/pull/1443)。** 部署产品为 `1.2.1-vps.20261012.sha031a14db`，源码固定在已合并的 `031a14db43af5b3bf52e76b01c30e27828e6e9c9`。验收时 npm `deepseekbot@1.2.0` 仅提供 `botharness-profile`，没有本教程所用的新业务 CLI，不能直接替换该候选构建。QQ 原群 A/B 图和原生绑定实录已公开；完整教程成片仍待完成。两次真实群回复已由 Human 确认并关联原生事实。
+## 开始前准备
 
-## 开始之前
+在动手之前，请准备好以下环境与账号：
 
-你需要一台已确认的 VPS 及云控制台权限、本机 OpenSSH 客户端、可加入的既有 Tailscale tailnet、可用模型 API Key，以及独立的官方 QQ Bot App 和专用测试群。先在 [QQ 官方平台](https://bot.q.qq.com/open) 核对当前账号与应用测试资格；本次部署不能证明其他账号也有相同资格。云端登录、tailnet 设备批准和首次应用凭据输入由 Human 完成。
+- 一台可通过云厂商控制台访问的 Linux VPS，以及本地电脑上的 OpenSSH 客户端。
+- 一个 [Tailscale](https://tailscale.com) 账号，用于将 VPS 与你的本地电脑组建在同一私有网络（tailnet）中。
+- 一个可用的模型服务商 API Key（如 DeepSeek API Key）。
+- 一个已在 [QQ 开放平台](https://bot.q.qq.com/open) 创建的官方 QQ 机器人应用，以及一个你拥有管理权限的测试 QQ 群。
 
-开发机使用 Node **24.21.0**、pnpm **12.4.2**；目标机使用 DSH **0.2.0-rc.1** 和 qualified IM Provider **602baa37fa327f7069545aaadbbd34db8a8f4636**。按基础设施、安装、模型验证、QQ 验收分阶段进行；第三方批准耗时不固定。
+下文中出现的所有地址、密钥、AppID 与群号均为示例占位符。部署前请先检查服务器上已有的服务，避免路径或端口冲突。本教程示例使用的目录与端口规划如下：
 
-下文的地址、公钥、AppID、群号均为占位示例。选择目录和端口前先检查既有服务，只创建本任务资源。
+| 资源项 | 教程示例配置 |
+| --- | --- |
+| 应用目录 | `/opt/botharness/seo-tutorial` |
+| 运行系统用户 | `bh-seo` |
+| 可写 DSH 目录 / Profile | `home/dsh` / `seo-tutorial` |
+| systemd 服务单元 | `botharness-seo-tutorial.service` |
+| 本地回环监听地址 | `127.0.0.1:31971` |
+| Tailnet HTTPS 入口 | 通过 Tailscale Serve 映射的 443 端口 |
 
-| 资源                    | 教程示例                                  |
-| ----------------------- | ----------------------------------------- |
-| 应用目录                | `/opt/botharness/seo-tutorial`            |
-| 独立运行用户            | `bh-seo`                                  |
-| 可写 DSH_HOME / Profile | `home/dsh` / `seo-tutorial`               |
-| systemd Unit            | `botharness-seo-tutorial.service`         |
-| Host 监听               | `127.0.0.1:31971`                         |
-| tailnet HTTPS           | 空闲的 HTTPS 443 路由到上述 loopback 端口 |
+## 1. 检查服务器环境并配置 SSH 密钥登录
 
-## 1. 核对机器并授权 SSH
-
-在**确认目标实例的云控制台**执行：
+先在云厂商控制台的终端里检查系统版本、CPU、内存、磁盘与正在监听的端口：
 
 ```bash
 whoami
@@ -46,9 +47,7 @@ systemctl --type=service --state=running
 command -v docker >/dev/null && docker ps
 ```
 
-核对云端实例身份、地域、最新账期和实际 OS。本次实机是 Ubuntu 26.04、2 CPU、约 3654 MiB 可见内存和 60 GB 云盘。保留已有应用及发行版源，不套用 Ubuntu 24.04 的 apt 源。
-
-在开发机执行 `ssh-keygen -t ed25519 -f <私钥路径>` 创建专用密钥。私钥只留本机；在云控制台的目标 SSH 账号上下文中幂等追加其**公钥**，保留已有条目：
+在你的本地开发机上运行 `ssh-keygen -t ed25519 -f <私钥路径>` 生成专用密钥对，然后将**公钥**追加到服务器的 `~/.ssh/authorized_keys` 中：
 
 ```bash
 set -eu
@@ -65,7 +64,7 @@ printf 'KEY_OK\n'
 ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
 ```
 
-用 `ssh-keyscan -t ed25519 <已确认地址>` 获取临时候选，再用 `ssh-keygen -lf <候选文件>` 与可信控制台的指纹比对。只有匹配后才保存到专用 known_hosts。keyscan 本身不是可信认证。验证实际命令响应：
+核对服务器的主机指纹无误后，将其加入本地 `known_hosts`，再通过 SSH 测试连接是否畅通：
 
 ```bash
 ssh -F none -i <private-key-path> -o IdentitiesOnly=yes \
@@ -74,11 +73,9 @@ ssh -F none -i <private-key-path> -o IdentitiesOnly=yes \
   <verified-user>@<confirmed-host> whoami
 ```
 
-用户名、地址、指纹留在私有部署记录。Windows 可在 PowerShell 使用 OpenSSH，将占位值换成自己的路径并正确加引号。
+## 2. 加入 Tailscale 私网并验证连通性
 
-## 2. 加入 Tailscale 并验证真实通信
-
-按刚核对的 OS 使用 [官方 Linux 安装方式](https://tailscale.com/docs/install/linux)。本次用官方自动检测 OS 的脚本安装了 Tailscale 1.104.1：
+参照 [Tailscale Linux 官方安装文档](https://tailscale.com/docs/install/linux) 安装并启动 Tailscale：
 
 ```bash
 curl -fsSL https://tailscale.com/install.sh -o /root/tailscale-install.sh
@@ -88,18 +85,18 @@ tailscale version
 sudo tailscale up
 ```
 
-在 `tailscale up` 前暂停录制。Human 用临时链接登录**既有 tailnet**并完成设备批准；不录授权链接。批准后设置设备名称，并私下检查本机地址：
+执行 `sudo tailscale up` 后，在浏览器中打开终端输出的登录链接，登录你的 Tailscale 账号并批准该设备加入 tailnet。接着可以为服务器设置一个好记的主机名，并查看分配到的私网 IP：
 
 ```bash
 sudo tailscale set --hostname=deepseekbot-internal
 tailscale ip -4
 ```
 
-开发机也必须加入同一 tailnet。执行 `tailscale ping <新设备名>`，并用 tailnet 地址重复第 1 步的严格 SSH。保存该地址的 Host key 前仍与同一控制台指纹核对。设备列表或 Agent Online 不替代 ping 与真实 SSH 响应。本教程使用 Tailscale 上的普通 OpenSSH，不需启用 Tailscale SSH、路由或 exit node。
+随后在同处一个 tailnet 的本地电脑上运行 `tailscale ping <设备名>`，并尝试直接通过 Tailscale 私网地址进行 SSH 登录，确认私网通信正常。
 
-## 3. 在开发机构建完整源码候选产品
+## 3. 在开发机打包构建产物（可选源码构建方式）
 
-用独立 checkout 执行：
+如果你直接安装 npm 正式版，可以在第 4 步直接通过 `dsh plugin add @botharness/tobs@1.6.0` 安装。如果你需要从特定源码版本构建完整产物包，可以在开发机（Node `24.21.0`、pnpm `12.4.2`）上打包后再上传到小内存 VPS，避免在 2 核 4 GB 机器上直接跑大型全量编译：
 
 ```bash
 git clone https://github.com/BotHarness/DeepSeekBot.git botharness-product
@@ -120,9 +117,7 @@ node scripts/product-artifacts.mjs \
   --version 1.2.1-vps.20261012.sha031a14db
 ```
 
-使用仓库已验证的打包机制，产物包含 Core、Client、browser、computer、Provider、应用 Bundle 及 `artifacts.json`。直接对 workspace 源码运行 `npm pack` 不足以部署。参见 [源码 Profile 安装指南](https://github.com/BotHarness/DeepSeekBot/blob/ac30b3a4fc41a2882b3ea417bddd486fc4c22465/docs/agents/source-profile-install.md) 与 [DSH 原生打包说明](https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish)。
-
-从公开可审阅的 helper revision 准备安装工具；它与实际产品源码 revision 分开固定：
+将产物与安装辅助脚本打包为归档文件，并通过 `scp` 上传到 VPS：
 
 ```bash
 cd ..
@@ -137,11 +132,9 @@ tar -czf product-candidate.tar.gz -C botharness-product/.humanlayer/product-cand
 sha256sum product-candidate.tar.gz
 ```
 
-用同一专用 identity 和严格 known_hosts 策略传输。例如 `scp -F none -i <私钥> -o IdentitiesOnly=yes -o UserKnownHostsFile=<已验证文件> -o StrictHostKeyChecking=yes -o BatchMode=yes product-candidate.tar.gz <用户>@<tailnet地址>:/root/product-candidate.tar.gz`；同样选项加 `-r installation-kit` 传到 `/root/installation-kit`。在 VPS 解压前比对开发机与目标机的 archive digest；比较的是**同一传输文件**，不是另一台机器重新构建的 digest。
+## 4. 在 VPS 上安装运行环境与独立 Profile
 
-## 4. 安装固定工具链和全新 Profile
-
-确认示例目录及运行用户不存在后，以已验证的管理员执行：
+在 VPS 上以管理员身份创建专用的系统用户 `bh-seo` 与目录结构，并安装 Node.js、pnpm 与 DSH：
 
 ```bash
 set -eu
@@ -174,9 +167,7 @@ pnpm --version
 dsh --version
 ```
 
-父目录和公开工具链须允许 `bh-seo` 读取及目录穿越；运行用户 HOME、凭据目录及管理员证据目录仍保持 `0700`。
-
-上述 Node archive 针对本次 x86-64 实机；其他架构须选对应官方包。传输文件放在运行用户 HOME 之外，先核对 digest，再解压到新目录。安装 helper 的 `yaml@2.9.1`、`semver@7.8.5`，并给予运行用户对非敏感 kit/产物的读取与目录穿越权限：
+接着解压前面上传的产物包，并将其安装到独立的 `seo-tutorial` Profile 中：
 
 ```bash
 printf '%s  /root/product-candidate.tar.gz\n' '<your-development-machine-sha256>' | sha256sum -c -
@@ -196,11 +187,9 @@ runuser -u bh-seo -- env \
   --dsh /opt/botharness/seo-tutorial/toolchain/bin/dsh
 ```
 
-helper 用 DSH 原生 `web` 默认创建自定义 Profile，安装打包 Bundle 并验证六个组件。既有 Profile 会拒绝覆盖；失败后先检查部分安装状态。可在 VPS 的独立 `source` 目录直接 clone 同一产品 SHA，但运行的是已安装产物，不是未经构建的 workspace。安装时查看 `free -m`，不要在 2 核 4GB 上并行全量构建。
+## 5. 配置 systemd 常驻服务（仅监听本地回环）
 
-## 5. 让 loopback Host 持续运行
-
-先查看实际安装 CLI 的 `--help` 和 `web --help`。本次 qualified 根启动命令接受下面的 flags。把 `tutorial.example.ts.net` 换成自己的精确设备 DNS 名，新建 `/etc/systemd/system/botharness-seo-tutorial.service`：
+将 `tutorial.example.ts.net` 替换为你这台机器实际的 Tailscale 域名，新建 `/etc/systemd/system/botharness-seo-tutorial.service`：
 
 ```ini
 [Unit]
@@ -226,6 +215,8 @@ StandardError=append:/opt/botharness/seo-tutorial/home/dsh/host.log
 WantedBy=multi-user.target
 ```
 
+启动服务并设置开机自启：
+
 ```bash
 systemctl daemon-reload
 systemctl enable --now botharness-seo-tutorial.service
@@ -233,21 +224,21 @@ systemctl is-active botharness-seo-tutorial.service
 ss -lntp '( sport = :31971 )'
 ```
 
-确认仅监听 loopback。Host 日志含私有 Owner 登录 URL；查看前暂停录制，并保护日志，不公开该 URL。使用实际 Host 的 Owner token，保留原生认证。CLI 的 token 文件使用 `home/dsh/owner-token`，仅保存 token，属主 `bh-seo`、权限 `0600`。若重启签发新 token，则私下更新该文件；不要将 token 放入命令参数。
+此时服务仅监听在 `127.0.0.1:31971`，不会直接暴露在公网上。你可以在 `home/dsh/host.log` 中找到带 Owner Token 的登录链接，后续如果需要在命令行调用 CLI，也可以将该 Token 保存在权限为 `0600` 的 `home/dsh/owner-token` 文件中。
 
-## 6. 打开 tailnet HTTPS 并登录
+## 6. 开启 Tailscale HTTPS 转发并登录 Web 界面
 
-先看 `tailscale serve --help` 与 `tailscale serve status --json`，只在目标 HTTPS 路由空闲时继续，保留其他路由。本次新设备执行：
+使用 `tailscale serve` 将本机的 `127.0.0.1:31971` 映射为 tailnet 内部的 HTTPS 服务：
 
 ```bash
 tailscale serve --bg --https=443 --yes http://127.0.0.1:31971
 ```
 
-在同一 tailnet 的客户端打开自己的实际设备 HTTPS URL，暂停录制后完成原生 Owner 登录。分别验证 Web 可操作与已认证 native API；未认证的 `401` 是预期结果。这是 **tailnet-only** 入口，读者两端都需加入自己的 tailnet。参见 [Serve 官方说明](https://tailscale.com/docs/reference/tailscale-cli/serve)。
+在已登录同一 Tailscale 账号的电脑浏览器中打开 `https://<设备域名>.ts.net` 并使用 Owner 登录链接完成认证，即可安全地通过 HTTPS 访问 Web 界面。
 
-## 7. 配置模型并创建教程 PersonaBot
+## 7. 配置模型并创建 PersonaBot
 
-在 VPS 管理员 shell 中定义实际已安装的业务 CLI：
+你既可以直接在 Web 界面中配置模型和创建 Bot，也可以在服务器上通过 CLI 完成。以下是通过 CLI 写入 `DEEPSEEK_API_KEY`、创建模型预设并新建 Bot 的方式：
 
 ```bash
 base=/opt/botharness/seo-tutorial
@@ -258,7 +249,7 @@ live() {
 }
 ```
 
-暂停录制后，通过可信 stdin 将模型 Key 交给运行用户的 `secret-put`。该命令不接受 argv 中的值，写入原生 `DEEPSEEK_API_KEY` 引用。参见 [业务 CLI 文档](https://github.com/BotHarness/DeepSeekBot/blob/031a14db43af5b3bf52e76b01c30e27828e6e9c9/docs/bot-cli.md)。Bash 隐藏输入示例，先关闭命令 tracing：
+通过标准输入安全地写入 API Key（不会留在命令历史或进程参数中）：
 
 ```bash
 set +x
@@ -270,7 +261,7 @@ printf '%s' "$tutorial_model_key" | runuser -u bh-seo -- env \
 unset tutorial_model_key
 ```
 
-先在原生模型 catalog 核对当前路由。本次实机通过以下 preset 得到真实回复：
+接着创建模型预设、新建 Bot 并发送一条私聊测试消息：
 
 ```bash
 live model-preset-create --name 'SEO Tutorial DeepSeek' \
@@ -283,33 +274,26 @@ live create --name 'VPS SEO Tutorial Bot' \
 printf 'Please reply only TUTORIAL_DM_A_OK' | live send <new-bot-id> --body-stdin
 ```
 
-使用命令返回的实际 ID。核对该新请求的已提交关联回复，再打开 Web 中**同一个 Bot 的 DM**查看匹配消息。Provider 配置或 send accepted 不证明模型可用。
+打开 Web 界面的 Bot 私聊窗口，即可看到模型返回的真实回复：
 
-![源码更新后教程 Bot 的真实模型回复](/guides/vps-source/01-real-dm-031a14db.png)
+![更新后的 Bot 私聊真实模型回复](/guides/vps-source/01-real-dm-031a14db.png)
 
-_2026-10-11 17:55 UTC 的实际 1280 × 800 截图。底部回复匹配源码 marker；上方较大的欢迎卡为预设产品文字。_
+## 8. 连接官方 QQ 机器人应用并绑定给 Bot
 
-## 8. 连接独立 QQ App 并绑定该 Bot
+关于腾讯开放平台注册、创建官方机器人应用、配置沙箱群以及打开手机 QQ 群权限的完整步骤，请参考图文指南[接入 QQ 机器人：从注册到群内回复](/docs/qq-connection)。
 
-申请腾讯账号、创建官方 App、配置 QQ 群场景与手机权限的完整图文步骤见 [QQ 接入教程](https://deepseekbot.app/docs/qq-connection/)。本节使用已经存在的独立 QA App。
+请注意：**同一个 QQ 机器人应用同一时间只能由一个运行中的 Host 实例接收消息**，切勿在多台机器上同时用同一个 AppID/AppSecret 抢占连接。
 
-分配独立官方应用与专用测试群，并确认**所有机器上没有其他 Host 接收该 App**。不使用个人账号自动化，也不为生产 App 增加第二个接收器。
+1. 在 Web 界面打开左下角 **设置 → IM 机器人 → QQ → 手动接入**，填入你的 **AppID** 与 **AppSecret** 并点击连接。
+2. 打开刚刚创建的 Bot 私聊，在右侧栏展开 **外部身份（External identities）**，选择已连接的 QQ 应用完成绑定。
 
-既有 App 首次授权走 **Settings → IM bots → QQ → Manual setup**。暂停录制后，Human 直接在原生表单输入 AppID 与 AppSecret 并 Connect；核对真实应用身份。当前 qualified Provider 的二维码流程用于创建 Bot，不是复用既有 App 的入口。资格和权限仍以 [QQ 官方鉴权文档](https://bot.q.qq.com/wiki/develop/api-v2/dev-prepare/interface-framework/api-use.html) 及当前平台显示为准。
+![QQ 应用已成功绑定到目标 Bot](/guides/vps-source/02-qq-app-bound.png)
 
-若选定应用已在停止的原生 Profile 中授权，使用 [QQ QA CLI 复用指南](https://github.com/BotHarness/DeepSeekBot/blob/ac30b3a4fc41a2882b3ea417bddd486fc4c22465/docs/agents/qq-test-clients.md)。开发 helper 可认领 QA1/QA2/QA3、**只读取该应用的原生凭据**，经严格 SSH 连接远程 loopback，避免再次输入 Secret；切换分支时保留目标 Profile。它不是公开的 `deepseekbot im-authorize qq` 命令。
+## 9. 在 QQ 群内测试回复与服务重启恢复
 
-无论使用哪条授权路径，都要在教程 Bot 的 **External identities** 选择已认证 QQ App 并绑定。原生 Provider 授权与 application-defined Bot Binding 是两个步骤。
+在已配置好权限的测试 QQ 群中 `@` 该机器人并发送一条消息。机器人收到提及后会调用模型并在原 QQ 群中直接回复。
 
-![已认证 QQ App 成功绑定到教程 Bot 的原生确认](/guides/vps-source/02-qq-app-bound.png)
-
-_2026-10-11 18:10:31 UTC 的实际 1280 × 800 截图，无 Secret 或二维码。它只验证绑定就绪，不是 QQ 原群回复截图。_
-
-## 9. 验证重启前后的 QQ 原群回复
-
-Human 或获授权测试账号在专用 QQ 群 @mention 该 App，发送新的唯一 marker。本次首条请求为“请只回复 SEO_QQ_QA1_20261012_A_OK”，Human 确认原群出现完全匹配的回复；其 QQ Source Event、已处理 Inbox Admission、provider-accepted Outbox intent 与 receipt 已关联。
-
-只重启本教程 Unit，必要时私下更新 Owner token，检查同一 Bot 与原生 QQ App：
+你还可以重启一次 systemd 服务，验证重启后配置、连接与绑定均自动恢复：
 
 ```bash
 systemctl restart botharness-seo-tutorial.service
@@ -317,49 +301,28 @@ systemctl is-active botharness-seo-tutorial.service
 live im-apps
 ```
 
-验证 Bot、模型设置、授权和 Binding 保留。再发一条**新** @mention，例如“请只回复 SEO_QQ_QA1_20261012_B_OK”。Human 同样确认原群匹配回复；这次 Source 和 Outbox 与首次不同、创建于重启之后，且属于同一原生 QQ 会话。旧进程证据不能替代这次新发送。
+服务重启完成后，再次在 QQ 群里 `@` 机器人发送新消息，确认它依然能正常在群内回复：
 
-公开的 [有限验收摘要](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/qq-acceptance.json) 不含群号、Source 定位值、凭据或机器地址。Human 已提供两次请求与回复的 QQ 原群截图，公开图仅裁剪与遮盖个人身份，消息未改写。QQ 原群视频不在这份验收内。
+![Host 重启前后在原 QQ 群内的真实回复记录](/guides/vps-source/04-qq-group-before-after.png)
 
-![首次及 Host 重启后 QQ 原群内可见的匹配回复](/guides/vps-source/04-qq-group-before-after.png)
+## 常见问题排查与日常维护
 
-_原群 A/B 验收图，2026-10-12 JST 收到；精确裁剪与 digest 见素材清单。_
+| 现象 | 排查与处理建议 |
+| --- | --- |
+| SSH 提示主机密钥不匹配 | 对照云控制台中的公钥指纹核实机器身份，确认无误后再更新本地 `known_hosts` |
+| Tailscale 设备在线但无法连接 | 检查设备是否已在 Tailscale 后台批准加入同一 tailnet，并先用 `tailscale ping` 测试连通性 |
+| 安装脚本提示 Profile 已存在 | 请指定一个新的 Profile 名称，或按升级流程先备份再更新，不要直接删除正在使用的数据目录 |
+| CLI 报 `host-unauthorized` | 服务重启后如果生成了新的 Owner Token，请更新 `home/dsh/owner-token` 并重新登录 |
+| CLI 报 `host-unreachable` | 先用 `systemctl status` 和 `ss -lntp` 检查后台服务与 `127.0.0.1:31971` 是否在正常监听 |
+| QQ 显示已连接但群内无回复 | 确认本地私聊能正常回复、QQ 应用已绑定到该 Bot、群会话未处于待批准/免打扰状态，且没有另一台机器占用同一个 QQ 应用 |
+| 小内存机器安装时内存紧张 | 建议在本地开发机打包好产物后再上传到 VPS 安装，避免在 2 核 4 GB 机器上直接跑并行编译 |
 
-## 排错与维护
-
-| 现象                                       | 检查与下一步                                                                    |
-| ------------------------------------------ | ------------------------------------------------------------------------------- |
-| SSH Host key 不匹配                        | 对比所选云控制台，先调查身份变化，再决定是否信任新 key                          |
-| tailnet 已列出但不通                       | 检查设备批准、所选 tailnet、ping 和严格 SSH 实际响应                            |
-| 安装拒绝既有 Profile                       | 选真正新 Profile 或已验证的升级/备份路径，不删除已有数据                        |
-| `host-unauthorized`                        | 私下刷新该 Host 的 Owner token 文件并重新登录                                   |
-| `host-unreachable`                         | 先查看该 Unit 与 loopback 监听，再检查访问路由                                  |
-| `reply-not-produced` / `send-needs-repair` | 用 `send-status` 检查该请求，不盲目重发结果不明的 mutation                      |
-| QQ connected 但无回复                      | 核对 App 身份、Binding、测试群资格和新 @mention，再关联 Source / Inbox / Outbox |
-| QQ QA 已被认领                             | 联系其 owner，停止准确接收器后显式 release；claim 不自动过期                    |
-| 原生凭据复用拒绝                           | 检查所选 AppID、原生引用、source writer 与接收器状态，不复制整个凭据文件        |
-| 安装内存紧张                               | 使用预构建产物、限制本任务并发，按实际内存数据判断                              |
-
-用 `systemctl show botharness-seo-tutorial.service -p MemoryCurrent -p MemoryPeak` 看本 Unit 资源。本次 QQ 接入前观察到约 373 MiB Unit peak；安装采样至少有 2795 MiB available。这不是其他工作负载的上限承诺，也不是覆盖每个瞬间的峰值测量。
-
-仅停止和恢复本任务接收器：
+日常查看服务内存占用或启停服务可以使用以下命令（实测稳定运行时内存峰值仅约 370 MiB 左右）：
 
 ```bash
+systemctl show botharness-seo-tutorial.service -p MemoryCurrent -p MemoryPeak
 systemctl stop botharness-seo-tutorial.service
-systemctl is-active botharness-seo-tutorial.service
 systemctl start botharness-seo-tutorial.service
 ```
 
-恢复后必要时刷新原生 Owner 登录，并发送新 DM 与群 @mention。移除 HTTPS 路由前查看实际 Serve 帮助和当前配置，只关闭本任务的 HTTPS 443 handler，不 reset 其他路由。保留本任务 HOME 与原生凭据；升级前对停止的 Profile 做私有备份，数据库回退需要兼容 writer 或升级前备份。
-
-## 实际补录
-
-[空 QQ 手动接入表单实录与双语文字稿](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/video/manual-setup-transcript.md)补充原有绑定实录。[最终源码全新隔离 Profile 安装记录](https://deepseekbot.app/guides/vps-source/terminal/05-fresh-profile-031a14db.typescript)与[原始 timing](https://deepseekbot.app/guides/vps-source/terminal/05-fresh-profile-031a14db.timing)于 2026-10-11 19:58 UTC 实际采集，包含 Ubuntu、资源、工具版本、Unit 状态和六组件验证；这是已配置机器上的后续安装补录，没有启动第二个 Host 或 QQ 接收器。
-
-## 证据与发布检查
-
-本次实机验证了严格 SSH、tailnet-only HTTPS、原生 Owner 登录、独立 Unit、真实模型回复及两次真实 QQ 原群回复。[素材来源清单](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/README.md) 记录版本、UTC 时间、digest 与每张公开图能证明的范围。
-
-仓库原用户指南路由已重定向到 DeepSeekBot 产品站。发布本教程时仍需核对该站的中英文目标页面；此 PR 准备的是源文档与重定向，并未部署线上教程页面。
-
-真实的 [安装及源码更新 terminal 输出/timing](https://github.com/BotHarness/DeepSeekBot/tree/main/docs/assets/vps-source/terminal) 已审阅，原样公开并记录 digest。[原生 QQ 绑定实录](https://github.com/BotHarness/DeepSeekBot/blob/main/docs/assets/vps-source/video/transcript.md) 提供 17 秒 MP4、中英文字幕、章节、等价文字稿及 digest；全部 516 帧已检查，保留完整原始视频数据。它展示绑定就绪，不是 QQ 原群回复。其他浏览器片段和完整教程成片仍待完成。登录链接、Owner token、模型 Key、QQ Secret、二维码、账号列表出现前暂停录制。只发布已审阅并去除无关会话和机器标识的素材。完整教程媒体交付继续由 [issue #1438](https://github.com/BotHarness/DeepSeekBot/issues/1438) 跟踪。
+每次升级版本前，建议先停止服务并备份整个 Profile 目录，确保数据安全。

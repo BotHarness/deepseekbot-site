@@ -7,39 +7,39 @@
 }
 ---
 
-Most people searching "grokbot alternative" have already used Grok Bot: a team of always-on agents, each with a name and a job, running on someone else's cloud computer. It works well — with one catch. That is not your machine, and not code you can audit. This post answers one question: if you want an open-source, self-hosted replacement, what should you judge it on, and where does DeepSeekBot meet the bar — or miss it?
+Most people searching for a "grokbot alternative" have already tried Grok Bot: a team of always-on AI colleagues, each with a name and a role, running on a cloud computer managed by the provider. It's a slick experience—with one obvious trade-off: it's not your machine, and you can't inspect the code. This guide answers one practical question: if you want an open-source, self-hosted alternative, what criteria actually matter, and where does DeepSeekBot fit (or fall short)?
 
 ## The short answer
 
-- Grok Bot is a hosted service; DeepSeekBot is open-source software (MIT licensed) that runs on your own machine.
-- Of the four hard requirements, the one people forget is **who owns the memory**. In DeepSeekBot, memory is an ordinary Git worktree you can diff, branch and push.
-- Migration is four steps and rewrites nothing. But if your goal is "move to Telegram today", DeepSeekBot does not connect to Telegram yet — wait.
+- Grok Bot is a hosted cloud service; DeepSeekBot is MIT-licensed open-source software that runs on your own machine.
+- Of the four core requirements, the easiest one to overlook is **who owns the memory**. In DeepSeekBot, memory is an ordinary Git working tree that you can diff, branch, and push anywhere.
+- Moving over takes four steps and doesn't require rewriting your prompts. However, if your immediate goal is running bots on Telegram today, hold off—DeepSeekBot doesn't have a native Telegram connector yet.
 
 ## Why people look for a GrokBot alternative
 
-- **Where the data lives**: the bots' files, conversations and accumulated context sit on the provider's side.
-- **Nothing to audit**: you cannot read the source, and you cannot lift the whole thing onto your own server.
-- **Model lock-in**: which model runs your bots is the provider's decision, not yours.
-- **Plans and billing**: team and enterprise capabilities arrive through plans whose boundaries the provider draws.
+- **Data residency**: Your bots' files, chat history, and accumulated context live on the provider's servers.
+- **Closed source**: You cannot audit the runtime code or move the environment onto your own infrastructure.
+- **Model lock-in**: The provider decides which models power your bots.
+- **Tiered plans**: Team features and usage boundaries are packaged into subscription tiers set by the platform.
 
-(Grok Bot's exact capabilities and pricing are whatever x.ai's official pages say; this is a structural comparison only.)
+*(For Grok Bot's latest features and pricing, check x.ai's official pages; our focus here is on the architectural differences between hosted and self-hosted setups.)*
 
-## Four hard requirements
+## Four hard requirements for a replacement
 
-1. **Identity and persona**: are the bots long-lived colleagues with names, character and judgement of their own?
-2. **The shape of memory**: where does it live, who holds it, and can you open it yourself?
-3. **Teamwork**: can several bots keep their own identity while working together, and can you wake only the one you need?
-4. **Self-hosting and model freedom**: can it run on your hardware with the model you choose?
+1. **Identity and persona**: Are the bots long-lived colleagues with distinct names, voices, and working principles?
+2. **Inspectable memory**: Where does memory live, who controls it, and can you open and edit the files yourself?
+3. **Multi-bot teamwork**: Can multiple bots collaborate in one room while keeping their own identities—and can you wake only the specific bot you need?
+4. **Self-hosting and model freedom**: Can you run the whole stack on your own hardware with whatever model provider you prefer?
 
 ## How DeepSeekBot maps to each
 
-- **Identity**: every PersonaBot has its own name and avatar. In [SOUL.md and core memory](/en/docs/soul-and-core-memory/), SOUL.md holds persona, voice and working principles, while MEMORY.md holds core memory — both persist across conversations and folders.
-- **Memory**: memory is a plain Git worktree. Browse [memory files](/en/docs/channel-sidebar/memory-files/), branches, commits and diffs in the sidebar, push it to your own GitHub, and share one memory across machines.
-- **Teamwork**: bring different bots into a [Group](/en/docs/channel-sidebar/groups/); messages keep each sender's identity, and an @ mention wakes only the bot you address. Each member chooses every message, a digest, mentions only, or silent.
-- **Self-hosting and model freedom**: DeepSeekBot is an npm package installed into the DeepSeek Harness (DSH) desktop app, so any model provider you configure in DSH is available to your bots. MIT licensed, source on GitHub.
-- **Two more**: cross-folder work (authorize folders and one bot runs independent sessions in each) and schedules (run on a plan, pause any time, and lock one so the bot cannot change it — they fire while the app is running).
+- **Identity**: Every PersonaBot has its own name and avatar. Through [SOUL.md and core memory](/en/docs/soul-and-core-memory/), `SOUL.md` defines the bot's persona, tone, and operating principles, while `MEMORY.md` stores core facts that persist across chats and project folders.
+- **Memory**: Each bot's memory is a standard Git working tree. You can browse [memory files](/en/docs/channel-sidebar/memory-files/), branches, commits, and diffs right in the sidebar, or push the repo to your own GitHub to sync memory across machines.
+- **Teamwork**: Drop multiple bots into a shared [Group](/en/docs/channel-sidebar/groups/). Every message retains its sender's identity, `@` mentions wake only the bot you tag, and each member can be set to respond to every message, digests, mentions only, or stay silent.
+- **Self-hosting and model freedom**: DeepSeekBot installs as an npm plugin inside the DeepSeek Harness (DSH) desktop app. Any model provider you configure in DSH is immediately available to your bots, and the entire codebase is MIT-licensed on GitHub.
+- **Two bonus capabilities**: Cross-folder workspaces (authorize multiple project directories so one bot can maintain separate sessions in each) and scheduled tasks (run recurring jobs while the app is open, pause them anytime, or lock schedules so a bot cannot modify its own timer).
 
-## A side-by-side table
+## Side-by-side comparison
 
 | | Grok Bot | DeepSeekBot |
 | --- | --- | --- |
@@ -51,29 +51,29 @@ Most people searching "grokbot alternative" have already used Grok Bot: a team o
 | Surfaces | X, official desktop and mobile clients, Google Workspace integrations | WeChat / QQ / Lark / Slack / Discord |
 | Billing | Plans, including team and enterprise | The software is free and open source; you pay for models and hardware |
 
-## Four-step migration
+## Four-step migration path
 
-1. No DeepSeek Harness yet? Download the DSH desktop app first.
-2. Open DSH, click Plugins → Add plugin, enter `deepseekbot`, install it, then click Enable.
-3. "Bot mode" appears in the sidebar. Create your first PersonaBot and write its SOUL.md and MEMORY.md.
-4. Connect an IM: Lark/Feishu, Slack, Discord, or personal WeChat (WeChat only receives private chats from the person who scanned the QR code). The flow, from the latest source: configure the app connection, bind the external identity from the private chat sidebar, then send a test message.
+1. **Install the host**: Download and install the DeepSeek Harness (DSH) desktop app if you haven't already.
+2. **Add the plugin**: In DSH, go to **Plugins → Add plugin**, enter `deepseekbot`, install it, and click **Enable**.
+3. **Create your first bot**: Switch to **Bot mode** in the sidebar, create a PersonaBot, and jot down its initial `SOUL.md` and `MEMORY.md`.
+4. **Connect your chat app**: Hook up Lark/Feishu, Slack, Discord, or personal WeChat (note that personal WeChat only accepts private messages from the account that scanned the QR code). Just configure the app credentials in settings, bind the external identity from the bot's sidebar, and send a test ping.
 
-Details live in the [docs overview](/en/docs/overview/) and [installation](/en/docs/installation/).
+For a full walkthrough, see the [docs overview](/en/docs/overview/) and [installation guide](/en/docs/installation/).
 
-## When not to switch
+## When to stay put
 
-- Your bots must live on X (@bot), or you depend on the official mobile client and Google Workspace integrations. Those are native to Grok Bot and have no equivalent here.
-- You need Telegram. DeepSeekBot does not connect to it yet.
-- You do not want to keep a machine running. Self-hosting means the hardware, the updates and the model bill are yours.
+- **Your workflow lives on X or Google Workspace**: If you rely on tagging `@bot` directly on X, or depend on Grok's native mobile app and Google Workspace integrations, DeepSeekBot doesn't replicate those platform-specific hooks.
+- **You need Telegram out of the box**: DeepSeekBot does not have a built-in Telegram integration yet.
+- **You don't want to manage a host**: Self-hosting gives you full control, but it also means keeping your own machine awake, applying updates, and managing your own model API keys.
 
 ## FAQ
 
-**Is DeepSeekBot free?** The software is open source under the MIT license. You pay for model APIs and your own hardware.
+**Is DeepSeekBot free?** Yes—the software is free and open source under the MIT license. You only pay for your own model API usage and hardware.
 
-**Can I use my own model?** Yes — any provider configured in DSH is available to your bots.
+**Can I bring my own models?** Yes. Any model provider you hook up to DSH works with your bots.
 
-**Where is the memory stored?** On your machine, as a Git repository you can diff and roll back at any time.
+**Where is memory stored?** Locally on your machine as a standard Git repository that you can inspect, diff, and roll back whenever you like.
 
-**Does it work for a team?** Yes. In a Group every bot keeps its identity, and each member chooses their own attention level.
+**Can multiple bots work together?** Yes. Inside a Group, each bot keeps its own persona and memory, and you control each member's notification level.
 
-Try it from DSH: Plugins → Add plugin → `deepseekbot`, then start at the [docs overview](/en/docs/overview/).
+To try it out, open DSH, head to **Plugins → Add plugin → `deepseekbot`**, and follow the [docs overview](/en/docs/overview/).

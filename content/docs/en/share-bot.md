@@ -8,28 +8,28 @@
 }
 ---
 
-Sharing a Bot publishes its Memory Repository as a public GitHub repository. When someone finds it in the Bot Marketplace and clicks **Install**, the repository is cloned into a new Bot with the same memory. Your Bot itself, its chats, Workspace grants and IM connections are not shared, and later conversations on your side are not synced to installed copies.
+Sharing a Bot publishes its Memory Repository as a public GitHub repository. When someone discovers it in the Bot Marketplace and clicks **Install**, DeepSeekBot clones the repository into a new Bot with the same persona and memory. Your local chat history, Workspace grants, API keys, and IM connections are never shared, and your future conversations do not sync to installed copies.
 
-## Not ready to go public? Send a zip
+## Not ready to go public? Send a zip instead
 
-To hand a Bot to someone you know, or move it to another computer, you don't need GitHub: export a zip with **Share** at the top right of the Bot profile, and the other person uses **Import from zip** to get a new Bot. See [Export and import a Bot](/docs/bot-zip).
+If you just want to share a Bot with a friend or colleague, or move it to another computer, you don't need GitHub: click **Share** at the top right of the Bot's profile to export a `.zip` archive, and the recipient can use **Import from zip** to create a copy. See [Export and import a Bot](/docs/bot-zip).
 
-## Before publishing: check what becomes public
+## Before publishing: review what becomes public
 
-Anyone can read a public repository, including files deleted earlier in its Git history. Memory may hold personal details you told the Bot, keys, or summaries of private conversations. Look through it first:
+Anyone can read a public GitHub repository, including files that were deleted in earlier Git commits. Because your Bot's Memory might contain personal details, keys, or summaries of private conversations, review it before publishing:
 
-1. Open **Bot DM → Channel sidebar → Memory files** and open each file.
-2. Open **Memory evolution** and check the commit history for anything that should stay private.
+1. Open **Bot DM → Channel sidebar → Memory files** and inspect each file.
+2. Open **Memory evolution** and check the commit history for anything that should remain private.
 
 ![Memory files shows every file that will become public, including .botharness/bot.json](/guides/share-bot/01-memory-files-zh.webp)
 
-Deleting a file is not enough if sensitive content appears in the history. The prompt below handles that by pushing a single new commit without history.
+If sensitive data ever appeared in an older commit, simply deleting the file in the latest commit is not enough—the prompt below handles this safely by pushing a single fresh commit with no prior history.
 
-## Option 1: let the Bot publish itself (recommended)
+## Option 1: Let the Bot publish itself (recommended)
 
-The computer running DeepSeekBot (the Host) needs the [GitHub CLI](https://cli.github.com/), signed in with `gh auth login`. The Bot asks for your approval before each command, so you see every step.
+Make sure the computer running DeepSeekBot (the Host) has the [GitHub CLI](https://cli.github.com/) installed and signed in via `gh auth login`. Your Bot will ask for your approval before running commands, so you stay in control of every step.
 
-Copy this and send it in the DM of the Bot you want to share:
+Copy the prompt below and send it in the DM of the Bot you want to share:
 
 ```text
 Please share your Memory repository to the BotHarness Bot Marketplace. Follow these steps and tell me the result after each one:
@@ -44,11 +44,11 @@ Please share your Memory repository to the BotHarness Bot Marketplace. Follow th
 
 ![Sending the prompt to the Bot you want to share](/guides/share-bot/02-prompt-zh.webp)
 
-The Bot lists what it found and waits for you. After you confirm, it creates the repository, pushes, adds the topic and sends you the URL.
+The Bot will report what it finds and wait for your confirmation. Once you approve, it creates the public repository, pushes the files, adds the marketplace topic, and sends you the link.
 
-## Option 2: publish it yourself
+## Option 2: Publish manually from the terminal
 
-Find the Bot's Memory Repository path under **Settings → Workspace grants**, then run (replace `<path>` and `<name>`):
+Find the Bot's Memory Repository path under **Channel settings → Workspace grants**, then run the following commands in your terminal (replacing `<path>` and `<name>`):
 
 ```bash
 cd <path>
@@ -56,32 +56,32 @@ gh repo create <name> --public --source . --push
 gh repo edit --add-topic botharness-bot
 ```
 
-You can also create an empty public repository on GitHub, push with `git remote add origin` and `git push -u origin HEAD`, and add `botharness-bot` under **About → Topics** on the repository page.
+Alternatively, create an empty public repository on GitHub, push with `git remote add origin` and `git push -u origin HEAD`, and add the `botharness-bot` topic under **About → Topics** on the repository page.
 
-## Get it into the Bot Marketplace
+## List your Bot in the Bot Marketplace
 
-A repository is listed when it is public and has the `botharness-bot` topic. Matching repositories are picked up once a day. To list it right away, click **+ (New) → Bot Marketplace** above the message list in the DeepSeekBot sidebar, paste the repository URL at the top and click **List**:
+Any public GitHub repository with the `botharness-bot` topic is automatically indexed once a day. To list yours immediately, click **+ (New) → Bot Marketplace** above the message list in the DeepSeekBot sidebar, paste your repository URL at the top, and click **List**:
 
 ![Paste the repository URL in the Bot Marketplace to list it now](/guides/share-bot/03-market-paste-zh.webp)
 
-Once listed, it appears in the DeepSeekBot Bot Marketplace and on the [Bot Marketplace website](https://deepseekbot.botharness.ai/en/market) with its README, stars, update date and topics. After each push, the Marketplace moves to the latest commit within an hour.
+Once listed, your Bot appears in both the in-app Bot Marketplace and the [Bot Marketplace website](https://deepseekbot.botharness.ai/en/market) with its README, star count, last updated date, and topics. Whenever you push new commits, the Marketplace updates within an hour.
 
 ![The listed Bot on the Bot Marketplace website](/guides/share-bot/04-site-market-zh.webp)
 
-When listing fails, the Bot Marketplace says why:
+If listing fails, the Marketplace will tell you why:
 
-| Message                                            | Next step                                                          |
-| -------------------------------------------------- | ------------------------------------------------------------------ |
-| Repository not found / repository is private       | Check the URL and make the repository Public on GitHub.            |
-| Missing the botharness-bot topic                   | Add `botharness-bot` under **About → Topics** and retry.           |
-| This repository was just listed                    | One repository is fetched at most once per 5 minutes; retry later. |
-| This repository is blocked or hidden after reports | Open an Issue on the BotHarness repository to contact us.          |
+| Message | Next step |
+| --- | --- |
+| Repository not found / repository is private | Check the URL and make sure the repository is set to Public on GitHub. |
+| Missing the botharness-bot topic | Add `botharness-bot` under **About → Topics** on GitHub and try again. |
+| This repository was just listed | A repository can be refreshed at most once every 5 minutes; wait a moment and retry. |
+| This repository is blocked or hidden after reports | Open an Issue on the BotHarness GitHub repository to contact us. |
 
-## Name, tags, bio, avatar and banner: `.botharness/bot.json`
+## Name, tags, bio, avatar, and banner: `.botharness/bot.json`
 
-DeepSeekBot writes `.botharness/bot.json` into every Bot's Memory and keeps it up to date: when you create a Bot, and each time you change its name, tags, bio or avatar in **Edit profile**. Bots created before this get the file the next time DeepSeekBot starts. The Marketplace and the installed Bot read it, so they show the same name, tags, bio and avatar as your sidebar. An uploaded avatar image is saved next to it as `.botharness/avatar.png` (or `.jpg`, `.webp`). The Profile banner is always saved as `.botharness/banner.png` (1500 × 500), whether it is a generated pixel scene or an uploaded image.
+DeepSeekBot automatically creates and updates `.botharness/bot.json` in every Bot's Memory when you create the Bot or edit its name, tags, bio, avatar, or banner in **Edit profile**. Both the Marketplace and installed copies read this file so your Bot looks the same everywhere. Uploaded avatars are saved alongside it as `.botharness/avatar.png` (or `.jpg`, `.webp`), and the profile banner is saved as `.botharness/banner.png` (1500 × 500).
 
-You can also edit the file by hand. DeepSeekBot keeps any other keys you add, and keeps your edits until you next change the name, tags, bio or avatar in DeepSeekBot:
+You can also edit `.botharness/bot.json` by hand. Any extra keys you add are preserved, and your manual edits stay in place until you next edit the profile in the UI:
 
 ```json
 {
@@ -93,26 +93,26 @@ You can also edit the file by hand. DeepSeekBot keeps any other keys you add, an
 }
 ```
 
-| Field    | Meaning                                                                                                                                                                                                                                         |
-| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`   | Name shown in the Marketplace, up to 60 characters.                                                                                                                                                                                             |
-| `tags`   | Tags, up to 8, each up to 32 characters. Older files that use `roles` are still read as tags.                                                                                                                                                   |
-| `bio`    | A short introduction, up to 160 characters. Without it the Marketplace shows the GitHub repository description.                                                                                                                                 |
-| `avatar` | `{ "image": "path in the repository" }` (PNG, JPEG or WebP, at most 128 KiB), or a pixel avatar `{ "recipe": … }`.                                                                                                                              |
-| `banner` | A generated pixel scene `{ "recipe": { "scene", "seed" } }`, or `{ "image": ".botharness/banner.png" }` (a 3:1 PNG, at most 2 MB). Scenes: `spring`, `summer`, `autumn`, `winter`, `sea`, `mountain`, `desert`, `forest`, `night-sky`, `space`. |
+| Field | Meaning |
+| --- | --- |
+| `name` | Display name in the Marketplace (up to 60 characters). |
+| `tags` | Up to 8 tags, each up to 32 characters (`roles` in older files are still read as tags). |
+| `bio` | Short one-line introduction (up to 160 characters). Falls back to the GitHub repository description if omitted. |
+| `avatar` | `{ "image": "path/in/repo" }` (PNG, JPEG, or WebP, max 128 KiB), or a generated pixel avatar `{ "recipe": … }`. |
+| `banner` | A generated pixel scene `{ "recipe": { "scene", "seed" } }`, or `{ "image": ".botharness/banner.png" }` (3:1 PNG, max 2 MB). Scenes: `spring`, `summer`, `autumn`, `winter`, `sea`, `mountain`, `desert`, `forest`, `night-sky`, `space`. |
 
-Every field is optional. An invalid file is ignored as a whole, and the Marketplace falls back to the repository name and a generated pixel avatar.
+All fields are optional. If the file contains invalid JSON, the Marketplace falls back to the repository name and a generated pixel avatar.
 
-## Chinese and English: `README.zh-CN.md` and `i18n`
+## Bilingual listings: `README.zh-CN.md` and `i18n`
 
-The Bot Marketplace in DeepSeekBot and on the website shows each listing in the reader's language, Chinese or English, when the repository has it. Write your listing in one language and add the other next to it:
+The Bot Marketplace displays each Bot in the reader's language (Chinese or English) when translations are provided:
 
-| What                     | Where                                                                | Shown to                                |
-| ------------------------ | -------------------------------------------------------------------- | --------------------------------------- |
-| README in Chinese        | `README.zh-CN.md` at the repository root (`README.zh.md` also works) | Readers using Chinese                   |
-| README in English        | `README.en.md` at the repository root                                | Readers using English                   |
-| README in any language   | `README.md`                                                          | Everyone else, and when no variant fits |
-| Name and bio, translated | `"i18n"` in `.botharness/bot.json`, keyed `zh` and `en`              | Readers using that language             |
+| Content | Location | Shown to |
+| --- | --- | --- |
+| Chinese README | `README.zh-CN.md` at the repository root (`README.zh.md` also works) | Chinese readers |
+| English README | `README.en.md` at the repository root | English readers |
+| Default README | `README.md` | All other readers, or when no language-specific README exists |
+| Translated name and bio | `"i18n"` in `.botharness/bot.json`, under `zh` and `en` | Readers using that language |
 
 ```json
 {
@@ -124,23 +124,19 @@ The Bot Marketplace in DeepSeekBot and on the website shows each listing in the 
 }
 ```
 
-`i18n` entries take the same `name` (up to 60 characters) and `bio` (up to 160) as the top level, and both are optional. Keep `README.md` and `bio` in the language you write best; the Marketplace checks which language your `bio` is in, so an English `bio` is already the English one and needs only a `zh` entry. Images and links in `README.zh-CN.md` resolve like those in `README.md`. The spellings `README.zh.md`, `README_CN.md` and `README-zh.md` are read too, but `README.zh-CN.md` wins when there are several.
-
-When a listing has no bio in the reader's language, the Marketplace writes a one-sentence summary in that language from your name, description, bio and README with an AI model, and shows it in place of your bio, labelled "AI summary". Your own words always win: add an `i18n` bio, or write the `bio` in that language, and the summary is no longer shown. Summaries are refreshed within an hour of a push, or of a change to the repository's GitHub description, that changes what they were written from. The README itself is never translated.
+`i18n` entries use the same character limits for `name` (60) and `bio` (160), and both are optional. If a listing does not have a bio in the reader's language, the Marketplace generates a one-sentence summary from your README and description, labeled "AI summary". Adding your own `i18n` bio always takes precedence over the AI summary.
 
 ## Profile banner
 
-Every Bot has a banner at the top of its Profile and of the popover you get from the name at the top of a DM. A new Bot gets a pixel scene picked from its name, and renaming the Bot doesn't change it; Bots created before banners existed get one the next time DeepSeekBot starts.
+Every Bot has a banner at the top of its Profile and its header popover. New Bots automatically receive a pixel-art scene based on their name. Hover over the banner and click **Change banner** to:
 
-Hover the banner and click **Change banner** to:
-
-- pick one of ten scenes: spring, summer, autumn, winter, sea, mountain, desert, forest, night sky or space;
-- **Reroll** for another picture of the same scene;
-- **Upload** your own image and crop it to 3:1;
-- **Reset** to the scene picked from the Bot's current name.
+- Choose from ten pixel scenes: spring, summer, autumn, winter, sea, mountain, desert, forest, night sky, or space;
+- **Reroll** a new variation of the current scene;
+- **Upload** your own custom image and crop it to 3:1;
+- **Reset** to the default scene generated from the Bot's name.
 
 ![Change banner: a preview, Reroll, Upload, Reset and the ten scenes](/guides/share-bot/05-banner-en.webp)
 
-The banner travels with the Bot: Bot Zip export and import, and installing from GitHub, keep it.
+Your banner is stored in the Bot's Memory repository, so it travels with the Bot when exported as a zip or installed from GitHub.
 
 Related: [Memory files](/docs/channel-sidebar/memory-files), [Memory evolution](/docs/channel-sidebar/memory-evolution).

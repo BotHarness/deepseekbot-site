@@ -61,6 +61,6 @@ Desktop 新引导带你配置模型、和托布创建 Bot、创建群聊，再�
 
 升级前请备份 Profile。1.4.0 包含数据结构升级，回退到旧二进制可能需要恢复升级前的备份。开始使用请看[安装指南](/docs/installation/)，或查看 [GitHub Release](https://github.com/BotHarness/DeepSeekBot/releases/tag/v1.4.0)。
 
-### 本文依据
+### 相关链接
 
-本文以 [1.4.0 发布源码](https://github.com/BotHarness/DeepSeekBot/tree/df454d5cebda2a8e4c1300f939267f295571f0f9)与[正式双语更新日志](https://github.com/BotHarness/DeepSeekBot/blob/df454d5cebda2a8e4c1300f939267f295571f0f9/CHANGELOG.zh.md)为依据，包括已合并的[新手引导 #2200](https://github.com/BotHarness/DeepSeekBot/pull/2200)及[窗口与面板拖拽修复 #2206](https://github.com/BotHarness/DeepSeekBot/pull/2206)。发布包验证见[正式发布流程](https://github.com/BotHarness/DeepSeekBot/actions/runs/39146814921)。
+完整的发布说明与更新细节请查阅 [1.4.0 官方双语更新日志](https://github.com/BotHarness/DeepSeekBot/blob/df454d5cebda2a8e4c1300f939267f295571f0f9/CHANGELOG.zh.md) 以及 [GitHub Release](https://github.com/BotHarness/DeepSeekBot/releases/tag/v1.4.0)。

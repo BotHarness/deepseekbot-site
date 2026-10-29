@@ -1,39 +1,37 @@
 ---
 {
   "title": "快速开始",
-  "description": "安装 DeepSeekBot，创建 PersonaBot 并连接聊天平台。",
+  "description": "安装 Tobs 插件、配置模型、创建第一个 PersonaBot 并接入聊天软件。",
   "order": 11,
-  "source": "apps/docs/src/content/docs-zh/docs/quickstart.mdx",
+  "source": "apps/docs/src/content/docs/docs/quickstart.mdx",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
+## 1. 安装插件
 
-## 安装插件
+参照[图文安装指南](/docs/installation)，打开 DSH 左侧的 **插件 → 添加插件**，输入 `@botharness/tobs@1.6.0` 安装并点击 **立即启用**。推荐使用 **DSH `0.2.1-rc.3`**（兼容 `0.2.0-rc.2` 及以上 `0.2.x` 版本）。
 
-按 [图文安装教程](/zh/docs/installation) 操作：在 DSH 打开 **插件 → 添加插件**，输入 `deepseekbot@1.4.1`，安装后点击 **立即启用**。推荐使用 **DSH `0.2.1-rc.2`**（已在 `0.2.0-rc.2` 与 `0.2.1-rc.2` 上验证，声明范围 `>=0.2.0-rc.2 <0.3.0-0`）。
+## 2. 配置模型服务商
 
-## 配置 API 提供商
+打开 **设置 → 模型**，填写模型服务商的 API 地址与密钥。具体步骤可参考[配置 API 与 Bot 模型](/docs/model-setup)。
 
-打开 **设置 → 模型**，配置 Provider 的 API、凭据和模型目录。参见 [API 与 Bot 模型图文教程](/zh/docs/model-setup)。
+## 3. 创建你的第一个 PersonaBot
 
-## 创建第一个 PersonaBot
+点击左侧栏进入 **Bot 模式**，在 **主页（Home）** 选择模型后，跟着内置助手 Tob 的引导创建你的第一个 Bot 和群聊（也可以随时点击左侧栏的 **+** 按钮新建）。
 
-进入 **Bot 模式**，在 **Home** 配置模型并跟随托布引导创建第一个 Bot 与群聊（也可以点击 **+** 按钮创建）。在 Bot 私聊打开 **··· → 频道设置… → 模型**（或右侧 Channel sidebar 的 **模型**），选择主模型与执行模型后点击 **保存**。发送一句问候，检查实际回复。
+进入与 Bot 的私聊后，你可以在右侧对话侧栏的 **模型**（或右上角 **··· → 频道设置… → 模型**）中调整主对话模型与后台任务模型。发一句问候，确认 Bot 能正常回复即可。
 
-## 连接聊天平台
+## 4. 接入外部聊天软件
 
-本地 DM 正常后，按 [连接 Lark / 飞书](/zh/docs/lark-connection) 配置。应用连接、身份绑定和群授权分别完成。
+确认本地私聊能正常回复后，你可以按需将 Bot 接入常用的即时通讯工具：
 
+- [接入飞书 / Lark](/docs/lark-connection)
+- [接入 QQ 机器人](/docs/qq-connection)
+- [接入个人微信](/docs/wechat-connection)
+- [接入 Slack](/docs/slack-connection)
 
-## 使用 Channel sidebar
+## 5. 探索对话侧栏与更多设置
 
-[Channel sidebar 章节](/zh/docs/channel-sidebar)包含总览，以及记忆文件、记忆演化、会话、Bot 收件箱、工作区授权、本地群管理、显示与布局的独立教程。打开 Bot 私聊或群聊，再按对应功能操作。
-
-## 调整其他设置
-
-[设置指南](/zh/docs/settings) 说明全局偏好、Bot 并发与名字、人格与头像、唤醒策略、侧栏视图和工作区授权的参数及生效范围。
-
-## 从源码开发
-
-仓库环境与开发命令见 [README](https://github.com/BotHarness/BotHarness#readme) 和 [本地开发指南](/zh/dev/guides/client-bridge)。
+- [对话侧栏指南](/docs/channel-sidebar)：管理 Bot 的记忆文件与记忆演进、查看工作会话、检查 Bot 收件箱、授权本地工作目录、管理本地群组以及切换简洁/专家视图。
+- [设置说明](/docs/settings)：调整界面语言与主题、Bot 并发上限、人设与头像、唤醒策略等详细配置。

@@ -8,28 +8,28 @@
 }
 ---
 
-分享 Bot，就是把它的 Memory Repository 发布成一个公开的 GitHub 仓库。别人在 Bot 市场里找到它、点 **安装**，会克隆这个仓库，得到一个带同样记忆的新 Bot。你的 Bot 本身、聊天记录、工作区授权和 IM 连接都不会被分享，之后在你这边的对话也不会自动同步过去。
+分享 Bot，就是将它的记忆仓库（Memory Repository）发布为一个公开的 GitHub 仓库。其他人在 Bot 市场里找到它并点击 **安装** 时，会把该仓库克隆到本地，获得一个拥有同样记忆与设定的新 Bot。你本地的聊天记录、工作区授权、API 密钥和 IM 连接不会被分享，你后续的对话也不会同步给其他安装者。
 
-## 不想公开？直接发 zip
+## 不想公开？直接导出 zip
 
-如果只想把 Bot 交给认识的人，或者搬到另一台电脑，不需要发布到 GitHub：在 Bot 资料页右上角点 **分享** 导出 zip，对方用 **从 zip 导入** 就能得到一个新的 Bot。见[导出与导入 Bot](/zh/docs/bot-zip)。
+如果你只想把 Bot 发给认识的朋友或同事，或者迁移到自己的另一台电脑，无需发布到 GitHub：直接在 Bot 资料页右上角点击 **分享** 导出 zip 文件，对方通过 **从 zip 导入** 即可创建新 Bot。详见 [导出与导入 Bot](/zh/docs/bot-zip)。
 
-## 发布前：检查会公开的内容
+## 发布前：检查将要公开的内容
 
-公开仓库任何人都能看到，包括 Git 历史里已经删掉的文件。Memory 里可能有你告诉 Bot 的个人信息、密钥或私人对话的摘要，发布前先看一遍：
+公开的 GitHub 仓库任何人都能够访问，包括 Git 历史提交中曾出现过、后来被删除的文件。由于 Memory 中可能包含你告诉过 Bot 的个人信息、密钥或私人对话摘要，发布前请务必检查一遍：
 
-1. 打开 **Bot 私聊 → Channel sidebar → 记忆文件**，逐个打开文件查看。
-2. 打开 **记忆演化**，看历史提交里是否出现过不该公开的内容。
+1. 打开 **Bot 私聊 → Channel sidebar → 记忆文件**，逐一检查文件内容。
+2. 打开 **记忆演化**，查看历史提交中是否出现过不宜公开的内容。
 
 ![记忆文件里能看到将要公开的全部文件，包括 .botharness/bot.json](/guides/share-bot/01-memory-files-zh.webp)
 
-如果历史里出现过敏感内容，只删除文件不够。下面的提示词里写了处理办法：只推送一个不带历史的新提交。
+如果历史提交中曾出现过敏感内容，仅在当前工作区删除文件是不够的——你可以使用下方的推荐提示词，让 Bot 只推送一个不包含历史记录的全新提交。
 
 ## 方式一：让 Bot 自己发布（推荐）
 
-前提：运行 DeepSeekBot 的电脑（Host）装了 [GitHub CLI](https://cli.github.com/)，并已经运行过 `gh auth login`。Bot 执行命令前会请你审批，每一步你都能看到。
+前提：运行 DeepSeekBot 的电脑（Host）已安装 [GitHub CLI](https://cli.github.com/)，并已通过 `gh auth login` 登录。Bot 执行终端命令前会请求你的批准，每一步操作都清晰可见。
 
-复制下面这段，在要分享的 Bot 的私聊里发给它：
+复制下面这段话，在要分享的 Bot 私聊中发送给它：
 
 ```text
 请把你的 Memory 仓库分享到 BotHarness 的 Bot 市场，按下面的步骤做，每一步做完告诉我结果：
@@ -44,11 +44,11 @@
 
 ![把提示词发给要分享的 Bot](/guides/share-bot/02-prompt-zh.webp)
 
-Bot 会先列出检查结果并等你确认。确认后它会创建仓库、推送并加上话题，最后把地址发给你。
+Bot 会先列出检查结果并等待你确认。确认后，它会创建公开仓库、推送代码、添加话题标签，并把仓库链接发给你。
 
-## 方式二：自己用命令发布
+## 方式二：手动用命令发布
 
-在 **设置 → 工作区授权** 里找到这个 Bot 的 Memory Repository 路径，然后在终端执行（把 `<路径>` 和 `<仓库名>` 换成你自己的）：
+在 **频道设置 → 工作区授权** 中找到该 Bot 的 Memory Repository 本地路径，然后在终端执行（将 `<路径>` 和 `<仓库名>` 替换为你自己的内容）：
 
 ```bash
 cd <路径>
@@ -56,32 +56,32 @@ gh repo create <仓库名> --public --source . --push
 gh repo edit --add-topic botharness-bot
 ```
 
-也可以在 GitHub 网页上新建一个空的公开仓库，用 `git remote add origin` 和 `git push -u origin HEAD` 推送，然后在仓库首页右侧的 **About → Topics** 里加上 `botharness-bot`。
+你也可以在 GitHub 网页端新建一个空的公开仓库，使用 `git remote add origin` 和 `git push -u origin HEAD` 推送，然后在仓库首页右侧的 **About → Topics** 中添加 `botharness-bot` 话题。
 
-## 让它出现在 Bot 市场
+## 收录到 Bot 市场
 
-收录需要仓库是公开的，并且带有 `botharness-bot` 话题。满足条件的仓库每天会被自动收录一次；想马上出现，点 DeepSeekBot 侧栏消息列表上方的 **＋（新建）→ Bot 市场**，在顶部贴入仓库地址，点 **收录**：
+只要仓库是公开（Public）的且带有 `botharness-bot` 话题标签，系统每天会自动扫描并收录一次。如果你想让它立即出现在市场里，可以点击 DeepSeekBot 侧栏消息列表上方的 **＋（新建）→ Bot 市场**，在顶部粘贴仓库地址并点击 **收录**：
 
-![在 Bot 市场贴入仓库地址，立即收录](/guides/share-bot/03-market-paste-zh.webp)
+![在 Bot 市场粘贴仓库地址，立即收录](/guides/share-bot/03-market-paste-zh.webp)
 
-收录后，它会出现在 DeepSeekBot 的 Bot 市场和 [官网 Bot 市场](https://deepseekbot.botharness.ai/market) 里，显示 README、Star 数、更新时间和话题。之后你每次推送，市场会在一小时内更新到最新提交。
+收录成功后，它会同时出现在 DeepSeekBot 内置的 Bot 市场和 [官网 Bot 市场](https://deepseekbot.botharness.ai/market) 中，展示 README、Star 数、更新时间和话题标签。之后你每次向该仓库推送更新，市场会在一小时内自动同步到最新提交。
 
 ![收录后在官网 Bot 市场看到的样子](/guides/share-bot/04-site-market-zh.webp)
 
-收录失败时，Bot 市场会说明原因：
+如果收录失败，Bot 市场会提示具体原因：
 
-| 提示                              | 下一步                                                     |
-| --------------------------------- | ---------------------------------------------------------- |
-| 找不到这个仓库 / 这个仓库是私有的 | 确认地址正确，并在 GitHub 把仓库设为 Public。              |
-| 缺少 botharness-bot 话题          | 在仓库首页 **About → Topics** 加上 `botharness-bot` 再试。 |
-| 这个仓库刚刚收录过                | 同一个仓库 5 分钟内只抓取一次，稍后再试。                  |
-| 这个仓库已被屏蔽或因举报隐藏      | 可以在 GitHub 上给 BotHarness 开 Issue 联系我们。          |
+| 提示信息 | 解决方法 |
+| --- | --- |
+| 找不到这个仓库 / 这个仓库是私有的 | 确认仓库地址无误，并在 GitHub 设置中将仓库改为 Public。 |
+| 缺少 botharness-bot 话题 | 在 GitHub 仓库首页右侧 **About → Topics** 中添加 `botharness-bot` 后重试。 |
+| 这个仓库刚刚收录过 | 同一个仓库每 5 分钟最多抓取一次，请稍后再试。 |
+| 这个仓库已被屏蔽或因举报隐藏 | 可在 GitHub 上给 BotHarness 提交 Issue 联系我们。 |
 
-## 设置名称、标签、简介、头像和横幅：`.botharness/bot.json`
+## 配置名称、标签、简介、头像和横幅：`.botharness/bot.json`
 
-DeepSeekBot 会自动在每个 Bot 的 Memory 里生成 `.botharness/bot.json`，并保持更新：创建 Bot 时写入，之后每次在 **编辑资料** 里改名称、标签、简介，或者改头像，都会同步。之前创建的 Bot 会在 DeepSeekBot 下次启动时补上这个文件。市场和安装后的 Bot 都读它，所以显示的名称、标签、简介和头像和你侧栏里的一致。上传的头像图片会存为旁边的 `.botharness/avatar.png`（或 `.jpg`、`.webp`）。资料横幅总是存为 `.botharness/banner.png`（1500 × 500），不管是生成的像素场景还是上传的图片。
+DeepSeekBot 会在每个 Bot 的 Memory 目录下自动生成并维护 `.botharness/bot.json`：创建 Bot 时自动写入，之后每次在 **编辑资料** 中修改名称、标签、简介或头像时都会实时同步。Bot 市场和安装该 Bot 的用户都会读取此文件，从而展示与你侧栏一致的资料。上传的头像图片会保存为 `.botharness/avatar.png`（或 `.jpg`、`.webp`），资料页横幅则统一保存为 `.botharness/banner.png`（1500 × 500）。
 
-也可以手动编辑这个文件。你加的其他字段会保留；手动改的内容会一直保留，直到你下次在 DeepSeekBot 里改名称、标签、简介或头像：
+你也可以手动编辑该文件。你额外添加的字段会被保留；手动修改的字段也会一直保留，直到你下次在界面中修改资料：
 
 ```json
 {
@@ -93,26 +93,26 @@ DeepSeekBot 会自动在每个 Bot 的 Memory 里生成 `.botharness/bot.json`�
 }
 ```
 
-| 字段     | 说明                                                                                                                                                                                                                                       |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `name`   | 在市场里显示的名称，最多 60 个字。                                                                                                                                                                                                         |
-| `tags`   | 标签，最多 8 个，每个不超过 32 个字。旧文件里的 `roles` 仍会当作标签读取。                                                                                                                                                                 |
-| `bio`    | 一句话简介，最多 160 个字。没有时市场显示 GitHub 仓库的描述。                                                                                                                                                                              |
-| `avatar` | 头像：`{ "image": "仓库里的图片路径" }`，PNG、JPEG 或 WebP，最大 128 KiB；或者 `{ "recipe": … }` 像素头像配方。                                                                                                                            |
-| `banner` | 横幅：生成的像素场景 `{ "recipe": { "scene", "seed" } }`，或 `{ "image": ".botharness/banner.png" }`（3:1 的 PNG，最大 2 MB）。场景：`spring`、`summer`、`autumn`、`winter`、`sea`、`mountain`、`desert`、`forest`、`night-sky`、`space`。 |
+| 字段 | 说明 |
+| --- | --- |
+| `name` | 在市场中显示的名称，最多 60 个字符。 |
+| `tags` | 标签，最多 8 个，每个不超过 32 个字符（旧版文件中的 `roles` 字段仍会作为标签读取）。 |
+| `bio` | 一句话简介，最多 160 个字符；未填写时市场会回退显示 GitHub 仓库描述。 |
+| `avatar` | 头像配置：`{ "image": "仓库内的图片路径" }`（支持 PNG、JPEG 或 WebP，最大 128 KiB），或像素头像配方 `{ "recipe": … }`。 |
+| `banner` | 横幅配置：像素场景配方 `{ "recipe": { "scene", "seed" } }`，或自定义图片 `{ "image": ".botharness/banner.png" }`（3:1 的 PNG，最大 2 MB）。可选场景：`spring`、`summer`、`autumn`、`winter`、`sea`、`mountain`、`desert`、`forest`、`night-sky`、`space`。 |
 
-所有字段都可以省略。文件格式不对时整个文件会被忽略，市场改用仓库名和自动生成的像素头像。
+所有字段均为可选。如果文件格式有误，市场会自动回退使用仓库名称和默认生成的像素头像。
 
-## 中英文：`README.zh-CN.md` 和 `i18n`
+## 双语展示：`README.zh-CN.md` 和 `i18n`
 
-DeepSeekBot 里和官网上的 Bot 市场会按读者的语言（中文或英文）显示每个 Bot，前提是仓库里有这种语言的内容。先用一种语言写好，再在旁边补上另一种：
+DeepSeekBot 内置市场和官网市场会根据读者的界面语言（中文或英文）优先展示对应语言的介绍：
 
-| 内容              | 放在哪里                                                | 谁会看到                         |
-| ----------------- | ------------------------------------------------------- | -------------------------------- |
-| 中文 README       | 仓库根目录的 `README.zh-CN.md`（`README.zh.md` 也可以） | 用中文的读者                     |
-| 英文 README       | 仓库根目录的 `README.en.md`                             | 用英文的读者                     |
-| 任意语言的 README | `README.md`                                             | 其他读者，以及没有对应语言版本时 |
-| 名称和简介的翻译  | `.botharness/bot.json` 里的 `"i18n"`，键为 `zh` 和 `en` | 用该语言的读者                   |
+| 内容 | 存放位置 | 展示对象 |
+| --- | --- | --- |
+| 中文 README | 仓库根目录的 `README.zh-CN.md`（或 `README.zh.md`） | 中文界面读者 |
+| 英文 README | 仓库根目录的 `README.en.md` | 英文界面读者 |
+| 默认 README | `README.md` | 其他语言读者，或未提供对应语言版本时回退显示 |
+| 名称和简介的多语言版本 | `.botharness/bot.json` 中的 `"i18n"`，键名为 `zh` 和 `en` | 对应语言的读者 |
 
 ```json
 {
@@ -124,23 +124,19 @@ DeepSeekBot 里和官网上的 Bot 市场会按读者的语言（中文或英文
 }
 ```
 
-`i18n` 里的 `name`（最多 60 个字）和 `bio`（最多 160 个字）规则和顶层一样，都可以省略。`README.md` 和 `bio` 用你最顺手的语言写；市场会判断 `bio` 是哪种语言，英文的 `bio` 本身就是英文版，只需要再加 `zh`。`README.zh-CN.md` 里的图片和链接与 `README.md` 一样处理。`README.zh.md`、`README_CN.md`、`README-zh.md` 这几种写法也能识别，同时存在时优先用 `README.zh-CN.md`。
+`i18n` 中的 `name`（最多 60 字符）和 `bio`（最多 160 字符）规则与顶层一致，均可按需省略。你可以用最顺手的语言编写 `README.md` 和顶层 `bio`，再补充另一种语言版本。如果某种语言下没有提供作者编写的简介，市场会根据名称、仓库描述和 README 自动生成一句带“AI 摘要”标识的对应语言简介；只要你添加了 `i18n` 简介，就会优先展示你自己的文字。
 
-如果某种语言下没有作者写的简介，市场会用 AI 模型，根据名称、GitHub 描述、简介和 README 写一句该语言的简介，代替原简介显示，并标注“AI 摘要”。作者自己写的内容总是优先：加上 `i18n` 简介，或者直接用该语言写 `bio`，就不再显示生成的简介。推送或修改仓库的 GitHub 描述后，如果生成所依据的内容有变化，一小时内会重新生成。README 正文不会被翻译。
+## 资料横幅（Banner）
 
-## 资料横幅
+每个 Bot 的资料页顶部和私聊名称悬浮卡顶部都有一张横幅。新建的 Bot 会根据名字自动生成一张像素风景画；将鼠标移到横幅上并点击 **更换横幅**，你可以：
 
-每个 Bot 的资料页顶部，以及在私聊顶部点名字弹出的小窗顶部，都有一张横幅。新建的 Bot 会按名字挑一张像素场景，之后改名不会变；横幅上线前创建的 Bot，会在 DeepSeekBot 下次启动时补上一张。
-
-鼠标移到横幅上，点 **更换横幅**，可以：
-
-- 从十个场景里挑一个：春、夏、秋、冬、海、山、沙漠、森林、星空、太空；
-- **换一张**：同一个场景换一幅画；
-- **上传图片**：上传自己的图片并裁成 3:1；
-- **恢复生成**：回到按 Bot 当前名字挑的场景。
+- 从十个主题场景中挑选：春、夏、秋、冬、海、山、沙漠、森林、星空、太空；
+- **换一张**：在同一场景下重新随机生成画面；
+- **上传图片**：上传自定义图片并裁剪为 3:1 比例；
+- **恢复生成**：恢复为按 Bot 当前名称生成的默认场景。
 
 ![更换横幅：预览、换一张、上传图片、恢复生成和十个场景](/guides/share-bot/05-banner-zh.webp)
 
-横幅跟着 Bot 走：Bot Zip 导出、导入，以及从 GitHub 安装，都会保留它。
+横幅会保存在 Bot 的记忆仓库中，无论是导出 zip 还是发布到 GitHub 市场，都会随 Bot 一起保留。
 
-相关：[记忆文件](/zh/docs/channel-sidebar/memory-files)、[记忆演化](/zh/docs/channel-sidebar/memory-evolution)。
+相关文档：[记忆文件](/zh/docs/channel-sidebar/memory-files)、[记忆演化](/zh/docs/channel-sidebar/memory-evolution)。

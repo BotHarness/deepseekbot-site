@@ -1,67 +1,81 @@
 ---
 {
   "title": "Open files on the Host",
-  "description": "Open Memory, Workspace and message files in native applications.",
+  "description": "Open, preview, and edit Memory files, Workspace folders, and chat attachments in native desktop apps.",
   "order": 21,
   "source": "docs/file-open.md",
   "sourceRevision": "57745b1cc02225ed754a8b1cf5dbe7d77a176a11"
 }
 ---
 
-The #1022 source candidate adds an explicit application-menu action to checked Bridge file cards when the Host reports native file opening is available. Looking at the card checks only that capability; it does not acquire the file. Selecting the action resolves the current Channel/source/file authorization before using the existing application menu, and opening resolves it again. The filename downloads to the current device with visible loading, refusal and retry states. Bridge cards retain this download-first interaction so viewing them never acquires remote file bytes. Edits to the acquired Host copy are not written back to the provider.
+In DeepSeekBot, you can open a Bot's Memory files, authorized Workspace folders, and chat attachments directly in native applications on your computer (the Host), reveal them in your system file manager, or download them to your current device.
 
-The current Memory file reader, ordinary file cards in chat, and the Memory Repository and authorized Workspace folder rows show an **Open** split button. The main button opens the file or folder on the Host in your default application; the arrow lists the other detected applications. Choosing another application there opens it once and leaves your default unchanged. **Set default for …** remembers an application for that file type (for example `.md`) or for folders, and **Restore system default** removes it. The default applies only to this browser and this Host profile: it does not change the operating system's file associations and does not follow you to another device. Files start with the Host's system default. Folders have no system default, so the first click asks you to choose. If your default application is no longer available on the Host, the button says so and asks you to choose again instead of picking another one. "Open request sent to the Host" means the Host accepted the request; check the Host screen for the window.
+## Open files and folders in desktop apps
 
-In Memory Evolution, every file row of a commit diff or an uncommitted diff has **Open current file**. It opens the file that exists at that path now, with the same default and dropdown, and never the version stored in the selected commit. A renamed file appears as its old path (deleted) and its new path (added); use the new path's row. If nothing exists at the path now, the button says so and nothing is rebuilt from history; when that row is itself a deletion it adds that the commit or the working change marked the path as deleted. A file that was deleted in an old commit and created again later opens normally.
+The Memory file reader, file cards in chat, and the rows for your **Memory Repository** and authorized **Workspace** folders all feature an **Open** split button:
 
-Click a displayed Memory Repository or authorized Workspace path to choose a detected application. Memory file rows offer a context menu and a More button. Current files can be revealed in the file manager, opened in an editor, copied as a Host path, or downloaded to this device.
+- **Open with your default app**: Click the main **Open** button to launch the file or folder on the Host computer using its default application.
+- **Open once with another app**: Click the dropdown arrow next to **Open** to see other detected applications on your system (such as VS Code, Cursor, Sublime Text, Finder, or File Explorer). Picking an app from the list opens the item with that app once without changing your default.
+- **Set a default app**: Choose **Set default for …** in the dropdown menu to remember your preferred application for that file extension (such as `.md`) or for folders. Choose **Restore system default** at any time to clear your custom preference.
 
-New message attachments use the same actions: click a file chip, right-click a file or image, or use its More button. Clicking an image still opens its preview. The menu names the Host computer explicitly. With Tailscale or Cloudflare Tunnel, an editor or file manager opens on the computer running DSH; downloading transfers the current bytes to the browser's device. Editing a download does not write back to the Host. If native applications are unavailable, download and copy remain available.
+> **How default app preferences work**:
+> - Your default app choice is saved for your current browser and Host profile only—it never alters your operating system's global file associations.
+> - Because operating systems do not define a single default app for folders, clicking **Open** on a folder for the first time will ask you to pick your preferred file manager or editor.
+> - If a previously saved default app is uninstalled or no longer available on the Host, DeepSeekBot will let you know and ask you to pick a new one rather than silently opening a different program.
 
-Sending transfers the file to one profile-managed destination. Opening and saving that attachment edits this same destination; the original message's next read, preview or download uses its current bytes, filename, MIME and size. Refresh the Channel after saving to refresh displayed metadata. The upload-source file stays independent. Two independent uploads remain separate even when their bytes match; explicit reuse of one attachment identity shares the same file across messages.
+### Opening files from Memory Evolution
 
-External saves create no attachment versions, notifications, Source Revisions, Inbox admissions or Bot wakes. A missing destination reports unavailable and is never restored from original upload bytes. Retained old hash-addressed attachments are converted at Host startup; successfully migrated chips offer the same editor menu, while failed conversions retain their old readable state. Memory keeps its existing Git behavior.
+In the **Memory Evolution** sidebar section, every file row in a commit diff or uncommitted working diff includes an **Open current file** button:
 
-## Storage and integration
+- This button always opens the file that exists at that path **right now**, rather than a historical snapshot from an older commit.
+- When a file has been renamed, the diff displays the old path (deleted) and the new path (added) as two separate rows—use the button on the **new path** row to open the file.
+- If the file has been deleted and no longer exists on disk, the button clearly indicates that the file is gone rather than recreating it from history.
 
-New references are `{fileId,name,mime,size}`; legacy references are `{hash,name,mime,size}`. Exactly one identity is allowed. The immutable message envelope keeps the sent reference; message queries project current metadata. `channel_read_image` takes `attachment_id` with the returned `fileId`, or `hash` for a legacy image. The Host validates current Bot membership and message ownership before reading current, size-limited image bytes. `channel_read_image` returns image content without a Host path; explicit original file access below returns only its source-validated path. A cached legacy image hash with its owning message resolves that message’s migrated file when unambiguous; a hash without message ownership, ambiguous hashes within one message, and legacy references on new sends are explicitly refused. Refresh the message to obtain its canonical fileId. Trusted Channel forwarding reuses the same validated reference contract; destination confirmation remains [#570](https://github.com/BotHarness/BotHarness/issues/570).
+### Additional file actions
 
-Under `$DSH_HOME/botharness/attachments/files/<uuid>/`, `data/<safe filename>` is the real destination and `record.json` is the durable identity/transfer receipt. The receipt holds a checksum for upload retry, with no archived file bytes. Composer retries reuse one upload key without overwriting an edited destination. New sends validate profile ownership, and native actions/downloads resolve `channelId + messageId + fileId` afresh. The authenticated download uses `no-store` and server-sniffed MIME with `nosniff`.
+On Memory file rows and chat attachment cards (by clicking a file card, right-clicking a file or image, or clicking the `···` More button), you can also:
 
-Staged transfer cleanup remains separate. Reference-aware cleanup protects file identities from all retained Source Event envelopes, including removed Channels, before removing old unreferenced destinations and their records; automatic retention remains disabled. Future Profile Backup, selected Export and explicit Purge must include current referenced destinations and their records. They must preserve shared identity, never purge a file still reachable from retained facts, and capture current bytes rather than create a version archive. Those products are not added by this slice.
+- **Reveal in file manager**: Highlight the file directly in macOS Finder or Windows File Explorer.
+- **Open in editor**: Launch the file in a chosen desktop editor.
+- **Copy Host path**: Copy the full local filesystem path on the machine running DSH.
+- **Download to this device**: Download the file through your browser. Clicking an image in chat continues to open the built-in image preview.
 
-The design is [ADR-0100](/dev/adr/0100-file-open-actions-target-real-host-files). The runnable verification entry is `scripts/e2e-real-attachment-files.mjs`: prepare through the real composer, save through an actual external editor, verify the original and independent/shared messages, restart the same Profile, then verify missing-file refusal. Its private fixture and login URL stay outside Git; only synthetic screenshots are published.
+> **Using DeepSeekBot remotely (via Tailscale or Cloudflare Tunnel)**:
+> Actions that launch an editor or file manager always open the window on the **Host computer** running DSH, whereas **Download** transfers a copy of the file to the device where your browser is open. Editing a downloaded copy on a remote device does not write changes back to the Host.
 
-## Existing-message migration
+---
 
-Messaging owns schema generation 39's `attachment_file_bindings`, keyed by immutable Source Event ID and attachment ordinal. Host startup scans all retained message envelopes, including removed Channels. Each legacy occurrence reserves a durable independent UUID in `pending`, streams and integrity-checks its old CAS object into the real-file owner, rereads and verifies the converted bytes, then atomically marks the binding `ready`. Queries apply this binding before projecting current metadata; original Source Event envelopes, text, placements and Inbox Admissions are unchanged. No file copy is created when a Human opens the menu.
+## Editing chat attachments in place
 
-The old representation recorded content hashes without a trustworthy upload identity or reuse provenance. Equal hashes therefore receive independent destinations, even within one message; historical sharing cannot be reconstructed from a hash match. New explicit reuse of a canonical fileId remains shared. Concurrent startup calls share one migration run. Interruption preserves the reserved UUID; restart resumes incomplete conversions without duplicating destinations. A ready binding is never recopied, even if its current file is missing or externally edited. Failed conversions expose the readable legacy object until repair, with bounded `attachment-migration` diagnostics naming the occurrence and repair/restart action. A corrupt source remains unavailable rather than being accepted.
+When you send a file in a local chat, DeepSeekBot stores it in a managed attachment directory for your profile:
 
-Owner-qualified legacy downloads and image reads resolve the migrated current destination, never a frozen old CAS substitute. If occurrences in one message resolve to different destinations for an old hash, that old identifier is ambiguous: use the current fileId. Duplicate occurrences still pointing to the same unconverted CAS object remain readable. The production download always requires message ownership and uses `no-store`, including mixed-state legacy reads. Raw legacy references remain an input decoder for retained facts and owner-qualified compatibility, not a way to create new mutable message files.
+- **Edit and save directly**: If you open a chat attachment in an external desktop app from the file card menu and save changes, you are editing that attachment directly. Refresh the Channel after saving, and any subsequent preview, read, or download of that attachment will reflect your updated content and file size.
+- **Original local files stay separate**: Uploading a file creates an independent managed copy inside DeepSeekBot. Editing the attachment in chat never alters the original file you uploaded from your desktop, and separate uploads remain independent even if their initial contents were identical.
 
-Reference-aware cleanup marks ready fileIds and all pending reserved fileIds; legacy objects remain reachable while any retained occurrence is unconverted. Only after all retained dependencies are converted can the existing explicit sweep release an obsolete shared CAS object. Migration does not enable automatic deletion or affect SoulSnapshots or other CAS stores. Future Profile Backup/Export/Purge must include the Operational Database's binding records and current file destinations/receipts. This one-time conversion and its obsolete compatibility storage provide no attachment-history API.
+---
 
-Schema activation is a one-way upgrade: older hash-only releases cannot consume generation 39 or the managed file identities. Recover forward, retaining the database, bindings and current files. Before upgrading, any separately supported backup remains its owner's responsibility; this feature does not implement a new backup or restore product.
+## Files from external channels (such as Lark / Feishu)
 
-## Let a PersonaBot process a received file
+File cards from connected external IM channels use an **on-demand download** flow:
 
-In the local Bot Channel, expand **Workspace Grants**, add a work folder and expand its row. **Allow Bot to write in this folder** starts off; enable it only for the folder where the Bot should save and produce files. Existing read-only Grants remain read-only. Turning it off blocks future Orchestrator writes without deleting files or changing Assignment permissions. Shell calls still require Human approval or a matching saved rule. A permission change invalidates earlier saved-rule scope.
+- Viewing a message or Bot Inbox card checks availability and displays the filename without automatically downloading remote files in the background.
+- Click the filename to download the file to your current device, with clear progress and retry options if a transfer is interrupted.
+- When the Host supports native file opening, external file cards also offer the application menu so you can open them locally—note that editing a downloaded local copy does not overwrite the file on the external IM platform.
 
-Send an arbitrary-format attachment, such as a ZIP of CSV records, and request a new result. The Orchestrator saves a separate working file through `channel_attachment_save`, uses native file tools and approved Shell calls, explicitly imports the generated file through `channel_attachment_import`, and replies with its independent download. Parent directories must exist and save-as never overwrites an existing destination. Original references remain unchanged; the attachment owner retains the existing 25 MiB transfer limit. Download the returned result to inspect its contents.
+---
 
-To inspect an original, ask the Bot to read the specified attachment. To change it, explicitly say “edit this original”, for example “change status=pending to status=approved in this original status.txt”. The Bot selects the exact message/file through `channel_attachment_open`; `read` only permits native inspection, while `edit-original` uses the existing Human tool approval or matching saved rule. Approve only the intended original. The Bot uses ordinary native read/edit/write on the returned path, without creating a copy or changing its Memory cwd.
+## Let a PersonaBot process or edit files
 
-Refresh the Channel, then download or reopen the original message's attachment to inspect current contents. Explicitly shared references to the same fileId show the edit, even after Host restart; identical independent uploads and the uploader's local source file remain separate. Native access expires at the end of the turn and rechecks current source membership on each operation. Leaving the source Channel or losing the original file prevents further access; a missing original is never recreated from upload bytes. File edits produce no Source Revision, file-change Inbox Admission or automatic wake; any conversational confirmation is an explicit reply. Native checks and Shell approval remain, with no BotHarness lock or file-version archive.
+You can also ask a PersonaBot to process uploaded files (for example, unpacking a ZIP of CSV files and generating a summary report) or edit an attachment directly.
 
-These local slices are #632 and #633. See [ADR-0105](/dev/adr/0105-attachments-use-native-file-operations-under-source-authority).
+### Option 1: Process an attachment and reply with a new file
 
-## Process a Lark ZIP in its original topic
+1. **Grant write access to a work folder**: In the Bot's Channel sidebar, expand **Workspace Grants**, add a working folder, expand its row, and turn on **Allow Bot to write in this folder** (this is off by default; enable it only for folders where you want the Bot to save and generate files).
+2. **Send the file and instructions**: Upload your file in a local DM (or upload it in an authorized Lark group/topic and `@mention` the Bot) and describe what output you need.
+3. **Receive the generated file**: The Bot saves an independent working copy into the authorized workspace folder (never overwriting existing files), processes it using native file tools or approved Shell commands, and replies with a new downloadable attachment (or replies with the file directly inside the original Lark topic).
 
-Use the isolated qualified IM Profile described in [the connection guide](/dev/guides/client-bridge#qualified-optional-im-provider). Bind one QA Bot account, authorize the test group and enable mention reception. Only one Host may own that account's receiving connection. In the Bot's Workspace Grants, explicitly allow writing to the folder where files should be processed.
+### Option 2: Ask the Bot to inspect or edit an attachment in place
 
-Upload a small CSV ZIP to the authorized Lark group/topic. Reply to that file using ordinary text, select the real Bot from the @ member picker, and request a new ZIP result. The Bot Inbox's **External message** detail shows the filename; **Download file** acquires the original on demand. Download errors remain visible and do not imply a successful transfer.
-
-The Bot uses `bridge_read` and `bridge_attachment_save` to save an independent working copy, then native files and approved Shell to process it. It explicitly selects the new result with `channel_attachment_import` and uses `bridge_reply_file` to return it in the exact original topic under its own identity. Text and file replies share one reply intent per source; requesting a file does not send a preliminary automatic text acknowledgement. Download the received result in Lark and check its contents; **Platform accepted** alone is not delivery or read evidence.
-
-The original stays unchanged. Transfers use the existing 25 MiB limit; revoking source access blocks future provider reads/replies, while a completed independent copy remains under its own Workspace Grant. Restart retains source and file identity and never repeats uncertain sends. This is the #657 temporary-provider slice, not production enablement, Slack support or general message history. See [ADR-0107](/dev/adr/0107-external-files-use-trusted-source-capabilities-and-existing-owner).
+- **Inspect an attachment**: Simply ask the Bot in chat to read the attachment from a specific message.
+- **Edit the original attachment in place**: If you want the Bot to modify the existing attachment on the message itself rather than creating a new file, explicitly ask it to edit the original (for example: *"Change `status=pending` to `status=approved` in this original `status.txt`"*).
+- When the Bot requests permission to edit the original attachment, approve the tool prompt. Once the Bot finishes, refresh the Channel and open or download the original message's attachment to see the updated file.

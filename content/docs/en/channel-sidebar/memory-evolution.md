@@ -53,6 +53,4 @@ The section title reads **Memory** followed by three tabs: **Evolution** shows t
 
 BotHarness also backs up Memory automatically when it changes, when a conversation ends, and before you restore, including files that are not committed yet. These backups stay out of the panel because Evolution and Versions cover everyday time travel. If Memory was damaged by accident and you cannot find it there, open the gear in the **Memory** title and choose **Restore from an automatic backup…**. Each backup shows when it was taken and why. Pick one, click **Restore to this point**, then **Restore**. The whole Memory folder is copied first, and the dialog shows where that copy is. A **Repair Memory** state has its own confirmation and backup procedure.
 
-The screenshots demonstrate reading the real repository and commit diff. They do not demonstrate a recovery or claim that the example repository needed repair.
-
 Related: [Memory files](/docs/channel-sidebar/memory-files), [Display and layout](/docs/channel-sidebar/display), [sidebar overview](/docs/channel-sidebar).

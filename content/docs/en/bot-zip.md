@@ -8,69 +8,69 @@
 }
 ---
 
-A Bot can be packed into a zip file to send to a friend or colleague, or to move to another computer. Importing it gives the other person a new Bot with the same memory. Unlike [sharing a Bot to the Bot Marketplace](/docs/share-bot), this needs no GitHub and publishes nothing: the zip only leaves your computer when you send it to someone.
+You can pack any Bot into a `.zip` file to share with a friend or colleague, or to move it to another computer. Importing the zip creates a new Bot with the same persona and memory. Unlike [sharing a Bot to the Bot Marketplace](/docs/share-bot), exporting a zip does not require GitHub or make anything public—the archive only leaves your computer when you send it to someone.
 
 ## What is in the zip
 
-| Included                                                                                | Never included                                                |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| The Bot's Memory files, uncommitted changes included                                    | Files ignored by `.gitignore`, symbolic links                 |
-| `.botharness/bot.json` (name, tags, bio), the avatar image and `.botharness/banner.png` | Sessions, chat history, the Bot Inbox                         |
-| Optional: Git history (every branch, tag and commit)                                    | IM connections, Workspace grants, model settings, credentials |
-|                                                                                         | Git remotes, Git config and recovery checkpoints              |
+| Included | Never included |
+| --- | --- |
+| The Bot's Memory files, including uncommitted changes | Files ignored by `.gitignore`, symbolic links |
+| `.botharness/bot.json` (name, tags, bio), avatar image, and `.botharness/banner.png` | Sessions, chat history, and the Bot Inbox |
+| Optional: Git history (all branches, tags, and commits) | IM connections, Workspace grants, model settings, API keys, and credentials |
+| | Git remotes, Git config, and recovery checkpoints |
 
-## Export
+## Export a Bot
 
 1. Open the DM of the Bot you want to export and click the Bot's name at the top to open its profile.
-2. Click **Share** at the top right of the profile. You can also right-click the Bot in the sidebar's message list and choose **Share**.
+2. Click **Share** at the top right of the profile (or right-click the Bot in the sidebar's message list and choose **Share**).
 
 ![Share at the top right of the Bot profile](/guides/bot-zip/02-export-section-en.webp)
 
-3. In the export window, choose the files to put in the zip. Everything is ticked by default. Click the arrow in front of a folder to expand it, and untick files or whole folders you don't want to share, or use **Select all** and **Select none**. `.botharness/bot.json`, the avatar and the banner are always included and can't be unticked.
-4. To let the other person see how the Bot's memory changed over time, tick **Include Git history**.
-5. Click **Export**. Your browser downloads a zip named after the Bot.
+3. In the export dialog, choose which files to include. Everything is selected by default; click the arrow next to any folder to expand it and uncheck files or folders you want to leave out, or use **Select all** and **Select none**. `.botharness/bot.json`, the avatar, and the banner are always included.
+4. If you want the recipient to see how the Bot's memory evolved over time, check **Include Git history**.
+5. Click **Export** to download a zip file named after your Bot.
 
 ![The export window: choose files and tick Include Git history](/guides/bot-zip/03-export-window-en.webp)
 
 ### Check before you share
 
-Memory can hold passwords, API keys, personal details you told the Bot, or summaries of private conversations. Before sending it to anyone, look through each file in **Bot DM → Channel sidebar → [Memory files](/docs/channel-sidebar/memory-files)** and untick the ones you don't want to give away.
+A Bot's Memory may contain passwords, API keys, personal details you mentioned, or summaries of private conversations. Before sending a zip to anyone, review your files in **Bot DM → Channel sidebar → [Memory files](/docs/channel-sidebar/memory-files)** and uncheck anything you want to keep private.
 
-Git history also keeps older content that was deleted or changed. That is why **Include Git history** is only available when every file is ticked: as soon as you untick any file it is greyed out, because the history would still show the files you left out. When in doubt, leave the history out.
+Keep in mind that Git history preserves older content that was previously edited or deleted. For that reason, **Include Git history** is only available when all files are selected—as soon as you uncheck any file, the option is disabled so excluded files cannot be recovered from commit history. When in doubt, leave Git history unchecked.
 
-## Import
+## Import a Bot
 
 1. Above the sidebar's message list, click **+ (New) → Create Bot → Import from zip**.
 
 ![The Create Bot submenu: Start empty, Import from GitHub, Import from zip](/guides/bot-zip/01-create-menu-en.webp)
 
-2. Click **Choose zip file**, pick the zip you received and click **Import**.
+2. Click **Choose zip file**, select the zip archive, and click **Import**.
 
 ![Import from zip: choose the file, then click Import](/guides/bot-zip/04-import-en.webp)
 
-Importing creates a new Bot and opens its DM:
+Importing creates a brand-new Bot and opens its DM:
 
-- Its name, tags, bio, avatar and banner come from `.botharness/bot.json` in the zip; `roles` in an older zip are imported as tags. Without that file, the zip's file name becomes the Bot's name.
-- A zip without Git history gives the new Bot's Memory a single initial commit.
-- A zip with Git history keeps every branch, tag and commit and checks out the branch the Bot was on when exported; changes that were uncommitted then are still uncommitted. You can see them in [Memory evolution](/docs/channel-sidebar/memory-evolution).
+- Its name, tags, bio, avatar, and banner are loaded from `.botharness/bot.json` inside the zip (`roles` from older exports are imported as tags; if `bot.json` is missing, the zip filename is used as the Bot's name).
+- A zip without Git history initializes the new Bot's Memory with a single clean initial commit.
+- A zip with Git history preserves all branches, tags, and commits and checks out the branch that was active when exported; any uncommitted changes remain uncommitted and can be inspected in [Memory evolution](/docs/channel-sidebar/memory-evolution).
 
 ![After importing with history, Memory evolution shows the original branches and commits](/guides/bot-zip/05-imported-history-en.webp)
 
-The imported Bot and the original are independent; later chats and memory on either side are not synced. Set up IM connections, Workspace grants and model settings again on the new Bot.
+The imported Bot is completely independent of the original—future conversations and memory updates on either side will not sync. You can configure models, Workspace grants, and IM connections on the new Bot as needed.
 
 ### Only import zips you trust
 
-The files in the zip become the new Bot's Memory and may contain harmful content, or text the Bot will follow as instructions. Make sure you trust where it came from, and look through **Memory files** after importing.
+Because files in the zip become the new Bot's standing Memory, an untrusted archive could contain harmful instructions. Only import zips from sources you trust, and review **Memory files** after importing.
 
-An unsafe or damaged zip is refused, and nothing is left behind:
+Unsafe or corrupted zip files are rejected automatically:
 
-| Message                                         | Cause and next step                                                                                         |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| This is not a valid zip file, or it is damaged. | The download was incomplete or the zip was changed. Download it again, or ask for a new export.             |
-| The zip has unsafe paths …                      | A file tries to write outside the Bot's folder (such as `../`) or is a symbolic link. Ask for a new export. |
-| The zip is too large …                          | Over 100 MB or 20,000 files. Ask the sender to untick large files or leave the history out.                 |
-| The zip has no files.                           | The wrong file was chosen, or the zip is empty.                                                             |
+| Message | Cause and next step |
+| --- | --- |
+| This is not a valid zip file, or it is damaged. | The download was incomplete or corrupted. Download it again or ask the sender for a fresh export. |
+| The zip has unsafe paths … | A file attempts to write outside the Bot directory (such as `../`) or uses a symbolic link. Ask for a clean export. |
+| The zip is too large … | Exceeds 100 MB or 20,000 files. Ask the sender to uncheck large files or omit Git history. |
+| The zip has no files. | The selected archive is empty. |
 
-A folder zipped with your system's own compression tool can be imported too: if every file sits in one top-level folder, that folder is unwrapped, and `__MACOSX` and `.DS_Store` are skipped.
+You can also import a regular folder compressed with your operating system's built-in zip tool: if all files sit inside a single top-level folder, that wrapper folder is unwrapped automatically, and macOS metadata files (`__MACOSX` and `.DS_Store`) are skipped.
 
 Related: [Share a Bot to the Bot Marketplace](/docs/share-bot), [Memory files](/docs/channel-sidebar/memory-files), [Memory evolution](/docs/channel-sidebar/memory-evolution).

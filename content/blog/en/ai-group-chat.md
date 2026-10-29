@@ -23,9 +23,9 @@ For a first attempt, try an original scene: three people arrive at a coastal lig
 | Sol | A travelling illustrator | Notices shapes, light and small details |
 | Jun | A local mechanic | Looks for practical explanations |
 
-This is a suggested setup, not a transcript of a completed model run. The point is to give each Bot something specific to notice. Three copies of “be friendly and creative” leave the model less to work with.
+The goal is to give each Bot a clear, focused perspective to react from. When every character has a distinct outlook, the interaction feels dynamic and natural.
 
-Put the durable voice and background in each Bot's Soul. Keep the immediate situation in the group message: the time of day, who has arrived and what has happened so far. If you change the scene, say so in the room rather than expecting the other Bots to infer a private conversation.
+Keep each character's foundational persona in its Soul, while placing immediate situational details in the group prompt: time of day, current setting, and what just happened. If you shift the scene, state it directly in the room so all characters can adapt.
 
 For a single character's voice and continuity, see the [AI character chat guide](/en/blog/ai-character-chat/).
 
@@ -69,7 +69,7 @@ The group conversation gives its members a place to exchange information. Each B
 
 Share an agreed fact in the Group if everyone needs it. If it should last beyond the scene, decide which Bot should record it, then inspect what it saved. A useful note might say “The lighthouse scene ends before the storm arrives”; an invented permanent preference about you would be a different claim.
 
-Tobs stores memory in Git-backed files you can inspect and revise. Its [Soul and Core Memory guide](/en/docs/soul-and-core-memory/) explains how standing files enter a new Session, while other files are read as needed. Saved information and successful recall are separate things to check.
+Tobs stores memory in transparent, Git-backed files you can review and edit at any time. The [Soul and Core Memory guide](/en/docs/soul-and-core-memory/) explains how standing files enter every new Session, while on-demand files are read by tools as needed.
 
 ## Keep the setup and costs visible
 
