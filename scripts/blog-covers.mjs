@@ -90,7 +90,19 @@ for (const lang of ['zh', 'en']) {
     await tab.setContent(page(meta.title, meta.tags ?? [], slug, pick(slug)), {
       waitUntil: 'load',
     });
-    await tab.evaluate(() => document.fonts.ready);
+    await tab.evaluate(async () => {
+      await document.fonts.ready;
+      const img = document.querySelector('.tile--logo img');
+      if (img && !img.complete) {
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      }
+      if (img?.decode) {
+        await img.decode();
+      }
+    });
     // Long titles must leave the tags clear of the fixed avatar row.
     await tab.evaluate(() => {
       const title = document.querySelector('.mark');
