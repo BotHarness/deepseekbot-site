@@ -1,0 +1,41 @@
+name: deploy
+
+# Publishes the site to the Cloudflare Worker `deepseekbot-site` (see wrangler.jsonc).
+# Runs on every push to main and on demand from the Actions tab (Run workflow).
+# Needs the CLOUDFLARE_API_TOKEN secret on the `production` environment; see README "Deploy".
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Deploys queue instead of cancelling each other, so the newest main always finishes last.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://tobs.app
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.4.2
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify
+      - name: Deploy to Cloudflare Workers
+        run: pnpm exec wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
