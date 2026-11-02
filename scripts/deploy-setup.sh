@@ -33,21 +33,18 @@ status=$(curl -fsS -H "Authorization: Bearer ${TOKEN}" \
 [ "$status" = "active" ] || { echo "Cloudflare says this token is not active (${status})." >&2; exit 1; }
 echo "    Token verified with Cloudflare."
 
-echo "2/3 Creating the '${ENV_NAME}' environment, deployable from main only"
+echo "2/3 Creating the '${ENV_NAME}' environment, deployable from main and site-* tags only"
 gh api -X PUT "repos/${REPO}/environments/${ENV_NAME}" --input - >/dev/null <<JSON
 {"deployment_branch_policy":{"protected_branches":false,"custom_branch_policies":true}}
 JSON
 gh api -X POST "repos/${REPO}/environments/${ENV_NAME}/deployment-branch-policies" \
   -f name=main -f type=branch >/dev/null 2>&1 || true
+gh api -X POST "repos/${REPO}/environments/${ENV_NAME}/deployment-branch-policies" \
+  -f name='site-*' -f type=tag >/dev/null 2>&1 || true
 
 echo "3/3 Saving CLOUDFLARE_API_TOKEN to the environment"
 printf '%s' "$TOKEN" | gh secret set CLOUDFLARE_API_TOKEN --env "$ENV_NAME" --repo "$REPO"
 unset TOKEN
 
 echo "Done. Review it at ${ENV_URL}"
-if gh api "repos/${REPO}/contents/.github/workflows/deploy.yml?ref=main" >/dev/null 2>&1; then
-  read -rp "Deploy main now? [y/N] " ans
-  [[ "$ans" =~ ^[Yy]$ ]] && gh workflow run deploy.yml --repo "$REPO" --ref main && echo "Started: https://github.com/${REPO}/actions/workflows/deploy.yml"
-else
-  echo "The deploy workflow is not on main yet; merge the deploy PR and the next push to main deploys."
-fi
+echo "Publish a release with: pnpm deploy:tag"

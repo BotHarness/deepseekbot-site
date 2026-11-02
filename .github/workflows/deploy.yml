@@ -1,31 +1,41 @@
 name: deploy
 
 # Publishes the site to the Cloudflare Worker `deepseekbot-site` (see wrangler.jsonc).
-# Runs on every push to main and on demand from the Actions tab (Run workflow).
+# Like the product's npm release, merging to main does not publish: pushing a release tag
+# does. Tags are `site-YYYY.MM.DD` (add `.2`, `.3` for later releases that day) and must
+# point at a commit on main; `pnpm deploy:tag` creates one on the latest main.
+# Run workflow on main (Actions tab) redeploys main without a tag.
 # Needs the CLOUDFLARE_API_TOKEN secret on the `production` environment; see README "Deploy".
 
 on:
   push:
-    branches: [main]
+    tags: ['site-*']
   workflow_dispatch:
 
 permissions:
   contents: read
 
-# Deploys queue instead of cancelling each other, so the newest main always finishes last.
+# Deploys queue instead of cancelling each other, so the newest release finishes last.
 concurrency:
   group: deploy-production
   cancel-in-progress: false
 
 jobs:
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/site-') || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: production
       url: https://tobs.app
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Require the release commit to be on main
+        run: |
+          git fetch --no-tags origin main
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main \
+            || { echo "::error::$GITHUB_REF_NAME points at a commit that is not on main"; exit 1; }
       - uses: pnpm/action-setup@v4
         with:
           version: 12.4.2
@@ -36,6 +46,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm verify
       - name: Deploy to Cloudflare Workers
-        run: pnpm exec wrangler deploy
+        run: pnpm exec wrangler deploy --tag "$GITHUB_REF_NAME" --message "${GITHUB_SHA::7}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
