@@ -8,11 +8,11 @@
 }
 ---
 
-> **当前稳定版：1.6.0。** 下方文字与安装口令已更新至 1.6.0；部分配图保留自早期版本界面，操作时请以正文中的包名与说明为准。
+> **当前稳定版：1.6.1。** 下方文字与安装口令已更新至 1.6.1；部分配图保留自早期版本界面，操作时请以正文中的包名与说明为准。
 
 本指南介绍如何在 DeepSeek Harness（DSH）中安装 **Tobs** 插件、开启 Bot 模式并创建你的第一个 PersonaBot。安装这一个插件包即可同时获得核心运行时、界面客户端以及配套的 IM 连接组件。
 
-请安装正式版 npm 包 **`@botharness/tobs@1.6.0`**，推荐搭配 **DSH `0.2.1-rc.3`** 使用（同时兼容 `0.2.0-rc.2` 与 `0.2.1-rc.2`）。升级前建议先备份当前 Profile，以便需要回退旧版本时能够恢复数据。
+请安装正式版 npm 包 **`@botharness/tobs@1.6.1`**，推荐搭配 **DSH `0.2.1-rc.3`** 使用（同时兼容 `0.2.0-rc.2` 与 `0.2.1-rc.2`）。升级前建议先备份当前 Profile，以便需要回退旧版本时能够恢复数据。
 
 新安装请统一使用 `@botharness/tobs` 包名与 `tobs` 命令。如果你此前已经安装了 `deepseekbot`，可以继续保留原有的 `deepseekbot` 包与命令，无需删除现有 Profile、配对设备或聊天记录，两者底层组件完全一致。
 
@@ -29,20 +29,20 @@
 在 **包名或地址（Package name or address）** 输入框中粘贴以下完整包名与版本号：
 
 ```text
-@botharness/tobs@1.6.0
+@botharness/tobs@1.6.1
 ```
 
 安装来源保持默认的 **npm 官方源（npm official registry）**，点击 **安装（Install）** 并等待安装任务完成。
 
 ![在添加插件弹窗中填写 npm 包名与版本](/guides/install/02-install-source-zh.webp)
 
-_注意：截图展示的是早期版本的界面示例，实际安装时请务必输入上方的 `@botharness/tobs@1.6.0`。_
+_注意：截图展示的是早期版本的界面示例，实际安装时请务必输入上方的 `@botharness/tobs@1.6.1`。_
 
 ### 为什么建议带上明确版本号
 
-建议在安装时直接填写带完整版本号的 `@botharness/tobs@1.6.0`，而不要使用不带版本号的旧包名。由于包管理器的发布冷却期策略（例如 pnpm 默认的新版本年龄限制），刚发布不久的新版本在不指定版本号时可能会回退解析到旧版本，从而引发与当前 DSH 版本不兼容的提示。
+建议在安装时直接填写带完整版本号的 `@botharness/tobs@1.6.1`，而不要使用不带版本号的旧包名。由于包管理器的发布冷却期策略（例如 pnpm 默认的新版本年龄限制），刚发布不久的新版本在不指定版本号时可能会回退解析到旧版本，从而引发与当前 DSH 版本不兼容的提示。
 
-如果你使用的是桌面版（Desktop）并希望通过命令行安装或重试，请先完全退出桌面端应用，再运行 `dsh plugin --profile desktop add @botharness/tobs@1.6.0`，完成后重新启动桌面端即可。整个过程无需删除原有 Profile 数据。
+如果你使用的是桌面版（Desktop）并希望通过命令行安装或重试，请先完全退出桌面端应用，再运行 `dsh plugin --profile desktop add @botharness/tobs@1.6.1`，完成后重新启动桌面端即可。整个过程无需删除原有 Profile 数据。
 
 ## 3. 启用插件
 
@@ -90,12 +90,12 @@ _注意：截图展示的是早期版本的界面示例，实际安装时请务�
 除了在图形界面安装，你也可以使用 DSH 命令行将插件安装到指定的 Profile：
 
 ```bash
-dsh plugin --profile <your-profile> add @botharness/tobs@1.6.0
+dsh plugin --profile <your-profile> add @botharness/tobs@1.6.1
 ```
 
 请将 `<your-profile>` 替换为你实际运行的 Profile 名称，安装后在插件页面开启启用开关即可。
 
-如果你需要通过本地归档包安装，可以先执行 `npm pack @botharness/tobs@1.6.0` 将预编译包下载到当前目录（生成 `botharness-tobs-<version>.tgz`），然后在 Web 界面的 **包名或地址** 中填入该文件在 **DSH 所在机器上的绝对路径**，或在命令行运行：
+如果你需要通过本地归档包安装，可以先执行 `npm pack @botharness/tobs@1.6.1` 将预编译包下载到当前目录（生成 `botharness-tobs-<version>.tgz`），然后在 Web 界面的 **包名或地址** 中填入该文件在 **DSH 所在机器上的绝对路径**，或在命令行运行：
 
 ```bash
 dsh plugin --profile <your-profile> add ./botharness-tobs-<version>.tgz
@@ -105,7 +105,7 @@ dsh plugin --profile <your-profile> add ./botharness-tobs-<version>.tgz
 
 | 现象 | 排查建议 |
 | --- | --- |
-| 提示插件与当前 DSH 版本不兼容 | 请确认 DSH 版本为 `0.2.0-rc.2`、`0.2.1-rc.2` 或 `0.2.1-rc.3`，且安装的完整包名为 `@botharness/tobs@1.6.0`。 |
+| 提示插件与当前 DSH 版本不兼容 | 请确认 DSH 版本为 `0.2.0-rc.2`、`0.2.1-rc.2` 或 `0.2.1-rc.3`，且安装的完整包名为 `@botharness/tobs@1.6.1`。 |
 | 提示找不到包或版本 | 检查包名拼写与版本号是否完整，确认安装源选为 **npm 官方源** 后重试。 |
 | 已安装但左侧没有 Bot 模式 | 在当前 Profile 的插件列表中开启 **启用 @botharness/tobs**；若提示需重启，重启 DSH 后刷新页面。 |
 | 能进 Bot 模式但发消息无回复 | 检查是否已在 **设置 → 模型** 中配好可用的 API Key，并在 Bot 右侧栏的 **模型** 中选定了模型。 |

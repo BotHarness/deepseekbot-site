@@ -8,11 +8,11 @@
 }
 ---
 
-> **Current stable release: 1.6.0.** The instructions and package commands below reflect 1.6.0. Some screenshots show earlier UI versions; follow the package spec and steps in the text.
+> **Current stable release: 1.6.1.** The instructions and package commands below reflect 1.6.1. Some screenshots show earlier UI versions; follow the package spec and steps in the text.
 
 This guide walks you through installing the **Tobs** plugin in DeepSeek Harness (DSH), enabling Bot mode, and creating your first PersonaBot. Installing this single package brings in the core runtime, web client, and messaging provider together.
 
-Install the stable npm package **`@botharness/tobs@1.6.0`**. We recommend **DSH `0.2.1-rc.3`** (also compatible with `0.2.0-rc.2` and `0.2.1-rc.2`). Before upgrading an existing installation, back up your Profile directory in case you ever want to roll back to an older version.
+Install the stable npm package **`@botharness/tobs@1.6.1`**. We recommend **DSH `0.2.1-rc.3`** (also compatible with `0.2.0-rc.2` and `0.2.1-rc.2`). Before upgrading an existing installation, back up your Profile directory in case you ever want to roll back to an older version.
 
 New installations use the `@botharness/tobs` package and the `tobs` command. If you are upgrading from `deepseekbot`, you can keep your existing `deepseekbot` setup and command—do not delete your Profiles, device pairings, or chats. Both packages share the same underlying components.
 
@@ -29,20 +29,20 @@ Click **Plugins (插件)** in the left sidebar, then click **Add plugin (添加�
 Paste this exact package specification into **Package name or address (包名或地址)**:
 
 ```text
-@botharness/tobs@1.6.0
+@botharness/tobs@1.6.1
 ```
 
 Keep **npm official registry (npm 官方源)** selected as the installation source and click **Install (安装)**. Wait for the installation task to finish.
 
 ![Add plugin dialog with the npm package name filled in](/guides/install/02-install-source-zh.webp)
 
-_Note: The screenshots show an earlier version for visual reference; always enter `@botharness/tobs@1.6.0` as shown above._
+_Note: The screenshots show an earlier version for visual reference; always enter `@botharness/tobs@1.6.1` as shown above._
 
 ### Why pinning the version matters
 
-Always include the explicit version (`@botharness/tobs@1.6.0`) when installing. Package managers with release-age policies (such as pnpm's default 24-hour window for brand-new releases) may otherwise resolve an unpinned package name to an older release that expects a different DSH version.
+Always include the explicit version (`@botharness/tobs@1.6.1`) when installing. Package managers with release-age policies (such as pnpm's default 24-hour window for brand-new releases) may otherwise resolve an unpinned package name to an older release that expects a different DSH version.
 
-If you are installing into an existing Desktop Profile from the command line, quit the Desktop app completely before running `dsh plugin --profile desktop add @botharness/tobs@1.6.0`, then relaunch the app. Keep your existing Profile data intact—there is no need to delete your Profile to retry an install.
+If you are installing into an existing Desktop Profile from the command line, quit the Desktop app completely before running `dsh plugin --profile desktop add @botharness/tobs@1.6.1`, then relaunch the app. Keep your existing Profile data intact—there is no need to delete your Profile to retry an install.
 
 ## 3. Enable the installed plugin
 
@@ -88,12 +88,12 @@ When importing a Bot from a standard SSH repository URL such as `git@github.com:
 You can also install the plugin into a specific DSH Profile from the command line:
 
 ```bash
-dsh plugin --profile <your-profile> add @botharness/tobs@1.6.0
+dsh plugin --profile <your-profile> add @botharness/tobs@1.6.1
 ```
 
 Make sure to specify the Profile you actually run, then enable the plugin on that Profile's Plugins page.
 
-To install from a local archive, download the prebuilt tarball with `npm pack @botharness/tobs@1.6.0`, which saves `botharness-tobs-<version>.tgz` in the current directory. You can then paste its **absolute path on the machine running DSH** into **Package name or address** in the Web UI, or install it via the CLI:
+To install from a local archive, download the prebuilt tarball with `npm pack @botharness/tobs@1.6.1`, which saves `botharness-tobs-<version>.tgz` in the current directory. You can then paste its **absolute path on the machine running DSH** into **Package name or address** in the Web UI, or install it via the CLI:
 
 ```bash
 dsh plugin --profile <your-profile> add ./botharness-tobs-<version>.tgz
@@ -103,7 +103,7 @@ dsh plugin --profile <your-profile> add ./botharness-tobs-<version>.tgz
 
 | What you see | How to fix it |
 | --- | --- |
-| Plugin is incompatible with this DSH | Make sure you are on DSH `0.2.0-rc.2`, `0.2.1-rc.2`, or `0.2.1-rc.3` and installing `@botharness/tobs@1.6.0`. |
+| Plugin is incompatible with this DSH | Make sure you are on DSH `0.2.0-rc.2`, `0.2.1-rc.2`, or `0.2.1-rc.3` and installing `@botharness/tobs@1.6.1`. |
 | Package or version not found | Double-check the spelling and version number, ensure **npm official registry** is selected, and try again. |
 | Installed, but Bot mode is missing | Enable `@botharness/tobs` in your current Profile's Plugins list; restart DSH if prompted and reload the page. |
 | Bot mode opens, but the Bot doesn't reply | Verify your model provider credentials in **Settings → Models** and check the Bot's selected model in its sidebar. |

@@ -96,7 +96,7 @@ tailscale ip -4
 
 ## 3. 在开发机打包构建产物（可选源码构建方式）
 
-如果你直接安装 npm 正式版，可以在第 4 步直接通过 `dsh plugin add @botharness/tobs@1.6.0` 安装。如果你需要从特定源码版本构建完整产物包，可以在开发机（Node `24.21.0`、pnpm `12.4.2`）上打包后再上传到小内存 VPS，避免在 2 核 4 GB 机器上直接跑大型全量编译：
+如果你直接安装 npm 正式版，可以在第 4 步直接通过 `dsh plugin add @botharness/tobs@1.6.1` 安装。如果你需要从特定源码版本构建完整产物包，可以在开发机（Node `24.21.0`、pnpm `12.4.2`）上打包后再上传到小内存 VPS，避免在 2 核 4 GB 机器上直接跑大型全量编译：
 
 ```bash
 git clone https://github.com/BotHarness/DeepSeekBot.git botharness-product

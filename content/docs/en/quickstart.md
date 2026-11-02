@@ -10,7 +10,7 @@
 
 ## 1. Install the plugin
 
-Follow the [illustrated installation guide](/docs/installation): in DSH, open **Plugins → Add plugin**, enter `@botharness/tobs@1.6.0`, install it, and click **Enable now**. We recommend **DSH `0.2.1-rc.3`** (compatible with `0.2.0-rc.2` and later `0.2.x` releases).
+Follow the [illustrated installation guide](/docs/installation): in DSH, open **Plugins → Add plugin**, enter `@botharness/tobs@1.6.1`, install it, and click **Enable now**. We recommend **DSH `0.2.1-rc.3`** (compatible with `0.2.0-rc.2` and later `0.2.x` releases).
 
 ## 2. Configure a model provider
 
