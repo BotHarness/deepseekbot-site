@@ -18,6 +18,7 @@
     "verify": "pnpm format:check && pnpm lint && pnpm test:docs-sync && pnpm test:community && pnpm test:header && pnpm test:companion && pnpm test:part-file && pnpm test:worker && pnpm test:avatar-store && pnpm test:plugins && pnpm test:blog-artwork && pnpm build",
     "deploy": "pnpm build && wrangler deploy",
     "deploy:preview": "pnpm build && wrangler versions upload",
+    "deploy:setup": "bash scripts/deploy-setup.sh",
     "frames": "node scripts/frame-svg.mjs",
     "og": "node scripts/og-image.mjs",
     "blog:covers": "node scripts/blog-covers.mjs",

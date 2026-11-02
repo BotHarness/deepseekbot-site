@@ -164,7 +164,9 @@ The job uses the `CLOUDFLARE_API_TOKEN` secret of the `production` environment
 in Cloudflare (My Profile → API Tokens → Create Token → the **Edit Cloudflare Workers** template),
 with Account Resources set to the account in `wrangler.jsonc` and Zone Resources set to all zones
 from that account; it needs no other permissions. Never paste the token
-into chats, issues or commits.
+into chats, issues or commits. `pnpm deploy:setup` does all of this from a terminal: it opens the
+pre-filled token page, reads the token without echoing it, creates the environment and saves the
+secret with the GitHub CLI.
 
 Manual fallback: `pnpm deploy` (production) or `pnpm deploy:preview` (preview URL only), after
 `npx wrangler login`.
