@@ -157,11 +157,21 @@ For local Worker asset checks, use `pnpm exec wrangler dev --local --local-upstr
 Wrangler otherwise defaults its upstream hostname to the product route and rewrites redirects
 back to its development address.
 
-Recommended: connect this repository in Cloudflare (Workers & Pages → Create → Import a
-repository) with build command `pnpm build` and deploy command `npx wrangler deploy`. Pushes to
-`main` go live; other branches get preview URLs (`npx wrangler versions upload`).
+Production deploys run from GitHub Actions (`.github/workflows/deploy.yml`). Like the product's npm
+release, merging to `main` does not publish; a release tag does. `pnpm deploy:tag` tags the latest
+`main` as `site-YYYY.MM.DD` (`.2`, `.3` for later releases the same day) and pushes it; the job checks
+the tag is on `main`, runs `pnpm verify` and then `wrangler deploy`. **Actions → deploy → Run
+workflow** on `main` redeploys `main` without a tag.
+The job uses the `CLOUDFLARE_API_TOKEN` secret of the `production` environment
+(Settings → Environments → production; limit its deployment branches and tags to `main` and `site-*`). Create that token
+in Cloudflare (My Profile → API Tokens → Create Token → the **Edit Cloudflare Workers** template),
+with Account Resources set to the account in `wrangler.jsonc` and Zone Resources set to all zones
+from that account; it needs no other permissions. Never paste the token
+into chats, issues or commits. `pnpm deploy:setup` does all of this from a terminal: it opens the
+pre-filled token page, reads the token without echoing it, creates the environment and saves the
+secret with the GitHub CLI.
 
-Manual: `pnpm deploy` (production) or `pnpm deploy:preview` (preview URL only), after
+Manual fallback: `pnpm deploy` (production) or `pnpm deploy:preview` (preview URL only), after
 `npx wrangler login`.
 
 ## Tobs brand migration
