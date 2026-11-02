@@ -96,7 +96,7 @@ From your local machine (signed in to the same tailnet), run `tailscale ping <ho
 
 ## 3. Build a source package off the VPS (optional)
 
-If you are installing the standard npm release, you can install `@botharness/tobs@1.6.0` directly via `dsh plugin add`. If you are building from a specific git revision, build the package on your local development machine first (using Node `24.21.0` and pnpm `12.4.2`) so you don't run a heavy build on a small 2-core / 4 GB VPS:
+If you are installing the standard npm release, you can install `@botharness/tobs@1.6.1` directly via `dsh plugin add`. If you are building from a specific git revision, build the package on your local development machine first (using Node `24.21.0` and pnpm `12.4.2`) so you don't run a heavy build on a small 2-core / 4 GB VPS:
 
 ```bash
 git clone https://github.com/BotHarness/DeepSeekBot.git botharness-product
