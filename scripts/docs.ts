@@ -144,6 +144,11 @@ function href(lang: Lang, url: string, slugs: Set<string>): string {
     return docPath(doc[1] === 'zh' ? 'zh' : doc[1] === 'en' ? 'en' : lang, slug) + hash;
   }
   if (path.startsWith('/guides/')) return url;
+  const legal = path.match(/^\/(?:(zh|en)\/)?(privacy|terms)\/?$/);
+  if (legal) {
+    const locale = legal[1] === 'zh' ? 'zh' : legal[1] === 'en' ? 'en' : lang;
+    return (legal[2] === 'privacy' ? privacyPath(locale) : termsPath(locale)) + hash;
+  }
   if (/^\/(?:(?:zh|en)\/)?changelog\/?$/.test(path))
     return `${path.startsWith('/en/') || (lang === 'en' && !path.startsWith('/zh/')) ? '/en' : ''}/changelog/${hash}`;
   // /dev and the rest live on botharness.ai, where Chinese sits under /zh

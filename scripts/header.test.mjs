@@ -212,7 +212,10 @@ test('all generated guides, legal, changelog, blog and plugin pages retain the s
       const html = readFileSync(`${prefix}terms/index.html`, 'utf8');
       assert.match(html, /YANG MUFENG/);
       assert.match(html, /href="mailto:yang@deepseekbot.app"/);
-      assert.ok(html.includes(`href="/${prefix}privacy/"`));
+      const body = html.match(/<div class="docs-body">([\s\S]*?)<\/div>/)?.[1];
+      assert.ok(body);
+      assert.equal([...body.matchAll(new RegExp(`href="/${prefix}privacy/"`, 'g'))].length, 2);
+      assert.doesNotMatch(body, /https:\/\/botharness\.ai\/(?:zh\/|en\/)?privacy/);
       assert.ok(html.includes(`<link rel="canonical" href="https://tobs.app/${prefix}terms/"`));
       assert.ok(html.includes('hreflang="zh-Hans" href="https://tobs.app/terms/"'));
       assert.ok(html.includes('hreflang="en" href="https://tobs.app/en/terms/"'));
