@@ -7,7 +7,7 @@ import { dirname } from 'node:path';
 import { Marked } from 'marked';
 import { headerCommunityMarkup } from '../src/headerCommunity.ts';
 import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
-import { privacyPath, searchButton } from './docs.ts';
+import { privacyPath, searchButton, termsLink } from './docs.ts';
 
 type Lang = 'zh' | 'en';
 const SITE = 'https://tobs.app';
@@ -414,7 +414,7 @@ function page(
       </div>
     </header>
     ${main}
-    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
+    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
     <script type="module" src="/src/plugins.ts"></script>
   </body>
 </html>

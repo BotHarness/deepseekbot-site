@@ -124,6 +124,8 @@ ${[
   [blogPath('en'), blogPath('zh'), blogPath('en')],
   ['/privacy/', '/privacy/', '/en/privacy/'],
   ['/en/privacy/', '/privacy/', '/en/privacy/'],
+  ['/terms/', '/terms/', '/en/terms/'],
+  ['/en/terms/', '/terms/', '/en/terms/'],
 ]
   .map(
     ([path, zh, en]) => `  <url>

@@ -50,6 +50,8 @@ export function AvatarApp() {
             BotPixel
           </a>{' '}
           · <a href={lang === 'zh' ? '/privacy/' : '/en/privacy/'}>{copy.footer.privacy}</a>
+          {' · '}
+          <a href={lang === 'zh' ? '/terms/' : '/en/terms/'}>{copy.footer.terms}</a>
         </p>
       </footer>
       {/* the same companion as on the home page, wearing the design as it is edited */}

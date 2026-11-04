@@ -188,6 +188,8 @@ export function MarketApp() {
         <p>
           {copy.footer.built}{' '}
           <a href={lang === 'zh' ? '/privacy/' : '/en/privacy/'}>{copy.footer.privacy}</a>
+          {' · '}
+          <a href={lang === 'zh' ? '/terms/' : '/en/terms/'}>{copy.footer.terms}</a>
         </p>
       </footer>
     </Theme>

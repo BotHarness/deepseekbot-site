@@ -196,7 +196,7 @@ test('localized controls retain destinations, hidden descriptions and click-only
   }
 });
 
-test('all generated guides, privacy, changelog, blog and plugin pages retain the shared header and correct locale links', () => {
+test('all generated guides, legal, changelog, blog and plugin pages retain the shared header and correct locale links', () => {
   const cwd = process.cwd();
   const fixture = mkdtempSync(join(tmpdir(), 'site-header-test-'));
   try {
@@ -207,6 +207,17 @@ test('all generated guides, privacy, changelog, blog and plugin pages retain the
     process.chdir(fixture);
     const paths = [...renderDocs(), ...renderChangelog(), ...renderBlog(), ...renderPlugins()];
     assert.ok(paths.length > 10);
+    for (const prefix of ['', 'en/']) {
+      assert.ok(paths.some((path) => path.replaceAll('\\', '/') === `${prefix}terms/index.html`));
+      const html = readFileSync(`${prefix}terms/index.html`, 'utf8');
+      assert.match(html, /YANG MUFENG/);
+      assert.match(html, /href="mailto:yang@deepseekbot.app"/);
+      assert.ok(html.includes(`href="/${prefix}privacy/"`));
+      assert.ok(html.includes(`<link rel="canonical" href="https://tobs.app/${prefix}terms/"`));
+      assert.ok(html.includes('hreflang="zh-Hans" href="https://tobs.app/terms/"'));
+      assert.ok(html.includes('hreflang="en" href="https://tobs.app/en/terms/"'));
+      assert.doesNotMatch(html, /class="docs-pager"|class="docs-sidebar"/);
+    }
     for (const path of paths) {
       const lang = path.split(/[\\/]/)[0] === 'en' ? 'en' : 'zh';
       const html = readFileSync(path, 'utf8');
@@ -238,7 +249,9 @@ test('all generated guides, privacy, changelog, blog and plugin pages retain the
         nav,
         /#features[\s\S]*#install[\s\S]*\/market[\s\S]*\/docs[\s\S]*\/changelog[\s\S]*\/blog/,
       );
-      if (path.includes('privacy')) assert.doesNotMatch(nav, /aria-current="page"/);
+      const footer = html.match(/<footer[\s\S]*?<\/footer>/)?.[0];
+      assert.ok(footer?.includes(`href="${lang === 'zh' ? '' : '/en'}/terms/"`), path);
+      if (/privacy|terms/.test(path)) assert.doesNotMatch(nav, /aria-current="page"/);
       else assert.match(nav, /aria-current="page"/);
     }
   } finally {
