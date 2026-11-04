@@ -102,6 +102,11 @@ const home = (lang: Lang) => (lang === 'zh' ? '/' : '/en/');
 export const docPath = (lang: Lang, slug: string) => `${lang === 'zh' ? '' : '/en'}/docs/${slug}/`;
 export const privacyPath = (lang: Lang) => `${lang === 'zh' ? '' : '/en'}/privacy/`;
 export const PRIVACY_OUT = ['privacy', 'en/privacy'];
+export const termsPath = (lang: Lang) => `${lang === 'zh' ? '' : '/en'}/terms/`;
+export const TERMS_OUT = ['terms', 'en/terms'];
+
+export const termsLink = (lang: Lang) =>
+  `<a href="${termsPath(lang)}">${lang === 'zh' ? '服务条款' : 'Terms of Service'}</a>`;
 
 function read(lang: Lang): Doc[] {
   const docs: Doc[] = [];
@@ -139,6 +144,11 @@ function href(lang: Lang, url: string, slugs: Set<string>): string {
     return docPath(doc[1] === 'zh' ? 'zh' : doc[1] === 'en' ? 'en' : lang, slug) + hash;
   }
   if (path.startsWith('/guides/')) return url;
+  const legal = path.match(/^\/(?:(zh|en)\/)?(privacy|terms)\/?$/);
+  if (legal) {
+    const locale = legal[1] === 'zh' ? 'zh' : legal[1] === 'en' ? 'en' : lang;
+    return (legal[2] === 'privacy' ? privacyPath(locale) : termsPath(locale)) + hash;
+  }
   if (/^\/(?:(?:zh|en)\/)?changelog\/?$/.test(path))
     return `${path.startsWith('/en/') || (lang === 'en' && !path.startsWith('/zh/')) ? '/en' : ''}/changelog/${hash}`;
   // /dev and the rest live on botharness.ai, where Chinese sits under /zh
@@ -361,16 +371,17 @@ function page(
       </main>
       ${contents}
     </div>
-    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a></p></footer>
+    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>
 `;
 }
 
-/** Writes every guide page and the privacy notice and returns their paths, for Vite's inputs. */
+/** Writes guides and standalone legal pages and returns their paths for Vite's inputs. */
 export function renderDocs(): string[] {
-  for (const dir of [...DOCS_OUT, ...PRIVACY_OUT]) rmSync(dir, { recursive: true, force: true });
+  for (const dir of [...DOCS_OUT, ...PRIVACY_OUT, ...TERMS_OUT])
+    rmSync(dir, { recursive: true, force: true });
   const written: string[] = [];
   for (const lang of ['zh', 'en'] as const) {
     const docs = read(lang);
@@ -381,16 +392,21 @@ export function renderDocs(): string[] {
       writeFileSync(file, page(lang, doc, docs, render(doc.body)));
       written.push(file);
     }
-    // the privacy notice is hand-written here, not synced from BotHarness
-    const text = readFileSync(join('content/privacy', `${lang}.md`), 'utf8');
-    const match = text.match(/^---\n([\s\S]*?)\n---\n/);
-    if (!match) throw new Error(`content/privacy/${lang}.md: missing front matter`);
-    const meta = JSON.parse(match[1]!) as Pick<Doc, 'title' | 'description'>;
-    const notice: Doc = { ...meta, slug: 'privacy', order: 0, source: '', body: '' };
-    const file = join(privacyPath(lang).slice(1), 'index.html');
-    mkdirSync(dirname(file), { recursive: true });
-    writeFileSync(file, page(lang, notice, docs, render(text.slice(match[0].length)), privacyPath));
-    written.push(file);
+    for (const [section, path] of [
+      ['privacy', privacyPath],
+      ['terms', termsPath],
+    ] as const) {
+      const source = join('content', section, `${lang}.md`);
+      const text = readFileSync(source, 'utf8');
+      const match = text.match(/^---\n([\s\S]*?)\n---\n/);
+      if (!match) throw new Error(`${source}: missing front matter`);
+      const meta: Pick<Doc, 'title' | 'description'> = JSON.parse(match[1]!);
+      const notice: Doc = { ...meta, slug: section, order: 0, source: '', body: '' };
+      const file = join(path(lang).slice(1), 'index.html');
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, page(lang, notice, docs, render(text.slice(match[0].length)), path));
+      written.push(file);
+    }
   }
   return written;
 }

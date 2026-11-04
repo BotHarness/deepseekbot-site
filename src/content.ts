@@ -267,6 +267,7 @@ export interface Copy {
     license: string;
     community: string;
     privacy: string;
+    terms: string;
   };
 }
 
@@ -708,6 +709,7 @@ const zh: Copy = {
     license: '开源，MIT 许可。',
     community: 'QQ 社区群 1125565676',
     privacy: '隐私说明',
+    terms: '服务条款',
   },
 };
 
@@ -1155,6 +1157,7 @@ const en: Copy = {
     license: 'Open source under the MIT license.',
     community: 'QQ community group 1125565676',
     privacy: 'Privacy',
+    terms: 'Terms of Service',
   },
 };
 
