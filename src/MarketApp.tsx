@@ -15,6 +15,7 @@ import type { MarketplaceEntry } from './marketApi';
 import { legacyMarketView, marketHref, parseMarketPath, type MarketView } from './marketRoutes';
 import { initialMode, marketPath, pathLang, pluginsPath, write, type Mode } from './site';
 import { pixelTheme } from './theme';
+import { SponsorFooter } from './components/Sponsors';
 
 // Every view has its own path under /market (see marketRoutes.ts), which the Worker also
 // pre-renders for search engines; the page swaps views in place and keeps history in step.
@@ -185,6 +186,7 @@ export function MarketApp() {
         ) : null}
       </main>
       <footer className="footer market-footer">
+        <SponsorFooter lang={lang} />
         <p>
           {copy.footer.built}{' '}
           <a href={lang === 'zh' ? '/privacy/' : '/en/privacy/'}>{copy.footer.privacy}</a>

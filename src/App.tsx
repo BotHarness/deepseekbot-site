@@ -13,6 +13,7 @@ import { MobileBeta } from './components/MobileBeta';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { SymbolIcon } from './components/SymbolIcon';
+import { SponsorFooter, Sponsors } from './components/Sponsors';
 import { COPY, LINKS } from './content';
 import { HERO_COPY } from './heroCopy';
 import { pixelTheme } from './theme';
@@ -198,6 +199,8 @@ export function App() {
           <Community copy={copy} />
         </section>
 
+        <Sponsors lang={lang} />
+
         <Faq copy={copy} />
 
         <section
@@ -227,6 +230,7 @@ export function App() {
       <BotCompanion lang={lang} design={design} />
 
       <footer className="footer">
+        <SponsorFooter lang={lang} />
         <div className="footer-links">
           <a href="#compare">{copy.compare.kicker}</a>
           <a href={LINKS.github} target="_blank" rel="noreferrer">

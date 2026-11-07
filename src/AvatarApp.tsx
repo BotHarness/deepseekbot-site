@@ -7,6 +7,7 @@ import { SiteHeader } from './components/SiteHeader';
 import { COPY, LINKS } from './content';
 import { initialMode, pathLang, write, type Mode } from './site';
 import { pixelTheme } from './theme';
+import { SponsorFooter } from './components/Sponsors';
 
 /**
  * The Avatar Studio at /avatar: the stage, the part editor and the color and shape panel side by
@@ -44,6 +45,7 @@ export function AvatarApp() {
         <Playground copy={copy} lang={lang} design={design} studio />
       </main>
       <footer className="footer market-footer">
+        <SponsorFooter lang={lang} />
         <p>
           {copy.footer.built}{' '}
           <a href={LINKS.botpixel} target="_blank" rel="noreferrer">

@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'nod
 import { dirname, join, relative, sep } from 'node:path';
 import { Marked, type Tokens } from 'marked';
 import { headerCommunityMarkup } from '../src/headerCommunity.ts';
+import { sponsorFooterMarkup } from '../src/sponsors.ts';
 import { navIconSvg } from '../src/navIcons.ts';
 
 type Lang = 'zh' | 'en';
@@ -371,7 +372,7 @@ function page(
       </main>
       ${contents}
     </div>
-    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
+    <footer class="footer">${sponsorFooterMarkup(lang)}<p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>
