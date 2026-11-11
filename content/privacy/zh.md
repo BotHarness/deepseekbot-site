@@ -58,9 +58,11 @@ iPhone 和 Android 上的托布 Tobs 应用（原名 DeepSeekBot）是**你自�
 
 ### 删除账号
 
+**不安装 App 也能申请删除**：请使用 Tobs 账号的注册邮箱，向 [yang@deepseekbot.app](mailto:yang@deepseekbot.app?subject=Tobs%20account%20deletion) 发送邮件，主题为 **Tobs account deletion**，说明希望删除 Tobs 账号及其关联账号数据。无需安装或登录 App。我们会先核验账号归属，再处理请求；请勿发送密码或验证码。核验后的邮件请求会删除下文所述的账号和 Connect 关联记录，保留范围及安全记录与下文相同。
+
 在手机上打开配对页面，选择 Tobs 账号入口，按需登录，再选择**删除账号**并确认。请求会删除 WorkOS 账号，移除该账号关联的电脑记录、隧道和地址，并清理这台手机上的账号会话及其关联连接。如果服务请求或本地清理失败，应用会显示失败或待清理状态，供你重试，不会把尚未完成的删除显示为成功。
 
-Connect 服务会保留包含用户 ID 和删除时间的最小删除记录，用于拒绝旧账号凭据。删除账号不会清除你电脑上的 Bot、对话或文件，也不会撤销通过局域网或 Tailscale 独立配对的设备；如需移除这些设备，请在电脑的设备设置中操作。在某台电脑上退出登录只会解除这台电脑的关联，与删除整个账号不同。
+Connect 服务会保留包含用户 ID 和删除时间的最小删除记录，用于拒绝旧账号凭据；该记录目前不会自动过期。删除账号不会清除你电脑上的 Bot、对话或文件，也不会撤销通过局域网或 Tailscale 独立配对的设备；如需移除这些设备，请在电脑的设备设置中操作。在某台电脑上退出登录只会解除这台电脑的关联，与删除整个账号不同。
 
 ### 消息、文件与模型服务
 
@@ -96,5 +98,7 @@ Connect 服务会保留包含用户 ID 和删除时间的最小删除记录，�
 我们不出售数据，不使用广告标识，也不跨应用或网站追踪你。
 
 ## 联系
+
+如需删除 Tobs 账号，请按上方步骤发送邮件至 [yang@deepseekbot.app](mailto:yang@deepseekbot.app?subject=Tobs%20account%20deletion)。
 
 有疑问可以在 [GitHub Issues](https://github.com/BotHarness/BotHarness/issues) 提出。
