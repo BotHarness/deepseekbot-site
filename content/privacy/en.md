@@ -49,11 +49,11 @@ The Tobs app for iPhone and Android, previously called DeepSeekBot, is a remote 
 
 You do not need a Tobs account to pair over a supported local network or Tailscale route. A local network connection uses an encrypted application channel. Tailscale connections use your own tailnet and an HTTPS computer address; Tailscale processes network and account information under its own policies.
 
-Tobs Connect provides a route through [Cloudflare Tunnel](https://www.cloudflare.com/privacypolicy/) when you choose to link the computer to a Tobs account. You sign in through [WorkOS](https://workos.com/legal/privacy), using an available sign-in method such as Apple, Google or an email code.
+Tobs Connect provides a route through [Cloudflare Tunnel](https://www.cloudflare.com/privacypolicy/) when you choose to link the computer to a Tobs account. You sign in through [WorkOS](https://workos.com/legal/privacy), using an available sign-in method such as Apple, Google, an email code or an email and password.
 
-- WorkOS processes your account email, user ID and, when supplied by your sign-in provider, your name, to authenticate you and manage the account.
-- The Connect service at `connect.botharness.ai` keeps your user ID, linked computer IDs and names, association times and tunnel configuration. Computer addresses currently use `<id>.deepseekbot.dev`; these service addresses retain the earlier name. A pairing request also passes the phone name and pairing verification information through the service.
-- Signing in alone does not authorize a new device. Pairing includes computer-key verification and approval on a trusted device. Connect application traffic is additionally encrypted between the phone and computer against the trusted computer key; the connection services do not hold the keys to decrypt that channel. A failed key or protocol check refuses the connection rather than retrying in plaintext.
+- WorkOS processes your account email, user ID and, when supplied, your name, to authenticate you and manage the account. With password sign-in or registration, the app sends the email and password over HTTPS through the Connect service to WorkOS. The app and Connect service do not persist the password or include it in application logs or statistics. WorkOS manages password verification, email verification and password resets. Successful sign-in stores the account session in the phone’s system-protected storage.
+- The Connect service at `connect.botharness.ai` keeps your user ID, linked computer IDs and names, association times and tunnel configuration. Computer addresses use a service subdomain such as `<id>.botharness.dev`; existing addresses may retain the earlier `deepseekbot.dev` domain. A pairing request also passes the phone name and pairing verification information through the service.
+- When your phone and computer use the same Tobs Connect account, choosing that computer authorizes the new phone without separate approval or manual fingerprint comparison. This enrollment trusts account authentication and the Connect relay; compromise of either may allow an unauthorized new device, and a compromised relay may substitute a computer key on first connection. Other pairing paths retain their device-approval checks. Connect application traffic is encrypted between the phone and computer against the pinned computer key; established sessions refuse failed key or protocol checks rather than retrying in plaintext. You can revoke paired devices, but if account access is compromised you must also secure that account to prevent new enrollment.
 - Network providers still process connection metadata, such as IP addresses, destination addresses, timing and traffic sizes. This channel protection does not cover the separate speech and notification services below.
 
 ### Delete your account
@@ -66,11 +66,21 @@ The Connect service retains a minimal deletion record containing the user ID and
 
 Messages, attachments and edited dictation text go to the paired computer. That computer may send content to the model providers, tools and messaging services you configure there. Their processing is separate from usage statistics and the optional account service. Review the providers you choose and their privacy policies before sending sensitive content.
 
+### Bot calls and shared visuals
+
+On supported app and computer versions, starting a Bot call sends microphone media to the paired computer. This is separate from keyboard dictation. The computer can send speech to its configured speech-recognition provider, the resulting conversation to its model provider, and reply text to its speech-synthesis provider. Provider processing and retention depend on the services configured on that computer. Ending the call stops further call capture; it does not delete messages already saved in the conversation.
+
+When you turn on camera sharing during a supported call, selected camera frames go to the paired computer. Frame saving can add those images to the conversation. Turning frame saving off prevents those conversation attachments, but images used by the model may still remain in its session tool results. Do not treat that switch as a promise of no storage. Desktop screen sharing is a separate computer-side feature with its own user permission.
+
+### Store-review demonstration computer
+
+When a store reviewer uses an account and demonstration computer supplied by us, we operate that computer. Review messages, attachments, Bot memory and execution records can therefore be accessible to its maintainers and the configured model service. It is isolated from personal computers and is intended for test content. Account deletion or unpairing does not erase the demonstration computer’s conversation records; contact us through the channel below to request their removal.
+
 ### Permissions and notifications
 
-- **Camera**: to scan a pairing code or take a photo you choose to send.
+- **Camera**: to scan a pairing code, take a photo you choose to send, or share camera frames during a supported Bot call.
 - **Photos**: to select a photo you choose to send.
-- **Microphone and speech recognition**: used after you start dictation. The app receives the recognized text for you to review and edit. Recognition uses the device's speech service; depending on platform, language and service availability, audio may be processed by Apple or the recognition provider on Android. The app does not require offline recognition, does not save a dictation audio file, and does not upload that audio to your computer or the Tobs account service.
+- **Microphone and speech recognition**: used for dictation and supported Bot calls. For dictation, the app receives the recognized text for you to review and edit. Recognition uses the device's speech service; depending on platform, language and service availability, audio may be processed by Apple or the recognition provider on Android. The app does not require offline recognition, does not save a dictation audio file, and does not upload that audio to your computer or the Tobs account service.
 - **Notifications**: optional. The phone obtains an Expo push token and registers it with your computer. The computer sends notifications through [Expo's push service](https://docs.expo.dev/push-notifications/faq/) and Apple (APNs) or Google (FCM). Payloads can include computer, device, Bot or channel identifiers and names, notification type, badge count, and a short message or tool-request preview. A tool preview can contain a command, URL, path or other argument summary; private-input values are not included in these previews. The delivery providers process these payloads separately from the encrypted Connect channel. Turn notifications off in app or system settings if you do not want new notifications delivered.
 
 ### Statistics
