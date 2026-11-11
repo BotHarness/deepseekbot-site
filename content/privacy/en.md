@@ -58,9 +58,11 @@ Tobs Connect provides a route through [Cloudflare Tunnel](https://www.cloudflare
 
 ### Delete your account
 
+**Request deletion without the app:** email [yang@deepseekbot.app](mailto:yang@deepseekbot.app?subject=Tobs%20account%20deletion) from the email address registered to your Tobs account, with the subject **Tobs account deletion**. Tell us that you want your Tobs account and its associated account data deleted. You do not need to install or sign in to the app. We verify account ownership before processing the request; never send your password or verification codes. A verified email request deletes the account and linked Connect records described below, with the same exclusions and retained security record.
+
 Open the phone's pairing screen, choose the Tobs account option, sign in if needed, then choose **Delete account** and confirm. The request deletes the WorkOS account, removes its linked computer records, tunnels and addresses, and clears the account session and its associated connections from that phone. If a service request or local cleanup fails, the app reports the failure or pending cleanup so you can retry; it does not report an unfinished deletion as complete.
 
-The Connect service retains a minimal deletion record containing the user ID and deletion time to reject old account credentials. Deleting an account does not erase Bots, conversations or files on your computer, or revoke independently paired local network or Tailscale devices. Remove those devices in the computer's device settings when needed. Signing out on a computer unlinks that computer; it is different from deleting the account.
+The Connect service retains a minimal deletion record containing the user ID and deletion time to reject old account credentials; this record currently has no automatic expiry. Deleting an account does not erase Bots, conversations or files on your computer, or revoke independently paired local network or Tailscale devices. Remove those devices in the computer's device settings when needed. Signing out on a computer unlinks that computer; it is different from deleting the account.
 
 ### Messages, files and model services
 
@@ -96,5 +98,7 @@ Turning statistics on again creates a new random ID. Details: [mobile statistics
 We do not sell data, use advertising IDs, or track you across apps and websites.
 
 ## Contact
+
+For Tobs account deletion requests, email [yang@deepseekbot.app](mailto:yang@deepseekbot.app?subject=Tobs%20account%20deletion) using the steps above.
 
 Questions are welcome in [GitHub Issues](https://github.com/BotHarness/BotHarness/issues).
