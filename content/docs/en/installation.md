@@ -4,7 +4,7 @@
   "description": "Install the verified Tobs package in DSH, enable Bot mode and create a Bot.",
   "order": 12,
   "source": "docs/installation.md",
-  "sourceRevision": "5966e9dd3a4f4c72990c79789f8fe0203374e227"
+  "sourceRevision": "0a853f429782ac8fdda3c182ad505853bfb98af1"
 }
 ---
 
@@ -94,7 +94,7 @@ dsh plugin --profile <your-profile> add @botharness/tobs@1.7.0
 
 Use the Profile you actually start. Enable the plugin in that Profile's Plugins page afterward.
 
-To import the same precompiled archive, download the public npm tarball with `npm pack @botharness/tobs@1.7.0`, which saves `botharness-tobs-<version>.tgz` in the current directory. In the Web interface, enter its **absolute path on the machine running DSH** in Package name or address; a path on a different browser machine is not a Host path. With the CLI you can instead use `dsh plugin --profile <your-profile> add ./botharness-tobs-<version>.tgz` from the download directory.
+To import the same precompiled archive, download the public npm tarball with `npm pack @botharness/tobs@1.7.0`, which saves `botharness-tobs-1.7.0.tgz` in the current directory. In the Web interface, enter its **absolute path on the machine running DSH** in Package name or address; a path on a different browser machine is not a Host path. With the CLI you can instead use `dsh plugin --profile <your-profile> add ./botharness-tobs-1.7.0.tgz` from the download directory.
 
 ## If installation does not finish
 
