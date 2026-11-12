@@ -72,7 +72,7 @@ Messages, attachments and edited dictation text go to the paired computer. That 
 
 On supported app and computer versions, starting a Bot call sends microphone media to the paired computer. This is separate from keyboard dictation. The computer can send speech to its configured speech-recognition provider, the resulting conversation to its model provider, and reply text to its speech-synthesis provider. Provider processing and retention depend on the services configured on that computer. Ending the call stops further call capture; it does not delete messages already saved in the conversation.
 
-When you turn on camera sharing during a supported call, selected camera frames go to the paired computer. Frame saving can add those images to the conversation. Turning frame saving off prevents those conversation attachments, but images used by the model may still remain in its session tool results. Do not treat that switch as a promise of no storage. Desktop screen sharing is a separate computer-side feature with its own user permission.
+When you turn on camera sharing during a supported call, selected camera frames go to the paired computer. Current versions save shared keyframes in the Bot conversation, including frames sent without a spoken message. Images used by the model may also remain in its session tool results. Older versions may show a frame-saving switch; turning that switch off is not a promise of no storage. Desktop screen sharing is a separate computer-side feature with its own user permission.
 
 ### Store-review demonstration computer
 
