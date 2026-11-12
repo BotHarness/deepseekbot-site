@@ -332,9 +332,9 @@ const zh: Copy = {
   features: {
     kicker: '能力',
     title: '每个 Bot 都是一位同事',
-    lead: `v${VERSION} 已发布：使用新的 Tobs 安装包，保留原有 DeepSeekBot 命令；Bot 可以统一向频道与外部聊天发送消息，后台任务完成后也能继续报告结果。`,
+    lead: `v${VERSION} 已发布：与 Bot 通话，在支持的平台分享屏幕或摄像头；搜索手机上已保存的聊天，查看 Bot 发来的图表与丰富文档。`,
     release: {
-      text: '修复了聊天返回最新消息按钮、已安装命令启动，以及 Mac 桌面控制组件安装失败时的清理与错误提示。',
+      text: '实时通话需要支持的 Mac/Windows Host，通过局域网或 Tailscale 连接。手机应用单独发布。',
       label: `查看 ${VERSION} 更新日志`,
       href: `/changelog/#v${VERSION}`,
     },
@@ -665,7 +665,7 @@ const zh: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/harness/',
     },
-    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；${VERSION} 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2、0.2.1-rc.2 和 0.2.1-rc.3 验证。声明安装范围为 >=0.2.0-0，不代表所有后续版本均已验证。`,
+    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；${VERSION} 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2、0.2.1-rc.2、0.2.1-rc.3 和 0.2.2-rc.1 验证。声明安装范围为 >=0.2.0-0，不代表所有后续版本均已验证。`,
     steps: ['安装 DeepSeek Harness', '把 Tobs 装进 web Profile', '启动并打开 Bot mode'],
     next: {
       title: '装好了？选择接入方式与可选能力',
@@ -775,9 +775,9 @@ const en: Copy = {
   features: {
     kicker: 'Features',
     title: 'Every Bot is a colleague',
-    lead: `v${VERSION} is out: install Tobs while keeping the supported DeepSeekBot command; Bots can send messages to Channels and external chats through one delivery path and report completed background work.`,
+    lead: `v${VERSION} is out: call your Bots and share your screen or camera on supported platforms; search saved mobile chats and open charts and rich documents from Bots.`,
     release: {
-      text: 'Fixes cover the return-to-latest conversation button, installed command startup, and cleanup and error reporting when Mac desktop-control setup fails.',
+      text: 'Real-time calls need a supported Mac/Windows Host over LAN or Tailscale. Mobile apps are released separately.',
       label: `Read the ${VERSION} changelog`,
       href: `/en/changelog/#v${VERSION}`,
     },
@@ -1109,7 +1109,7 @@ const en: Copy = {
       docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/en/harness/',
     },
-    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact ${VERSION} packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2, 0.2.1-rc.2 and 0.2.1-rc.3. Declared admission is >=0.2.0-0; later versions are not all runtime-qualified.`,
+    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact ${VERSION} packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2, 0.2.1-rc.2, 0.2.1-rc.3 and 0.2.2-rc.1. Declared admission is >=0.2.0-0; later versions are not all runtime-qualified.`,
     steps: [
       'Install DeepSeek Harness',
       'Add Tobs to the web Profile',
