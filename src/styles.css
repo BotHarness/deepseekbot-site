@@ -1328,6 +1328,123 @@ a:where(:not(.astryx-button)) {
   margin: 0;
 }
 
+/* ---- sponsors (src/sponsors.ts): homepage cards and the footer line ---- */
+:root {
+  --sponsor-logo: #002689;
+}
+:root[data-theme='dark'] {
+  --sponsor-logo: var(--ink);
+}
+.sponsor-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 28px;
+}
+.sponsor-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px 24px;
+  padding: 12px 20px;
+  border-image-source: var(--frame-paper);
+}
+.sponsor-logo {
+  display: inline-block;
+  flex: none;
+  height: 48px;
+  background: var(--sponsor-logo);
+  -webkit-mask: var(--logo) center / contain no-repeat;
+  mask: var(--logo) center / contain no-repeat;
+}
+.sponsor-meta {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.sponsor-meta p {
+  margin: 0;
+}
+.sponsor-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.sponsor-tier {
+  font-family: var(--pixel-font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  padding: 0 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  -webkit-font-smoothing: none;
+}
+.sponsor-person {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  color: var(--ink-soft);
+}
+a.sponsor-x {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+}
+a.sponsor-x:hover .sponsor-x-name {
+  text-decoration: underline;
+}
+.sponsor-person .sponsor-x {
+  color: var(--ink);
+}
+.sponsor-x-icon {
+  width: 0.9em;
+  height: 0.9em;
+  flex: none;
+  fill: currentColor;
+}
+.sponsor-x-name {
+  font-weight: 700;
+}
+.sponsor-x-handle {
+  opacity: 0.75;
+}
+.sponsor-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 0 auto 12px !important;
+  padding-bottom: 12px;
+  max-width: 720px;
+  border-bottom: 2px dashed color-mix(in srgb, var(--ink-soft) 40%, transparent);
+}
+.sponsor-footer-item {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 10px;
+}
+.sponsor-footer .sponsor-logo {
+  height: 22px;
+  background: currentColor;
+}
+@media (max-width: 560px) {
+  .sponsor-card {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+}
+
 /* ---- analytics consent (src/analytics.ts) ---- */
 .consent-bar {
   position: fixed;

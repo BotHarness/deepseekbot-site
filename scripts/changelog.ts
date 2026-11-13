@@ -6,6 +6,7 @@ import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Marked, type Tokens } from 'marked';
 import { headerCommunityMarkup } from '../src/headerCommunity.ts';
+import { sponsorFooterMarkup } from '../src/sponsors.ts';
 import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { VERSION } from '../src/installRelease.ts';
 import { privacyPath, searchButton, termsLink } from './docs.ts';
@@ -339,7 +340,7 @@ function page(lang: Lang, releases: Release[]) {
         <p class="docs-source"><a href="${GITHUB_BLOB}${lang === 'zh' ? 'CHANGELOG.zh.md' : 'CHANGELOG.md'}" target="_blank" rel="noreferrer">${t.source}</a></p>
       </main>
     </div>
-    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
+    <footer class="footer">${sponsorFooterMarkup(lang)}<p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>

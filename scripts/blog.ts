@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import { dirname } from 'node:path';
 import { Marked } from 'marked';
 import { headerCommunityMarkup } from '../src/headerCommunity.ts';
+import { sponsorFooterMarkup } from '../src/sponsors.ts';
 import { navIconSvg, type NavIcon } from '../src/navIcons.ts';
 import { privacyPath, searchButton, termsLink } from './docs.ts';
 
@@ -280,7 +281,7 @@ function shell(
       </div>
     </header>
     ${main}
-    <footer class="footer"><p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
+    <footer class="footer">${sponsorFooterMarkup(lang)}<p>Tobs · ${t.footer} <a href="${privacyPath(lang)}">${t.privacy}</a> · ${termsLink(lang)}</p></footer>
     <script type="module" src="/src/docs.ts"></script>
   </body>
 </html>
