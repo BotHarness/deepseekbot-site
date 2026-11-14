@@ -6,7 +6,7 @@ import subsetFont from 'subset-font';
 import { defineConfig, type Plugin } from 'vite';
 import { changelogPath, renderChangelog } from './scripts/changelog.ts';
 import { blogPath, blogSitemap, renderBlog } from './scripts/blog.ts';
-import { docsSitemap, renderDocs, searchIndex } from './scripts/docs.ts';
+import { docsMarkdown, docsSitemap, renderDocs, searchIndex } from './scripts/docs.ts';
 import { pluginsLlms, pluginsSitemap, renderPlugins } from './scripts/plugins.ts';
 
 const require = createRequire(import.meta.url);
@@ -91,6 +91,8 @@ function pixelAssets(): Plugin {
       this.emitFile({ type: 'asset', fileName: FONT_URL.slice(1), source: subset });
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() });
       this.emitFile({ type: 'asset', fileName: 'llms.txt', source: llms() });
+      for (const guide of docsMarkdown())
+        this.emitFile({ type: 'asset', fileName: guide.path, source: guide.body });
       // the docs search box loads its language's index on first open
       for (const lang of ['zh', 'en'] as const)
         this.emitFile({
@@ -151,6 +153,11 @@ const llms = () => `# Tobs
 
 - [Overview](${SITE}/en/docs/overview/): what Tobs is and where to start ([中文](${SITE}/docs/overview/))
 - [Installation](${SITE}/en/docs/installation/): install Tobs ([中文](${SITE}/docs/installation/))
+- [Private connections](${SITE}/en/docs/private-connect.md): choose a deployment ([中文](${SITE}/docs/private-connect.md))
+- [Named Tunnel](${SITE}/en/docs/private-named-tunnel.md): fixed address and agent prompt ([中文](${SITE}/docs/private-named-tunnel.md))
+- [HTTPS ingress](${SITE}/en/docs/private-ingress.md): proxy/tunnel and agent prompt ([中文](${SITE}/docs/private-ingress.md))
+- [Docker relay](${SITE}/en/docs/private-relay.md): own relay and agent prompt ([中文](${SITE}/docs/private-relay.md))
+- [Relay protocol](${SITE}/en/docs/private-relay-standard.md): compatible implementations ([中文](${SITE}/docs/private-relay-standard.md))
 - [Changelog](${SITE}/en/changelog/): what changed in each release ([中文](${SITE}/changelog/))
 
 ## Marketplace

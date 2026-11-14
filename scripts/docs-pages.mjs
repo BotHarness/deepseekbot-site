@@ -2,6 +2,80 @@
 // descriptions come from BotHarness scripts/sync-docs.mjs, or the .mdx frontmatter when absent.
 export const DOC_PAGES = [
   {
+    slug: 'private-connect',
+    order: 17,
+    en: {
+      source: 'docs/private-connect.md',
+      title: 'Choose a private connection',
+      description: 'Named Tunnel, HTTPS ingress or Docker relay, with agent prompts.',
+    },
+    zh: {
+      source: 'docs/private-connect.zh.md',
+      title: '选择私有连接',
+      description: 'Named Tunnel、自带 HTTPS 入口或 Docker Relay，含 agent 提示词。',
+    },
+  },
+  {
+    slug: 'private-named-tunnel',
+    order: 1,
+    en: {
+      source: 'docs/private-named-tunnel.md',
+      title: 'Cloudflare Named Tunnel',
+      description: 'Configure your own fixed tunnel manually or with your agent.',
+    },
+    zh: {
+      source: 'docs/private-named-tunnel.zh.md',
+      title: 'Cloudflare Named Tunnel',
+      description: '手动或让自己的 agent 配置固定隧道。',
+    },
+    parent: 'private-connect',
+  },
+  {
+    slug: 'private-ingress',
+    order: 2,
+    en: {
+      source: 'docs/private-ingress.md',
+      title: 'Your own HTTPS proxy or tunnel',
+      description: 'Connect through your proxy or tunnel, with manual steps and an agent prompt.',
+    },
+    zh: {
+      source: 'docs/private-ingress.zh.md',
+      title: '自带 HTTPS 代理或隧道',
+      description: '通过自己的代理或隧道连接，含手动步骤和 agent 提示词。',
+    },
+    parent: 'private-connect',
+  },
+  {
+    slug: 'private-relay',
+    order: 3,
+    en: {
+      source: 'docs/private-relay.md',
+      title: 'Docker private relay',
+      description: 'Deploy your multi-Host relay, with manual steps and an agent prompt.',
+    },
+    zh: {
+      source: 'docs/private-relay.zh.md',
+      title: 'Docker 私有 Relay',
+      description: '部署自己的多 Host 中继，含手动步骤与 agent 提示词。',
+    },
+    parent: 'private-connect',
+  },
+  {
+    slug: 'private-relay-standard',
+    order: 4,
+    en: {
+      source: 'docs/private-relay-standard.md',
+      title: 'Private relay protocol',
+      description: 'Protocol and conformance checks for compatible relays.',
+    },
+    zh: {
+      source: 'docs/private-relay-standard.zh.md',
+      title: '私有 Relay 协议',
+      description: '兼容中继的协议与一致性检查。',
+    },
+    parent: 'private-connect',
+  },
+  {
     slug: 'vps-qq-tutorial',
     order: 13,
     en: {

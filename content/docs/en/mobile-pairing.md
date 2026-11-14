@@ -4,11 +4,13 @@
   "description": "Install Tailscale, publish DSH on your tailnet and pair the phone app by QR code.",
   "order": 16,
   "source": "docs/mobile-pairing.md",
-  "sourceRevision": "2747ba71cff5bc31570094a1e71b31fe9834b0e1"
+  "sourceRevision": "0b621488c588d1448c7bd3a0f23e40a1ab254057"
 }
 ---
 
 The DeepSeekBot phone app connects to DeepSeek Harness (DSH) on your own computer. Bots, chat history and approvals stay on the computer; the phone is a remote client.
+
+**Want your own fixed address or relay?** See [private connections](/en/docs/private-connect/): [Named Tunnel](/en/docs/private-named-tunnel/), [HTTPS ingress](/en/docs/private-ingress/) and [Docker relay](/en/docs/private-relay/), each with manual steps and a copyable agent prompt. This page retains the Tailscale walkthrough.
 
 Without an account, the phone **reaches the computer through Tailscale**: the phone and the computer sign in to the same Tailscale network (tailnet), the computer publishes DSH as `https://<computer>.<tailnet>.ts.net` with `tailscale serve`, and after you scan the code the phone connects back through that address. You need no public IP and no router changes, and it works over mobile data. If you would rather not set up Tailscale, use [DeepSeekBot Connect](#without-tailscale-deepseekbot-connect) instead.
 
@@ -104,12 +106,13 @@ You can open a Bot's **Computer** from another network when the phone is paired 
 
 If the network drops or the phone locks, input must stop. Reconnect returns to watching; explicitly take control again. Never repeat a click or text entry automatically after an uncertain result—inspect the desktop first.
 
-### Cross-network considerations
-When your phone and computer operate on different networks (for example, your phone is on cellular data while your computer is connected to home Wi-Fi), Tailscale transparently bridges them using an encrypted peer-to-peer tunnel or relay.
+### What has been verified
 
-- **Video streaming**: The computer streams desktop frames securely to your mobile app. If the stream doesn't appear immediately, verify that screen recording and accessibility permissions are enabled on your computer and tap **Reconnect video** on the phone.
-- **Cellular data usage**: Streaming a live interactive desktop session consumes bandwidth; monitor your cellular usage when operating outside Wi-Fi.
-- **Connect mode**: Live interactive desktop streaming currently requires a Tailscale private network connection; DeepSeekBot Connect mode focuses on text conversations, session approvals, and file attachments.
+On 2026-10-25, macOS → iPhone XS Max was verified with the phone on another phone's mobile-data hotspot and **USB disconnected**: moving video, takeover, pointer movement and handback passed. Host and iOS Release app source: `8418bad80a499213427606b23dcbc8e9ff2974ad`. This is exact-build evidence, not a minimum supported version or a new store release. Windows → Android supports the native viewer in source; its **Tailscale cross-network test is pending**. Forced network-loss recovery, the full input matrix and long-duration performance also remain pending. See [qualification record](https://github.com/BotHarness/DeepSeekBot/issues/2562#issuecomment-6388900922).
+
+For your own cross-network check, keep the computer on its original network and put the phone on mobile data or a hotspot backed by another phone's mobile data. Disconnect USB and avoid ADB reverse or other local forwarding; otherwise the picture may bypass Tailscale. A connected HTTPS endpoint proves signaling, not the video route.
+
+The project does not provide a public TURN relay for this path. Tailscale may connect devices directly or use its own relay; WebRTC reporting `direct` does not prove the Tailscale underlay is peer-to-peer. Your network and Tailscale plan still apply. **Connect desktop video is currently unavailable**; this does not disable ordinary Connect chat or pairing, and does not prevent using a separate Tailscale connection.
 
 ## Without Tailscale: DeepSeekBot Connect
 
@@ -143,3 +146,9 @@ Tailscale connects directly or through its own relays on most networks. If the n
 - A paired phone has the same authority as you on the computer, so pair only your own devices.
 - The phone keeps its credential only in the system keychain (iOS Keychain / Android Keystore); the computer keeps only its hash.
 - DSH itself still listens on the local address only. Phone requests go through the DeepSeekBot device gateway and can be revoked at any time. Details: [ADR-0199](/dev/adr/0199-paired-devices-reach-the-host-through-a-same-listener-device-gateway).
+
+## Manage linked computers
+
+On the phone's Connect account screen, sign in and choose **Manage linked computers**. No Host pairing is required. Select an online or offline computer and confirm **Unlink**. After success, the list refreshes and a slot is available for a new computer.
+
+A session-bound computer must sign in again to restore Connect. Older links without session information warn that the computer may reconnect automatically. Bots, chats, files, phone pairings and independent LAN/Tailscale access remain. This does not delete your account.
