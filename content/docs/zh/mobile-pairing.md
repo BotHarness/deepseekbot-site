@@ -4,11 +4,13 @@
   "description": "安装 Tailscale，把 DSH 发布到 tailnet，再扫码把手机 App 和电脑配对。",
   "order": 16,
   "source": "docs/mobile-pairing.zh.md",
-  "sourceRevision": "2747ba71cff5bc31570094a1e71b31fe9834b0e1"
+  "sourceRevision": "8d51f81ffcc05e9779f39cccefd0e624c79c199e"
 }
 ---
 
 DeepSeekBot 手机 App 连接的是你自己电脑上的 DeepSeek Harness（DSH）。Bot、聊天记录和审批都留在电脑上，手机只是远程客户端。
+
+**想使用自己的固定地址或中继？**见[私有连接总览](/zh/docs/private-connect/)：[Named Tunnel](/zh/docs/private-named-tunnel/)、[HTTPS 入口](/zh/docs/private-ingress/)、[Docker Relay](/zh/docs/private-relay/)，每篇都有手动步骤和可复制给 agent 的提示词；本页保留 Tailscale 教程。
 
 不登录账号时，手机**通过 Tailscale 连接电脑**：手机和电脑登录同一个 Tailscale 网络（tailnet），电脑用 `tailscale serve` 把 DSH 发布成 `https://<电脑名>.<tailnet>.ts.net`，手机扫码后就通过这个地址连回电脑。不需要公网 IP，不用改路由器，在外面用蜂窝数据也能连。不想装 Tailscale 的话，可以改用 [DeepSeekBot Connect](#不用-tailscaledeepseekbot-connect)。
 
@@ -104,13 +106,13 @@ tailscale serve --bg 3080
 
 网络中断或手机锁屏后，输入应停止。重新连接只恢复观看，需再次明确接管。输入结果不确定时，先检查桌面，不要自动重复点击或输入文字。
 
-### 跨网络使用注意事项
+### 已验证范围
 
-当手机与电脑处于不同网络（例如手机使用蜂窝移动网络，电脑连接家庭或办公室 Wi-Fi）时，Tailscale 会通过其安全的 P2P 隧道或加密中继实现两端互联。
+2026-10-25 已验证 macOS → iPhone XS Max：手机连接另一台手机的移动数据热点，**拔掉 USB** 后，持续画面、接管、移动光标和交还均通过。Host 与 iOS Release App 源码为 `8418bad80a499213427606b23dcbc8e9ff2974ad`。这是绑定具体构建的证据，不是最低支持版本或新商店版本公告。Windows → Android 在源码中支持原生观看端，但 **Tailscale 跨网络实测仍待完成**。强制断网恢复、完整输入矩阵和长时间性能也仍待验收。参见[验收记录](https://github.com/BotHarness/DeepSeekBot/issues/2562#issuecomment-6388900922)。
 
-- **画面流传输**：电脑端 DSH 将桌面画面通过安全流传输到手机。若首次连接画面未及时显示，请检查电脑端是否已开启屏幕录制与辅助功能权限，并在手机端点击“重新连接视频”。
-- **移动流量消耗**：远程实时查看与操作桌面需要持续传输画面流，在蜂窝移动网络下使用时建议留意数据流量。
-- **Connect 模式说明**：目前远程桌面控制功能通过 Tailscale 私有加密通道提供；DeepSeekBot Connect 模式则专注于文本聊天、会话管理与审批卡片推送。
+自行验证跨网络时，让电脑保留原网络，手机使用移动数据或另一台手机提供的移动数据热点。拔掉 USB，不使用 ADB reverse 等本地转发，否则画面可能绕过 Tailscale。HTTPS 连接成功只能证明信令可达，不能单独证明视频路径。
+
+这条路径不依赖项目提供公共 TURN。Tailscale 可能直连，也可能使用它自己的中继；WebRTC 显示 `direct` 不等于 Tailscale 底层必然点对点。用户的网络与 Tailscale 套餐仍适用。**Connect 暂不支持桌面视频**，不影响普通 Connect 聊天和配对，也不妨碍改用单独的 Tailscale 连接。
 
 ## 不用 Tailscale：DeepSeekBot Connect
 
@@ -144,3 +146,9 @@ Tailscale 在大多数网络下都能直连或通过它自己的中继连通。�
 - 配对后的手机拥有和你在电脑上一样的权限，请只配对自己的设备。
 - 手机上的凭据只保存在系统钥匙串（iOS Keychain／Android Keystore）里，电脑只保存它的哈希值。
 - DSH 本身仍只监听本机地址，手机的请求经过 DeepSeekBot 的设备网关转发，并且随时可以撤销。技术细节见 [ADR-0199](/dev/adr/0199-paired-devices-reach-the-host-through-a-same-listener-device-gateway)。
+
+## 管理已关联电脑
+
+在手机的 Connect 账号页面登录后，选择「管理已关联电脑」。无需先配对 Host。选择在线或离线电脑，确认「解除关联」。成功后刷新列表，释放名额供新电脑关联。
+
+已绑定登录会话的电脑需要重新登录才能恢复 Connect。没有登录会话信息的旧关联会明确提示可能自动重新关联。Bot、聊天、文件、手机配对和独立的局域网/Tailscale 访问均保留，不会删除账号。

@@ -412,6 +412,18 @@ export function renderDocs(): string[] {
   return written;
 }
 
+/** Plain Markdown siblings for agents, generated from the same source as each HTML guide. */
+export function docsMarkdown(): { path: string; body: string }[] {
+  return (['zh', 'en'] as const).flatMap((lang) => {
+    const docs = read(lang);
+    const slugs = new Set(docs.map((doc) => doc.slug));
+    return docs.map((doc) => ({
+      path: `${docPath(lang, doc.slug).slice(1, -1)}.md`,
+      body: `# ${doc.title}\n\n${doc.body.replace(/\]\((\/[^)\s]+)\)/g, (_match, url: string) => `](${new URL(href(lang, url, slugs), SITE).href})`)}`,
+    }));
+  });
+}
+
 /** Sitemap entries for every guide, with both languages linked. */
 export function docsSitemap(): string {
   return read('zh')

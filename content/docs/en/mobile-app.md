@@ -7,6 +7,8 @@
 }
 ---
 
+**Choose a connection:** this page retains the Tailscale walkthrough. For your own fixed address or relay, see [private connections](/docs/private-connect/): [Named Tunnel](/docs/private-named-tunnel/), [HTTPS ingress](/docs/private-ingress/) and [Docker relay](/docs/private-relay/), each with a copyable agent prompt.
+
 The DeepSeekBot phone app is a remote for DeepSeek Harness (DSH) running on your own computer. Your Bots, chats and approvals stay on the computer; the phone shows them and lets you chat and approve from anywhere. This guide goes from a clean computer to a paired phone in about 20 minutes.
 
 The software is free. DSH and DeepSeekBot are open source and need no account. The phone reaches the computer over your own [Tailscale](https://tailscale.com) network, which is free for personal use but needs a Tailscale account. The only possible cost is your model provider: DeepSeek and most others bill API usage by token.

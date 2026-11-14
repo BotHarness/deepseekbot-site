@@ -66,6 +66,12 @@ For repeatable local model setup across product worktrees, see the
   button opens a client-side search over `/search/zh.json` or `/search/en.json`, built from the
   same Markdown at build time (one entry per section, plain substring matching so Chinese needs no
   segmenter; `src/search.ts`). Developer docs stay on botharness.ai.
+- **Private deployment**: `/docs/private-connect/` (English under `/en/`) groups Named Tunnel,
+  existing HTTPS ingress and Docker relay, with a copyable agent prompt on each method page.
+  The protocol reference is a fourth child. Sync these canonical sources together with
+  `BOTHARNESS=../BotHarness pnpm docs:sync --only private-connect,private-named-tunnel,private-ingress,private-relay,private-relay-standard,mobile-pairing,mobile-app`.
+  Every guide has a plain `.md` sibling generated from the same source; `/llms.txt` links to
+  the private deployment Markdown. No extra browser script or account is needed to read it.
 - **Plugins**: `/plugins/` and `/en/plugins/` are the second shelf of the marketplace, next to the
   Bot list at `/market`. Each plugin is one file, `content/plugins/<slug>.json` (package, version,
   requirements, links, media file names and the zh/en copy); its media lives under

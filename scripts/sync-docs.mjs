@@ -70,6 +70,11 @@ const rewriteRelative = (body, source) =>
     /\]\((?!https?:|\/|#|mailto:)([^)\s]+?\.md)(#[^)\s]*)?\)/g,
     (_m, path, hash = '') => {
       const repoPath = posix.normalize(posix.join(posix.dirname(source), path));
+      const guide = DOC_PAGES.find((page) =>
+        ['zh', 'en'].some((lang) => page[lang].source === repoPath),
+      );
+      if (guide)
+        return `](/${repoPath.endsWith('.zh.md') ? 'zh/' : 'en/'}docs/${guide.slug}/${hash})`;
       const adr = repoPath.match(/^docs\/adr\/([0-9]{4}-[a-z0-9-]+)\.md$/);
       if (adr) return `](/dev/adr/${adr[1]}${hash})`;
       if (/^docs\/client-bridge(\.zh)?\.md$/.test(repoPath))
