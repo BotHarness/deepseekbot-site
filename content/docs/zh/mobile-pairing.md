@@ -4,13 +4,13 @@
   "description": "安装 Tailscale，把 DSH 发布到 tailnet，再扫码把手机 App 和电脑配对。",
   "order": 16,
   "source": "docs/mobile-pairing.zh.md",
-  "sourceRevision": "8d51f81ffcc05e9779f39cccefd0e624c79c199e"
+  "sourceRevision": "a5047726b43c72884b29f344a08cd8baff0613b5"
 }
 ---
 
 DeepSeekBot 手机 App 连接的是你自己电脑上的 DeepSeek Harness（DSH）。Bot、聊天记录和审批都留在电脑上，手机只是远程客户端。
 
-**想使用自己的固定地址或中继？**见[私有连接总览](/zh/docs/private-connect/)：[Named Tunnel](/zh/docs/private-named-tunnel/)、[HTTPS 入口](/zh/docs/private-ingress/)、[Docker Relay](/zh/docs/private-relay/)，每篇都有手动步骤和可复制给 agent 的提示词；本页保留 Tailscale 教程。
+想使用自己的固定地址或中继？先看[私有连接总览](/zh/docs/private-connect/)：[Named Tunnel](/zh/docs/private-named-tunnel/)、[HTTPS 入口](/zh/docs/private-ingress/)、[Docker Relay](/zh/docs/private-relay/)，每篇都有手动步骤和可复制给 agent 的提示词；本页保留 Tailscale 教程。
 
 不登录账号时，手机**通过 Tailscale 连接电脑**：手机和电脑登录同一个 Tailscale 网络（tailnet），电脑用 `tailscale serve` 把 DSH 发布成 `https://<电脑名>.<tailnet>.ts.net`，手机扫码后就通过这个地址连回电脑。不需要公网 IP，不用改路由器，在外面用蜂窝数据也能连。不想装 Tailscale 的话，可以改用 [DeepSeekBot Connect](#不用-tailscaledeepseekbot-connect)。
 

@@ -5,7 +5,7 @@
   "order": 3,
   "parent": "private-connect",
   "source": "docs/private-relay.md",
-  "sourceRevision": "8d51f81ffcc05e9779f39cccefd0e624c79c199e"
+  "sourceRevision": "a5047726b43c72884b29f344a08cd8baff0613b5"
 }
 ---
 

@@ -1,6 +1,6 @@
 # 手机 App 上手：从安装到配对
 
-**选择连接方式：**本页保留 Tailscale 教程。使用自己的固定地址或中继时，先看[私有连接总览](/docs/private-connect/)：[Named Tunnel](/docs/private-named-tunnel/)、[自带 HTTPS 入口](/docs/private-ingress/)、[Docker Relay](/docs/private-relay/)，每篇都有可复制给 agent 的部署提示词。
+选择连接方式：本页保留 Tailscale 教程。使用自己的固定地址或中继时，先看[私有连接总览](/docs/private-connect/)：[Named Tunnel](/docs/private-named-tunnel/)、[自带 HTTPS 入口](/docs/private-ingress/)、[Docker Relay](/docs/private-relay/)，每篇都有可复制给 agent 的部署提示词。
 
 DeepSeekBot 手机 App 是你自己电脑上 DeepSeek Harness（DSH）的遥控器。Bot、聊天记录和审批都留在电脑上，手机负责查看、聊天和审批，在外面也能用。这篇教程从一台干净的电脑开始，大约 20 分钟完成手机配对。
 
