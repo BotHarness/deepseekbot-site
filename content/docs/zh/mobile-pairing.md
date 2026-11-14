@@ -4,7 +4,7 @@
   "description": "安装 Tailscale，把 DSH 发布到 tailnet，再扫码把手机 App 和电脑配对。",
   "order": 16,
   "source": "docs/mobile-pairing.zh.md",
-  "sourceRevision": "a5047726b43c72884b29f344a08cd8baff0613b5"
+  "sourceRevision": "0b621488c588d1448c7bd3a0f23e40a1ab254057"
 }
 ---
 

@@ -38,3 +38,17 @@ test('guide links stay on the product site and preserve explicit language change
   assert.ok(chinese.body.includes('https://tobs.app/en/docs/private-ingress/#reference-configs'));
   assert.ok(chinese.body.includes('https://tobs.app/docs/private-named-tunnel/'));
 });
+
+test('relay protocol examples are valid JSON and control frames carry explicit values', () => {
+  for (const lang of ['zh', 'en']) {
+    const source = readFileSync(`content/docs/${lang}/private-relay-standard.md`, 'utf8');
+    const examples = [...source.matchAll(/`(\{[^`]+\})`/g)].map((match) => JSON.parse(match[1]));
+    const frames = examples.filter((example) => 'type' in example);
+    assert.ok(frames.length >= 5);
+    for (const frame of frames) {
+      assert.ok(['open', 'data', 'close'].includes(frame.type));
+      assert.match(frame.id, /^[a-f0-9]{32}$/);
+      if (frame.type === 'data') assert.equal(typeof frame.data, 'string');
+    }
+  }
+});

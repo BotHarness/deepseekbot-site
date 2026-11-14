@@ -5,7 +5,7 @@
   "order": 1,
   "parent": "private-connect",
   "source": "docs/private-named-tunnel.zh.md",
-  "sourceRevision": "a5047726b43c72884b29f344a08cd8baff0613b5"
+  "sourceRevision": "0b621488c588d1448c7bd3a0f23e40a1ab254057"
 }
 ---
 
@@ -33,11 +33,13 @@
 
 ## CLI 方式
 
+新安装提供 `tobs` 命令；已有 `deepseekbot` 用户可继续使用原命令。
+
 使用现有本机 Host 及平常的连接参数和私有令牌文件。连接器令牌从仅本人可读的私有文件传入：
 
 ```bash
-deepseekbot private-tunnel-enable --hostname bot.example.com --token-stdin --confirm < /absolute/private/connector-token.txt
-deepseekbot devices
+tobs private-tunnel-enable --hostname bot.example.com --token-stdin --confirm < /absolute/private/connector-token.txt
+tobs devices
 ```
 
 先检查已有连接，不覆盖已占用的 custom 位置。较新 Host 还提供[独立连接命令](https://github.com/BotHarness/BotHarness/blob/main/docs/bot-cli.zh.md)。

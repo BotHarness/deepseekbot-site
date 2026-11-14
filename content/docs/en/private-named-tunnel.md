@@ -5,7 +5,7 @@
   "order": 1,
   "parent": "private-connect",
   "source": "docs/private-named-tunnel.md",
-  "sourceRevision": "a5047726b43c72884b29f344a08cd8baff0613b5"
+  "sourceRevision": "0b621488c588d1448c7bd3a0f23e40a1ab254057"
 }
 ---
 
@@ -33,11 +33,13 @@ An interactive Cloudflare Access login challenge can block the phone's WebSocket
 
 ## CLI alternative
 
+New installations provide `tobs`; existing `deepseekbot` users may keep their command.
+
 Use the existing local Host and its usual connection/token-file arguments. Read the connector token from a private file readable only by you:
 
 ```bash
-deepseekbot private-tunnel-enable --hostname bot.example.com --token-stdin --confirm < /absolute/private/connector-token.txt
-deepseekbot devices
+tobs private-tunnel-enable --hostname bot.example.com --token-stdin --confirm < /absolute/private/connector-token.txt
+tobs devices
 ```
 
 Inspect existing routes first. Do not overwrite an occupied custom slot. Newer Hosts also expose [independent route commands](https://github.com/BotHarness/BotHarness/blob/main/docs/bot-cli.md#independently-managed-private-routes).
