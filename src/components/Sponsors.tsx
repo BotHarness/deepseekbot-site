@@ -22,7 +22,9 @@ export function Sponsors({ lang }: { lang: Lang }) {
     if (!node || typeof IntersectionObserver === 'undefined') return;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
+        // the first callback can report a sliver of the section, so check the ratio too
+        if (!entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.5))
+          return;
         observer.disconnect();
         track('sponsor:section_view', { sponsors: SPONSORS.map((s) => s.id) });
       },
