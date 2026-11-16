@@ -1333,13 +1333,13 @@ a:where(:not(.astryx-button)) {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 28px;
+  /* quotes vary in length, so flow them into columns instead of a ragged grid */
+  columns: 3 260px;
+  column-gap: 28px;
 }
 .review-card {
-  display: flex;
-  align-items: center;
+  break-inside: avoid;
+  margin-bottom: 28px;
   padding: 16px 20px;
 }
 .review-card blockquote {

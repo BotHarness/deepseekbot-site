@@ -146,7 +146,7 @@ export interface Copy {
   featureDemos: FeatureDemoCopy;
   dsh: { title: string; body: string; issues: string };
   /** Anonymous quotes from users, the same ones the app shows in onboarding. */
-  reviews: { kicker: string; title: string; quotes: readonly string[] };
+  reviews: { kicker: string; title: string; lead: string; quotes: readonly string[] };
   community: {
     kicker: string;
     title: string;
@@ -688,10 +688,13 @@ const zh: Copy = {
   reviews: {
     kicker: '用户评价',
     title: '用过的人怎么说',
+    lead: '来自 QQ 群和社区用户的真实反馈。',
     quotes: [
       '界面做得挺清爽的，功能多但不乱，找东西很快。',
       '这将是跨时代的！',
       '很多的小巧思和细节的打磨。',
+      'Tobs 前端再优化一下我就该退订 Grok Bot 了。',
+      '打算再品鉴一下，如果老马实在搬不出合适的解决方案的话，就考虑纯用 Tobs 了。',
     ],
   },
   community: {
@@ -1145,10 +1148,13 @@ const en: Copy = {
   reviews: {
     kicker: 'Reviews',
     title: 'What people say',
+    lead: 'Real feedback from our QQ group and community.',
     quotes: [
       'Clean and uncluttered. Lots of features, yet I find things fast.',
       'This is going to define an era!',
       'So many small clever touches and polished details.',
+      'A little more polish on the Tobs frontend and I’m cancelling Grok Bot.',
+      'I’ll give it one more look. If Musk can’t come up with a proper fix, I’m switching to Tobs entirely.',
     ],
   },
   community: {

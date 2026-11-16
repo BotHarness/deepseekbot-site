@@ -195,6 +195,7 @@ export function App() {
         <section className="section" id="reviews" aria-labelledby="reviews-title">
           <p className="kicker">{copy.reviews.kicker}</p>
           <h2 id="reviews-title">{copy.reviews.title}</h2>
+          <p className="section-lead">{copy.reviews.lead}</p>
           <ul className="review-list">
             {copy.reviews.quotes.map((quote) => (
               <li key={quote} className="review-card frame">
