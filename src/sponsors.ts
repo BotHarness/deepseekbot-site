@@ -1,7 +1,8 @@
 /**
  * Sponsors shown on the homepage and in every page footer. Trusted local strings only: the
  * same markup feeds React (homepage, marketplace, avatar studio) and the generated guide,
- * changelog, blog and plugin pages.
+ * changelog, blog and plugin pages. Every sponsor link carries `data-sponsor` so the shared click
+ * listener in `analytics.ts` can report per-sponsor clicks back to the sponsor.
  */
 type Lang = 'zh' | 'en';
 
@@ -62,7 +63,7 @@ function logoMarkup(s: Sponsor) {
 }
 
 function xMarkup(lang: Lang, s: Sponsor) {
-  return `<a class="sponsor-x" href="https://x.com/${escape(s.x.handle)}" target="_blank" rel="noreferrer" aria-label="${escape(SPONSORS_COPY[lang].xLabel(s))}">${X_ICON}<span class="sponsor-x-name">${escape(s.x.name)}</span><span class="sponsor-x-handle">@${escape(s.x.handle)}</span></a>`;
+  return `<a class="sponsor-x" data-sponsor="${escape(s.id)}" href="https://x.com/${escape(s.x.handle)}" target="_blank" rel="noreferrer" aria-label="${escape(SPONSORS_COPY[lang].xLabel(s))}">${X_ICON}<span class="sponsor-x-name">${escape(s.x.name)}</span><span class="sponsor-x-handle">@${escape(s.x.handle)}</span></a>`;
 }
 
 /** Homepage cards: logo, full name, tier tag, the person's X account and role. */
@@ -70,7 +71,7 @@ export function sponsorCardsMarkup(lang: Lang): string {
   const t = SPONSORS_COPY[lang];
   return SPONSORS.map(
     (s) =>
-      `<li class="sponsor-card frame">${logoMarkup(s)}<div class="sponsor-meta"><p class="sponsor-name"><span>${escape(s.name[lang].full)}</span><span class="sponsor-tier">${t.tier}</span></p><p class="sponsor-person">${xMarkup(lang, s)}<span>${escape(s.x.role[lang])}</span></p></div></li>`,
+      `<li class="sponsor-card frame" data-placement="sponsor_card">${logoMarkup(s)}<div class="sponsor-meta"><p class="sponsor-name"><span>${escape(s.name[lang].full)}</span><span class="sponsor-tier">${t.tier}</span></p><p class="sponsor-person">${xMarkup(lang, s)}<span>${escape(s.x.role[lang])}</span></p></div></li>`,
   ).join('');
 }
 
@@ -81,5 +82,5 @@ export function sponsorFooterMarkup(lang: Lang): string {
     (s) =>
       `<span class="sponsor-footer-item">${logoMarkup(s)}<span>${escape(s.name[lang].short)}</span><span aria-hidden="true">·</span>${xMarkup(lang, s)}</span>`,
   ).join('');
-  return `<p class="sponsor-footer"><span>${SPONSORS_COPY[lang].footer}</span>${items}</p>`;
+  return `<p class="sponsor-footer" data-placement="sponsor_footer"><span>${SPONSORS_COPY[lang].footer}</span>${items}</p>`;
 }
