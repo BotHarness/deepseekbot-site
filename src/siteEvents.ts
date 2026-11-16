@@ -44,6 +44,7 @@ export const SITE_EVENTS = [
   'navigation:docs_link_click',
   'navigation:language_select',
   'navigation:market_link_click',
+  'sponsor:contact_click',
   'sponsor:link_click',
   'sponsor:section_view',
 ] as const;

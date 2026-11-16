@@ -68,6 +68,8 @@ export function linkEvent(anchor: HTMLAnchorElement): [SiteEvent, Record<string,
   } catch {
     return null;
   }
+  const channel = anchor.closest<HTMLElement>('[data-sponsor-contact]')?.dataset.sponsorContact;
+  if (channel) return ['sponsor:contact_click', { channel, placement: at }];
   const sponsor = anchor.closest<HTMLElement>('[data-sponsor]')?.dataset.sponsor;
   if (sponsor)
     return ['sponsor:link_click', { sponsor, target: url.host + url.pathname, placement: at }];

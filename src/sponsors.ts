@@ -28,6 +28,9 @@ export const SPONSORS: readonly Sponsor[] = [
   },
 ];
 
+/** Public inbox already listed in the privacy policy and terms. */
+export const SPONSOR_EMAIL = 'yang@deepseekbot.app';
+
 export const SPONSORS_COPY = {
   zh: {
     kicker: '赞助商',
@@ -36,6 +39,16 @@ export const SPONSORS_COPY = {
     tier: '月度赞助商',
     footer: '赞助商',
     xLabel: (s: Sponsor) => `${s.x.name}（@${s.x.handle}）的 X 主页，将在新标签页打开`,
+    become: {
+      title: '成为赞助商',
+      body: '按月赞助 Tobs 的开源开发。你的品牌会出现在官网首页的赞助区、GitHub README 和全站页脚，我们也会提供展示位的曝光和点击数据。欢迎通过以下方式联系：',
+      email: '发邮件',
+      emailSubject: '赞助 Tobs',
+      discord: '在 Discord 找我们',
+      qq: '复制 QQ 群号',
+      copied: '已复制',
+      copyFailed: (group: string) => `复制失败，QQ 群号是 ${group}，请手动复制。`,
+    },
   },
   en: {
     kicker: 'Sponsors',
@@ -44,6 +57,16 @@ export const SPONSORS_COPY = {
     tier: 'Monthly sponsor',
     footer: 'Sponsored by',
     xLabel: (s: Sponsor) => `${s.x.name} (@${s.x.handle}) on X. Opens in a new tab.`,
+    become: {
+      title: 'Become a sponsor',
+      body: 'Sponsor open-source work on Tobs monthly. Your brand appears in the homepage sponsor section, the GitHub README and every page footer, and we share view and click numbers for your placements. Reach us through any of these:',
+      email: 'Email us',
+      emailSubject: 'Sponsoring Tobs',
+      discord: 'Find us on Discord',
+      qq: 'Copy QQ group number',
+      copied: 'Copied',
+      copyFailed: (group: string) => `Copy failed. The QQ group number is ${group}.`,
+    },
   },
 } as const;
 
