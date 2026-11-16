@@ -1,7 +1,8 @@
 /**
  * Sponsors shown on the homepage and in every page footer. Trusted local strings only: the
  * same markup feeds React (homepage, marketplace, avatar studio) and the generated guide,
- * changelog, blog and plugin pages.
+ * changelog, blog and plugin pages. Every sponsor link carries `data-sponsor` so the shared click
+ * listener in `analytics.ts` can report per-sponsor clicks back to the sponsor.
  */
 type Lang = 'zh' | 'en';
 
@@ -27,6 +28,9 @@ export const SPONSORS: readonly Sponsor[] = [
   },
 ];
 
+/** Public inbox already listed in the privacy policy and terms. */
+export const SPONSOR_EMAIL = 'yang@deepseekbot.app';
+
 export const SPONSORS_COPY = {
   zh: {
     kicker: '赞助商',
@@ -35,6 +39,16 @@ export const SPONSORS_COPY = {
     tier: '月度赞助商',
     footer: '赞助商',
     xLabel: (s: Sponsor) => `${s.x.name}（@${s.x.handle}）的 X 主页，将在新标签页打开`,
+    become: {
+      title: '成为赞助商',
+      body: '按月赞助 Tobs 的开源开发。你的品牌会出现在官网首页的赞助区、GitHub README 和全站页脚，我们也会提供展示位的曝光和点击数据。欢迎通过以下方式联系：',
+      email: '发邮件',
+      emailSubject: '赞助 Tobs',
+      discord: '在 Discord 找我们',
+      qq: '复制 QQ 群号',
+      copied: '已复制',
+      copyFailed: (group: string) => `复制失败，QQ 群号是 ${group}，请手动复制。`,
+    },
   },
   en: {
     kicker: 'Sponsors',
@@ -43,6 +57,16 @@ export const SPONSORS_COPY = {
     tier: 'Monthly sponsor',
     footer: 'Sponsored by',
     xLabel: (s: Sponsor) => `${s.x.name} (@${s.x.handle}) on X. Opens in a new tab.`,
+    become: {
+      title: 'Become a sponsor',
+      body: 'Sponsor open-source work on Tobs monthly. Your brand appears in the homepage sponsor section, the GitHub README and every page footer, and we share view and click numbers for your placements. Reach us through any of these:',
+      email: 'Email us',
+      emailSubject: 'Sponsoring Tobs',
+      discord: 'Find us on Discord',
+      qq: 'Copy QQ group number',
+      copied: 'Copied',
+      copyFailed: (group: string) => `Copy failed. The QQ group number is ${group}.`,
+    },
   },
 } as const;
 
@@ -62,7 +86,7 @@ function logoMarkup(s: Sponsor) {
 }
 
 function xMarkup(lang: Lang, s: Sponsor) {
-  return `<a class="sponsor-x" href="https://x.com/${escape(s.x.handle)}" target="_blank" rel="noreferrer" aria-label="${escape(SPONSORS_COPY[lang].xLabel(s))}">${X_ICON}<span class="sponsor-x-name">${escape(s.x.name)}</span><span class="sponsor-x-handle">@${escape(s.x.handle)}</span></a>`;
+  return `<a class="sponsor-x" data-sponsor="${escape(s.id)}" href="https://x.com/${escape(s.x.handle)}" target="_blank" rel="noreferrer" aria-label="${escape(SPONSORS_COPY[lang].xLabel(s))}">${X_ICON}<span class="sponsor-x-name">${escape(s.x.name)}</span><span class="sponsor-x-handle">@${escape(s.x.handle)}</span></a>`;
 }
 
 /** Homepage cards: logo, full name, tier tag, the person's X account and role. */
@@ -70,7 +94,7 @@ export function sponsorCardsMarkup(lang: Lang): string {
   const t = SPONSORS_COPY[lang];
   return SPONSORS.map(
     (s) =>
-      `<li class="sponsor-card frame">${logoMarkup(s)}<div class="sponsor-meta"><p class="sponsor-name"><span>${escape(s.name[lang].full)}</span><span class="sponsor-tier">${t.tier}</span></p><p class="sponsor-person">${xMarkup(lang, s)}<span>${escape(s.x.role[lang])}</span></p></div></li>`,
+      `<li class="sponsor-card frame" data-placement="sponsor_card">${logoMarkup(s)}<div class="sponsor-meta"><p class="sponsor-name"><span>${escape(s.name[lang].full)}</span><span class="sponsor-tier">${t.tier}</span></p><p class="sponsor-person">${xMarkup(lang, s)}<span>${escape(s.x.role[lang])}</span></p></div></li>`,
   ).join('');
 }
 
@@ -81,5 +105,5 @@ export function sponsorFooterMarkup(lang: Lang): string {
     (s) =>
       `<span class="sponsor-footer-item">${logoMarkup(s)}<span>${escape(s.name[lang].short)}</span><span aria-hidden="true">·</span>${xMarkup(lang, s)}</span>`,
   ).join('');
-  return `<p class="sponsor-footer"><span>${SPONSORS_COPY[lang].footer}</span>${items}</p>`;
+  return `<p class="sponsor-footer" data-placement="sponsor_footer"><span>${SPONSORS_COPY[lang].footer}</span>${items}</p>`;
 }

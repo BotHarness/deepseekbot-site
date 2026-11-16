@@ -145,6 +145,8 @@ export interface Copy {
   demo: DemoCopy;
   featureDemos: FeatureDemoCopy;
   dsh: { title: string; body: string; issues: string };
+  /** Anonymous quotes from users, the same ones the app shows in onboarding. */
+  reviews: { kicker: string; title: string; lead: string; quotes: readonly string[] };
   community: {
     kicker: string;
     title: string;
@@ -683,6 +685,18 @@ const zh: Copy = {
     body: 'Tobs 直接用 DSH 自己的 Session 管理和 Harness：你在 DSH 里接入的任何 LLM 模型 provider，Bot 都能用；也可以和其他 DSH 插件装在一起。个别插件可能还不兼容，遇到了欢迎提 Issue 或 PR。',
     issues: '去 GitHub 提 Issue',
   },
+  reviews: {
+    kicker: '用户评价',
+    title: '用过的人怎么说',
+    lead: '来自 QQ 群和社区用户的真实反馈。',
+    quotes: [
+      '界面做得挺清爽的，功能多但不乱，找东西很快。',
+      '这将是跨时代的！',
+      '很多的小巧思和细节的打磨。',
+      'Tobs 前端再优化一下我就该退订 Grok Bot 了。',
+      '打算再品鉴一下，如果老马实在搬不出合适的解决方案的话，就考虑纯用 Tobs 了。',
+    ],
+  },
   community: {
     kicker: '社区',
     title: '一起来聊',
@@ -1130,6 +1144,18 @@ const en: Copy = {
     title: 'Built on DeepSeek Harness',
     body: 'Tobs runs on DSH’s own session management and harness, so any LLM provider you connect in DSH works for your Bots, and it installs alongside other DSH plugins. Some plugins may not be compatible yet; if you hit one, please open an issue or a PR.',
     issues: 'Open an issue on GitHub',
+  },
+  reviews: {
+    kicker: 'Reviews',
+    title: 'What people say',
+    lead: 'Real feedback from our QQ group and community.',
+    quotes: [
+      'Clean and uncluttered. Lots of features, yet I find things fast.',
+      'This is going to define an era!',
+      'So many small clever touches and polished details.',
+      'A little more polish on the Tobs frontend and I’m cancelling Grok Bot.',
+      'I’ll give it one more look. If Musk can’t come up with a proper fix, I’m switching to Tobs entirely.',
+    ],
   },
   community: {
     kicker: 'Community',

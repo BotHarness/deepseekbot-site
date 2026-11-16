@@ -52,7 +52,7 @@ function placement(element: Element) {
 }
 
 /**
- * Outbound GitHub, Discord and DeepSeek Harness download links, the language switch, the in-page
+ * Sponsor links, outbound GitHub, Discord and DeepSeek Harness download links, the language switch, the in-page
  * install buttons, and the header links to the marketplace, docs and changelog appear on every page, including the static docs, so they are tracked by one
  * delegated listener instead of in each component.
  */
@@ -68,6 +68,11 @@ export function linkEvent(anchor: HTMLAnchorElement): [SiteEvent, Record<string,
   } catch {
     return null;
   }
+  const channel = anchor.closest<HTMLElement>('[data-sponsor-contact]')?.dataset.sponsorContact;
+  if (channel) return ['sponsor:contact_click', { channel, placement: at }];
+  const sponsor = anchor.closest<HTMLElement>('[data-sponsor]')?.dataset.sponsor;
+  if (sponsor)
+    return ['sponsor:link_click', { sponsor, target: url.host + url.pathname, placement: at }];
   if (url.origin === location.origin) {
     if (url.pathname === location.pathname && url.hash === '#install')
       return ['install:cta_click', { placement: at }];

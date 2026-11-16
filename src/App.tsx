@@ -192,6 +192,19 @@ export function App() {
           <Install copy={copy} lang={lang} />
         </section>
 
+        <section className="section" id="reviews" aria-labelledby="reviews-title">
+          <p className="kicker">{copy.reviews.kicker}</p>
+          <h2 id="reviews-title">{copy.reviews.title}</h2>
+          <p className="section-lead">{copy.reviews.lead}</p>
+          <ul className="review-list">
+            {copy.reviews.quotes.map((quote) => (
+              <li key={quote} className="review-card frame">
+                <blockquote>“{quote}”</blockquote>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="section section--alt" id="community" aria-labelledby="community-title">
           <p className="kicker">{copy.community.kicker}</p>
           <h2 id="community-title">{copy.community.title}</h2>
