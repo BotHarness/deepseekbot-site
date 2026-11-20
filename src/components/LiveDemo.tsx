@@ -92,6 +92,8 @@ function Icon({ name }: { name: DemoIcon }) {
 type Extra = { kind: 'user'; text: string; author?: string } | { kind: 'fallback'; bot: string };
 type PreviewKind = 'models' | 'session' | 'members';
 type PreviewSurface = 'desktop' | 'phone';
+type SessionConversation = { draft: string; messages: string[] };
+const EMPTY_SESSION_CONVERSATION: SessionConversation = { draft: '', messages: [] };
 type PreviewPanel =
   | { kind: PreviewKind; surface: PreviewSurface }
   | { kind: 'memory'; surface: 'desktop'; entry: DemoMemoryEntry };
@@ -352,6 +354,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const hero = HERO_COPY[lang];
   const preview = PREVIEW_COPY[lang];
   const [modelPlan, setModelPlan] = useState(DEFAULT_PREVIEW_MODELS);
+  const [sessionConversations, setSessionConversations] = useState<
+    Record<string, SessionConversation>
+  >({});
   const [previewPanel, setPreviewPanel] = useState<PreviewPanel>();
   const previewTrigger = useRef<HTMLButtonElement>(null);
   const previewClose = useRef<HTMLButtonElement>(null);
@@ -437,6 +442,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const maxSessionWidth = panelOpen ? Math.min(60, 75 - visibleColumnWidth) : 60;
   const visibleSessionWidth = Math.min(sessionWidth, maxSessionWidth);
   const sessionTitle = isTeam ? preview.session : preview.localSession;
+  const sessionConversation = sessionConversations[channel.id] ?? EMPTY_SESSION_CONVERSATION;
   const model = previewModel(modelPlan.main);
   const panel = useMemo(() => {
     const sections = panelAt(channel, shown);
@@ -461,6 +467,25 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
 
   function resizeSession(width: number) {
     setSessionWidth(Math.round(Math.min(maxSessionWidth, Math.max(MIN_SUBPANEL_WIDTH, width))));
+  }
+
+  function changeSessionDraft(draft: string) {
+    setSessionConversations((current) => ({
+      ...current,
+      [channel.id]: { ...(current[channel.id] ?? EMPTY_SESSION_CONVERSATION), draft },
+    }));
+  }
+
+  function sendSessionMessage() {
+    setSessionConversations((current) => {
+      const conversation = current[channel.id];
+      const text = conversation?.draft.trim();
+      if (!conversation || !text) return current;
+      return {
+        ...current,
+        [channel.id]: { draft: '', messages: [...conversation.messages, text] },
+      };
+    });
   }
 
   useLayoutEffect(() => {
@@ -825,7 +850,21 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             }}
           />
         ) : kind === 'session' ? (
-          <PreviewSessionDetail t={preview} isTeam={isTeam} />
+          <PreviewSessionDetail
+            t={preview}
+            isTeam={isTeam}
+            messages={sessionConversation.messages}
+            composer={
+              surface === 'desktop'
+                ? {
+                    draft: sessionConversation.draft,
+                    sendLabel: t.send,
+                    onChange: changeSessionDraft,
+                    onSend: sendSessionMessage,
+                  }
+                : undefined
+            }
+          />
         ) : (
           <div className="app-panel-body">
             <p className="preview-hint">{preview.teamScope}</p>

@@ -1,4 +1,5 @@
 import {
+  ArrowUp,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -7,10 +8,11 @@ import {
   Layers2,
   ListTodo,
   Package,
+  Paperclip,
   Search,
   Terminal,
 } from 'lucide-react';
-import { useRef, useState, type Ref } from 'react';
+import { useLayoutEffect, useRef, useState, type Ref } from 'react';
 import type { DemoMemoryEntry } from '../demoMemory';
 import { PREVIEW_MODELS, type ModelId, type PreviewCopy, type PreviewModel } from '../previewCopy';
 import { PreviewModelIcon } from './PreviewModelIcon';
@@ -209,71 +211,143 @@ export function PreviewModelDialog({
   );
 }
 
-export function PreviewSessionDetail({ t, isTeam }: { t: PreviewCopy; isTeam: boolean }) {
+export function PreviewSessionDetail({
+  t,
+  isTeam,
+  messages,
+  composer,
+}: {
+  t: PreviewCopy;
+  isTeam: boolean;
+  messages: readonly string[];
+  composer?: {
+    draft: string;
+    sendLabel: string;
+    onChange: (value: string) => void;
+    onSend: () => void;
+  };
+}) {
   const model = isTeam ? PREVIEW_MODELS[0] : PREVIEW_MODELS[2];
   const path = isTeam ? 'content/pricing.md' : 'research/README.md';
+  const transcript = useRef<HTMLDivElement>(null);
+  const input = useRef<HTMLTextAreaElement>(null);
+
+  useLayoutEffect(() => {
+    const node = transcript.current;
+    if (node && messages.length) node.scrollTop = node.scrollHeight;
+  }, [messages.length]);
 
   return (
-    <div className="preview-detail">
-      <div className="preview-session-heading">
-        <span className="preview-complete">
-          <CircleCheck size={14} aria-hidden="true" />
-          {t.complete}
-        </span>
-      </div>
-      <p className="preview-source">
-        <ModelSource model={model} t={t} /> · {model.name}
-      </p>
-      <p className="preview-goal">
-        <strong>{t.goal}</strong>
-        {isTeam ? t.goalText : t.localGoalText}
-      </p>
-      <details className="preview-progress">
-        <summary>
-          <ListTodo size={16} aria-hidden="true" />
-          {t.progress}
-          <span>3/3</span>
-        </summary>
-        <ul className="preview-list">
-          {(isTeam ? t.todos : t.localTodos).map((todo) => (
-            <li key={todo}>
-              <Check size={14} aria-hidden="true" /> {todo}
-            </li>
-          ))}
-        </ul>
-      </details>
-      <div className="preview-transcript">
-        <h4>{t.assignment}</h4>
-        <p className="preview-instruction">{isTeam ? t.instruction : t.localInstruction}</p>
-        <details className="preview-work">
+    <>
+      <div className="preview-detail" ref={transcript}>
+        <div className="preview-session-heading">
+          <span className="preview-complete">
+            <CircleCheck size={14} aria-hidden="true" />
+            {t.complete}
+          </span>
+        </div>
+        <p className="preview-source">
+          <ModelSource model={model} t={t} /> · {model.name}
+        </p>
+        <p className="preview-goal">
+          <strong>{t.goal}</strong>
+          {isTeam ? t.goalText : t.localGoalText}
+        </p>
+        <details className="preview-progress">
           <summary>
-            <Terminal size={16} aria-hidden="true" />
-            {t.work}
+            <ListTodo size={16} aria-hidden="true" />
+            {t.progress}
+            <span>3/3</span>
           </summary>
-          <details>
-            <summary>
-              <FileText size={14} aria-hidden="true" />
-              {t.stepRead}
-            </summary>
-            <code>{path}</code>
-          </details>
-          <details>
-            <summary>
-              <Terminal size={14} aria-hidden="true" />
-              {t.stepCheck}
-            </summary>
-            <pre aria-label={t.output}>
-              <code>
-                {isTeam
-                  ? 'check-links content/pricing.md\n2 passed, 1 stale: /plans/annual-2025'
-                  : 'git diff --check\nNo whitespace errors'}
-              </code>
-            </pre>
-          </details>
+          <ul className="preview-list">
+            {(isTeam ? t.todos : t.localTodos).map((todo) => (
+              <li key={todo}>
+                <Check size={14} aria-hidden="true" /> {todo}
+              </li>
+            ))}
+          </ul>
         </details>
-        <p className="preview-result">{isTeam ? t.result : t.localResult}</p>
+        <div className="preview-transcript">
+          <h4>{t.assignment}</h4>
+          <p className="preview-instruction">{isTeam ? t.instruction : t.localInstruction}</p>
+          <details className="preview-work">
+            <summary>
+              <Terminal size={16} aria-hidden="true" />
+              {t.work}
+            </summary>
+            <details>
+              <summary>
+                <FileText size={14} aria-hidden="true" />
+                {t.stepRead}
+              </summary>
+              <code>{path}</code>
+            </details>
+            <details>
+              <summary>
+                <Terminal size={14} aria-hidden="true" />
+                {t.stepCheck}
+              </summary>
+              <pre aria-label={t.output}>
+                <code>
+                  {isTeam
+                    ? 'check-links content/pricing.md\n2 passed, 1 stale: /plans/annual-2025'
+                    : 'git diff --check\nNo whitespace errors'}
+                </code>
+              </pre>
+            </details>
+          </details>
+          <p className="preview-result">{isTeam ? t.result : t.localResult}</p>
+          <div role="log" aria-label={t.assignment}>
+            {messages.map((message, index) => (
+              <div key={index}>
+                <p className="preview-instruction">{message}</p>
+                <p className="preview-result">{t.sessionReply}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+      {composer ? (
+        <form
+          className="app-composer preview-session-composer"
+          aria-label={t.sessionComposer}
+          onSubmit={(event) => {
+            event.preventDefault();
+            composer.onSend();
+            input.current?.focus();
+          }}
+        >
+          <Paperclip className="app-composer-plus" size={16} aria-hidden="true" />
+          <textarea
+            ref={input}
+            rows={1}
+            maxLength={1000}
+            value={composer.draft}
+            aria-label={t.sessionComposer}
+            onChange={(event) => composer.onChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (
+                event.key !== 'Enter' ||
+                event.shiftKey ||
+                event.nativeEvent.isComposing ||
+                event.nativeEvent.keyCode === 229
+              )
+                return;
+              event.preventDefault();
+              event.currentTarget.form?.requestSubmit();
+            }}
+          />
+          <button
+            className="app-send"
+            type="submit"
+            aria-label={composer.sendLabel}
+            disabled={!composer.draft.trim()}
+          >
+            <ArrowUp size={16} aria-hidden="true" />
+          </button>
+        </form>
+      ) : null}
+    </>
   );
 }
 
