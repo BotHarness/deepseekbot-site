@@ -60,8 +60,6 @@ export const PREVIEW_COPY = {
     remoteHost: '远程 Host',
     editConnection: '连接详情',
     openMarketplace: '浏览 Bot 市场',
-    marketMira: '研究资料和整理简报',
-    marketNova: '检查改动和跟进发布',
     teamTitle: '团队模式（Team mode）',
     teamBody:
       '一台 Host 服务一个小团队。Owner 主动开启试用并邀请成员，各自用自己的账号登录。Owner 和获授权的 Admin 管理成员与角色，成员按权限私聊，在共享 Channel 里和同事、Bot 协作。适用范围为通过 Bot 执行隔离检查的 Linux Host。',
@@ -213,8 +211,6 @@ export const PREVIEW_COPY = {
     remoteHost: 'Remote Host',
     editConnection: 'Connection details',
     openMarketplace: 'Browse marketplace',
-    marketMira: 'Research and short briefs',
-    marketNova: 'Code review and release follow-up',
     teamTitle: 'Team mode',
     teamBody:
       'One Host serves a small team. The Owner opts in and invites people to sign in with their own accounts. The Owner and authorized Admins manage members and roles. Members can message each other and work with Bots in shared Channels according to their permissions. Team mode is available on Linux Hosts that pass Bot execution isolation checks.',

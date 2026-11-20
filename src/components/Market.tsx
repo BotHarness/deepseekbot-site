@@ -3,7 +3,6 @@ import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/Segme
 import { TextInput } from '@astryxdesign/core/TextInput';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import { isPixelAvatarRecipe } from '@botharness/pixel-avatar';
 import {
   BANNER_HEIGHT,
   BANNER_WIDTH,
@@ -14,81 +13,25 @@ import {
 import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import { track } from '../analytics';
 import type { Copy, Lang } from '../content';
-import { recipeFor } from '../mascot';
 import {
   getBot,
   listBots,
   listTopics,
-  MARKET_ORIGIN,
   MarketError,
-  type MarketplaceAvatar,
   type MarketplaceBanner,
   type MarketplaceDetail,
   type MarketplaceEntry,
   type Sort,
 } from '../marketApi';
 import { marketBase, marketHref } from '../marketRoutes';
-import { pixelTileSvg } from '../pixelTile';
 import { Command } from './Install';
+import { BotFace, botBio, botName, marketArtUrl } from './MarketBot';
 
 export const fill = (template: string, values: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ''));
 
 const dateFormat = (lang: Lang) =>
   new Intl.DateTimeFormat(lang === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'medium' });
-
-export const botName = (bot: MarketplaceEntry) => bot.displayName ?? bot.name;
-
-// Author art is shown only from GitHub's raw files or the Marketplace itself.
-const artUrl = (url: string) =>
-  url.startsWith('https://raw.githubusercontent.com/') || url.startsWith(`${MARKET_ORIGIN}/`)
-    ? url
-    : null;
-
-// The author's avatar recipe or image when bot.json sets one, else the face seeded from `seed`.
-export function BotFace({
-  avatar,
-  seed,
-  size,
-}: {
-  avatar: MarketplaceAvatar | null | undefined;
-  seed: string;
-  size: number;
-}) {
-  const recipe =
-    avatar && 'recipe' in avatar && isPixelAvatarRecipe(avatar.recipe) ? avatar.recipe : null;
-  const image = avatar && 'image' in avatar ? artUrl(avatar.image) : null;
-  const [failed, setFailed] = useState<string | null>(null);
-  const svg = useMemo(
-    () =>
-      image && image !== failed
-        ? null
-        : pixelTileSvg(recipe ?? recipeFor(seed)).replace(
-            'width="512" height="512"',
-            `width="${size}" height="${size}"`,
-          ),
-    [recipe, seed, size, image, failed],
-  );
-  if (svg === null && image)
-    return (
-      <span className="bot-face" aria-hidden="true">
-        <img
-          src={image}
-          alt=""
-          width={size}
-          height={size}
-          loading="lazy"
-          decoding="async"
-          onError={() => setFailed(image)}
-        />
-      </span>
-    );
-  return (
-    <span className="bot-face" aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg ?? '' }} />
-  );
-}
-
-const botBio = (bot: MarketplaceEntry) => bot.bio ?? bot.description;
 
 // A pixel-scene banner is drawn here from its recipe; an uploaded one is the repository's
 // .botharness/banner.png. Bots without one get the neutral strip, or with `seed` the scene
@@ -110,7 +53,7 @@ export function BotBanner({
         ? seededBannerRecipe(seed)
         : null;
   const [failed, setFailed] = useState<string | null>(null);
-  const uploaded = banner && 'image' in banner ? artUrl(banner.image) : null;
+  const uploaded = banner && 'image' in banner ? marketArtUrl(banner.image) : null;
   const image = uploaded !== failed ? uploaded : null;
   useEffect(() => {
     const context = canvas.current?.getContext('2d');

@@ -44,6 +44,7 @@ import { track } from '../analytics';
 import { HERO_COPY } from '../heroCopy';
 import { HERO_PAIRING_COPY } from '../heroPairingCopy';
 import { PREVIEW_COPY, type ModelId } from '../previewCopy';
+import { HeroMarketplace } from './HeroMarketplace';
 import {
   DEFAULT_PREVIEW_MODELS,
   PreviewMemoryReader,
@@ -67,7 +68,6 @@ import {
   phoneChannelKey,
   type PhoneHostId,
 } from '../heroPhoneData';
-import { marketHref } from '../marketRoutes';
 import { guidePath } from '../site';
 import type { Copy } from '../content';
 import { demoMemoryEntry, type DemoMemoryEntry } from '../demoMemory';
@@ -1468,23 +1468,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 </ul>
               )
             ) : sidePanel === 'marketplace' ? (
-              <div className="app-side-content">
-                {[
-                  { name: 'Mira', description: preview.marketMira },
-                  { name: 'Nova', description: preview.marketNova },
-                ].map(({ name, description }) => (
-                  <div className="app-market-row" key={name}>
-                    <Avatar name={name} size={30} />
-                    <span>
-                      <strong>{name}</strong>
-                      <small>{description}</small>
-                    </span>
-                  </div>
-                ))}
-                <a className="app-side-link" href={marketHref(lang, { kind: 'home' })}>
-                  {preview.openMarketplace} →
-                </a>
-              </div>
+              <HeroMarketplace lang={lang} copy={copy} />
             ) : (
               <div className="app-side-content">
                 {addingRemote ? (
