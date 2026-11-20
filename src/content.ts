@@ -258,7 +258,7 @@ export interface Copy {
     };
     lead: string;
     steps: string[];
-    next: { title: string; button: string; overview: string };
+    next: { button: string; overview: string };
     copy: string;
     copied: string;
   };
@@ -730,7 +730,6 @@ const zh: Copy = {
     lead: '需要 Node.js 22 或更高版本。',
     steps: ['安装 DeepSeek Harness', '把 Tobs 装进 web Profile', '启动并打开 Bot mode'],
     next: {
-      title: '装好了？选择接入方式与可选能力',
       button: '查看接入与配置',
       overview: '使用文档总览',
     },
@@ -1251,7 +1250,6 @@ const en: Copy = {
       'Start it and open Bot mode',
     ],
     next: {
-      title: 'Installed? Choose connections and optional tools',
       button: 'Connections and setup',
       overview: 'All user guides',
     },

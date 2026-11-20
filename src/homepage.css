@@ -509,16 +509,30 @@
   justify-self: end;
 }
 
+.workflow-install-cards[data-placement='install_dev'] .command {
+  margin-block-start: auto;
+}
+
+.workflow-install-cards[data-placement='install_dev'] .command code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.workflow-install-links {
+  display: grid;
+  gap: 6px;
+}
+
+.workflow-install-links .workflow-link {
+  margin-top: 0;
+}
+
 .workflow-step-no {
   width: fit-content;
   padding: 1px 8px;
   background: var(--accent);
   color: var(--accent-ink);
   font: 18px/1.45 var(--pixel-font);
-}
-
-.workflow-install > .steps {
-  max-width: 740px;
 }
 
 .workflow-footer-inner {
