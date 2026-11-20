@@ -484,6 +484,15 @@ a.beta-button--ios {
   padding: 0;
   gap: 13px;
 }
+.hero-phone-feed .app-event {
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+.hero-phone-feed .app-event > svg {
+  margin-block-start: calc((1lh - 16px) / 2);
+}
 .hero-phone-feed .app-msg {
   gap: 7px;
   max-width: 92%;
