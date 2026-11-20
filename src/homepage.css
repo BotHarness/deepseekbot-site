@@ -273,8 +273,10 @@
 }
 
 .workflow-hosts {
-  block-size: 12em;
-  overflow: auto;
+  display: grid;
+  min-block-size: 204px;
+  align-content: start;
+  gap: 4px;
 }
 
 .workflow-hosts .hero-phone-source {
@@ -487,9 +489,16 @@
 
 .workflow-feature-pane .workflow-hosts li,
 .workflow-feature-pane .workflow-team-channels li {
-  margin-bottom: 4px;
   padding: 8px;
   background: var(--app-side);
+}
+
+.workflow-feature-pane .workflow-hosts li {
+  min-block-size: 48px;
+}
+
+.workflow-feature-pane .workflow-team-channels li {
+  margin-bottom: 4px;
 }
 
 .workflow-feature-pane .workflow-model {
@@ -509,13 +518,14 @@
 
 .workflow-session {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  block-size: 408px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
 }
 
 .workflow-session .preview-detail {
   padding: 12px;
+  overflow: visible;
+  overscroll-behavior: auto;
   background: var(--app-bg);
 }
 
@@ -538,11 +548,11 @@
   background: var(--app-hover);
 }
 
-.workflow-session .app-composer.preview-session-composer {
+#sessions .app-composer.preview-session-composer {
   margin: 0;
   border: 0;
   border-radius: 0;
-  background: var(--app-bg);
+  background: color-mix(in srgb, var(--app-bg), var(--app-ink) 12%);
   box-shadow: none;
 }
 
