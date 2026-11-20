@@ -3,17 +3,47 @@
   --workflow-border: color-mix(in srgb, var(--ink) 26%, transparent);
   --workflow-soft: color-mix(in srgb, var(--bg-alt) 66%, var(--bubble));
   --workflow-selected: color-mix(in srgb, var(--accent) 15%, var(--workflow-surface));
+  /* Each corner steps in by one site pixel twice. */
+  --workflow-pixel-corners: polygon(
+    calc(2 * var(--px)) 0,
+    calc(100% - 2 * var(--px)) 0,
+    calc(100% - 2 * var(--px)) var(--px),
+    calc(100% - var(--px)) var(--px),
+    calc(100% - var(--px)) calc(2 * var(--px)),
+    100% calc(2 * var(--px)),
+    100% calc(100% - 2 * var(--px)),
+    calc(100% - var(--px)) calc(100% - 2 * var(--px)),
+    calc(100% - var(--px)) calc(100% - var(--px)),
+    calc(100% - 2 * var(--px)) calc(100% - var(--px)),
+    calc(100% - 2 * var(--px)) 100%,
+    calc(2 * var(--px)) 100%,
+    calc(2 * var(--px)) calc(100% - var(--px)),
+    var(--px) calc(100% - var(--px)),
+    var(--px) calc(100% - 2 * var(--px)),
+    0 calc(100% - 2 * var(--px)),
+    0 calc(2 * var(--px)),
+    var(--px) calc(2 * var(--px)),
+    var(--px) var(--px),
+    calc(2 * var(--px)) var(--px)
+  );
 }
 
 .workflow-bento,
 .workflow-feature-grid,
 .workflow-install-cards {
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
 .workflow-bento {
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.workflow-card,
+.workflow-opinion,
+.workflow-free {
+  clip-path: var(--workflow-pixel-corners);
+  background: var(--workflow-surface);
 }
 
 .workflow-card {
@@ -22,9 +52,6 @@
   min-width: 0;
   gap: 12px;
   padding: clamp(16px, 2.3vw, 27px);
-  border: 1px solid var(--workflow-border);
-  border-radius: 20px;
-  background: var(--workflow-surface);
 }
 
 .workflow-card h3 {
@@ -41,11 +68,15 @@
 }
 
 .workflow-card--engine {
-  background: color-mix(in srgb, var(--workflow-surface) 90%, var(--accent));
+  background: color-mix(in srgb, var(--workflow-surface), var(--accent) 20%);
 }
 
 .workflow-card--chat {
-  background: color-mix(in srgb, var(--workflow-surface) 90%, var(--grass-light));
+  background: color-mix(in srgb, var(--workflow-surface), var(--grass-light) 31%);
+}
+
+.workflow-card--memory {
+  background: color-mix(in srgb, var(--workflow-surface), var(--soil) 29%);
 }
 
 .workflow-card--memory,
@@ -69,11 +100,15 @@
 .workflow-demo {
   min-width: 0;
   padding: 14px;
-  border: 1px solid var(--workflow-border);
-  border-radius: 13px;
   background: var(--workflow-soft);
   color: var(--ink);
   font-size: 13px;
+}
+
+.workflow-bento :is(.workflow-demo, .feature-demo) {
+  background: var(--workflow-surface);
+  border: 0;
+  box-shadow: none;
 }
 
 .workflow-card > .workflow-demo,
@@ -223,18 +258,12 @@
 
 .workflow-card .feature-demo {
   padding: 12px;
-  border: 1px solid var(--workflow-border);
-  border-radius: 12px;
-  box-shadow: none;
-  background: var(--workflow-soft);
 }
 
-.workflow-card .feature-demo figcaption {
+.workflow-bento .feature-demo figcaption {
   padding: 0;
   color: var(--ink-soft);
   background: transparent;
-  font: inherit;
-  font-size: 12px;
 }
 
 .workflow-card .app--mini {
@@ -276,6 +305,12 @@
   font-weight: 600;
 }
 
+.workflow-bento .workflow-link {
+  color: color-mix(in srgb, var(--accent), var(--ink) 38%);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 .workflow-fixture-note,
 .workflow-release,
 .workflow-opinion {
@@ -286,8 +321,6 @@
 .workflow-opinion {
   margin-top: 20px;
   padding: 15px 18px;
-  border: 1px solid var(--workflow-border);
-  border-radius: 12px;
 }
 
 .workflow-opinion summary {
@@ -337,7 +370,6 @@
   display: grid;
   gap: 6px;
   padding: 8px;
-  border-radius: 7px;
   outline: none;
 }
 
@@ -356,9 +388,8 @@
 .workflow-step-no {
   width: fit-content;
   padding: 1px 8px;
-  border-radius: 5px;
-  background: var(--workflow-selected);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--accent-ink);
   font: 18px/1.45 var(--pixel-font);
 }
 
@@ -368,8 +399,6 @@
 
 .workflow-free {
   padding: clamp(24px, 6vw, 56px);
-  border: 1px solid var(--workflow-border);
-  border-radius: 22px;
   background: color-mix(in srgb, var(--workflow-surface) 82%, var(--grass-light));
 }
 
