@@ -1,6 +1,7 @@
 import {
   Check,
   ChevronDown,
+  ChevronLeft,
   CircleCheck,
   FileText,
   Layers,
@@ -9,7 +10,8 @@ import {
   Search,
   Terminal,
 } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useRef, useState, type Ref } from 'react';
+import type { DemoMemoryEntry } from '../demoMemory';
 import { PREVIEW_MODELS, type ModelId, type PreviewCopy, type PreviewModel } from '../previewCopy';
 
 type Role = 'main' | 'task';
@@ -249,5 +251,99 @@ export function PreviewSessionDetail({ t, isTeam }: { t: PreviewCopy; isTeam: bo
         <p className="preview-result">{isTeam ? t.result : t.localResult}</p>
       </div>
     </div>
+  );
+}
+
+export function PreviewMemoryReader({
+  t,
+  entry,
+  backRef,
+  onBack,
+}: {
+  t: PreviewCopy;
+  entry: DemoMemoryEntry;
+  backRef: Ref<HTMLButtonElement>;
+  onBack: () => void;
+}) {
+  let oldLine = 0;
+  let newLine = 0;
+  const rows =
+    entry.kind === 'commit'
+      ? entry.lines.map((line) => {
+          const sign = line[0];
+          return {
+            oldNumber: sign === '+' ? null : ++oldLine,
+            newNumber: sign === '-' ? null : ++newLine,
+            sign,
+            text: line.slice(1),
+          };
+        })
+      : [];
+  return (
+    <section
+      className="preview-memory-reader"
+      aria-label={entry.kind === 'file' ? entry.path : t.commitDiff}
+    >
+      <header className="app-pane-head preview-memory-header">
+        <button
+          className="app-icon-btn"
+          type="button"
+          ref={backRef}
+          aria-label={t.backToChat}
+          title={t.backToChat}
+          onClick={onBack}
+        >
+          <ChevronLeft size={18} aria-hidden="true" />
+        </button>
+        {entry.kind === 'commit' ? <code className="preview-memory-sha">{entry.sha}</code> : null}
+        <strong>{entry.kind === 'file' ? entry.path : entry.title}</strong>
+      </header>
+      <div className="preview-memory-content">
+        {entry.kind === 'file' ? (
+          <pre className="preview-memory-file">
+            <code>{entry.text}</code>
+          </pre>
+        ) : (
+          <>
+            <p className="preview-memory-changes">{t.changedFiles} · 1</p>
+            <details open className="preview-memory-diff">
+              <summary>
+                <FileText size={15} aria-hidden="true" />
+                <strong>{entry.path}</strong>
+                <span className="preview-memory-diff-count">
+                  <span className="mini-add">
+                    +{entry.lines.filter((line) => line.startsWith('+')).length}
+                  </span>{' '}
+                  <span className="mini-del">
+                    −{entry.lines.filter((line) => line.startsWith('-')).length}
+                  </span>
+                </span>
+              </summary>
+              <pre>
+                <code>
+                  <span className="preview-memory-hunk">{entry.hunk}</span>
+                  {rows.map(({ oldNumber, newNumber, sign, text }, index) => (
+                    <span
+                      key={index}
+                      className="preview-memory-line"
+                      data-change={sign === '+' ? 'added' : sign === '-' ? 'removed' : undefined}
+                    >
+                      <span className="preview-memory-line-number" aria-hidden="true">
+                        {oldNumber}
+                      </span>
+                      <span className="preview-memory-line-number" aria-hidden="true">
+                        {newNumber}
+                      </span>
+                      <span>{sign}</span>
+                      <span>{text}</span>
+                    </span>
+                  ))}
+                </code>
+              </pre>
+            </details>
+          </>
+        )}
+      </div>
+    </section>
   );
 }

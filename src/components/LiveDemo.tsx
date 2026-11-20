@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Ellipsis,
+  FileText,
   Files,
   FolderLock,
   GitCommitVertical,
@@ -45,6 +46,7 @@ import { HERO_COPY } from '../heroCopy';
 import { PREVIEW_COPY } from '../previewCopy';
 import {
   DEFAULT_PREVIEW_MODELS,
+  PreviewMemoryReader,
   PreviewModelDialog,
   PreviewSessionDetail,
   previewModel,
@@ -62,6 +64,7 @@ import {
 import { marketHref } from '../marketRoutes';
 import { guidePath } from '../site';
 import type { Copy } from '../content';
+import { demoMemoryEntry, type DemoMemoryEntry } from '../demoMemory';
 import type { DemoChannel, DemoIcon, DemoStep, PanelSection } from '../demoCopy';
 import { recipeFor } from '../mascot';
 import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
@@ -88,8 +91,11 @@ function Icon({ name }: { name: DemoIcon }) {
 
 /** A message the visitor typed after the script finished, and the Bot's canned answer. */
 type Extra = { kind: 'user'; text: string; author?: string } | { kind: 'fallback'; bot: string };
-type PreviewPanel = 'models' | 'session' | 'members';
+type PreviewKind = 'models' | 'session' | 'members';
 type PreviewSurface = 'desktop' | 'phone';
+type PreviewPanel =
+  | { kind: PreviewKind; surface: PreviewSurface }
+  | { kind: 'memory'; surface: 'desktop'; entry: DemoMemoryEntry };
 type SidePanel = 'notifications' | 'channels' | 'chats' | 'marketplace' | 'environment';
 type HostScope = PhoneHostId | 'all';
 const TEAM_MEMBER = { desktop: 'Mei', phone: 'Jun' } as const;
@@ -342,12 +348,11 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const hero = HERO_COPY[lang];
   const preview = PREVIEW_COPY[lang];
   const [modelPlan, setModelPlan] = useState(DEFAULT_PREVIEW_MODELS);
-  const [previewPanel, setPreviewPanel] = useState<{
-    kind: PreviewPanel;
-    surface: PreviewSurface;
-  }>();
+  const [previewPanel, setPreviewPanel] = useState<PreviewPanel>();
   const previewTrigger = useRef<HTMLButtonElement>(null);
   const previewClose = useRef<HTMLButtonElement>(null);
+  const subpanelToggle = useRef<HTMLButtonElement>(null);
+  const chatScrollBeforeMemory = useRef<number | undefined>(undefined);
   const restorePreviewFocus = useRef(false);
   const [phoneHost, setPhoneHost] = useState<PhoneHostId>('studio');
   const channels = useMemo(
@@ -419,6 +424,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const scopedRows = channelRows.filter((row) => hostScope === 'all' || row.host === hostScope);
   const isTeam = linkedPhone && phoneHost === 'studio' && active === 0;
   const isPreviewBot = linkedPhone && phoneHost === 'research' && active === 2;
+  const memoryReader = previewPanel?.kind === 'memory' ? previewPanel.entry : undefined;
   const hasDesktopSession = previewPanel?.kind === 'session' && previewPanel.surface === 'desktop';
   const maxColumnWidth = hasDesktopSession ? 40 : 60;
   const visibleColumnWidth = Math.min(columnWidth, maxColumnWidth);
@@ -429,6 +435,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     const sessions = sections.find((section) => section.id === 'sessions');
     return sessions ? [sessions, ...sections.filter((section) => section !== sessions)] : sections;
   }, [channel, shown]);
+
+  const hasPreference = panel.some(
+    (section) => section.id === 'commits' && section.items.some((item) => item.id === 'c2'),
+  );
 
   function resizeSubpanel(id: string, height: number) {
     setPanelHeights((previous) => ({
@@ -445,11 +455,24 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     if (previewPanel) previewClose.current?.focus({ preventScroll: true });
     else if (restorePreviewFocus.current) {
       restorePreviewFocus.current = false;
-      previewTrigger.current?.focus({ preventScroll: true });
+      const trigger = previewTrigger.current;
+      (trigger?.getClientRects().length ? trigger : subpanelToggle.current)?.focus({
+        preventScroll: true,
+      });
     }
-  }, [previewPanel]);
+    if (!memoryReader && chatScrollBeforeMemory.current !== undefined && feed.current) {
+      feed.current.scrollTop = chatScrollBeforeMemory.current;
+      chatScrollBeforeMemory.current = undefined;
+    }
+  }, [memoryReader, previewPanel]);
 
-  function showPreview(kind: PreviewPanel, surface: PreviewSurface, trigger: HTMLButtonElement) {
+  function showMemory(entry: DemoMemoryEntry, trigger: HTMLButtonElement) {
+    if (!memoryReader) chatScrollBeforeMemory.current = feed.current?.scrollTop;
+    previewTrigger.current = trigger;
+    setPreviewPanel({ kind: 'memory', surface: 'desktop', entry });
+  }
+
+  function showPreview(kind: PreviewKind, surface: PreviewSurface, trigger: HTMLButtonElement) {
     if (previewPanel?.kind === kind && previewPanel.surface === surface) {
       closePreview();
       return;
@@ -612,7 +635,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   // keep the newest message in view, inside the window only (never scroll the page)
   useEffect(() => {
     for (const el of [feed.current, phoneFeed.current])
-      if (el)
+      if (el?.getClientRects().length)
         el.scrollTo({ top: el.scrollHeight, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   }, [shown, working, extra, answers, done, phonePhase]);
 
@@ -621,6 +644,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     synced = phonePhase !== 'intro' && phonePhase !== 'pair',
     host: PhoneHostId = index === 0 ? 'studio' : index === 2 ? 'research' : phoneHost,
   ) => {
+    chatScrollBeforeMemory.current = undefined;
     setPreviewPanel(undefined);
     setPhoneHost(host);
     startSynced.current = synced;
@@ -738,7 +762,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     </>
   );
   const renderPreview = (surface: PreviewSurface) => {
-    if (previewPanel?.surface !== surface) return null;
+    if (previewPanel?.surface !== surface || previewPanel.kind === 'memory') return null;
     const kind = previewPanel.kind;
     const title =
       kind === 'session' ? sessionTitle : kind === 'models' ? preview.modelPicker : preview.members;
@@ -1194,6 +1218,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
               <button
                 type="button"
                 className="app-icon-btn app-panel-toggle"
+                ref={subpanelToggle}
                 aria-expanded={panelOpen}
                 aria-controls={subpanelId}
                 aria-label={panelOpen ? t.hideSidebar : t.showSidebar}
@@ -1212,83 +1237,102 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             </header>
             <div className="app-message-split" data-session={hasDesktopSession ? '' : undefined}>
               <div className="app-message-content">
-                {linkedPhone && phonePhase === 'pair' ? (
-                  <div className="hero-desktop-pair">
-                    <PhonePair
-                      t={{
-                        ...copy.featureDemos.mobile,
-                        pair: { ...copy.featureDemos.mobile.pair, title: hero.pairTitle },
-                      }}
-                      autoPlay={!isInteractive}
-                      onNext={() => pairingWith.current?.()}
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <div className="app-feed" ref={feed}>
-                      <ol className="app-msgs">
-                        <li className="app-day">{t.today}</li>
-                        {renderSteps('desktop')}
-                        {renderExtra('desktop')}
-                        {working ? (
-                          <Working
-                            bot={working.bot}
-                            tool={working.tool}
-                            label={fill(t.working, {
-                              bot: working.bot,
-                              tool: copy.symbols[working.tool],
-                            })}
-                          />
-                        ) : null}
-                        {done && extra.length === 0 ? (
-                          <li className="app-event app-event--replay">
-                            <button type="button" className="app-btn" onClick={() => open(active)}>
-                              <RotateCcw
-                                className="app-icon"
-                                size={14}
-                                strokeWidth={1.75}
-                                aria-hidden="true"
-                              />
-                              {t.replay}
-                            </button>
-                          </li>
-                        ) : null}
-                      </ol>
+                {memoryReader ? (
+                  <PreviewMemoryReader
+                    key={memoryReader.kind + memoryReader.id}
+                    t={preview}
+                    entry={memoryReader}
+                    backRef={previewClose}
+                    onBack={closePreview}
+                  />
+                ) : null}
+                <div className="app-message-timeline" hidden={memoryReader !== undefined}>
+                  {linkedPhone && phonePhase === 'pair' ? (
+                    <div className="hero-desktop-pair">
+                      <PhonePair
+                        t={{
+                          ...copy.featureDemos.mobile,
+                          pair: { ...copy.featureDemos.mobile.pair, title: hero.pairTitle },
+                        }}
+                        autoPlay={!isInteractive}
+                        onNext={() => pairingWith.current?.()}
+                      />
                     </div>
-                    <form
-                      className="app-composer"
-                      onSubmit={(event) => send(event, 'desktop')}
-                      data-typing={typing ? '' : undefined}
-                    >
-                      <Plus
-                        className="app-composer-plus"
-                        size={18}
-                        strokeWidth={1.75}
-                        aria-hidden="true"
-                      />
-                      <input
-                        value={draft}
-                        readOnly={!done}
-                        onChange={(event) => setDraft(event.target.value)}
-                        placeholder={
-                          isTeam
-                            ? fill(preview.composer, { name: 'Mei' })
-                            : fill(t.composer, { name: channel.title })
-                        }
-                        aria-label={
-                          isTeam
-                            ? fill(preview.composer, { name: 'Mei' })
-                            : fill(t.composer, { name: channel.title })
-                        }
-                        maxLength={200}
-                      />
-                      <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
-                        <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
-                        <span className="visually-hidden">{t.send}</span>
-                      </button>
-                    </form>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <div className="app-feed" ref={feed}>
+                        <ol className="app-msgs">
+                          <li className="app-day">{t.today}</li>
+                          {renderSteps('desktop')}
+                          {renderExtra('desktop')}
+                          {working ? (
+                            <Working
+                              bot={working.bot}
+                              tool={working.tool}
+                              label={fill(t.working, {
+                                bot: working.bot,
+                                tool: copy.symbols[working.tool],
+                              })}
+                            />
+                          ) : null}
+                          {done && extra.length === 0 ? (
+                            <li className="app-event app-event--replay">
+                              <button
+                                type="button"
+                                className="app-btn"
+                                onClick={() => open(active)}
+                              >
+                                <RotateCcw
+                                  className="app-icon"
+                                  size={14}
+                                  strokeWidth={1.75}
+                                  aria-hidden="true"
+                                />
+                                {t.replay}
+                              </button>
+                            </li>
+                          ) : null}
+                        </ol>
+                      </div>
+                      <form
+                        className="app-composer"
+                        onSubmit={(event) => send(event, 'desktop')}
+                        data-typing={typing ? '' : undefined}
+                      >
+                        <Plus
+                          className="app-composer-plus"
+                          size={18}
+                          strokeWidth={1.75}
+                          aria-hidden="true"
+                        />
+                        <input
+                          value={draft}
+                          readOnly={!done}
+                          onChange={(event) => setDraft(event.target.value)}
+                          placeholder={
+                            isTeam
+                              ? fill(preview.composer, { name: 'Mei' })
+                              : fill(t.composer, { name: channel.title })
+                          }
+                          aria-label={
+                            isTeam
+                              ? fill(preview.composer, { name: 'Mei' })
+                              : fill(t.composer, { name: channel.title })
+                          }
+                          maxLength={200}
+                        />
+                        <button
+                          type="submit"
+                          className="app-send"
+                          disabled={!done || !draft.trim()}
+                        >
+                          <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
+                          <span className="visually-hidden">{t.send}</span>
+                        </button>
+                      </form>
+                    </>
+                  )}
+                </div>
               </div>
               {hasDesktopSession ? renderPreview('desktop') : null}
               <div
@@ -1396,25 +1440,68 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                             .filter(
                               (item) => !(section.id === 'members' && item.id === 'h' && isTeam),
                             )
-                            .map((item) => (
-                              // keyed by its badge too, so a status change flashes the row
-                              <li
-                                key={`${item.id}-${item.badge ?? ''}`}
-                                className="app-panel-item"
-                                data-tone={item.tone}
-                              >
-                                {section.id === 'members' && item.id !== 'h' ? (
-                                  <Avatar name={item.title} size={22} />
-                                ) : null}
+                            .map((item) => {
+                              const entry = demoMemoryEntry(
+                                lang,
+                                phoneHost,
+                                section.id,
+                                item,
+                                hasPreference,
+                                copy.featureDemos.memory.commits,
+                              );
+                              const text = (
                                 <span className="app-panel-text">
                                   <span>{item.title}</span>
-                                  {item.meta ? <small>{item.meta}</small> : null}
+                                  {item.meta ? (
+                                    <small>
+                                      {[item.sha, item.meta].filter(Boolean).join(' · ')}
+                                    </small>
+                                  ) : null}
                                 </span>
-                                {item.badge ? (
-                                  <span className="app-badge">{item.badge}</span>
-                                ) : null}
-                              </li>
-                            ))}
+                              );
+                              return (
+                                <li
+                                  key={`${item.id}-${item.badge ?? ''}`}
+                                  className={
+                                    entry ? 'app-panel-item preview-memory-item' : 'app-panel-item'
+                                  }
+                                  data-tone={item.tone}
+                                >
+                                  {entry ? (
+                                    <button
+                                      type="button"
+                                      className="preview-memory-row"
+                                      data-kind={entry.kind}
+                                      aria-pressed={
+                                        memoryReader?.kind === entry.kind &&
+                                        memoryReader.id === entry.id
+                                      }
+                                      onClick={(event) => showMemory(entry, event.currentTarget)}
+                                    >
+                                      {entry.kind === 'file' ? (
+                                        <FileText size={15} aria-hidden="true" />
+                                      ) : (
+                                        <GitCommitVertical size={15} aria-hidden="true" />
+                                      )}
+                                      {text}
+                                      {item.badge ? (
+                                        <span className="app-badge">{item.badge}</span>
+                                      ) : null}
+                                    </button>
+                                  ) : (
+                                    <>
+                                      {section.id === 'members' && item.id !== 'h' ? (
+                                        <Avatar name={item.title} size={22} />
+                                      ) : null}
+                                      {text}
+                                      {item.badge ? (
+                                        <span className="app-badge">{item.badge}</span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </li>
+                              );
+                            })}
                         </ul>
                       </div>
                       {open ? (

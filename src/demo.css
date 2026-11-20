@@ -449,16 +449,18 @@
   container-type: inline-size;
 }
 .app-message-split,
-.app-message-content {
+.app-message-content,
+.app-message-timeline {
   display: flex;
   flex: 1;
   min-width: 0;
   min-height: 0;
 }
-.app-message-content {
+.app-message-content,
+.app-message-timeline {
   flex-direction: column;
 }
-.app-message-content > .app-feed {
+.app-message-timeline > .app-feed {
   flex: 1;
 }
 .app-icon {

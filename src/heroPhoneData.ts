@@ -21,6 +21,7 @@ type Story = {
   introReply: string;
   researchPrompt: string;
   researchReply: string;
+  researchCommit: string;
   checkPrompt: string;
   checkReply: string;
 };
@@ -58,5 +59,20 @@ export function phoneChannel(
       steps = [...intro, ...steps.slice(approval)];
     }
   }
-  return { ...channel, id: phoneChannelKey(host, channel.id), steps };
+  const panel =
+    host === 'research' && index === 1
+      ? channel.panel.map((section) =>
+          section.id === 'commits'
+            ? {
+                ...section,
+                items: section.items.map((item) => ({
+                  ...item,
+                  title: story.researchCommit,
+                  sha: 'b48d1fc',
+                })),
+              }
+            : section,
+        )
+      : channel.panel;
+  return { ...channel, id: phoneChannelKey(host, channel.id), steps, panel };
 }

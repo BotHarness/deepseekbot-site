@@ -9,6 +9,7 @@ export interface PanelItem {
   id: string;
   title: string;
   meta?: string;
+  sha?: string;
   badge?: string;
   tone?: 'ok' | 'warn' | 'info';
 }
@@ -397,7 +398,7 @@ const zhDemo: DemoCopy = {
           id: 'commits',
           icon: 'history',
           title: '记忆演化',
-          items: [{ id: 'c1', title: '整理竞品定价', meta: 'a41c9e2 · 昨天', badge: 'main' }],
+          items: [{ id: 'c1', title: '整理竞品定价', sha: 'a41c9e2', meta: '昨天', badge: 'main' }],
         },
         {
           id: 'schedules',
@@ -439,7 +440,8 @@ const zhDemo: DemoCopy = {
               item: {
                 id: 'c2',
                 title: '记住：最关心定价变化',
-                meta: '7d03b51 · 刚刚',
+                sha: '7d03b51',
+                meta: '刚刚',
                 badge: 'HEAD',
                 tone: 'info',
               },
@@ -744,12 +746,13 @@ const enDemo: DemoCopy = {
         {
           id: 'commits',
           icon: 'history',
-          title: 'Memory history',
+          title: 'Memory evolution',
           items: [
             {
               id: 'c1',
               title: 'Sort competitor pricing',
-              meta: 'a41c9e2 · yesterday',
+              sha: 'a41c9e2',
+              meta: 'yesterday',
               badge: 'main',
             },
           ],
@@ -804,7 +807,8 @@ const enDemo: DemoCopy = {
               item: {
                 id: 'c2',
                 title: 'Remember: pricing first',
-                meta: '7d03b51 · just now',
+                sha: '7d03b51',
+                meta: 'just now',
                 badge: 'HEAD',
                 tone: 'info',
               },
