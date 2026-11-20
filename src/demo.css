@@ -1065,7 +1065,8 @@ button.app-chat-identity {
   border: var(--px) solid var(--px-ink);
   box-shadow: 6px 6px 0 var(--px-shadow);
 }
-.feature-row:nth-child(3n + 2) .feature-demo {
+.feature-row:nth-child(3n + 2) .feature-demo,
+.workflow-feature-grid .feature-demo[data-demo='schedules'] {
   background: linear-gradient(var(--grass-light), var(--grass));
 }
 .feature-row:nth-child(3n) .feature-demo {

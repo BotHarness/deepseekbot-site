@@ -13,12 +13,7 @@ import { MobileBeta } from './components/MobileBeta';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
 import { Sponsors } from './components/Sponsors';
-import {
-  HomepageFeatures,
-  HomepageFooter,
-  HowTobsWorks,
-  OpenToEveryone,
-} from './components/HomepageSections';
+import { HomepageFeatures, HomepageFooter, HowTobsWorks } from './components/HomepageSections';
 import { COPY, LINKS } from './content';
 import { HERO_COPY } from './heroCopy';
 import { PREVIEW_COPY } from './previewCopy';
@@ -151,9 +146,6 @@ export function App() {
           <Community copy={copy} />
         </section>
 
-        <Faq copy={copy} />
-
-        <OpenToEveryone lang={lang} />
         <Sponsors lang={lang} />
 
         <section
@@ -181,6 +173,8 @@ export function App() {
             {home.blog} →
           </a>
         </section>
+
+        <Faq copy={copy} />
       </main>
 
       <BotCompanion lang={lang} design={design} />

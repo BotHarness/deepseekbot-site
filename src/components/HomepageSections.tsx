@@ -1,4 +1,13 @@
-import { ArrowRight, Hash, Link2, MessageSquare, Plus, Send, Terminal } from 'lucide-react';
+import {
+  ArrowRight,
+  Hash,
+  Link2,
+  LockKeyhole,
+  MessageSquare,
+  Plus,
+  Send,
+  Terminal,
+} from 'lucide-react';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { LINKS, QQ_GROUP, type Copy, type Lang } from '../content';
 import { HOMEPAGE_COPY } from '../homepageCopy';
@@ -6,7 +15,6 @@ import { HERO_CONVERSATIONS, PHONE_HOSTS, type PhoneHostId } from '../heroPhoneD
 import { recipeFor } from '../mascot';
 import { PREVIEW_COPY } from '../previewCopy';
 import { blogPath, changelogPath, docsPath, guidePath, marketPath, pluginsPath } from '../site';
-import { SPONSOR_EMAIL } from '../sponsors';
 import { FeatureDemo } from './FeatureDemos';
 import { HeroPhoneSource } from './HeroPhoneHome';
 import { PreviewSessionDetail, previewModel } from './HeroPreviewPanels';
@@ -212,7 +220,6 @@ export function HowTobsWorks({ copy, lang }: { copy: Copy; lang: Lang }) {
           />
         </article>
       </div>
-      <p className="workflow-fixture-note">{t.demoNote}</p>
       <details className="workflow-opinion">
         <summary>{t.opinion}</summary>
         <p>{t.opinionLead}</p>
@@ -259,52 +266,47 @@ function NetworkDemo({ copy, lang }: { copy: Copy; lang: Lang }) {
   );
 }
 
-const TEAM_ROLES = [
-  { name: 'Mei', role: 'Owner', detail: 'ownerDetail' },
-  { name: 'Lea', role: 'Admin', detail: 'adminDetail' },
-  { name: 'Jun', role: 'Member', detail: 'memberDetail' },
+const TEAM_MEMBERS = [
+  { name: 'Mei', role: 'Owner', bots: ['Mira', 'Theo'] },
+  { name: 'Lea', role: 'Admin', bots: ['Luna', 'Vera'] },
+  { name: 'Jun', role: 'Member', bots: ['Kai', 'Juno'] },
 ] as const;
 
 function TeamDemo({ t }: { t: HomeCopy }) {
   const [index, setIndex] = useState(0);
-  const [posts, setPosts] = useState<{ author: string; text: string }[]>([]);
-  const log = useRef<HTMLUListElement>(null);
-  useLayoutEffect(() => {
-    const node = log.current;
-    if (node && posts.length) node.scrollTop = node.scrollHeight;
-  }, [posts]);
-  const member = TEAM_ROLES[index]!;
+  const member = TEAM_MEMBERS[index]!;
   return (
     <div className="workflow-demo">
       <div className="workflow-options" role="group" aria-label={t.memberPicker}>
-        {TEAM_ROLES.map(({ name, role }, i) => (
+        {TEAM_MEMBERS.map(({ name, role }, i) => (
           <button key={name} type="button" aria-pressed={i === index} onClick={() => setIndex(i)}>
             {name} · {role}
           </button>
         ))}
       </div>
-      <p className="workflow-role" aria-live="polite">
-        {member.role} · {t[member.detail]}
-      </p>
-      <h4 className="workflow-room">
-        <Hash size={15} aria-hidden="true" />
-        {t.sampleRoom}
-      </h4>
-      <ul className="workflow-chat" role="log" aria-label={t.sampleRoom} ref={log}>
-        <ChatLine author="Jun" text={t.sampleMessage} />
-        <ChatLine author="Mira" text={t.handoff} />
-        <ChatLine author="Nova" text={t.groupResult} />
-        {posts.map((post, i) => (
-          <ChatLine key={i} {...post} />
+      <ul
+        className="workflow-team-channels"
+        aria-label={t.channelsFor(member.name)}
+        aria-live="polite"
+      >
+        {member.bots.map((bot) => (
+          <li key={bot}>
+            <DemoAvatar name={bot} />
+            <strong>{bot}</strong>
+            <small>
+              <LockKeyhole size={14} aria-hidden="true" /> {t.privateBot}
+            </small>
+          </li>
         ))}
+        <li>
+          <Hash size={25} aria-hidden="true" />
+          <div>
+            <strong>{t.sampleRoom}</strong>
+            <span>Nova · Bot</span>
+          </div>
+          <small>{t.publicChannel}</small>
+        </li>
       </ul>
-      <WorkflowComposer
-        key={member.name}
-        t={t}
-        onSend={(message) =>
-          setPosts((previous) => [...previous.slice(-6), { author: member.name, text: message }])
-        }
-      />
     </div>
   );
 }
@@ -322,7 +324,7 @@ function ImDemo({ lang }: { lang: Lang }) {
   const [index, setIndex] = useState(0);
   const platform = IM_PLATFORMS[index]!;
   return (
-    <div className="workflow-demo">
+    <div className="workflow-demo workflow-im">
       <div className="workflow-options" role="group" aria-label={t.imPicker}>
         {IM_PLATFORMS.map(({ name }, i) => (
           <button key={name} type="button" aria-pressed={i === index} onClick={() => setIndex(i)}>
@@ -380,29 +382,14 @@ export function HomepageFeatures({ copy, lang }: { copy: Copy; lang: Lang }) {
       <p className="section-lead">{t.featuresLead}</p>
       <div className="workflow-feature-grid">
         {copy.features.items
-          .filter((item) => item.demo && item.demo !== 'memory')
+          .filter((item) => item.demo === 'identity' || item.demo === 'schedules')
           .map((item) => (
             <article className="workflow-card" key={item.title}>
               <h3>{item.title}</h3>
               <p>{item.body}</p>
               <FeatureDemo copy={copy} demo={item.demo!} />
-              {item.cta ? (
-                <a className="workflow-link" href={item.cta.href}>
-                  {item.cta.label} <ArrowRight size={16} aria-hidden="true" />
-                </a>
-              ) : null}
-              {item.guide ? (
-                <a className="workflow-link" href={guidePath(lang, item.guide.slug)}>
-                  {item.guide.label} <ArrowRight size={16} aria-hidden="true" />
-                </a>
-              ) : null}
             </article>
           ))}
-        <article className="workflow-card">
-          <h3>{preview.sessionsTitle}</h3>
-          <p>{preview.sessionsBody}</p>
-          <SessionDemo copy={copy} lang={lang} />
-        </article>
         <article className="workflow-card" id="hosts">
           <h3>{t.network}</h3>
           <p>{t.networkBody}</p>
@@ -411,42 +398,27 @@ export function HomepageFeatures({ copy, lang }: { copy: Copy; lang: Lang }) {
             {t.networkGuide} <ArrowRight size={16} aria-hidden="true" />
           </a>
         </article>
-        <article className="workflow-card" id="team">
-          <h3>{t.team}</h3>
-          <p>{t.teamBody}</p>
-          <TeamDemo t={t} />
+        <article className="workflow-card" id="sessions">
+          <h3>{preview.sessionsTitle}</h3>
+          <p>{preview.sessionsBody}</p>
+          <SessionDemo copy={copy} lang={lang} />
         </article>
-        <article className="workflow-card workflow-card--wide" id="integrations">
-          <div>
-            <h3>{t.im}</h3>
-            <p>{t.imBody}</p>
-            <p>{t.roadmap}</p>
+        <article className="workflow-card workflow-card--people" id="team">
+          <h3>{t.people}</h3>
+          <div className="workflow-people-panels">
+            <section aria-labelledby="workflow-team-title">
+              <h4 id="workflow-team-title">{t.team}</h4>
+              <p>{t.teamBody}</p>
+              <TeamDemo t={t} />
+            </section>
+            <section id="integrations" aria-labelledby="workflow-im-title">
+              <h4 id="workflow-im-title">{t.im}</h4>
+              <p>{t.imBody}</p>
+              <p>{t.roadmap}</p>
+              <ImDemo lang={lang} />
+            </section>
           </div>
-          <ImDemo lang={lang} />
         </article>
-      </div>
-      <p className="workflow-release">
-        {copy.features.lead} {copy.features.release.text}{' '}
-        <a href={copy.features.release.href}>{copy.features.release.label} →</a>
-      </p>
-    </section>
-  );
-}
-
-export function OpenToEveryone({ lang }: { lang: Lang }) {
-  const t = HOMEPAGE_COPY[lang];
-  return (
-    <section className="section workflow-section" aria-labelledby="workflow-free-title">
-      <div className="workflow-free">
-        <h2 id="workflow-free-title">{t.free}</h2>
-        <p>{t.freeBody}</p>
-        <a
-          className="workflow-action"
-          data-sponsor-contact="email"
-          href={`mailto:${SPONSOR_EMAIL}`}
-        >
-          {t.sponsor} <ArrowRight size={17} aria-hidden="true" />
-        </a>
       </div>
     </section>
   );

@@ -76,9 +76,8 @@ export const PREVIEW_COPY = {
     acpTitle: 'ACP 能接入其他 Agent 吗？',
     acpBody:
       'ACP（Agent Client Protocol）让客户端把任务交给外部 Agent，并接收执行结果。Tobs 的通用 ACP 引擎接入仍在规划中。Tobs 的订阅引擎使用专用适配，Codex 走 app-server，Claude Code 走 Agent SDK。',
-    sessionsTitle: '在对话里打开 Session',
-    sessionsBody:
-      '点开消息关联的 Session，或从 Bot 的 Sessions 列表进入。桌面端可在 Messages 的详情子面板里查看目标、待办和对话。展开工具步骤查看输出，也可以直接给这个 Assignment 发消息。',
+    sessionsTitle: '查看与跟进 Session',
+    sessionsBody: '从消息打开 Session，查看目标、进度和工具输出，也可以直接发消息跟进这项任务。',
     teamQuestion: '团队模式适用于哪些 Host？',
     engineQuestion: '可以用 ChatGPT 或 Claude 的订阅额度吗？',
     sessionsQuestion: '在哪里查看 Bot 的执行过程？',
@@ -232,9 +231,9 @@ export const PREVIEW_COPY = {
     acpTitle: 'Can I connect other agents with ACP?',
     acpBody:
       'ACP (Agent Client Protocol) lets a client delegate work to an external agent and receive its results. Tobs plans generic ACP engine support for a later phase. Tobs subscription engines use dedicated adapters, with Codex on app-server and Claude Code on the Agent SDK.',
-    sessionsTitle: 'Open a Session from a conversation',
+    sessionsTitle: 'Follow and steer a Session',
     sessionsBody:
-      'Follow a Session link from a message or open one from the Bot’s Sessions list. The desktop detail subpanel in Messages shows goals, to-dos and conversation. Expand a tool step to see its output, or send a message directly to the Assignment.',
+      'Open a Session from a message to see its goal, progress, and tool output, or send a follow-up to that task.',
     teamQuestion: 'Which Hosts can use Team mode?',
     engineQuestion: 'Can I use my ChatGPT or Claude subscription?',
     sessionsQuestion: 'Where can I see how a Bot did its work?',

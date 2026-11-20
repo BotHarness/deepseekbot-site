@@ -253,8 +253,6 @@ export interface Copy {
       lead: string;
       download: string;
       steps: string[];
-      docs: string;
-      docsUrl: string;
       downloadUrl: string;
     };
     lead: string;
@@ -262,8 +260,6 @@ export interface Copy {
     next: { title: string; button: string; overview: string };
     copy: string;
     copied: string;
-    after: string;
-    note: string;
   };
   footer: {
     built: string;
@@ -295,7 +291,7 @@ const zh: Copy = {
   hero: {
     badge: `v${VERSION} 正式版`,
     title: 'Tobs',
-    tagline: '托布 Tobs，一支各有身份、人格和记忆、彼此协作的 Bot 团队。',
+    tagline: '托布：你的专属 Bot 团队，各有身份、性格与长期记忆。',
     lead: 'Tobs（托布）意为 Team of bots，也寓意 Thousands of Bots，是 BotHarness 开发的个人 AI 智能体协作工具，作为 Tobs 插件装进 DeepSeek Harness（DSH）。创建各有身份与 Git Memory 的 Bot，在群组中协作、委派任务，并连接飞书、Slack、Discord、QQ 和微信。',
     ctaInstall: '开始安装',
     ctaGithub: '在 GitHub 查看',
@@ -346,7 +342,7 @@ const zh: Copy = {
         icon: 'present',
         demo: 'identity',
         title: '持久身份',
-        body: '创建负责研究、设计或实现的 PersonaBots。每个 Bot 有自己的名字和头像：SOUL.md 保存人格、表达方式与工作原则，MEMORY.md 保存核心记忆，跨对话和文件夹延续。',
+        body: '按分工创建负责研究、设计或开发的 Bot，每个都有自己的名字和头像。SOUL.md 记录性格、语气和工作原则，MEMORY.md 沉淀核心记忆，跨对话、跨文件夹持续延续。',
       },
       {
         icon: 'read',
@@ -370,7 +366,7 @@ const zh: Copy = {
         icon: 'todo',
         demo: 'schedules',
         title: '定时任务',
-        body: '设置计划，或让 Bot 帮你管理。查看每次触发及处理记录，随时暂停，也可锁定以防 Bot 修改。应用运行时按计划执行。',
+        body: '自己设定执行计划，或交给 Bot 帮你维护。每次触发和处理记录都清晰可查，随时可以暂停，也能锁定以防 Bot 改动；只要应用保持运行，任务就会按时执行。',
       },
       {
         icon: 'present',
@@ -471,70 +467,70 @@ const zh: Copy = {
         id: 'affiliation',
         question: 'Tobs 和 DeepSeek 有什么关系？',
         answer:
-          'Tobs 是独立的开源项目，与 DeepSeek 公司没有隶属关系，也不是其官方产品。它基于 DeepSeek Harness（DSH），以插件形式提供 Bot 的身份、人格、记忆与协作能力。',
+          'Tobs 是独立的开源项目，与 DeepSeek 公司没有隶属关系，也不是官方产品。它以插件形式运行在 DeepSeek Harness（DSH）之上，为 Bot 提供独立的身份、性格、记忆与协作能力。',
       },
       {
         id: 'project-identity',
         question: '这是哪个 DeepSeek Bot？和 DS Bot 是同一个项目吗？',
         answer:
-          '这里是 BotHarness 的 Tobs（托布，原名 DeepSeekBot），安装包为 deepseekbot，官网为 tobs.app，MIT 开源。DS Bot 使用 ds-bot 安装，Apache-2.0，由 Fei2411/DeepSeek-Bot 维护，是另一个独立项目。两者都基于 DeepSeek Harness，都不是 DeepSeek 官方产品。',
+          'Tobs 是 BotHarness 的开源项目，原名 DeepSeekBot，官网是 tobs.app，npm 包名为 @botharness/tobs，采用 MIT 许可。DS Bot 是 Fei2411/DeepSeek-Bot 维护的独立项目，包名是 ds-bot，采用 Apache-2.0 许可。',
         links: [{ label: 'Tobs 与 DS Bot 怎么选', href: '/blog/deepseekbot-vs-ds-bot/' }],
       },
       {
         id: 'project-focus',
-        question: 'Tobs（托布）和 DS Bot 的重心有什么不同？',
+        question: 'Tobs（托布）和 DS Bot 的侧重点有什么不同？',
         answer:
-          'Tobs 让每个 Bot 成为能走出 DSH 窗口的长期同事：可审阅的 Git 记忆、Bot 自己的飞书 / Slack / Discord / 微信身份、定时任务、任务委派和 Bot 市场。DS Bot 把 DSH 本身变成 Bot 聊天应用：主 Bot Chief 带你建团队，群管理员默认统筹回复，并提供按 Bot 和模型的用量统计。',
+          'Tobs 把每个 Bot 当成能走出 DSH 窗口的长期同事：拥有可审阅的 Git 记忆、独立的飞书 / Slack / Discord / QQ / 微信身份、定时任务、任务委派和 Bot 市场。DS Bot 则侧重把 DSH 本身打造成 Bot 聊天应用：由主 Bot Chief 带你组建团队，群管理员默认统筹回复，并提供按 Bot 与模型划分的用量统计。',
       },
       {
         id: 'capabilities',
         question: 'Tobs 能帮我做什么？',
         answer:
-          '你可以创建负责研究、设计或实现的 Bot，分别私聊，或让它们在 Group 中协作。每个 Bot 保留自己的身份和记忆，可以在授权的文件夹中开展工作，也能设置定时任务。定时任务需要应用保持运行。',
+          '你可以按分工创建负责研究、设计或开发的 Bot，一对一私聊，或在群聊里让多个 Bot 共享上下文协作。每个 Bot 都保留独立的身份和记忆，能在你授权的文件夹里干活，也可以按计划执行定时任务（需要应用保持运行）。',
       },
       {
         id: 'getting-started',
-        question: '如何安装并开始使用？',
-        answer: `先安装 DeepSeek Harness ${DSH_VERSION}，在「插件 → 添加插件」中输入 ${DESKTOP_PACKAGE}，安装并启用。进入「Bot 模式」后，按 Home 引导配置模型，和托布创建 Bot、组建群聊，再学习开关与调整面板。`,
+        question: '怎么安装并开始使用？',
+        answer: `在 DeepSeek Harness ${DSH_VERSION} 的「插件 → 添加插件」里输入 ${DESKTOP_PACKAGE}，安装并启用。进入 Bot 模式，配置好模型，就可以创建第一个 Bot。`,
         links: [{ label: '安装教程', href: '/docs/installation/' }],
       },
       {
         id: 'mobile-standalone',
-        question: '只下载手机版就能使用吗？',
+        question: '只装手机 App 就能用吗？',
         answer:
-          '还不行。Tobs 的 Bot 运行在 Windows、Linux 或 macOS 电脑上，目前不能直接在手机上运行。移动端相当于一个遥控器：先在电脑上安装 DeepSeek Harness 和 Tobs，再连接手机，就能随时和电脑上的 Bot 协作。',
+          '目前还不行。Tobs 的 Bot 运行在你的 Windows、Linux 或 macOS 电脑上，手机端更像一块随身遥控屏：先在电脑上装好 DeepSeek Harness 和 Tobs，再把手机连上去，出门在外也能随时和电脑上的 Bot 协作。',
         links: [{ label: '安装桌面端', href: '/docs/installation/' }],
       },
       {
         id: 'mobile-features',
-        question: '手机上可以做什么？',
+        question: '在手机上都能做些什么？',
         answer:
-          '可以和 Bot 私聊、参与群聊，接收消息通知，并在 Activity 中查看和处理工具审批。电脑负责运行 Bot，手机让你随时查看进展、回复和批准操作。',
+          '可以和 Bot 私聊、参与群聊、接收实时通知，并在 Activity 里查看和处理工具审批。电脑负责真正执行任务，手机让你随时跟进进度、发消息和批准操作。',
       },
       {
         id: 'mobile-host-online',
-        question: '用手机时，电脑必须一直开着吗？',
+        question: '用手机连的时候，电脑必须一直开着吗？',
         answer:
-          '需要让对应的电脑保持开机、联网，并运行 DeepSeek Harness 和 Tobs。电脑关机、休眠或应用退出后，手机无法继续连接这台电脑上的 Bot；重新上线后可以再连接。',
+          '是的。对应的电脑需要保持开机、联网，并且运行着 DeepSeek Harness 和 Tobs。一旦电脑关机、休眠或退出应用，手机就暂时连不上这台电脑的 Bot；等它重新上线后即可恢复连接。',
       },
       {
         id: 'mobile-connection',
         question: '手机和电脑必须在同一个 Wi-Fi 下吗？',
         answer:
-          '不必。可以通过 Connect 登录同一个账号连接电脑，也可以按配对教程配置 Tailscale。配置好后，手机在外也能连接；两端都需要联网。',
+          '不用。既可以通过 Connect 登录同一个账号远程连接，也可以按配对指南配置 Tailscale。配好之后出门在外也能连，只要手机和电脑各自有网就行。',
         links: [{ label: '手机连接教程', href: '/docs/mobile-pairing/' }],
       },
       {
         id: 'mobile-multiple-hosts',
-        question: '一部手机可以连接多台电脑吗？',
+        question: '一部手机能连多台电脑吗？',
         answer:
-          '可以。每台电脑分别安装 Tobs 并完成连接后，手机可以切换电脑，也可以在全部聊天和 Activity 中查看多个环境的消息与待审批请求。每台电脑上的 Bot 和数据仍由各自的电脑保存。',
+          '可以。在每台电脑上装好 Tobs 并分别连接后，手机端可以自由切换 Host，也能在全部聊天和 Activity 里汇总查看多台电脑的消息与待审批请求。各台电脑的 Bot 和数据仍保存在本机。',
       },
       {
         id: 'models',
-        question: '只能使用 DeepSeek 模型吗？',
+        question: '只能用 DeepSeek 模型吗？',
         answer:
-          '不限于 DeepSeek。Tobs 使用你在 DSH 中配置的模型提供商，也支持通过 DSH 配置兼容 API 或自部署服务。能否使用某个模型取决于接口支持、凭据和模型配置。',
+          '不是的。你可以在 DSH 中配置任意兼容 API 或自部署模型，也能在本机 Host 通过官方 Codex 或 Claude Code CLI 登录符合条件的订阅来运行 Bot。具体可用哪些模型，取决于接口兼容性、凭据和你的订阅或配置。',
         links: [{ label: '模型配置', href: '/docs/model-setup/' }],
       },
       {
@@ -564,13 +560,13 @@ const zh: Copy = {
         id: 'cost',
         question: '使用 Tobs 需要付费吗？',
         answer:
-          'Tobs 采用 MIT 许可开源，可免费使用。模型服务需要自行配置凭据，调用可能产生服务商费用；开源软件不等于免费的模型额度。',
+          'Tobs 按 MIT 协议开源，软件本身永久免费使用，由赞助支持持续开发。模型 API、订阅或自托管服务器的费用直接由你选择的第三方服务商收取，开源软件不包含免费的模型额度。',
       },
       {
         id: 'data-and-access',
         question: '我的数据存在哪里？Bot 能访问哪些文件？',
         answer:
-          'Bot 的记忆和聊天记录保存在运行 DSH 的设备上；调用模型时，相关上下文会发送给你配置的模型服务。文件夹访问由你授权，执行操作受权限与批准设置约束。插件的匿名统计不收集对话或记忆内容，也可以关闭。',
+          'Bot 的记忆和聊天记录保存在运行 DSH 的设备上。调用模型时，相关上下文会发给你配置的模型服务。文件夹访问由你授权，工具操作遵循权限与审批设置。你可以关闭插件的匿名统计，统计内容不包含对话或记忆。',
         links: [
           { label: '文件夹权限', href: '/docs/channel-sidebar/workspaces/' },
           { label: '隐私说明', href: '/privacy/' },
@@ -578,9 +574,9 @@ const zh: Copy = {
       },
       {
         id: 'chat-platforms',
-        question: '可以连接哪些聊天平台？',
+        question: '目前支持连接哪些聊天平台？',
         answer:
-          '可连接飞书 / Lark、Slack、Discord、QQ 和个人微信，需要先配置相应的平台应用或账号，并绑定到 Bot。个人微信目前仅支持扫码者私聊；其他平台的收发范围受平台权限、发送者限制和会话设置约束。',
+          '目前支持飞书 / Lark、Slack、Discord、QQ 和个人微信，只需先配置对应平台的应用或账号，再绑定到 Bot 即可。个人微信仅支持扫码账号的一对一私聊，其他平台的收发范围取决于各自权限与绑定设置。WhatsApp、Telegram 和企业微信正在开发中。',
         links: [{ label: '接入与可选能力', href: '/docs/capabilities/' }],
       },
     ],
@@ -708,11 +704,9 @@ const zh: Copy = {
         '显示「已安装」后点「立即启用」；如果提示重启，重启当前 Profile',
         '进入「Bot 模式」，跟随 Home 引导配置模型，再和托布创建第一个 Bot 与群聊',
       ],
-      docs: 'DSH 官方文档：打包与安装插件',
-      docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/harness/',
     },
-    lead: `需要 Node 22 以上。推荐 DSH ${DSH_VERSION}；${VERSION} 的同包安装、启动和重启持久化已在 DSH 0.2.0-rc.2、0.2.1-rc.2、0.2.1-rc.3 和 0.2.2-rc.1 验证。声明安装范围为 >=0.2.0-0，不代表所有后续版本均已验证。`,
+    lead: '需要 Node.js 22 或更高版本。',
     steps: ['安装 DeepSeek Harness', '把 Tobs 装进 web Profile', '启动并打开 Bot mode'],
     next: {
       title: '装好了？选择接入方式与可选能力',
@@ -721,9 +715,6 @@ const zh: Copy = {
     },
     copy: '复制',
     copied: '已复制',
-    after:
-      '打开后进入 Bot mode，创建 PersonaBot，先私聊，再建 Group 邀请成员。从私聊侧栏「外部身份」绑定已连接的应用；Browser 与 Computer 需为每个 Bot 显式开启访问。',
-    note: `此入口安装 npm 正式版 v${VERSION}。Browser 与 Computer 随包附带，首次使用按提示配置驱动。升级前请备份 Profile；回退旧版可能需要恢复升级前备份。想独立试用，可使用新的 Profile。`,
   },
   dsh: {
     title: '站在 DeepSeek Harness 上',
@@ -793,8 +784,7 @@ const en: Copy = {
   hero: {
     badge: `v${VERSION} is out`,
     title: 'Tobs',
-    tagline:
-      'A team of bots (Tobs), each with its own identity, persona and memory, working together.',
+    tagline: 'A team of Bots—each with its own identity, persona, and lasting memory.',
     lead: 'Tobs means Team of bots, with the ambition of Thousands of Bots. It is BotHarness’s personal AI agent collaboration tool for DeepSeek Harness (DSH). Install the Tobs plugin to create Bots with persistent identities and Git-backed memory, collaborate in groups, delegate tasks, and connect them to Lark, Slack, Discord, QQ and WeChat.',
     ctaInstall: 'Install',
     ctaGithub: 'View on GitHub',
@@ -844,8 +834,8 @@ const en: Copy = {
       {
         icon: 'present',
         demo: 'identity',
-        title: 'Lasting identity',
-        body: 'Create PersonaBots for research, design or engineering. Each has its own name and avatar: SOUL.md holds its persona, voice and working principles; MEMORY.md holds core memory that lasts across chats and folders.',
+        title: 'Persistent identity',
+        body: 'Create Bots for research, design, or engineering, each with its own name and avatar. SOUL.md defines its persona, voice, and working principles, while MEMORY.md preserves core memory across chats and folders.',
       },
       {
         icon: 'read',
@@ -869,7 +859,7 @@ const en: Copy = {
         icon: 'todo',
         demo: 'schedules',
         title: 'Scheduled tasks',
-        body: 'Set a schedule or ask your Bot to manage one. Review triggers and handling history, pause it, or lock it against Bot edits. Tasks run while the app is running.',
+        body: 'Set up recurring schedules yourself or let a Bot manage them for you. Inspect every trigger and run log, pause anytime, or lock a schedule so Bots cannot modify it—tasks run automatically while the app is open.',
       },
       {
         icon: 'present',
@@ -970,70 +960,70 @@ const en: Copy = {
         id: 'affiliation',
         question: 'Is Tobs affiliated with DeepSeek?',
         answer:
-          'Tobs is an independent open-source project. It is not affiliated with DeepSeek and is not an official DeepSeek product. It runs as a plugin on DeepSeek Harness (DSH), giving Bots their own identity, persona, memory and collaboration tools.',
+          'No. Tobs is an independent open-source project and is not affiliated with or endorsed by DeepSeek. It runs as a plugin on DeepSeek Harness (DSH), adding persistent Bot identities, personas, Git memory, and collaboration.',
       },
       {
         id: 'project-identity',
         question: 'Which DeepSeek Bot is this? Is it the same as DS Bot?',
         answer:
-          'This is Tobs by BotHarness, formerly DeepSeekBot (DSB): npm package deepseekbot, website tobs.app, MIT licensed. DS Bot installs as ds-bot, is Apache-2.0 licensed and lives at Fei2411/DeepSeek-Bot; it is a separate project. Both run on DeepSeek Harness, and neither is an official DeepSeek product.',
+          'Tobs is BotHarness’s MIT-licensed project, formerly called DeepSeekBot. Its website is tobs.app and its npm package is @botharness/tobs. DS Bot is a separate Apache-2.0 project maintained at Fei2411/DeepSeek-Bot and packaged as ds-bot.',
         links: [{ label: 'Compare Tobs and DS Bot', href: '/en/blog/deepseekbot-vs-ds-bot/' }],
       },
       {
         id: 'project-focus',
         question: 'How do Tobs and DS Bot differ in focus?',
         answer:
-          "Tobs makes each Bot a long-lived colleague that works beyond the DSH window: Git memory you can review, the Bot's own Lark / Slack / Discord / WeChat identity, schedules, delegated Assignments and a Bot Marketplace. DS Bot turns DSH itself into a bot chat app: a main Bot, Chief, builds your team, a group admin answers first, and a Usage page shows tokens by Bot and model.",
+          'Tobs treats each Bot as a long-lived teammate that works beyond the DSH window—with inspectable Git memory, its own Lark / Slack / Discord / QQ / WeChat identity, scheduled tasks, delegated Assignments, and a Bot Marketplace. DS Bot turns DSH itself into a bot chat app, where a lead Bot (Chief) builds your team, a group admin coordinates replies, and a Usage view tracks tokens by Bot and model.',
       },
       {
         id: 'capabilities',
         question: 'What can Tobs help me do?',
         answer:
-          'Create Bots for research, design or implementation, chat with them individually, or bring them together in a Group. Each Bot keeps its own identity and memory, can work in folders you authorize, and can run scheduled tasks. Scheduled tasks require the app to keep running.',
+          'Create dedicated Bots for research, design, or engineering—chat with them one-on-one or bring them together in a Group to collaborate on shared context. Each Bot keeps its own identity and memory, works inside folders you authorize, and runs scheduled tasks while the app is open.',
       },
       {
         id: 'getting-started',
-        question: 'How do I install it and get started?',
-        answer: `Install DeepSeek Harness ${DSH_VERSION} first. In Plugins → Add plugin, enter ${DESKTOP_PACKAGE}, then install and enable it. Open Bot mode and follow Home onboarding to configure a model, ask Tob to create a Bot and group, and learn the panel controls.`,
+        question: 'How do I install Tobs and get started?',
+        answer: `In DeepSeek Harness ${DSH_VERSION}, go to Plugins → Add plugin, then install and enable ${DESKTOP_PACKAGE}. Switch to Bot mode and set up a model, then create your first Bot.`,
         links: [{ label: 'Installation guide', href: '/en/docs/installation/' }],
       },
       {
         id: 'mobile-standalone',
         question: 'Can I use Tobs with just the mobile app?',
         answer:
-          'Not yet. Tobs Bots run on a Windows, Linux or macOS computer, not on your phone. Think of the mobile app as a remote control: install DeepSeek Harness and Tobs on your computer first, then connect your phone to work with your Bots from anywhere.',
+          'Not yet. Tobs Bots run on a Windows, Linux, or macOS computer rather than directly on your phone. Think of the mobile app as a pocket remote: install DeepSeek Harness and Tobs on your computer first, then pair your phone to stay connected on the go.',
         links: [{ label: 'Install on your computer', href: '/en/docs/installation/' }],
       },
       {
         id: 'mobile-features',
-        question: 'What can I do on my phone?',
+        question: 'What can I do from my phone?',
         answer:
-          'Chat with Bots, join group conversations, receive notifications, and review tool requests in Activity. Your computer runs the Bots; your phone lets you follow progress, reply and approve actions on the go.',
+          'Chat with Bots in DMs and Groups, get push notifications, and review or approve tool requests in Activity. Your computer does the heavy lifting while your phone lets you check progress, reply, and approve actions from anywhere.',
       },
       {
         id: 'mobile-host-online',
         question: 'Does my computer need to stay on?',
         answer:
-          'Yes. Keep the computer awake and online, with DeepSeek Harness and Tobs running. If it shuts down, sleeps or the app quits, your phone cannot reach its Bots. Reconnect when the computer is back online.',
+          'Yes. The computer needs to stay awake and online with DeepSeek Harness and Tobs running. If it shuts down, goes to sleep, or quits the app, your phone cannot reach its Bots until the Host comes back online.',
       },
       {
         id: 'mobile-connection',
-        question: 'Do my phone and computer need the same Wi-Fi?',
+        question: 'Do my phone and computer need to be on the same Wi-Fi?',
         answer:
-          'No. Sign in to the same account through Connect, or set up Tailscale using the pairing guide. Once configured, you can connect while away from your computer. Both devices need an internet connection.',
+          'No. Sign in to the same account via Connect, or set up Tailscale by following the pairing guide. Once configured, you can reach your Bots from anywhere as long as both devices have internet access.',
         links: [{ label: 'Connect your phone', href: '/en/docs/mobile-pairing/' }],
       },
       {
         id: 'mobile-multiple-hosts',
-        question: 'Can one phone connect to several computers?',
+        question: 'Can one phone connect to multiple computers?',
         answer:
-          'Yes. Install Tobs and connect each computer separately. On your phone, switch computers or view messages and pending tool requests across environments in All Chats and Activity. Each computer still stores its own Bots and data.',
+          'Yes. Install Tobs on each computer and connect them separately. From your phone, you can switch between Hosts or view messages and pending approvals across all of them in All Chats and Activity, while each computer keeps storing its own Bots and data.',
       },
       {
         id: 'models',
         question: 'Can I use models other than DeepSeek?',
         answer:
-          'Yes. Tobs uses the model providers you configure in DSH, including compatible APIs or self-hosted services configured through DSH. Whether a model works depends on interface support, credentials and model configuration.',
+          'Yes. Tobs works with any compatible API or self-hosted model configured in DSH, and on a local Host you can also sign in with an eligible ChatGPT or Claude subscription through the official Codex or Claude Code CLI. Model availability depends on API compatibility, credentials, and your plan.',
         links: [{ label: 'Model setup', href: '/en/docs/model-setup/' }],
       },
       {
@@ -1066,13 +1056,13 @@ const en: Copy = {
         id: 'cost',
         question: 'Does Tobs cost money to use?',
         answer:
-          'Tobs is open source under the MIT license and free to use. You supply your own model credentials, and model calls may incur charges from your provider. Open-source software does not include free model credits.',
+          'Tobs is open source under the MIT license and permanently free to use, supported by sponsors. Any costs for model APIs, subscriptions, or hosting are billed directly by the third-party providers you choose—Tobs does not include free model credits.',
       },
       {
         id: 'data-and-access',
         question: 'Where is my data stored, and which files can Bots access?',
         answer:
-          'Bot memory and chat history are stored on the device running DSH. When you call a model, relevant context is sent to the model service you configured. You authorize folder access, and actions are governed by permission and approval settings. The plugin’s anonymous analytics do not collect conversations or memory content and can be disabled.',
+          'The device running DSH stores Bot memory and chat history. Model calls send relevant context to the provider you configured. You grant folder access and set approval rules for tool actions. You can turn off anonymous plugin analytics, which exclude conversations and memory.',
         links: [
           { label: 'Folder permissions', href: '/en/docs/channel-sidebar/workspaces/' },
           { label: 'Privacy', href: '/en/privacy/' },
@@ -1080,9 +1070,9 @@ const en: Copy = {
       },
       {
         id: 'chat-platforms',
-        question: 'Which chat platforms can I connect?',
+        question: 'Which messaging platforms can I connect?',
         answer:
-          'Connect Feishu / Lark, Slack, Discord, QQ or personal WeChat by setting up the relevant platform app or account and binding it to a Bot. Personal WeChat currently supports only the QR owner’s DMs; other platforms’ message scope depends on platform permissions, sender restrictions and conversation settings.',
+          'You can connect Feishu / Lark, Slack, Discord, QQ, and personal WeChat by setting up the platform app or account and binding it to a Bot. Personal WeChat currently supports one-to-one DMs from the account that scanned the QR code only; other platforms follow their own permissions and binding rules. WhatsApp, Telegram, and WeCom integrations are in development.',
         links: [{ label: 'Connections and optional tools', href: '/en/docs/capabilities/' }],
       },
     ],
@@ -1211,11 +1201,9 @@ const en: Copy = {
         'When it shows Installed, click Enable now; if DSH asks, restart the current Profile',
         'Open Bot mode and follow Home onboarding: set up a model, then ask Tob to create a Bot and group',
       ],
-      docs: 'DSH docs: package and install a plugin',
-      docsUrl: 'https://deepseek-harness.github.io/deepseek-harness/en/develop/basic/publish',
       downloadUrl: 'https://www.deepseek.com/en/harness/',
     },
-    lead: `Needs Node 22 or later. Use DSH ${DSH_VERSION}. The exact ${VERSION} packages passed installation, startup and restart persistence on DSH 0.2.0-rc.2, 0.2.1-rc.2, 0.2.1-rc.3 and 0.2.2-rc.1. Declared admission is >=0.2.0-0; later versions are not all runtime-qualified.`,
+    lead: 'Requires Node.js 22 or later.',
     steps: [
       'Install DeepSeek Harness',
       'Add Tobs to the web Profile',
@@ -1228,9 +1216,6 @@ const en: Copy = {
     },
     copy: 'Copy',
     copied: 'Copied',
-    after:
-      'Open Bot mode, create a PersonaBot, DM it, then invite members to a Group. Bind connected apps in the DM sidebar’s External identities; explicitly enable Browser and Computer access for each Bot.',
-    note: `This installs npm v${VERSION}. Browser and Computer are bundled; follow the driver setup prompts on first use. Back up the Profile before upgrading: returning to an older binary may require the pre-upgrade backup. Use a new Profile for a separate trial.`,
   },
   dsh: {
     title: 'Built on DeepSeek Harness',

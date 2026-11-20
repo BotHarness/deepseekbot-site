@@ -2,7 +2,7 @@ import { Button } from '@astryxdesign/core/Button';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { useState, type ReactNode } from 'react';
 import { track } from '../analytics';
-import { DESKTOP_PACKAGE, DSH_VERSION, INSTALL_STEPS, type Copy, type Lang } from '../content';
+import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy, type Lang } from '../content';
 import { HOMEPAGE_COPY } from '../homepageCopy';
 import { docsPath, guidePath } from '../site';
 
@@ -86,6 +86,7 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
   return (
     <div className="install workflow-install">
       <SegmentedControl
+        className="workflow-install-switch"
         label={t.tabsLabel}
         value={way}
         onChange={(value) => {
@@ -99,53 +100,40 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
       </SegmentedControl>
 
       {way === 'desktop' ? (
-        <>
-          <ol className="workflow-install-cards" data-placement="install_desktop">
-            {HOMEPAGE_COPY[lang].installSteps.map((step, i) => (
-              <li key={step.title} className="workflow-card">
-                <span className="workflow-step-no" aria-hidden="true">
-                  {i + 1}
-                </span>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-                {i === 0 ? (
-                  <div>
-                    <small>
-                      {HOMEPAGE_COPY[lang].recommendedDsh} {DSH_VERSION}
-                    </small>
-                    <br />
-                    <a className="workflow-link" href={t.desktop.downloadUrl}>
-                      {HOMEPAGE_COPY[lang].download} →
-                    </a>
-                  </div>
-                ) : null}
-                {i === 1 ? (
-                  <Command
-                    command={DESKTOP_PACKAGE}
-                    copy={copy}
-                    shell={false}
-                    onCopy={() => track('install:command_copy', { tab: 'desktop', step: i + 1 })}
-                  />
-                ) : null}
-                {i === 2 ? (
-                  <a className="workflow-link" href={guidePath(lang, 'settings')}>
-                    {HOMEPAGE_COPY[lang].setupModels} →
-                  </a>
-                ) : null}
-                {i === 3 ? (
-                  <a className="workflow-link" href={docsPath(lang)}>
-                    {HOMEPAGE_COPY[lang].getStarted} →
-                  </a>
-                ) : null}
-              </li>
-            ))}
-          </ol>
-          <p className="install-links">
-            <a href={t.desktop.docsUrl} target="_blank" rel="noreferrer">
-              {t.desktop.docs}
-            </a>
-          </p>
-        </>
+        <ol className="workflow-install-cards" data-placement="install_desktop">
+          {HOMEPAGE_COPY[lang].installSteps.map((step, i) => (
+            <li key={step.title} className="workflow-card">
+              <span className="workflow-step-no" aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+              {i === 0 ? (
+                <a className="workflow-link" href={t.desktop.downloadUrl}>
+                  {HOMEPAGE_COPY[lang].download} →
+                </a>
+              ) : null}
+              {i === 1 ? (
+                <Command
+                  command={DESKTOP_PACKAGE}
+                  copy={copy}
+                  shell={false}
+                  onCopy={() => track('install:command_copy', { tab: 'desktop', step: i + 1 })}
+                />
+              ) : null}
+              {i === 2 ? (
+                <a className="workflow-link" href={guidePath(lang, 'settings')}>
+                  {HOMEPAGE_COPY[lang].setupModels} →
+                </a>
+              ) : null}
+              {i === 3 ? (
+                <a className="workflow-link" href={docsPath(lang)}>
+                  {HOMEPAGE_COPY[lang].getStarted} →
+                </a>
+              ) : null}
+            </li>
+          ))}
+        </ol>
       ) : (
         <>
           <p className="install-lead">{t.lead}</p>
@@ -160,13 +148,11 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
               </Step>
             ))}
           </ol>
-          <p>{t.after}</p>
           <ol className="steps">
             <NextStep copy={copy} lang={lang} way="dev" />
           </ol>
         </>
       )}
-      <p className="note">{t.note}</p>
     </div>
   );
 }

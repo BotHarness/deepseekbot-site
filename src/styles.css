@@ -1165,21 +1165,11 @@ a:where(:not(.astryx-button)) {
   margin: 16px 0 20px;
   font-weight: 600;
 }
-.install-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-}
 .step-next .step-no {
   font-size: 20px;
 }
 .step-next .step-title {
   margin-bottom: 10px;
-}
-.install .note {
-  margin: 0;
-  font-size: 14px;
-  color: var(--ink-soft);
 }
 
 /* ---- frequently asked questions ---- */
@@ -1463,11 +1453,15 @@ a.sponsor-x:hover .sponsor-x-name {
   justify-items: start;
   gap: 10px;
   margin-top: 28px;
-  padding: 16px 20px 20px;
+  padding: clamp(20px, 3vw, 32px);
+  border-image-source: var(--frame-paper);
 }
 .sponsor-become h3,
 .sponsor-become p {
   margin: 0;
+}
+.sponsor-become h3 {
+  font-size: clamp(24px, 3vw, 36px);
 }
 .sponsor-contacts {
   display: flex;
