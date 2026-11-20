@@ -574,6 +574,16 @@ const zh: Copy = {
           'Tobs 按 MIT 协议开源，软件本身永久免费使用，由赞助支持持续开发。模型 API、订阅或自托管服务器的费用直接由你选择的第三方服务商收取，开源软件不包含免费的模型额度。',
       },
       {
+        id: 'sustainability',
+        question: 'Tobs 靠什么赚钱？以后会停止维护吗？',
+        answer:
+          '我们通过赞助获得收入，用于开发和维护，让 Tobs 继续免费开源，也让更多人用得上。开源项目也可能有一天停止维护。即使到了那一天，你仍可以按 MIT 许可 fork 已发布的代码，开发自己需要的功能，并继续运行自己的 Bot 或 Agent。',
+        links: [
+          { label: '查看源代码', href: LINKS.github },
+          { label: '了解如何赞助', href: '#sponsors' },
+        ],
+      },
+      {
         id: 'data-and-access',
         question: '我的数据存在哪里？Bot 能访问哪些文件？',
         answer:
@@ -1078,6 +1088,16 @@ const en: Copy = {
         question: 'Does Tobs cost money to use?',
         answer:
           'Tobs is open source under the MIT license and permanently free to use, supported by sponsors. Any costs for model APIs, subscriptions, or hosting are billed directly by the third-party providers you choose—Tobs does not include free model credits.',
+      },
+      {
+        id: 'sustainability',
+        question: 'How does Tobs make money? Will it ever stop being maintained?',
+        answer:
+          'We earn revenue from sponsorships. It funds development and maintenance so Tobs can stay free and open source and reach more people. Like any open-source project, Tobs may eventually stop being actively maintained. If that happens, you can still fork the code we released under the MIT license, build the features you need, and keep running your own Bots or agents.',
+        links: [
+          { label: 'View the source code', href: LINKS.github },
+          { label: 'Sponsor Tobs', href: '#sponsors' },
+        ],
       },
       {
         id: 'data-and-access',
