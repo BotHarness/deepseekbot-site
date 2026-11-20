@@ -397,8 +397,19 @@
   pointer-events: none;
 }
 
-:root[data-theme='dark'] .workflow-feature-art {
-  filter: brightness(0.72);
+.workflow-feature-art[data-art-theme='dark'],
+:root[data-theme='dark'] .workflow-feature-art[data-art-theme='light'] {
+  opacity: 0;
+}
+
+:root[data-theme='dark'] .workflow-feature-art[data-art-theme='dark'] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .workflow-feature-art {
+    transition: opacity 400ms ease-in-out;
+  }
 }
 
 @media (min-width: 1100px) {

@@ -392,15 +392,19 @@ function FeatureRow({
         {details}
       </div>
       <div className="workflow-feature-preview">
-        <img
-          className="workflow-feature-art"
-          src={`/demo-backgrounds/${artwork}-v1.webp`}
-          alt=""
-          width={1200}
-          height={800}
-          loading="lazy"
-          decoding="async"
-        />
+        {(['light', 'dark'] as const).map((theme) => (
+          <img
+            key={theme}
+            className="workflow-feature-art"
+            data-art-theme={theme}
+            src={`/demo-backgrounds/${artwork}-${theme}-v2.webp`}
+            alt=""
+            width={1200}
+            height={800}
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
         <div className="app workflow-feature-pane">{children}</div>
       </div>
     </article>
