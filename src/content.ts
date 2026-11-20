@@ -264,7 +264,6 @@ export interface Copy {
   };
   footer: {
     built: string;
-    license: string;
     community: string;
     privacy: string;
     terms: string;
@@ -769,7 +768,6 @@ const zh: Copy = {
   },
   footer: {
     built: '用 React、Astryx 和 BotPixel 搭建，部署在 Cloudflare。',
-    license: '开源，MIT 许可。',
     community: 'QQ 社区群 1125565676',
     privacy: '隐私说明',
     terms: '服务条款',
@@ -1282,7 +1280,6 @@ const en: Copy = {
   },
   footer: {
     built: 'Built with React, Astryx and BotPixel. Hosted on Cloudflare.',
-    license: 'Open source under the MIT license.',
     community: 'QQ community group 1125565676',
     privacy: 'Privacy',
     terms: 'Terms of Service',

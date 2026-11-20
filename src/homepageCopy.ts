@@ -78,6 +78,7 @@ export const HOMEPAGE_COPY = {
     blog: '浏览全部博客',
     faq: '常见问题',
     source: '开源代码',
+    footerTagline: '人机交互的时代前瞻。',
     backTop: '返回顶部',
   },
   en: {
@@ -172,6 +173,7 @@ export const HOMEPAGE_COPY = {
     blog: 'Browse all posts',
     faq: 'FAQ',
     source: 'Source code',
+    footerTagline: 'The future of human–computer interaction.',
     backTop: 'Back to top',
   },
 } as const satisfies Record<Lang, object>;

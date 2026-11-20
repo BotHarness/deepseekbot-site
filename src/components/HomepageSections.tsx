@@ -474,7 +474,9 @@ export function HomepageFooter({ copy, lang }: { copy: Copy; lang: Lang }) {
             Tobs
           </a>
           <p>
-            {copy.footer.built} {copy.footer.license}
+            {t.footerTagline}
+            <br />
+            <span lang="en">From bot -&gt; tob (Team of Bots)</span>
           </p>
         </div>
         {groups.map(({ title, links }) => (
