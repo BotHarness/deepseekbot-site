@@ -61,18 +61,25 @@ export function phoneChannel(
   }
   const panel =
     host === 'research' && index === 1
-      ? channel.panel.map((section) =>
-          section.id === 'commits'
-            ? {
-                ...section,
-                items: section.items.map((item) => ({
-                  ...item,
-                  title: story.researchCommit,
-                  sha: 'b48d1fc',
-                })),
-              }
-            : section,
-        )
+      ? channel.panel.map((section) => {
+          if (section.id === 'commits')
+            return {
+              ...section,
+              items: section.items.map((item) => ({
+                ...item,
+                title: story.researchCommit,
+                sha: 'b48d1fc',
+              })),
+            };
+          if (section.id === 'channel-files')
+            return {
+              ...section,
+              items: [
+                { id: 'research-brief', title: 'research/brief.md', text: story.researchReply },
+              ],
+            };
+          return section;
+        })
       : channel.panel;
   return { ...channel, id: phoneChannelKey(host, channel.id), steps, panel };
 }

@@ -356,11 +356,13 @@ export function PreviewMemoryReader({
   entry,
   backRef,
   onBack,
+  backLabel = t.backToChat,
 }: {
   t: PreviewCopy;
   entry: DemoMemoryEntry;
   backRef: Ref<HTMLButtonElement>;
   onBack: () => void;
+  backLabel?: string;
 }) {
   let oldLine = 0;
   let newLine = 0;
@@ -386,8 +388,8 @@ export function PreviewMemoryReader({
           className="app-icon-btn"
           type="button"
           ref={backRef}
-          aria-label={t.backToChat}
-          title={t.backToChat}
+          aria-label={backLabel}
+          title={backLabel}
           onClick={onBack}
         >
           <ChevronLeft size={16} aria-hidden="true" />

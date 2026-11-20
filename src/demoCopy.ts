@@ -12,6 +12,8 @@ export interface PanelItem {
   sha?: string;
   badge?: string;
   tone?: 'ok' | 'warn' | 'info';
+  text?: string;
+  change?: { path: string; lines: string[] };
 }
 
 /** A lucide icon, as the real app draws its sidebar sections and timeline events. */
@@ -19,6 +21,7 @@ export type DemoIcon =
   | 'members'
   | 'sessions'
   | 'files'
+  | 'channel-files'
   | 'history'
   | 'schedules'
   | 'workspace'
@@ -397,6 +400,25 @@ const zhDemo: DemoCopy = {
       time: '15:42',
       panel: [
         {
+          id: 'sessions',
+          icon: 'sessions',
+          title: '会话',
+          items: [{ id: 'main', title: '主会话', meta: '盯着 Bot 收件箱', badge: '空闲' }],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: '频道文件',
+          items: [
+            {
+              id: 'brief',
+              title: 'research/competitor-brief.md',
+              meta: '竞品简报',
+              text: '# 竞品简报\n\n已记录套餐、公开价格和查阅时间。',
+            },
+          ],
+        },
+        {
           id: 'files',
           icon: 'files',
           title: '记忆文件',
@@ -475,6 +497,67 @@ const zhDemo: DemoCopy = {
       preview: '两个仓库都升到 1.2.0 了',
       time: '14:18',
       panel: [
+        {
+          id: 'files',
+          icon: 'files',
+          title: '记忆文件',
+          items: [
+            {
+              id: 'nova-memory',
+              title: 'MEMORY.md',
+              text: '# Nova\n\n每次检查先列出改动文件，再给出验证结果。',
+            },
+          ],
+        },
+        {
+          id: 'commits',
+          icon: 'history',
+          title: '记忆演化',
+          items: [
+            {
+              id: 'nova-memory-head',
+              title: '记录仓库检查偏好',
+              meta: '昨天',
+              sha: 'f06d3c2',
+              badge: 'HEAD',
+              change: {
+                path: 'MEMORY.md',
+                lines: [
+                  ' # Nova',
+                  ' ',
+                  '-检查失败时列出相关文件。',
+                  '+每次检查先列出改动文件，再给出验证结果。',
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: '频道文件',
+          items: [
+            {
+              id: 'review',
+              title: 'research/review.md',
+              meta: '仓库检查报告',
+              text: '# 检查报告\n\n- 已核对改动文件。\n- 空白符检查通过。',
+            },
+          ],
+        },
+        {
+          id: 'schedules',
+          icon: 'schedules',
+          title: '定时任务',
+          items: [
+            {
+              id: 'review-weekly',
+              title: '每周仓库检查',
+              meta: '下次 周一 09:00',
+              badge: '周一 09:00',
+            },
+          ],
+        },
         {
           id: 'sessions',
           icon: 'sessions',
@@ -752,6 +835,27 @@ const enDemo: DemoCopy = {
       time: '15:42',
       panel: [
         {
+          id: 'sessions',
+          icon: 'sessions',
+          title: 'Sessions',
+          items: [
+            { id: 'main', title: 'Main session', meta: 'Watching the Bot Inbox', badge: 'Idle' },
+          ],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: 'Channel files',
+          items: [
+            {
+              id: 'brief',
+              title: 'research/competitor-brief.md',
+              meta: 'Competitor brief',
+              text: '# Competitor brief\n\nRecorded public plans, prices and dates checked.',
+            },
+          ],
+        },
+        {
           id: 'files',
           icon: 'files',
           title: 'Memory files',
@@ -848,6 +952,67 @@ const enDemo: DemoCopy = {
       preview: 'Both repos are on 1.2.0',
       time: '14:18',
       panel: [
+        {
+          id: 'files',
+          icon: 'files',
+          title: 'Memory files',
+          items: [
+            {
+              id: 'nova-memory',
+              title: 'MEMORY.md',
+              text: '# Nova\n\nList changed files first, then report the check results.',
+            },
+          ],
+        },
+        {
+          id: 'commits',
+          icon: 'history',
+          title: 'Memory evolution',
+          items: [
+            {
+              id: 'nova-memory-head',
+              title: 'Record repository review preferences',
+              meta: 'yesterday',
+              sha: 'f06d3c2',
+              badge: 'HEAD',
+              change: {
+                path: 'MEMORY.md',
+                lines: [
+                  ' # Nova',
+                  ' ',
+                  '-List relevant files when a check fails.',
+                  '+List changed files first, then report the check results.',
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: 'Channel files',
+          items: [
+            {
+              id: 'review',
+              title: 'research/review.md',
+              meta: 'Repository review report',
+              text: '# Review report\n\n- Reviewed changed files.\n- Whitespace check passed.',
+            },
+          ],
+        },
+        {
+          id: 'schedules',
+          icon: 'schedules',
+          title: 'Scheduled tasks',
+          items: [
+            {
+              id: 'review-weekly',
+              title: 'Weekly repository review',
+              meta: 'Next: Mon 09:00',
+              badge: 'Mon 09:00',
+            },
+          ],
+        },
         {
           id: 'sessions',
           icon: 'sessions',

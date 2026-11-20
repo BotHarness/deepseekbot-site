@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Ellipsis,
+  File,
   FolderKey,
   GitBranch,
   Hash,
@@ -52,6 +53,7 @@ import { PhonePair } from './FeatureDemos';
 import { HeroPhoneChat } from './HeroPhoneChat';
 import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
 import { HeroPhoneProfile, type PhoneProfilePage, type PhoneProfileTab } from './HeroPhoneProfile';
+import { HeroPhoneProfileContent, type PhoneProfileViews } from './HeroPhoneProfileContent';
 import { MarketplaceIcon } from './MarketplaceIcon';
 import { MemoryMarkdownIcon } from './MemoryMarkdownIcon';
 import { PreviewModelIcon } from './PreviewModelIcon';
@@ -66,7 +68,7 @@ import { marketHref } from '../marketRoutes';
 import { guidePath } from '../site';
 import type { Copy } from '../content';
 import { demoMemoryEntry, type DemoMemoryEntry } from '../demoMemory';
-import type { DemoChannel, DemoIcon, DemoStep, PanelSection } from '../demoCopy';
+import type { DemoChannel, DemoIcon, DemoStep, PanelItem, PanelSection } from '../demoCopy';
 import { recipeFor } from '../mascot';
 import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
 
@@ -79,6 +81,7 @@ const ICONS: Record<DemoIcon, LucideIcon> = {
   members: Users,
   sessions: TextQuote,
   files: Brain,
+  'channel-files': File,
   history: GitBranch,
   schedules: AlarmClock,
   workspace: FolderKey,
@@ -96,9 +99,14 @@ type PreviewKind = 'models' | 'session' | 'members';
 type PreviewSurface = 'desktop' | 'phone';
 type SessionConversation = { draft: string; messages: string[] };
 const EMPTY_SESSION_CONVERSATION: SessionConversation = { draft: '', messages: [] };
+type PhoneProfileDetail =
+  | { kind: 'session' }
+  | { kind: 'routine'; item: PanelItem }
+  | { kind: 'document'; entry: DemoMemoryEntry };
 type PreviewPanel =
   | { kind: PreviewKind; surface: PreviewSurface }
   | { kind: 'profile'; surface: 'phone'; page: PhoneProfilePage }
+  | { kind: 'profile-detail'; surface: 'phone'; detail: PhoneProfileDetail; opener: string }
   | { kind: 'memory'; surface: 'desktop'; entry: DemoMemoryEntry };
 type SidePanel = 'notifications' | 'channels' | 'chats' | 'marketplace' | 'environment';
 type HostScope = PhoneHostId | 'all';
@@ -359,13 +367,17 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const [modelPlans, setModelPlans] = useState<Record<string, ModelPlan>>({});
   const [botProfileTab, setBotProfileTab] = useState<PhoneProfileTab>('work');
   const [groupProfileTab, setGroupProfileTab] = useState<PhoneProfileTab>('members');
+  const [profileViews, setProfileViews] = useState<PhoneProfileViews>({
+    changes: false,
+    media: false,
+  });
   const [sessionConversations, setSessionConversations] = useState<
     Record<string, SessionConversation>
   >({});
   const [previewPanel, setPreviewPanel] = useState<PreviewPanel>();
   const previewTrigger = useRef<HTMLButtonElement>(null);
   const previewClose = useRef<HTMLButtonElement>(null);
-  const profileReturnFocus = useRef<'models' | 'main' | 'task' | undefined>(undefined);
+  const profileReturnFocus = useRef<string | undefined>(undefined);
   const subpanelToggle = useRef<HTMLButtonElement>(null);
   const chatScrollBeforeMemory = useRef<number | undefined>(undefined);
   const restorePreviewFocus = useRef(false);
@@ -460,6 +472,16 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const hasPreference = panel.some(
     (section) => section.id === 'commits' && section.items.some((item) => item.id === 'c2'),
   );
+  function memoryEntry(section: string, item: PanelItem) {
+    return demoMemoryEntry(
+      lang,
+      phoneHost,
+      section,
+      item,
+      hasPreference,
+      copy.featureDemos.memory.commits,
+    );
+  }
 
   function resizeSubpanel(id: string, height: number) {
     setPanelHeights((previous) => ({
@@ -506,9 +528,12 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       const row = restore
         ? previewClose.current
             ?.closest('.hero-phone-profile')
-            ?.querySelector<HTMLButtonElement>(`[data-profile-focus="${restore}"]`)
+            ?.querySelectorAll<HTMLButtonElement>('[data-profile-focus]')
         : undefined;
-      (row ?? previewClose.current)?.focus({ preventScroll: true });
+      const target = row
+        ? [...row].find((button) => button.dataset.profileFocus === restore)
+        : undefined;
+      (target ?? previewClose.current)?.focus({ preventScroll: true });
     } else if (restorePreviewFocus.current) {
       restorePreviewFocus.current = false;
       const trigger = previewTrigger.current;
@@ -558,6 +583,24 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       profileReturnFocus.current = page;
       phoneProfilePage(page === 'models' ? 'profile' : 'models');
     }
+  }
+
+  function openPhoneProfileDetail(section: string, item: PanelItem) {
+    const entry = memoryEntry(section, item);
+    const detail: PhoneProfileDetail | undefined = entry
+      ? { kind: 'document', entry }
+      : section === 'schedules'
+        ? { kind: 'routine', item }
+        : section === 'sessions' && item.id === 'linked-session'
+          ? { kind: 'session' }
+          : undefined;
+    if (detail)
+      setPreviewPanel({ kind: 'profile-detail', surface: 'phone', detail, opener: item.id });
+  }
+
+  function closePhoneProfileDetail(opener: string) {
+    profileReturnFocus.current = opener;
+    phoneProfilePage('profile');
   }
 
   // start playing when the window is mostly on screen, once
@@ -852,9 +895,57 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   );
   const renderPreview = (surface: PreviewSurface) => {
     if (previewPanel?.surface !== surface || previewPanel.kind === 'memory') return null;
+    if (previewPanel.kind === 'profile-detail') {
+      const { detail, opener } = previewPanel;
+      const back = () => closePhoneProfileDetail(opener);
+      if (detail.kind === 'document') {
+        return (
+          <div className="app-pane preview-panel">
+            <PreviewMemoryReader
+              t={preview}
+              entry={detail.entry}
+              backRef={previewClose}
+              backLabel={preview.back}
+              onBack={back}
+            />
+          </div>
+        );
+      }
+      const title = detail.kind === 'session' ? sessionTitle : detail.item.title;
+      return (
+        <section className="app-pane preview-panel" data-kind={detail.kind} aria-label={title}>
+          <header className="app-pane-head preview-panel-head">
+            <button
+              ref={previewClose}
+              type="button"
+              className="app-icon-btn"
+              aria-label={preview.back}
+              onClick={back}
+            >
+              <ChevronLeft size={18} aria-hidden="true" />
+            </button>
+            <strong className="app-pane-title">{title}</strong>
+          </header>
+          {detail.kind === 'session' ? (
+            <PreviewSessionDetail
+              t={preview}
+              isTeam={isTeam}
+              messages={sessionConversation.messages}
+            />
+          ) : (
+            <div className="hero-phone-routine-detail">
+              <strong>{preview.phoneProfile.schedule}</strong>
+              <p>{detail.item.badge}</p>
+              <p className="preview-hint">{detail.item.meta}</p>
+            </div>
+          )}
+        </section>
+      );
+    }
     if (previewPanel.kind === 'profile') {
       const { page } = previewPanel;
       const group = channel.kind === 'group';
+      const tab = group ? groupProfileTab : botProfileTab;
       return (
         <HeroPhoneProfile
           t={preview}
@@ -867,7 +958,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             )
           }
           group={group}
-          tab={group ? groupProfileTab : botProfileTab}
+          tab={tab}
           onTab={group ? setGroupProfileTab : setBotProfileTab}
           page={page}
           plan={modelPlan}
@@ -879,7 +970,18 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           onBack={() => backFromPhoneProfile(page)}
           backRef={previewClose}
           members={group ? profileMembers : undefined}
-          session={sessionAvailable ? sessionTitle : undefined}
+          content={
+            <HeroPhoneProfileContent
+              t={preview}
+              tab={tab}
+              panel={panel}
+              status={workingSummary ?? (waiting ? t.needsYou : t.states.idle)}
+              session={sessionAvailable ? sessionTitle : undefined}
+              views={profileViews}
+              onViews={setProfileViews}
+              onOpen={openPhoneProfileDetail}
+            />
+          }
         />
       );
     }
@@ -1106,6 +1208,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         ) {
           event.stopPropagation();
           if (previewPanel.kind === 'profile') backFromPhoneProfile(previewPanel.page);
+          else if (previewPanel.kind === 'profile-detail')
+            closePhoneProfileDetail(previewPanel.opener);
           else closePreview();
         }
       }}
@@ -1631,14 +1735,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                               (item) => !(section.id === 'members' && item.id === 'h' && isTeam),
                             )
                             .map((item, index, items) => {
-                              const entry = demoMemoryEntry(
-                                lang,
-                                phoneHost,
-                                section.id,
-                                item,
-                                hasPreference,
-                                copy.featureDemos.memory.commits,
-                              );
+                              const entry = memoryEntry(section.id, item);
                               const text = (
                                 <span className="app-panel-text">
                                   <span>{item.title}</span>

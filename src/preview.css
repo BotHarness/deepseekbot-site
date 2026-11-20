@@ -906,6 +906,38 @@
   font-size: 11px;
 }
 
+.hero-phone-profile-status,
+.hero-phone-routine-detail {
+  margin: 8px 0;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--app-side);
+}
+
+.hero-phone-profile-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hero-phone-profile-status > span {
+  color: var(--app-soft);
+  font-size: 12px;
+}
+
+.hero-phone-routine-detail {
+  margin-inline: 12px;
+}
+
+.hero-phone-routine-detail p {
+  margin: 4px 0 0;
+}
+
+.hero-phone-profile-body .preview-segments button[aria-pressed='true'] {
+  background: var(--app-info-bg);
+  color: var(--app-info);
+}
+
 .hero-phone-profile-rows {
   margin-block: 8px;
   overflow: hidden;
@@ -933,7 +965,7 @@ button.hero-phone-profile-row {
   cursor: pointer;
 }
 
-.hero-phone-profile-row > svg {
+.hero-phone-profile-row > svg:not(.preview-memory-markdown) {
   flex: none;
   color: var(--app-soft);
 }

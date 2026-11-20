@@ -116,7 +116,7 @@ export function HeroPhoneProfile({
   onBack,
   backRef,
   members,
-  session,
+  content,
 }: {
   t: PreviewCopy;
   title: string;
@@ -131,7 +131,7 @@ export function HeroPhoneProfile({
   onBack: () => void;
   backRef: Ref<HTMLButtonElement>;
   members?: ReactNode;
-  session?: string;
+  content?: ReactNode;
 }) {
   const copy = t.phoneProfile;
   const main = previewModel(plan.main);
@@ -214,16 +214,8 @@ export function HeroPhoneProfile({
                   </div>
                 </>
               )
-            ) : tab === 'work' && session ? (
-              <div className="hero-phone-profile-rows">
-                <div className="hero-phone-profile-row">
-                  <TextQuote size={16} aria-hidden="true" />
-                  <span>{session}</span>
-                  <small>{t.complete}</small>
-                </div>
-              </div>
             ) : (
-              <p className="preview-hint">{copy.empty[tab]}</p>
+              content
             )}
           </div>
         </>

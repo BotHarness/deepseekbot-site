@@ -53,6 +53,11 @@ export function demoMemoryEntry(
   hasPreference: boolean,
   commits: FeatureDemoCopy['memory']['commits'],
 ): DemoMemoryEntry | undefined {
+  if (section === 'channel-files' || (section === 'files' && item.text !== undefined)) {
+    return item.text === undefined
+      ? undefined
+      : { kind: 'file', id: item.id, path: item.title, text: item.text };
+  }
   if (section !== 'files' && section !== 'commits') return undefined;
   const text = MEMORY_TEXT[lang];
   const studio = host === 'studio';
@@ -71,12 +76,13 @@ export function demoMemoryEntry(
   }
   if (!item.sha) return undefined;
   const commit = commits.find(({ sha }) => sha === item.sha);
-  const lines = commit?.diff ?? [
-    ' ' + text.pricingTitle,
-    ' ',
-    '-' + text.researchBefore,
-    '+' + text.researchAfter,
-  ];
+  const lines = item.change?.lines ??
+    commit?.diff ?? [
+      ' ' + text.pricingTitle,
+      ' ',
+      '-' + text.researchBefore,
+      '+' + text.researchAfter,
+    ];
   const oldLength = lines.filter((line) => !line.startsWith('+')).length;
   const newLength = lines.filter((line) => !line.startsWith('-')).length;
   return {
@@ -84,7 +90,7 @@ export function demoMemoryEntry(
     id: item.id,
     title: item.title,
     sha: item.sha,
-    path: commit?.file ?? 'research/pricing.md',
+    path: item.change?.path ?? commit?.file ?? 'research/pricing.md',
     hunk: `@@ -${oldLength ? 1 : 0},${oldLength} +${newLength ? 1 : 0},${newLength} @@`,
     lines,
   };

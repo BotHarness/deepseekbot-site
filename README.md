@@ -27,7 +27,8 @@ For repeatable local model setup across product worktrees, see the
   v1.8.0 fixtures add member roles to Launch crew, a model dialog to Nova’s DM, and detail panes
   linked from messages and the Sessions list. The five Control Rail buttons switch the left panel, and the Host scope filters Channels,
   Chats and Notifications. The Messages header opens its own Simple Layout subpanel column. Mira’s Memory rows open the file
-  reader or Git diff in the conversation area. `src/demoCopy.ts` and `src/previewCopy.ts` hold
+  reader or Git diff in the conversation area. The phone Profile uses the same Session, Memory,
+  Channel file and routine data as the desktop subpanels. `src/demoCopy.ts` and `src/previewCopy.ts` hold
   the scripts and preview copy. The demo runs entirely in the visitor’s browser.
 - **Native screenshots**: the 1.5 release article reuses historical iOS Simulator captures, with
   source revisions, hashes and scope in `public/blog-figures/tobs-1-5/provenance.json`. Keep the
