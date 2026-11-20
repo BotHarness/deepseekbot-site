@@ -7,6 +7,7 @@ import { Crew } from './components/Crew';
 import { FeatureDemo } from './components/FeatureDemos';
 import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
+import { HeroPreview } from './components/HeroPreview';
 import { LiveDemo } from './components/LiveDemo';
 import { Install } from './components/Install';
 import { MobileBeta } from './components/MobileBeta';
@@ -16,6 +17,7 @@ import { SymbolIcon } from './components/SymbolIcon';
 import { SponsorFooter, Sponsors } from './components/Sponsors';
 import { COPY, LINKS } from './content';
 import { HERO_COPY } from './heroCopy';
+import { PREVIEW_COPY } from './previewCopy';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
 import { changelogPath, guidePath, initialMode, pathLang, write, type Mode } from './site';
@@ -25,6 +27,8 @@ export function App() {
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
   const hero = HERO_COPY[lang];
+  const preview = PREVIEW_COPY[lang];
+  const [stableTour, setStableTour] = useState(false);
   const design = useAvatarDesign();
 
   useEffect(() => {
@@ -75,8 +79,16 @@ export function App() {
               <HeroLinks lang={lang} />
             </div>
             <figure className="hero-product">
-              <LiveDemo copy={copy} linkedPhone />
-              <figcaption className="hero-caption">{copy.hero.lead}</figcaption>
+              <div className="hero-preview-nav">
+                <strong>{stableTour ? copy.hero.badge : preview.badge}</strong>
+                <button type="button" onClick={() => setStableTour((visible) => !visible)}>
+                  {stableTour ? preview.previewTour : preview.stableTour}
+                </button>
+              </div>
+              {stableTour ? <LiveDemo copy={copy} linkedPhone /> : <HeroPreview t={preview} />}
+              <figcaption className="hero-caption">
+                {stableTour ? copy.hero.lead : preview.caption}
+              </figcaption>
             </figure>
           </div>
           <Crew copy={copy} lang={lang} />
