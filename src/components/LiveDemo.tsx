@@ -157,27 +157,25 @@ function GroupAvatar({ bots, size }: { bots: string[]; size: number }) {
   );
 }
 
-/** The "working" row: the Bot's face turns into each tool it picks up. */
-function Working({ bot, tool, label }: { bot: string; tool: PixelSymbol; label: string }) {
+function WorkingAvatar({ bot, tool, size }: { bot: string; tool: PixelSymbol; size: number }) {
   const recipe = useMemo(() => recipeFor(bot), [bot]);
   const avatar = useRef<PixelAvatarHandle>(null);
   useEffect(() => {
     void avatar.current?.show(tool);
   }, [tool]);
-  return (
-    <li className="app-msg app-msg--bot app-working" aria-live="polite">
-      <PixelAvatar ref={avatar} recipe={recipe} size={32} />
-      <span className="app-working-label">
-        {label}
-        <span className="app-dots" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-        </span>
-      </span>
-    </li>
-  );
+  return <PixelAvatar ref={avatar} recipe={recipe} size={size} />;
 }
+
+const TOOL_ACTIVITY: Partial<Record<PixelSymbol, keyof Copy['demo']['activity']>> = {
+  thinking: 'thinking',
+  web: 'searching',
+  fetch: 'searching',
+  search: 'searching',
+  read: 'coding',
+  write: 'coding',
+  edit: 'coding',
+  bash: 'executing',
+};
 
 function HumanMessage({
   text,
@@ -651,7 +649,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     for (const el of [feed.current, phoneFeed.current])
       if (el?.getClientRects().length)
         el.scrollTo({ top: el.scrollHeight, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-  }, [shown, working, extra, answers, done, phonePhase]);
+  }, [shown, extra, answers, done, phonePhase]);
 
   const open = (
     index: number,
@@ -663,6 +661,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     setPhoneHost(host);
     startSynced.current = synced;
     setShown(0);
+    setWorking(null);
     setAnswers({});
     setWaiting(false);
     answerWith.current = null;
@@ -702,7 +701,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     const timer = window.setTimeout(
       () => {
         pendingReplies.current.delete(timer);
-        setWorking(null);
+        if (pendingReplies.current.size === 0) setWorking(null);
         setExtra((prev) => [...prev, { kind: 'fallback', bot }]);
       },
       prefersReducedMotion() ? 0 : 1400,
@@ -952,6 +951,15 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const showHost = linkedPhone && hostScope === 'all';
   const visibleConversations =
     sidePanel === 'chats' ? scopedRows.filter((row) => row.channel.kind === 'dm') : scopedRows;
+  const workingSummary = working
+    ? [
+        t.activity[TOOL_ACTIVITY[working.tool] ?? 'working'],
+        working.tool === 'thinking' ? null : copy.symbols[working.tool],
+      ]
+        .filter(Boolean)
+        .join(' · ')
+    : undefined;
+  const dmWorking = working && channel.kind === 'dm';
   const channelIdentity = (
     <>
       <span className="app-chat-avatar" aria-hidden="true">
@@ -961,8 +969,13 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           <Avatar name={channel.bots[0]!} size={20} />
         )}
       </span>
-      <span className="app-chat-name" title={channel.title}>
-        {channel.title}
+      <span
+        className="app-chat-name"
+        data-working={dmWorking ? '' : undefined}
+        title={dmWorking ? workingSummary : channel.title}
+        aria-hidden={dmWorking ? true : undefined}
+      >
+        {dmWorking ? workingSummary : channel.title}
       </span>
     </>
   );
@@ -994,6 +1007,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       }
       data-phase={linkedPhone ? phonePhase : undefined}
     >
+      <span className="visually-hidden" role="status">
+        {working ? `${working.bot} · ${workingSummary}` : ''}
+      </span>
       <div className="sky" aria-hidden="true">
         <span className="cloud cloud--a" />
         <span className="cloud cloud--b" />
@@ -1246,6 +1262,16 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 ) : (
                   <span className="app-chat-identity">{channelIdentity}</span>
                 )}
+                {working && channel.kind === 'group' ? (
+                  <span
+                    className="app-header-working"
+                    title={`${working.bot} · ${workingSummary}`}
+                    aria-hidden="true"
+                  >
+                    <WorkingAvatar key={working.bot} {...working} size={22} />
+                    <span>{workingSummary}</span>
+                  </span>
+                ) : null}
               </span>
               {isPreviewBot ? modelTrigger('desktop') : null}
               <button
@@ -1298,16 +1324,6 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                           <li className="app-day">{t.today}</li>
                           {renderSteps('desktop')}
                           {renderExtra('desktop')}
-                          {working ? (
-                            <Working
-                              bot={working.bot}
-                              tool={working.tool}
-                              label={fill(t.working, {
-                                bot: working.bot,
-                                tool: copy.symbols[working.tool],
-                              })}
-                            />
-                          ) : null}
                           {done && extra.length === 0 ? (
                             <li className="app-event app-event--replay">
                               <button
@@ -1704,6 +1720,18 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                             ) : undefined
                           }
                           source={<HeroPhoneSource host={phoneHost} />}
+                          status={
+                            working ? (
+                              <>
+                                {channel.kind === 'group' ? (
+                                  <WorkingAvatar key={working.bot} {...working} size={13} />
+                                ) : null}
+                                <span>
+                                  {t.activity[working.tool === 'thinking' ? 'thinking' : 'working']}
+                                </span>
+                              </>
+                            ) : undefined
+                          }
                           title={channel.title}
                           group={channel.bots.length > 1}
                           avatar={
@@ -1730,16 +1758,6 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                         >
                           {renderSteps('phone')}
                           {renderExtra('phone')}
-                          {working ? (
-                            <Working
-                              bot={working.bot}
-                              tool={working.tool}
-                              label={fill(t.working, {
-                                bot: working.bot,
-                                tool: copy.symbols[working.tool],
-                              })}
-                            />
-                          ) : null}
                         </HeroPhoneChat>
                       </div>
                       {renderPreview('phone')}

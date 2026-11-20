@@ -414,11 +414,39 @@ a.beta-button--ios {
   color: var(--app-soft);
   flex: none;
 }
+.hero-phone-title-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+.hero-phone-title-name,
+.hero-phone-chat-status {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
 .hero-phone-title strong {
   font-size: 13px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.hero-phone-title:has(.hero-phone-chat-status) strong {
+  line-height: 15px;
+}
+.hero-phone-chat-status {
+  color: var(--app-soft);
+  font-size: 10px;
+  line-height: 13px;
+}
+.hero-phone-chat-status .pixel-avatar {
+  flex: none;
+}
+.hero-phone-chat-status > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .hero-phone-feed {
   flex: 1;

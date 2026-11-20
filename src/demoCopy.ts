@@ -72,7 +72,13 @@ export interface DemoCopy {
   human: string;
   you: string;
   today: string;
-  working: string;
+  activity: {
+    thinking: string;
+    working: string;
+    searching: string;
+    coding: string;
+    executing: string;
+  };
   composer: string;
   send: string;
   allow: string;
@@ -220,7 +226,13 @@ const zhDemo: DemoCopy = {
   human: 'Human',
   you: '你',
   today: '今天',
-  working: '{bot} 正在{tool}…',
+  activity: {
+    thinking: '正在思考',
+    working: '正在工作',
+    searching: '正在搜索',
+    coding: '正在处理文件',
+    executing: '正在执行',
+  },
   composer: '发消息给 {name}',
   send: '发送',
   allow: '允许这次',
@@ -571,7 +583,13 @@ const enDemo: DemoCopy = {
   human: 'Human',
   you: 'you',
   today: 'Today',
-  working: '{bot} · {tool}…',
+  activity: {
+    thinking: 'Thinking',
+    working: 'Working',
+    searching: 'Searching',
+    coding: 'Working on files',
+    executing: 'Executing',
+  },
   composer: 'Message {name}',
   send: 'Send',
   allow: 'Allow once',

@@ -7,6 +7,7 @@ export function HeroPhoneChat({
   onBack,
   group,
   source,
+  status,
   actions,
   avatar,
   feedRef,
@@ -21,6 +22,7 @@ export function HeroPhoneChat({
   onBack: () => void;
   group: boolean;
   source: ReactNode;
+  status?: ReactNode;
   actions?: ReactNode;
   avatar: ReactNode;
   feedRef: RefObject<HTMLDivElement | null>;
@@ -43,8 +45,17 @@ export function HeroPhoneChat({
         </button>
         <div className="hero-phone-title">
           {group ? <Hash size={19} aria-hidden="true" /> : avatar}
-          <strong>{title}</strong>
-          {source}
+          <span className="hero-phone-title-copy">
+            <span className="hero-phone-title-name">
+              <strong>{title}</strong>
+              {source}
+            </span>
+            {status ? (
+              <span className="hero-phone-chat-status" aria-hidden="true">
+                {status}
+              </span>
+            ) : null}
+          </span>
         </div>
         {actions}
       </header>

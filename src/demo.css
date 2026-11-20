@@ -556,6 +556,27 @@ button.app-chat-identity {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.app-chat-name[data-working] {
+  color: var(--app-soft);
+}
+.app-header-working {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding-inline-start: 8px;
+  border-inline-start: 1px solid var(--app-line);
+  color: var(--app-soft);
+  animation: app-in 0.18s ease-out both;
+}
+.app-header-working .pixel-avatar {
+  flex: none;
+}
+.app-header-working > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .app-chat-head .app-panel-toggle {
   flex: none;
   width: 28px;
@@ -649,16 +670,6 @@ button.app-chat-identity {
 .app-event svg {
   flex: none;
   color: var(--app-soft);
-}
-.app-working {
-  align-items: center;
-}
-.app-working-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--app-soft);
-  font-size: 13px;
 }
 .app-dots {
   display: inline-flex;
@@ -1548,6 +1559,7 @@ button.app-chat-identity {
 @media (prefers-reduced-motion: reduce) {
   .app-msgs > li,
   .app-panel-item,
+  .app-header-working,
   .mini-code,
   .mini-result,
   .mini-history li,
