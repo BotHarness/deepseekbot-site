@@ -11,7 +11,7 @@ import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, type Ref 
 
 export const MORPH_MS = 800;
 // 24 steps a second keeps the hop chunky, like a sprite animation
-const FRAME_MS = 1000 / 24;
+export const MORPH_FRAME_MS = 1000 / 24;
 
 export interface PixelAvatarHandle {
   /** Morph into `symbol`, or back to the face when `null`. Resolves when the morph lands. */
@@ -59,7 +59,7 @@ export function PixelAvatar({ recipe, size, label, ref }: Props) {
         run.current = null;
       } else {
         const next = morphPixels(layer, from, to, MORPH_MS, {
-          frameMs: FRAME_MS,
+          frameMs: MORPH_FRAME_MS,
           markup: pixelPathMarkup,
         });
         run.current = next;

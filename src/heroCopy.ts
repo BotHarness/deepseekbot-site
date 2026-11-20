@@ -2,6 +2,8 @@ import type { Lang } from './content';
 
 export const HERO_COPY = {
   zh: {
+    switchNight: '切换到夜晚',
+    switchDay: '切换到白天',
     stars: '200k+ GitHub Stars',
     setup: '复制提示词安装桌面端',
     summary:
@@ -57,6 +59,8 @@ export const HERO_COPY = {
     done: '已完成',
   },
   en: {
+    switchNight: 'Switch to night mode',
+    switchDay: 'Switch to day mode',
     stars: '200k+ GitHub Stars',
     setup: 'Copy prompt to install on desktop',
     summary:

@@ -6,6 +6,7 @@ import { Community } from './components/Community';
 import { Crew } from './components/Crew';
 import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
+import { HeroThemeToggle } from './components/HeroThemeToggle';
 import { LiveDemo } from './components/LiveDemo';
 import { Install } from './components/Install';
 import { MobileBeta } from './components/MobileBeta';
@@ -34,6 +35,10 @@ export function App() {
   const preview = PREVIEW_COPY[lang];
   const home = HOMEPAGE_COPY[lang];
   const design = useAvatarDesign();
+  const changeMode = (next: Mode) => {
+    setMode(next);
+    write('dsb-mode', next);
+  };
 
   useEffect(() => {
     document.documentElement.lang = copy.htmlLang;
@@ -43,16 +48,7 @@ export function App() {
 
   return (
     <Theme theme={pixelTheme} mode={mode}>
-      <SiteHeader
-        copy={copy}
-        lang={lang}
-        mode={mode}
-        page="home"
-        onMode={(next) => {
-          setMode(next);
-          write('dsb-mode', next);
-        }}
-      />
+      <SiteHeader copy={copy} lang={lang} mode={mode} page="home" onMode={changeMode} />
 
       <main id="main">
         <section className="hero" id="top">
@@ -62,6 +58,7 @@ export function App() {
             <span className="cloud cloud--c" />
             <span className="star-field" />
           </div>
+          <HeroThemeToggle lang={lang} mode={mode} onMode={changeMode} />
           <div className="hero-layout">
             <div className="hero-copy">
               <h1 className="wordmark hero-title">{copy.hero.title}</h1>
