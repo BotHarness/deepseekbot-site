@@ -20,9 +20,9 @@ import {
   PanelRight,
   Plus,
   RotateCcw,
-  ScanLine,
   Server,
   Signal,
+  Smartphone,
   TextQuote,
   Wifi,
   Users,
@@ -30,6 +30,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import {
+  useCallback,
   useEffect,
   useId,
   useLayoutEffect,
@@ -41,6 +42,7 @@ import {
 } from 'react';
 import { track } from '../analytics';
 import { HERO_COPY } from '../heroCopy';
+import { HERO_PAIRING_COPY } from '../heroPairingCopy';
 import { PREVIEW_COPY, type ModelId } from '../previewCopy';
 import {
   DEFAULT_PREVIEW_MODELS,
@@ -50,7 +52,7 @@ import {
   previewModel,
   type ModelPlan,
 } from './HeroPreviewPanels';
-import { PhonePair } from './FeatureDemos';
+import { HeroPairingDialog, HeroPairingPhone, type PairState, type PairStep } from './HeroPairing';
 import { HeroPhoneChat } from './HeroPhoneChat';
 import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
 import { HeroPhoneProfile, type PhoneProfilePage, type PhoneProfileTab } from './HeroPhoneProfile';
@@ -74,6 +76,16 @@ import { recipeFor } from '../mascot';
 import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
 
 const TOOL_MS = 1100;
+const PAIR_START: PairState = { step: 'method', method: 'lan' };
+const PAIR_TOUR = {
+  method: { next: 'prepare', ms: 1500 },
+  prepare: { next: 'code', ms: 1500 },
+  code: { next: 'scan', ms: 1200 },
+  scan: { next: 'verify', ms: 1350 },
+  verify: { next: 'approve', ms: 1350 },
+  approve: { next: 'paired', ms: 1250 },
+  paired: { next: null, ms: 1050 },
+} as const;
 const MIN_SUBPANEL_HEIGHT = 120;
 const MAX_SUBPANEL_HEIGHT = 640;
 const MIN_SUBPANEL_WIDTH = 20;
@@ -398,6 +410,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const phoneFeed = useRef<HTMLDivElement>(null);
   const answerWith = useRef<((answer: Answer) => void) | null>(null);
   const pairingWith = useRef<(() => void) | null>(null);
+  const pairTrigger = useRef<HTMLButtonElement>(null);
+  const restorePairFocus = useRef(false);
   const pendingReplies = useRef(new Set<number>());
   const startSynced = useRef(false);
   // the visitor took over: stop moving on to the next chat by itself
@@ -431,12 +445,64 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const [phonePhase, setPhonePhase] = useState<'intro' | 'pair' | 'sync' | 'home' | 'activity'>(
     'intro',
   );
+  const [pairing, setPairing] = useState(PAIR_START);
   const [isInteractive, setIsInteractive] = useState(false);
   const takeOver = () => {
     if (touched.current) return;
     touched.current = true;
     setIsInteractive(true);
   };
+  const pairingOnPhone = ['scan', 'verify', 'paired'].includes(pairing.step);
+  const finishPairing = useCallback(() => {
+    restorePairFocus.current = touched.current;
+    if (pairingWith.current) pairingWith.current();
+    else setPhonePhase('sync');
+  }, []);
+  const pairingProps = {
+    lang,
+    computer: PHONE_HOSTS.find(({ id }) => id === phoneHost)!.name,
+    state: pairing,
+    onChange: (step: PairStep, method = pairing.method) => {
+      if (step === 'verify') track('demo:feature_demo_use', { feature: 'mobile', action: 'pair' });
+      setPairing({ step, method });
+    },
+    onFinish: finishPairing,
+  } as const;
+  const openPairing = () => {
+    takeOver();
+    setPairing(PAIR_START);
+    setPreviewPanel(undefined);
+    setPhonePhase('pair');
+  };
+
+  useEffect(() => {
+    if (phonePhase !== 'pair' || isInteractive) return;
+    const { next, ms } = PAIR_TOUR[pairing.step];
+    const timer = window.setTimeout(
+      () => {
+        if (touched.current) return;
+        if (next) setPairing((previous) => ({ ...previous, step: next }));
+        else finishPairing();
+      },
+      prefersReducedMotion() ? 0 : ms,
+    );
+    return () => window.clearTimeout(timer);
+  }, [finishPairing, isInteractive, pairing.step, phonePhase]);
+
+  useLayoutEffect(() => {
+    if (phonePhase === 'pair' && touched.current) {
+      const surface = pairingOnPhone ? '.hero-pair-phone' : '.hero-pair-dialog';
+      root.current?.querySelector<HTMLElement>(`${surface} [data-pair-focus]`)?.focus();
+    } else if (phonePhase === 'sync' && restorePairFocus.current) {
+      restorePairFocus.current = false;
+      const candidates = [
+        pairTrigger.current,
+        root.current?.querySelector<HTMLElement>('[data-rail="channels"]'),
+        root.current?.querySelector<HTMLElement>('.hero-phone-back'),
+      ];
+      candidates.find((el) => el?.getClientRects().length)?.focus({ preventScroll: true });
+    }
+  }, [pairing.step, pairingOnPhone, phonePhase]);
 
   const channel = channels[active]!;
   const channelRows = useMemo(
@@ -713,6 +779,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           await wait(step.kind === 'bot' ? 900 + step.text.length * 12 : 1100);
           if (signal.aborted) return;
           if (linkedPhone && !paired && step.kind === 'bot') {
+            setPairing(PAIR_START);
             setPhonePhase('pair');
             await new Promise<void>((resolve) => {
               const finish = () => {
@@ -1206,6 +1273,11 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       onFocusCapture={takeOver}
       onPointerDownCapture={takeOver}
       onKeyDown={(event) => {
+        if (event.key === 'Escape' && phonePhase === 'pair') {
+          event.stopPropagation();
+          finishPairing();
+          return;
+        }
         if (
           event.key === 'Escape' &&
           previewPanel &&
@@ -1220,12 +1292,13 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       }}
       data-device={
         linkedPhone
-          ? phonePhase === 'intro' || phonePhase === 'pair'
+          ? phonePhase === 'intro' || (phonePhase === 'pair' && !pairingOnPhone)
             ? 'desktop'
             : 'phone'
           : undefined
       }
       data-phase={linkedPhone ? phonePhase : undefined}
+      data-pair-step={phonePhase === 'pair' ? pairing.step : undefined}
     >
       <span className="visually-hidden" role="status">
         {working ? `${working.bot} · ${workingSummary}` : ''}
@@ -1258,7 +1331,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         </div>
         <div
           className="app-body"
-          inert={previewPanel?.kind === 'models' && previewPanel.surface === 'desktop'}
+          inert={
+            phonePhase === 'pair' ||
+            (previewPanel?.kind === 'models' && previewPanel.surface === 'desktop')
+          }
         >
           <nav className="app-rail" aria-label={t.rail}>
             <span className="app-rail-brand">
@@ -1276,7 +1352,6 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 title={label}
                 onClick={() => {
                   takeOver();
-                  if (linkedPhone && phonePhase === 'pair') pairingWith.current?.();
                   setSidePanel(id);
                 }}
               >
@@ -1457,6 +1532,17 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                     ) : null}
                   </div>
                 ))}
+                {linkedPhone && phonePhase !== 'intro' ? (
+                  <button
+                    ref={pairTrigger}
+                    type="button"
+                    className="app-env-row"
+                    onClick={openPairing}
+                  >
+                    <Smartphone size={15} aria-hidden="true" />
+                    <strong>{HERO_PAIRING_COPY[lang].open}</strong>
+                  </button>
+                ) : null}
               </div>
             )}
           </section>
@@ -1526,81 +1612,58 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   className="app-message-timeline"
                   hidden={memoryReader !== undefined || hasDesktopMembers}
                 >
-                  {linkedPhone && phonePhase === 'pair' ? (
-                    <div className="hero-desktop-pair">
-                      <PhonePair
-                        t={{
-                          ...copy.featureDemos.mobile,
-                          pair: { ...copy.featureDemos.mobile.pair, title: hero.pairTitle },
-                        }}
-                        autoPlay={!isInteractive}
-                        onNext={() => pairingWith.current?.()}
-                      />
-                    </div>
-                  ) : (
-                    <>
-                      <div className="app-feed" ref={feed}>
-                        <ol className="app-msgs">
-                          <li className="app-day">{t.today}</li>
-                          {renderSteps('desktop')}
-                          {renderExtra('desktop')}
-                          {done && extra.length === 0 ? (
-                            <li className="app-event app-event--replay">
-                              <button
-                                type="button"
-                                className="app-btn"
-                                onClick={() => open(active)}
-                              >
-                                <RotateCcw
-                                  className="app-icon"
-                                  size={14}
-                                  strokeWidth={1.75}
-                                  aria-hidden="true"
-                                />
-                                {t.replay}
-                              </button>
-                            </li>
-                          ) : null}
-                        </ol>
-                      </div>
-                      <form
-                        className="app-composer"
-                        onSubmit={(event) => send(event, 'desktop')}
-                        data-typing={typing ? '' : undefined}
-                      >
-                        <Plus
-                          className="app-composer-plus"
-                          size={18}
-                          strokeWidth={1.75}
-                          aria-hidden="true"
-                        />
-                        <input
-                          value={draft}
-                          readOnly={!done}
-                          onChange={(event) => setDraft(event.target.value)}
-                          placeholder={
-                            isTeam
-                              ? fill(preview.composer, { name: 'Mei' })
-                              : fill(t.composer, { name: channel.title })
-                          }
-                          aria-label={
-                            isTeam
-                              ? fill(preview.composer, { name: 'Mei' })
-                              : fill(t.composer, { name: channel.title })
-                          }
-                          maxLength={200}
-                        />
-                        <button
-                          type="submit"
-                          className="app-send"
-                          disabled={!done || !draft.trim()}
-                        >
-                          <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
-                          <span className="visually-hidden">{t.send}</span>
-                        </button>
-                      </form>
-                    </>
-                  )}
+                  <div className="app-feed" ref={feed}>
+                    <ol className="app-msgs">
+                      <li className="app-day">{t.today}</li>
+                      {renderSteps('desktop')}
+                      {renderExtra('desktop')}
+                      {done && extra.length === 0 ? (
+                        <li className="app-event app-event--replay">
+                          <button type="button" className="app-btn" onClick={() => open(active)}>
+                            <RotateCcw
+                              className="app-icon"
+                              size={14}
+                              strokeWidth={1.75}
+                              aria-hidden="true"
+                            />
+                            {t.replay}
+                          </button>
+                        </li>
+                      ) : null}
+                    </ol>
+                  </div>
+                  <form
+                    className="app-composer"
+                    onSubmit={(event) => send(event, 'desktop')}
+                    data-typing={typing ? '' : undefined}
+                  >
+                    <Plus
+                      className="app-composer-plus"
+                      size={18}
+                      strokeWidth={1.75}
+                      aria-hidden="true"
+                    />
+                    <input
+                      value={draft}
+                      readOnly={!done}
+                      onChange={(event) => setDraft(event.target.value)}
+                      placeholder={
+                        isTeam
+                          ? fill(preview.composer, { name: 'Mei' })
+                          : fill(t.composer, { name: channel.title })
+                      }
+                      aria-label={
+                        isTeam
+                          ? fill(preview.composer, { name: 'Mei' })
+                          : fill(t.composer, { name: channel.title })
+                      }
+                      maxLength={200}
+                    />
+                    <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
+                      <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
+                      <span className="visually-hidden">{t.send}</span>
+                    </button>
+                  </form>
                 </div>
               </div>
               {hasDesktopSession ? (
@@ -1856,6 +1919,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             </div>
           </section>
         </div>
+        {linkedPhone && phonePhase === 'pair' ? <HeroPairingDialog {...pairingProps} /> : null}
         {previewPanel?.kind === 'models' && previewPanel.surface === 'desktop' ? (
           <div className="preview-model-overlay">{renderPreview('desktop')}</div>
         ) : null}
@@ -1886,10 +1950,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   <strong>Tobs</strong>
                 </div>
               ) : phonePhase === 'pair' ? (
-                <div className="hero-phone-intro">
-                  <ScanLine size={112} strokeWidth={1.2} aria-hidden="true" />
-                  <strong>{hero.scanTitle}</strong>
-                </div>
+                <HeroPairingPhone {...pairingProps} />
               ) : (
                 <HeroPhoneHome
                   lang={lang}
@@ -1902,6 +1963,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   }
                   autoPlay={!isInteractive}
                   sharedRequest={sharedRequest}
+                  onPairComputer={openPairing}
                   defaultModel={hostDefaultModel}
                   onDefaultModel={(id) => {
                     setHostDefaultModels((previous) => ({ ...previous, [phoneHost]: id }));

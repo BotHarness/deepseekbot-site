@@ -1069,6 +1069,16 @@ button.hero-phone-profile-row {
   .hero-linked > .hero-phone-wrap {
     display: none;
   }
+
+  .hero-linked[data-phase='pair'][data-device='phone'] > .hero-desktop {
+    display: none;
+  }
+
+  .hero-linked[data-phase='pair'][data-device='phone'] > .hero-phone-wrap {
+    display: block;
+    width: min(300px, 100%);
+    justify-self: center;
+  }
 }
 
 @container (max-width: 580px) {

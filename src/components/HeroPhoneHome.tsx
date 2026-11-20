@@ -55,6 +55,7 @@ export function HeroPhoneHome({
   renderAvatar,
   renderChat,
   sharedRequest,
+  onPairComputer,
   defaultModel,
   onDefaultModel,
 }: {
@@ -65,6 +66,7 @@ export function HeroPhoneHome({
   renderAvatar: (name: string, size: number) => ReactNode;
   renderChat: (onBack: () => void) => ReactNode;
   sharedRequest?: SharedPhoneRequest;
+  onPairComputer: () => void;
   defaultModel: ModelId;
   onDefaultModel: (model: ModelId) => void;
 }) {
@@ -181,6 +183,11 @@ export function HeroPhoneHome({
             {host === value ? <Check size={14} aria-hidden="true" /> : null}
           </button>
         ))}
+        {!compact ? (
+          <button type="button" onClick={onPairComputer}>
+            {t.pairComputer}
+          </button>
+        ) : null}
       </div>
     </details>
   );

@@ -731,33 +731,241 @@ a.beta-button--ios {
   color: var(--app-ink);
   font-size: 22px;
 }
-.hero-desktop-pair {
+.hero-pair-overlay {
+  position: absolute;
+  z-index: 10;
+  inset: 36px 0 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgb(0 0 0 / 0.34);
+}
+.hero-pair-dialog {
+  width: min(440px, 100%);
+  max-height: 100%;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-bg);
+  box-shadow: 0 18px 38px rgb(0 0 0 / 0.22);
+}
+.hero-pair-dialog > header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--app-line);
+}
+.hero-pair-dialog > header strong {
+  flex: 1;
+}
+.hero-pair-dialog-body {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.hero-pair-dialog h4,
+.hero-pair-phone h4 {
+  margin: 0;
+  font-size: 14px;
+}
+.hero-pair-steps {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-pair-steps li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--app-soft);
+  font-size: 12px;
+}
+.hero-pair-steps li:not(:last-child) {
+  flex: 1;
+}
+.hero-pair-steps li:not(:last-child)::after {
+  flex: 1;
+  min-width: 5px;
+  height: 1px;
+  margin-inline-start: 2px;
+  background: var(--app-line);
+  content: '';
+}
+.hero-pair-steps li > span {
+  display: grid;
+  width: 19px;
+  height: 19px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--app-side);
+  font-size: 10px;
+  font-weight: 600;
+}
+.hero-pair-steps li[data-reached] > span {
+  background: var(--app-accent);
+  color: #fff;
+}
+.hero-pair-steps li[aria-current] {
+  color: var(--app-ink);
+  font-weight: 600;
+}
+.hero-pair-choices {
+  display: grid;
+  gap: 6px;
+}
+.hero-pair-choices button,
+.hero-pair-ready {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+  background: var(--app-side);
+  color: var(--app-ink);
+  text-align: start;
+}
+.hero-pair-choices button {
+  cursor: pointer;
+}
+.hero-pair-choices button:hover {
+  background: var(--app-hover);
+}
+.hero-pair-choices svg,
+.hero-pair-ready svg {
+  flex: none;
+  margin-top: 1px;
+}
+.hero-pair-ready svg {
+  color: var(--app-ok);
+}
+.hero-pair-choices small,
+.hero-pair-ready p,
+.hero-pair-note,
+.hero-pair-code small {
+  display: block;
+  margin: 3px 0 0;
+  color: var(--app-soft);
+  font-size: 11px;
+}
+.hero-pair-code {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.hero-pair-qr {
+  display: grid;
+  width: min(146px, 100%);
+  padding: 5px;
+  border-radius: 6px;
+  background: #fff;
+}
+.hero-pair-qr svg {
+  width: 100%;
+  height: auto;
+}
+.hero-pair-primary {
+  justify-self: start;
+  border-color: var(--app-info);
+  background: var(--app-info-bg);
+  color: var(--app-info);
+}
+.hero-pair-code .hero-pair-primary {
+  justify-self: center;
+}
+.hero-pair-phone {
   display: flex;
   flex: 1;
   min-height: 0;
+  flex-direction: column;
+}
+.hero-pair-phone > header {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  padding-inline: 8px;
+}
+.hero-pair-phone > header strong {
+  grid-column: 2;
+  text-align: center;
+}
+.hero-pair-phone-content {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  flex: 1;
+  gap: 12px;
+  padding: 16px;
   overflow: auto;
-  justify-content: center;
-  align-items: center;
-  animation: hero-scene-in 420ms ease-out both;
+  text-align: center;
 }
-.hero-desktop-pair .phone-page {
-  width: 100%;
-  max-width: 340px;
-  padding: 20px;
+.hero-pair-phone-content p {
+  margin: 0;
+  color: var(--app-soft);
 }
-.hero-desktop-pair .phone-title {
-  font-size: 22px;
+.hero-pair-phone-content .hero-pair-primary {
+  justify-self: center;
 }
-.hero-desktop-pair .phone-qr {
-  max-width: 150px;
-  margin: 16px auto;
+.hero-pair-camera {
+  position: relative;
+  display: grid;
+  width: min(190px, 100%);
+  aspect-ratio: 1;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 18px;
+  background: radial-gradient(ellipse at 56% 30%, #3f4960, #161c28 76%);
+  color: #f6f8ff;
 }
-.hero-desktop-pair .phone-hint,
-.hero-desktop-pair .phone-actions {
-  display: none;
+.hero-pair-camera > svg {
+  position: absolute;
+  inset: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
 }
-.hero-desktop-pair .phone-page[data-manual] .phone-actions {
-  display: flex;
+.hero-pair-camera > .hero-pair-qr {
+  width: 49%;
+  transform: rotate(-4deg);
+}
+.hero-pair-camera[data-scanning]::after {
+  position: absolute;
+  top: 17%;
+  width: 72%;
+  height: 2px;
+  background: #9ac4ff;
+  box-shadow: 0 0 9px #83acff;
+  content: '';
+  animation: hero-pair-scan 1.1s ease-in-out infinite alternate;
+}
+@keyframes hero-pair-scan {
+  to {
+    top: 81%;
+  }
+}
+.hero-pair-fingerprint {
+  max-width: 100%;
+  padding: 7px 9px;
+  border-radius: 6px;
+  background: var(--app-side);
+  overflow-wrap: anywhere;
+}
+:is(.hero-pair-dialog, .hero-pair-phone) button:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
+}
+:is(.hero-pair-dialog, .hero-pair-phone) [data-pair-focus]:focus {
+  outline: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-pair-camera[data-scanning]::after {
+    animation: none;
+  }
 }
 .hero-linked[data-phase='sync'] .hero-desktop .app-feed {
   animation: hero-scene-in 420ms ease-out both;
@@ -774,7 +982,6 @@ a.beta-button--ios {
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-phone-scene,
-  .hero-desktop-pair,
   .hero-linked[data-phase='sync'] .hero-desktop .app-feed {
     animation: none;
   }
