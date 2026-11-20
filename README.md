@@ -91,13 +91,10 @@ For repeatable local model setup across product worktrees, see the
 
 ## Analytics
 
-Homepage beta links use the existing analytics configuration and consent behavior:
-`mobile_install_clicked` carries only `platform: ios`, `destination: testflight` and `placement`;
-`mobile_beta_menu_opened` carries `platform: android` and `placement`. Android Discord selection
-uses the existing `discord_clicked` event, and successful QQ copies use `qq_group_copied`, both
-with `placement: android_beta_hero` or `android_beta_install`. `setup_prompt_copied` records only `placement: hero`, never
-the copied prompt or an email. The scripted Hero follows the existing demo interaction events without recording message text.
-These record website intent, not a completed app installation or beta membership.
+Homepage mobile links use the existing analytics configuration and consent behavior.
+`mobile_beta:install_link_click` records `platform`, `destination`, and `placement` for TestFlight on iOS and Google Play on Android.
+`install:setup_prompt_copy` records only `placement: hero`.
+These events measure visitor actions on the site. The scripted Hero excludes message text from its demo events.
 
 Anonymous PostHog analytics, as decided in BotHarness ADR-0132 (`src/analytics.ts`). A build sends nothing unless `VITE_POSTHOG_KEY` (the project's public `phc_…` key) is set, for example in `.env.production`; `VITE_POSTHOG_HOST` overrides the ingest proxy (default `https://t.botharness.ai`). Visitors get a consent box: accepting keeps an anonymous ID for cross-day attribution, declining falls back to PostHog's cookieless mode, which must also be enabled in the PostHog project settings. `?ref=<x>` is rewritten to `utm_source=<x>` before PostHog starts. `/privacy/` and `/en/privacy/` render from `content/privacy/{zh,en}.md`.
 

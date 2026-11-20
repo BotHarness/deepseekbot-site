@@ -180,18 +180,13 @@
   font-size: 13px;
 }
 a.beta-button {
-  color: var(--ink);
+  color: var(--mobile-button-ink);
 }
 .beta-button--ios {
   background: var(--mobile-ios);
-  color: var(--mobile-button-ink);
-}
-a.beta-button--ios {
-  color: var(--mobile-button-ink);
 }
 .beta-button--android {
   background: var(--mobile-android);
-  color: var(--mobile-button-ink);
 }
 .mobile-beta {
   display: flex;
@@ -639,62 +634,6 @@ a.beta-button--ios {
   width: 65px;
   border-radius: 4px;
   background: var(--app-ink);
-}
-.android-beta-popover {
-  color: var(--ink) !important;
-  background: var(--bubble) !important;
-  border: 3px solid var(--px-ink) !important;
-  border-radius: 0 !important;
-  box-shadow: 4px 4px 0 var(--px-shadow) !important;
-}
-.android-beta-content {
-  font-family: var(--pixel-font);
-  text-align: left;
-}
-.android-beta-content h3 {
-  margin: 0 0 10px;
-  font-size: 20px;
-}
-.android-beta-content p {
-  font-size: 13px;
-  margin: 0 0 12px;
-  line-height: 1.6;
-}
-.android-beta-content small {
-  display: block;
-  font-size: 12px;
-  color: var(--ink-soft);
-  line-height: 1.6;
-}
-.beta-contact {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  width: 100%;
-  margin: 8px 0;
-  padding: 10px;
-  font: 13px var(--pixel-font);
-  border: 2px solid var(--px-ink);
-  background: var(--bg-alt);
-  color: var(--ink) !important;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-}
-.beta-contact .community-icon-wrap {
-  display: block;
-  width: 20px;
-  height: 20px;
-  flex: none;
-}
-.beta-contact .community-icon-wrap svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.beta-group-number {
-  font: 22px var(--pixel-font) !important;
-  user-select: text;
 }
 @media (max-width: 1100px) {
   .hero-copy {

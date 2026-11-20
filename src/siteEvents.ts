@@ -38,7 +38,6 @@ export const SITE_EVENTS = [
   'marketplace:digest_open',
   'marketplace:install_button_click',
   'mobile_beta:install_link_click',
-  'mobile_beta:menu_open',
   'navigation:avatar_link_click',
   'navigation:changelog_link_click',
   'navigation:docs_link_click',
