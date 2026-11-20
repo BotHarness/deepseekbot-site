@@ -226,6 +226,11 @@ a.beta-button--ios {
   display: none;
 }
 .hero-linked > .hero-desktop {
+  --hero-workspace-base: #fff;
+  --hero-workspace-surface: #f5f6f7;
+  --hero-workspace-canvas: var(--hero-workspace-surface);
+  --hero-workspace-gap: 4px;
+  --hero-pane-radius: 4px;
   width: 100%;
   height: calc(var(--hero-phone-width) * 2868 / 1320 + 32px);
   max-width: none;
@@ -233,11 +238,53 @@ a.beta-button--ios {
   border-radius: 14px;
   box-shadow: 6px 6px 0 var(--px-shadow);
 }
-.hero-linked .hero-desktop .app-pane--channels {
+:root[data-theme='dark'] .hero-linked > .hero-desktop {
+  --hero-workspace-base: #151517;
+  --hero-workspace-surface: #353638;
+  --hero-workspace-canvas: var(--hero-workspace-base);
+}
+.hero-desktop .app-titlebar,
+.hero-desktop .app-body {
+  background-color: var(--hero-workspace-canvas);
+}
+.hero-desktop .app-titlebar,
+.hero-desktop .app-body .app-pane-head {
+  border-bottom: 0;
+}
+/* The Control Rail and dock panels sit on the same canvas, with room between them. */
+.hero-desktop .app-body {
+  gap: var(--hero-workspace-gap);
+  padding: var(--hero-workspace-gap);
+}
+.hero-desktop .app-body {
+  --pane-bg: color-mix(in srgb, var(--hero-workspace-base) 85%, var(--hero-workspace-surface));
+}
+.hero-desktop .app-rail,
+.hero-desktop .app-body .app-pane {
+  border: 0;
+  border-radius: var(--hero-pane-radius);
+  background: var(--pane-bg);
+}
+.hero-desktop .app-body .app-chat,
+.hero-desktop .app-body .app-panel {
+  background: var(--hero-workspace-canvas);
+}
+.hero-desktop .app-chat-head,
+.hero-desktop .app-message-content,
+.hero-desktop .app-panel-section {
+  background: var(--pane-bg);
+  border-radius: var(--hero-pane-radius);
+}
+.hero-desktop .app-message-split {
+  margin-top: 2px;
+}
+.hero-linked .hero-desktop .app-side-panel {
   flex-basis: 200px;
 }
-.hero-linked .hero-desktop .app-stack {
-  flex-basis: 200px;
+@media (max-width: 720px) {
+  .hero-linked .hero-desktop .app-side-panel {
+    flex-basis: auto;
+  }
 }
 .hero-phone-wrap {
   min-width: 0;
@@ -358,20 +405,71 @@ a.beta-button--ios {
   cursor: pointer;
 }
 .hero-phone-title {
-  gap: 7px;
-  padding: 0 12px;
+  flex: 1;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 0 8px 0 4px;
   min-width: 0;
-  max-width: calc(100% - 42px);
+  cursor: pointer;
+  text-align: start;
 }
-.hero-phone-title svg {
-  color: var(--app-soft);
+.hero-phone-title > .pixel-avatar,
+.hero-phone-header-channel {
   flex: none;
+}
+.hero-phone-title > .pixel-avatar svg {
+  border-radius: 50%;
+}
+.hero-phone-header-channel {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--app-side);
+  color: var(--app-soft);
+}
+.hero-phone-title-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+.hero-phone-chat-status,
+.hero-phone-header-model,
+.hero-phone-header-state {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
 }
 .hero-phone-title strong {
   font-size: 13px;
+  line-height: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.hero-phone-chat-status {
+  color: var(--app-soft);
+  font-size: 10px;
+  line-height: 12px;
+}
+.hero-phone-header-state > .pixel-avatar,
+.hero-phone-header-model > span:last-child {
+  flex: none;
+}
+.hero-phone-header-model > .preview-model-icon svg {
+  width: 11px;
+  height: 11px;
+}
+.hero-phone-header-model > span:nth-child(2),
+.hero-phone-header-state > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hero-phone-header-state {
+  flex: none;
 }
 .hero-phone-feed {
   flex: 1;
@@ -385,6 +483,15 @@ a.beta-button--ios {
 .hero-phone-feed .app-msgs {
   padding: 0;
   gap: 13px;
+}
+.hero-phone-feed .app-event {
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+.hero-phone-feed .app-event > svg {
+  margin-block-start: calc((1lh - 16px) / 2);
 }
 .hero-phone-feed .app-msg {
   gap: 7px;
@@ -565,11 +672,6 @@ a.beta-button--ios {
   font: 22px var(--pixel-font) !important;
   user-select: text;
 }
-@media (min-width: 1081px) {
-  .hero-linked .hero-desktop .app-stack {
-    display: flex;
-  }
-}
 @media (max-width: 1100px) {
   .hero-copy {
     grid-template-columns: minmax(0, 1fr);
@@ -629,33 +731,241 @@ a.beta-button--ios {
   color: var(--app-ink);
   font-size: 22px;
 }
-.hero-desktop-pair {
+.hero-pair-overlay {
+  position: absolute;
+  z-index: 10;
+  inset: 36px 0 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgb(0 0 0 / 0.34);
+}
+.hero-pair-dialog {
+  width: min(440px, 100%);
+  max-height: 100%;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-bg);
+  box-shadow: 0 18px 38px rgb(0 0 0 / 0.22);
+}
+.hero-pair-dialog > header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--app-line);
+}
+.hero-pair-dialog > header strong {
+  flex: 1;
+}
+.hero-pair-dialog-body {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.hero-pair-dialog h4,
+.hero-pair-phone h4 {
+  margin: 0;
+  font-size: 14px;
+}
+.hero-pair-steps {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-pair-steps li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--app-soft);
+  font-size: 12px;
+}
+.hero-pair-steps li:not(:last-child) {
+  flex: 1;
+}
+.hero-pair-steps li:not(:last-child)::after {
+  flex: 1;
+  min-width: 5px;
+  height: 1px;
+  margin-inline-start: 2px;
+  background: var(--app-line);
+  content: '';
+}
+.hero-pair-steps li > span {
+  display: grid;
+  width: 19px;
+  height: 19px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--app-side);
+  font-size: 10px;
+  font-weight: 600;
+}
+.hero-pair-steps li[data-reached] > span {
+  background: var(--app-accent);
+  color: #fff;
+}
+.hero-pair-steps li[aria-current] {
+  color: var(--app-ink);
+  font-weight: 600;
+}
+.hero-pair-choices {
+  display: grid;
+  gap: 6px;
+}
+.hero-pair-choices button,
+.hero-pair-ready {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+  background: var(--app-side);
+  color: var(--app-ink);
+  text-align: start;
+}
+.hero-pair-choices button {
+  cursor: pointer;
+}
+.hero-pair-choices button:hover {
+  background: var(--app-hover);
+}
+.hero-pair-choices svg,
+.hero-pair-ready svg {
+  flex: none;
+  margin-top: 1px;
+}
+.hero-pair-ready svg {
+  color: var(--app-ok);
+}
+.hero-pair-choices small,
+.hero-pair-ready p,
+.hero-pair-note,
+.hero-pair-code small {
+  display: block;
+  margin: 3px 0 0;
+  color: var(--app-soft);
+  font-size: 11px;
+}
+.hero-pair-code {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.hero-pair-qr {
+  display: grid;
+  width: min(146px, 100%);
+  padding: 5px;
+  border-radius: 6px;
+  background: #fff;
+}
+.hero-pair-qr svg {
+  width: 100%;
+  height: auto;
+}
+.hero-pair-primary {
+  justify-self: start;
+  border-color: var(--app-info);
+  background: var(--app-info-bg);
+  color: var(--app-info);
+}
+.hero-pair-code .hero-pair-primary {
+  justify-self: center;
+}
+.hero-pair-phone {
   display: flex;
   flex: 1;
   min-height: 0;
+  flex-direction: column;
+}
+.hero-pair-phone > header {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  padding-inline: 8px;
+}
+.hero-pair-phone > header strong {
+  grid-column: 2;
+  text-align: center;
+}
+.hero-pair-phone-content {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  flex: 1;
+  gap: 12px;
+  padding: 16px;
   overflow: auto;
-  justify-content: center;
-  align-items: center;
-  animation: hero-scene-in 420ms ease-out both;
+  text-align: center;
 }
-.hero-desktop-pair .phone-page {
-  width: 100%;
-  max-width: 340px;
-  padding: 20px;
+.hero-pair-phone-content p {
+  margin: 0;
+  color: var(--app-soft);
 }
-.hero-desktop-pair .phone-title {
-  font-size: 22px;
+.hero-pair-phone-content .hero-pair-primary {
+  justify-self: center;
 }
-.hero-desktop-pair .phone-qr {
-  max-width: 150px;
-  margin: 16px auto;
+.hero-pair-camera {
+  position: relative;
+  display: grid;
+  width: min(190px, 100%);
+  aspect-ratio: 1;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 18px;
+  background: radial-gradient(ellipse at 56% 30%, #3f4960, #161c28 76%);
+  color: #f6f8ff;
 }
-.hero-desktop-pair .phone-hint,
-.hero-desktop-pair .phone-actions {
-  display: none;
+.hero-pair-camera > svg {
+  position: absolute;
+  inset: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
 }
-.hero-desktop-pair .phone-page[data-manual] .phone-actions {
-  display: flex;
+.hero-pair-camera > .hero-pair-qr {
+  width: 49%;
+  transform: rotate(-4deg);
+}
+.hero-pair-camera[data-scanning]::after {
+  position: absolute;
+  top: 17%;
+  width: 72%;
+  height: 2px;
+  background: #9ac4ff;
+  box-shadow: 0 0 9px #83acff;
+  content: '';
+  animation: hero-pair-scan 1.1s ease-in-out infinite alternate;
+}
+@keyframes hero-pair-scan {
+  to {
+    top: 81%;
+  }
+}
+.hero-pair-fingerprint {
+  max-width: 100%;
+  padding: 7px 9px;
+  border-radius: 6px;
+  background: var(--app-side);
+  overflow-wrap: anywhere;
+}
+:is(.hero-pair-dialog, .hero-pair-phone) button:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
+}
+:is(.hero-pair-dialog, .hero-pair-phone) [data-pair-focus]:focus {
+  outline: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-pair-camera[data-scanning]::after {
+    animation: none;
+  }
 }
 .hero-linked[data-phase='sync'] .hero-desktop .app-feed {
   animation: hero-scene-in 420ms ease-out both;
@@ -672,7 +982,6 @@ a.beta-button--ios {
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-phone-scene,
-  .hero-desktop-pair,
   .hero-linked[data-phase='sync'] .hero-desktop .app-feed {
     animation: none;
   }
@@ -808,8 +1117,7 @@ a.beta-button--ios {
   color: var(--app-soft);
 }
 .hero-phone-conversations,
-.hero-phone-requests,
-.hero-phone-computers {
+.hero-phone-requests {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -881,17 +1189,37 @@ a.beta-button--ios {
   font-size: 10px;
 }
 .hero-phone-tabbar {
+  position: absolute;
+  z-index: 4;
+  inset: auto 8px var(--phone-tabbar-bottom);
+  box-sizing: border-box;
   display: flex;
-  flex: none;
+  height: var(--phone-tabbar-height);
   align-items: stretch;
   gap: 3px;
-  margin: 2px 8px 3px;
   padding: 4px;
   border-radius: 999px;
   border: 1px solid var(--phone-edge);
-  background: var(--phone-glass);
-  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--app-bg) 45%, transparent);
+  backdrop-filter: blur(4px);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+  pointer-events: none;
+}
+.hero-phone-app:has(> .hero-phone-tabbar) {
+  --phone-tabbar-height: 56px;
+  --phone-tabbar-bottom: 22px;
+  --phone-tabbar-inset: calc(var(--phone-tabbar-height) + var(--phone-tabbar-bottom) + 8px);
+}
+.hero-phone-app:has(> .hero-phone-tabbar) .hero-phone-page-feed {
+  padding-block-end: var(--phone-tabbar-inset);
+  scroll-padding-block-end: var(--phone-tabbar-inset);
+}
+.hero-linked-phone:has(.hero-phone-tabbar) > .hero-phone-home {
+  position: absolute;
+  z-index: 4;
+  inset: auto 0 8px;
+  margin: 0 auto;
+  pointer-events: none;
 }
 .hero-phone-tabbar button {
   display: flex;
@@ -907,9 +1235,10 @@ a.beta-button--ios {
   color: var(--app-soft);
   font-size: 9px;
   cursor: pointer;
+  pointer-events: auto;
 }
 .hero-phone-tabbar button[aria-pressed='true'] {
-  background: var(--app-hover);
+  background: color-mix(in srgb, var(--app-hover) 52%, transparent);
   color: var(--app-user);
 }
 .hero-phone-tabbar button > span {
@@ -1015,31 +1344,171 @@ a.beta-button--ios {
   background: transparent;
   color: var(--app-soft);
 }
-.hero-phone-computers li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 17px 0;
-  border-bottom: 1px solid var(--phone-edge);
+.hero-linked-phone.app:has(.hero-phone-app[data-screen='settings']) {
+  --app-bg: #fdfdfd;
+  --settings-card: #f1f2f4;
 }
-.hero-phone-computers .hero-phone-source {
+:root[data-theme='dark'] .hero-linked-phone.app:has(.hero-phone-app[data-screen='settings']) {
+  --app-bg: #202123;
+  --settings-card: #242529;
+}
+.hero-phone-app[data-screen='settings'] .hero-phone-tabbar button[aria-pressed='true'] {
+  color: var(--app-ink);
+}
+.hero-settings-feed {
+  padding: 10px 12px 18px;
+}
+.hero-phone-settings[data-page='root'] .hero-settings-feed {
+  padding-top: 42px;
+}
+.hero-settings-feed > * + * {
+  margin-top: 22px;
+}
+.hero-settings-feed > h3 {
+  margin: 0 0 6px;
+  font:
+    700 27px/1.2 -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+.hero-settings-feed > h3 + .hero-settings-card {
+  margin-top: 0;
+}
+.hero-settings-feed h4 {
+  margin: 0 0 7px;
+  padding-inline: 12px;
+  color: var(--app-soft);
   font-size: 12px;
+  font-weight: 600;
 }
-.hero-phone-connected {
-  color: var(--app-ok);
+.hero-settings-card {
+  border: 0;
+  border-radius: 19px;
+  background: var(--settings-card);
+  overflow: hidden;
+}
+.hero-settings-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 39px;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  padding: 8px 12px;
+  background: transparent;
+  color: inherit;
+  text-align: start;
+}
+.hero-settings-row + .hero-settings-row::before {
+  position: absolute;
+  inset: 0 12px auto 12px;
+  border-top: 1px solid var(--app-line);
+  content: '';
+}
+.hero-settings-row:has(.hero-settings-icon) + .hero-settings-row::before {
+  inset-inline-start: 42px;
+}
+button.hero-settings-row,
+button.hero-settings-usage {
+  cursor: pointer;
+}
+:is(button.hero-settings-row, button.hero-settings-usage):hover {
+  background: var(--app-hover);
+}
+.hero-settings-icon {
+  display: grid;
+  width: 20px;
+  flex: none;
+  place-items: center;
+}
+.hero-settings-icon > svg {
+  width: 17px;
+  height: 17px;
+}
+.hero-settings-initial {
+  width: 34px;
+  line-height: 38px;
+  font-size: 22px;
+  text-align: center;
+}
+.hero-settings-icon:has(.hero-settings-initial) {
+  width: 34px;
+}
+.hero-settings-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.hero-settings-label small {
+  display: block;
+  color: var(--app-soft);
   font-size: 10px;
+}
+.hero-settings-chevron {
+  flex: none;
+  color: var(--app-soft);
+  opacity: 0.7;
+}
+.hero-settings-usage {
+  display: grid;
+  width: 100%;
+  gap: 6px;
+  padding: 12px;
+  color: inherit;
+  text-align: start;
+}
+.hero-settings-usage-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--app-soft);
+  font-size: 10px;
+}
+.hero-settings-usage-head strong {
+  margin-inline-end: auto;
+  color: var(--app-ink);
+  font-size: 13px;
+}
+.hero-settings-usage-total {
+  color: var(--app-soft);
+}
+.hero-settings-usage-total strong {
+  color: var(--app-ink);
+  font-size: 23px;
+  font-variant-numeric: tabular-nums;
+}
+.hero-settings-usage-chart {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  height: 43px;
+  margin-top: 2px;
+}
+.hero-settings-usage-chart > span {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+}
+.hero-settings-usage-chart i {
+  width: min(100%, 11px);
+  border-radius: 4px 4px 0 0;
+  background: var(--app-info);
+}
+.hero-settings-usage-chart small {
+  color: var(--app-soft);
+  font-size: 9px;
+}
+.hero-phone-settings button:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-phone-page {
     animation: none;
   }
-}
-
-.hero-phone-title .hero-phone-source {
-  flex: none;
-  font-size: 8px;
-}
-.hero-phone-title .hero-phone-source svg {
-  width: 9px;
-  height: 9px;
 }

@@ -9,8 +9,11 @@ export interface PanelItem {
   id: string;
   title: string;
   meta?: string;
+  sha?: string;
   badge?: string;
   tone?: 'ok' | 'warn' | 'info';
+  text?: string;
+  change?: { path: string; lines: string[] };
 }
 
 /** A lucide icon, as the real app draws its sidebar sections and timeline events. */
@@ -18,6 +21,7 @@ export type DemoIcon =
   | 'members'
   | 'sessions'
   | 'files'
+  | 'channel-files'
   | 'history'
   | 'schedules'
   | 'workspace'
@@ -71,7 +75,13 @@ export interface DemoCopy {
   human: string;
   you: string;
   today: string;
-  working: string;
+  activity: {
+    thinking: string;
+    working: string;
+    searching: string;
+    coding: string;
+    executing: string;
+  };
   composer: string;
   send: string;
   allow: string;
@@ -86,24 +96,10 @@ export interface DemoCopy {
   needsYou: string;
   /** the full-height Control Rail on the left and the panels it opens */
   rail: string;
-  home: string;
   channelsPanel: string;
-  activity: string;
   unread: string;
   nothingWaiting: string;
-  wallpaper: string;
-  /** Home: Tob, the local steward, with Token usage and Bot activity */
-  tob: {
-    name: string;
-    greeting: string;
-    description: string;
-    input: string;
-    starters: string[];
-    usage: string;
-    ranges: string[];
-    botActivity: string;
-    states: { working: string; needs: string; idle: string };
-  };
+  states: { working: string; idle: string };
   replay: string;
   sidebar: string;
   hideSidebar: string;
@@ -233,7 +229,13 @@ const zhDemo: DemoCopy = {
   human: 'Human',
   you: '你',
   today: '今天',
-  working: '{bot} 正在{tool}…',
+  activity: {
+    thinking: '正在思考',
+    working: '正在工作',
+    searching: '正在搜索',
+    coding: '正在处理文件',
+    executing: '正在执行',
+  },
   composer: '发消息给 {name}',
   send: '发送',
   allow: '允许这次',
@@ -246,32 +248,14 @@ const zhDemo: DemoCopy = {
   tool: '工具',
   needsYou: '需要你',
   rail: '工作区控制列',
-  home: '首页',
   channelsPanel: '频道列表',
-  activity: '活动',
   unread: '未读',
   nothingWaiting: '没有等你处理的事',
-  wallpaper: '壁纸',
-  tob: {
-    name: '托布',
-    greeting: '你好，我是托布',
-    description: '你的本地总管。了解 Bot 的状态，或告诉我你想调整什么。',
-    input: '有什么可以帮你？',
-    starters: [
-      '帮我创建一个 Bot',
-      '看看我的 Bot 最近怎么样',
-      '有哪些事情需要我处理？',
-      '最近有哪些记忆更新？',
-    ],
-    usage: 'Token 用量',
-    ranges: ['今日', '7 天', '4 周', '12 周'],
-    botActivity: 'Bot 活跃情况',
-    states: { working: '工作中', needs: '需要你', idle: '空闲' },
-  },
+  states: { working: '工作中', idle: '空闲' },
   replay: '再看一遍',
-  sidebar: '频道子面板',
-  hideSidebar: '收起频道子面板',
-  showSidebar: '展开频道子面板',
+  sidebar: '子面板栏',
+  hideSidebar: '收起子面板栏',
+  showSidebar: '展开子面板栏',
   fallback:
     '这里是预设脚本的演示，我还不能真的回答你。把 Tobs 装进 DeepSeek Harness，就能和真正的我聊了。',
   fallbackCta: '开始安装 →',
@@ -416,6 +400,25 @@ const zhDemo: DemoCopy = {
       time: '15:42',
       panel: [
         {
+          id: 'sessions',
+          icon: 'sessions',
+          title: '会话',
+          items: [{ id: 'main', title: '主会话', meta: '盯着 Bot 收件箱', badge: '空闲' }],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: '频道文件',
+          items: [
+            {
+              id: 'brief',
+              title: 'research/competitor-brief.md',
+              meta: '竞品简报',
+              text: '# 竞品简报\n\n已记录套餐、公开价格和查阅时间。',
+            },
+          ],
+        },
+        {
           id: 'files',
           icon: 'files',
           title: '记忆文件',
@@ -429,7 +432,7 @@ const zhDemo: DemoCopy = {
           id: 'commits',
           icon: 'history',
           title: '记忆演化',
-          items: [{ id: 'c1', title: '整理竞品定价', meta: 'a41c9e2 · 昨天', badge: 'main' }],
+          items: [{ id: 'c1', title: '整理竞品定价', sha: 'a41c9e2', meta: '昨天', badge: 'main' }],
         },
         {
           id: 'schedules',
@@ -471,7 +474,8 @@ const zhDemo: DemoCopy = {
               item: {
                 id: 'c2',
                 title: '记住：最关心定价变化',
-                meta: '7d03b51 · 刚刚',
+                sha: '7d03b51',
+                meta: '刚刚',
                 badge: 'HEAD',
                 tone: 'info',
               },
@@ -493,6 +497,67 @@ const zhDemo: DemoCopy = {
       preview: '两个仓库都升到 1.2.0 了',
       time: '14:18',
       panel: [
+        {
+          id: 'files',
+          icon: 'files',
+          title: '记忆文件',
+          items: [
+            {
+              id: 'nova-memory',
+              title: 'MEMORY.md',
+              text: '# Nova\n\n每次检查先列出改动文件，再给出验证结果。',
+            },
+          ],
+        },
+        {
+          id: 'commits',
+          icon: 'history',
+          title: '记忆演化',
+          items: [
+            {
+              id: 'nova-memory-head',
+              title: '记录仓库检查偏好',
+              meta: '昨天',
+              sha: 'f06d3c2',
+              badge: 'HEAD',
+              change: {
+                path: 'MEMORY.md',
+                lines: [
+                  ' # Nova',
+                  ' ',
+                  '-检查失败时列出相关文件。',
+                  '+每次检查先列出改动文件，再给出验证结果。',
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: '频道文件',
+          items: [
+            {
+              id: 'review',
+              title: 'research/review.md',
+              meta: '仓库检查报告',
+              text: '# 检查报告\n\n- 已核对改动文件。\n- 空白符检查通过。',
+            },
+          ],
+        },
+        {
+          id: 'schedules',
+          icon: 'schedules',
+          title: '定时任务',
+          items: [
+            {
+              id: 'review-weekly',
+              title: '每周仓库检查',
+              meta: '下次 周一 09:00',
+              badge: '周一 09:00',
+            },
+          ],
+        },
         {
           id: 'sessions',
           icon: 'sessions',
@@ -601,7 +666,13 @@ const enDemo: DemoCopy = {
   human: 'Human',
   you: 'you',
   today: 'Today',
-  working: '{bot} · {tool}…',
+  activity: {
+    thinking: 'Thinking',
+    working: 'Working',
+    searching: 'Searching',
+    coding: 'Working on files',
+    executing: 'Executing',
+  },
   composer: 'Message {name}',
   send: 'Send',
   allow: 'Allow once',
@@ -614,32 +685,14 @@ const enDemo: DemoCopy = {
   tool: 'Tool',
   needsYou: 'Needs you',
   rail: 'Workspace controls',
-  home: 'Home',
   channelsPanel: 'Channels',
-  activity: 'Activity',
   unread: 'Unread',
   nothingWaiting: 'Nothing waiting on you',
-  wallpaper: 'Wallpaper',
-  tob: {
-    name: 'Tob',
-    greeting: 'Hello, I’m Tob',
-    description: 'Your local steward. Check on your Bots or tell me what you’d like to change.',
-    input: 'What can I help you with?',
-    starters: [
-      'Help me create a Bot',
-      'How are my Bots doing?',
-      'What needs my attention?',
-      'What memories changed recently?',
-    ],
-    usage: 'Token usage',
-    ranges: ['Today', '7 days', '4 weeks', '12 weeks'],
-    botActivity: 'Bot activity',
-    states: { working: 'Working', needs: 'Needs you', idle: 'Idle' },
-  },
+  states: { working: 'Working', idle: 'Idle' },
   replay: 'Replay',
-  sidebar: 'Channel subpanels',
-  hideSidebar: 'Hide Channel subpanels',
-  showSidebar: 'Show Channel subpanels',
+  sidebar: 'Subpanel column',
+  hideSidebar: 'Hide Subpanel column',
+  showSidebar: 'Show Subpanel column',
   fallback:
     'This demo plays a script, so I can’t really answer you yet. Add Tobs to DeepSeek Harness and you can talk to the real me.',
   fallbackCta: 'Install →',
@@ -782,6 +835,27 @@ const enDemo: DemoCopy = {
       time: '15:42',
       panel: [
         {
+          id: 'sessions',
+          icon: 'sessions',
+          title: 'Sessions',
+          items: [
+            { id: 'main', title: 'Main session', meta: 'Watching the Bot Inbox', badge: 'Idle' },
+          ],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: 'Channel files',
+          items: [
+            {
+              id: 'brief',
+              title: 'research/competitor-brief.md',
+              meta: 'Competitor brief',
+              text: '# Competitor brief\n\nRecorded public plans, prices and dates checked.',
+            },
+          ],
+        },
+        {
           id: 'files',
           icon: 'files',
           title: 'Memory files',
@@ -794,12 +868,13 @@ const enDemo: DemoCopy = {
         {
           id: 'commits',
           icon: 'history',
-          title: 'Memory history',
+          title: 'Memory evolution',
           items: [
             {
               id: 'c1',
               title: 'Sort competitor pricing',
-              meta: 'a41c9e2 · yesterday',
+              sha: 'a41c9e2',
+              meta: 'yesterday',
               badge: 'main',
             },
           ],
@@ -854,7 +929,8 @@ const enDemo: DemoCopy = {
               item: {
                 id: 'c2',
                 title: 'Remember: pricing first',
-                meta: '7d03b51 · just now',
+                sha: '7d03b51',
+                meta: 'just now',
                 badge: 'HEAD',
                 tone: 'info',
               },
@@ -876,6 +952,67 @@ const enDemo: DemoCopy = {
       preview: 'Both repos are on 1.2.0',
       time: '14:18',
       panel: [
+        {
+          id: 'files',
+          icon: 'files',
+          title: 'Memory files',
+          items: [
+            {
+              id: 'nova-memory',
+              title: 'MEMORY.md',
+              text: '# Nova\n\nList changed files first, then report the check results.',
+            },
+          ],
+        },
+        {
+          id: 'commits',
+          icon: 'history',
+          title: 'Memory evolution',
+          items: [
+            {
+              id: 'nova-memory-head',
+              title: 'Record repository review preferences',
+              meta: 'yesterday',
+              sha: 'f06d3c2',
+              badge: 'HEAD',
+              change: {
+                path: 'MEMORY.md',
+                lines: [
+                  ' # Nova',
+                  ' ',
+                  '-List relevant files when a check fails.',
+                  '+List changed files first, then report the check results.',
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: 'channel-files',
+          icon: 'channel-files',
+          title: 'Channel files',
+          items: [
+            {
+              id: 'review',
+              title: 'research/review.md',
+              meta: 'Repository review report',
+              text: '# Review report\n\n- Reviewed changed files.\n- Whitespace check passed.',
+            },
+          ],
+        },
+        {
+          id: 'schedules',
+          icon: 'schedules',
+          title: 'Scheduled tasks',
+          items: [
+            {
+              id: 'review-weekly',
+              title: 'Weekly repository review',
+              meta: 'Next: Mon 09:00',
+              badge: 'Mon 09:00',
+            },
+          ],
+        },
         {
           id: 'sessions',
           icon: 'sessions',

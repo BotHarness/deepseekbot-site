@@ -16,6 +16,7 @@ import { SymbolIcon } from './components/SymbolIcon';
 import { SponsorFooter, Sponsors } from './components/Sponsors';
 import { COPY, LINKS } from './content';
 import { HERO_COPY } from './heroCopy';
+import { PREVIEW_COPY } from './previewCopy';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
 import { changelogPath, guidePath, initialMode, pathLang, write, type Mode } from './site';
@@ -25,6 +26,7 @@ export function App() {
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
   const hero = HERO_COPY[lang];
+  const preview = PREVIEW_COPY[lang];
   const design = useAvatarDesign();
 
   useEffect(() => {
@@ -75,8 +77,9 @@ export function App() {
               <HeroLinks lang={lang} />
             </div>
             <figure className="hero-product">
+              <p className="hero-preview-badge">{preview.badge}</p>
               <LiveDemo copy={copy} linkedPhone />
-              <figcaption className="hero-caption">{copy.hero.lead}</figcaption>
+              <figcaption className="hero-caption">{preview.caption}</figcaption>
             </figure>
           </div>
           <Crew copy={copy} lang={lang} />

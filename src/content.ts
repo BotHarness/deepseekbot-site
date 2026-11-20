@@ -12,6 +12,7 @@ import {
 import { QQ_GROUP } from './communityLinks';
 import { MARKET_LABELS } from './marketRoutes';
 import { VERSION, DESKTOP_PACKAGE, DSH_VERSION } from './installRelease';
+import { PREVIEW_COPY } from './previewCopy';
 export { QQ_GROUP };
 
 export type Lang = 'zh' | 'en';
@@ -380,6 +381,30 @@ const zh: Copy = {
         cta: { label: '加入社区，获取测试邀请', href: '#community' },
       },
       {
+        icon: 'subagent',
+        title: PREVIEW_COPY.zh.teamTitle,
+        body: PREVIEW_COPY.zh.teamBody,
+        tag: PREVIEW_COPY.zh.badge,
+      },
+      {
+        icon: 'thinking',
+        title: PREVIEW_COPY.zh.modelsTitle,
+        body: PREVIEW_COPY.zh.modelsBody,
+        tag: PREVIEW_COPY.zh.badge,
+      },
+      {
+        icon: 'workflow',
+        title: PREVIEW_COPY.zh.enginesTitle,
+        body: PREVIEW_COPY.zh.enginesBody,
+        tag: PREVIEW_COPY.zh.badge,
+      },
+      {
+        icon: 'goal',
+        title: PREVIEW_COPY.zh.sessionsTitle,
+        body: PREVIEW_COPY.zh.sessionsBody,
+        tag: PREVIEW_COPY.zh.badge,
+      },
+      {
         icon: 'web',
         title: '自己的 IM 身份',
         body: '连接飞书 / Lark、Slack、Discord、QQ 或个人微信。先在设置中连接应用，再在私聊侧栏「外部身份」绑定 Bot。微信仅接收扫码者私聊；其他平台按各自权限和会话规则收件、回复，新会话可自动接收或先询问。',
@@ -514,6 +539,29 @@ const zh: Copy = {
         answer:
           '不限于 DeepSeek。Tobs 使用你在 DSH 中配置的模型提供商，也支持通过 DSH 配置兼容 API 或自部署服务。能否使用某个模型取决于接口支持、凭据和模型配置。',
         links: [{ label: '模型配置', href: '/docs/model-setup/' }],
+      },
+      {
+        id: 'team-preview',
+        question: PREVIEW_COPY.zh.teamQuestion,
+        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.teamAnswer}`,
+      },
+      {
+        id: 'engines-preview',
+        question: PREVIEW_COPY.zh.engineQuestion,
+        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.engineAnswer}`,
+      },
+      {
+        id: 'acp-preview',
+        question: PREVIEW_COPY.zh.acpTitle,
+        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.acpBody}`,
+        links: [
+          { label: 'ACP 接入讨论', href: 'https://github.com/BotHarness/DeepSeekBot/issues/4254' },
+        ],
+      },
+      {
+        id: 'sessions-preview',
+        question: PREVIEW_COPY.zh.sessionsQuestion,
+        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.sessionsAnswer}`,
       },
       {
         id: 'cost',
@@ -682,7 +730,7 @@ const zh: Copy = {
   },
   dsh: {
     title: '站在 DeepSeek Harness 上',
-    body: 'Tobs 直接用 DSH 自己的 Session 管理和 Harness：你在 DSH 里接入的任何 LLM 模型 provider，Bot 都能用；也可以和其他 DSH 插件装在一起。个别插件可能还不兼容，遇到了欢迎提 Issue 或 PR。',
+    body: 'Tobs 的 API 模型使用 DSH 的 Session 管理和 Harness。Bot 可选你在 DSH 配置的兼容模型，Tobs 也可与其他 DSH 插件一起安装。个别插件可能还不兼容，遇到了欢迎提 Issue 或 PR。',
     issues: '去 GitHub 提 Issue',
   },
   reviews: {
@@ -835,6 +883,30 @@ const en: Copy = {
         cta: { label: 'Join the community for a test invite', href: '#community' },
       },
       {
+        icon: 'subagent',
+        title: PREVIEW_COPY.en.teamTitle,
+        body: PREVIEW_COPY.en.teamBody,
+        tag: PREVIEW_COPY.en.badge,
+      },
+      {
+        icon: 'thinking',
+        title: PREVIEW_COPY.en.modelsTitle,
+        body: PREVIEW_COPY.en.modelsBody,
+        tag: PREVIEW_COPY.en.badge,
+      },
+      {
+        icon: 'workflow',
+        title: PREVIEW_COPY.en.enginesTitle,
+        body: PREVIEW_COPY.en.enginesBody,
+        tag: PREVIEW_COPY.en.badge,
+      },
+      {
+        icon: 'goal',
+        title: PREVIEW_COPY.en.sessionsTitle,
+        body: PREVIEW_COPY.en.sessionsBody,
+        tag: PREVIEW_COPY.en.badge,
+      },
+      {
         icon: 'web',
         title: 'Their own IM identity',
         body: 'Connect Lark / Feishu, Slack, Discord, QQ or personal WeChat. Connect an app in Settings, then bind it to a Bot in the DM sidebar’s External identities. WeChat accepts only the QR owner’s DMs; other platforms follow their permissions and conversation rules. New conversations can be automatic or ask first.',
@@ -969,6 +1041,32 @@ const en: Copy = {
         answer:
           'Yes. Tobs uses the model providers you configure in DSH, including compatible APIs or self-hosted services configured through DSH. Whether a model works depends on interface support, credentials and model configuration.',
         links: [{ label: 'Model setup', href: '/en/docs/model-setup/' }],
+      },
+      {
+        id: 'team-preview',
+        question: PREVIEW_COPY.en.teamQuestion,
+        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.teamAnswer}`,
+      },
+      {
+        id: 'engines-preview',
+        question: PREVIEW_COPY.en.engineQuestion,
+        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.engineAnswer}`,
+      },
+      {
+        id: 'acp-preview',
+        question: PREVIEW_COPY.en.acpTitle,
+        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.acpBody}`,
+        links: [
+          {
+            label: 'ACP integration discussion',
+            href: 'https://github.com/BotHarness/DeepSeekBot/issues/4254',
+          },
+        ],
+      },
+      {
+        id: 'sessions-preview',
+        question: PREVIEW_COPY.en.sessionsQuestion,
+        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.sessionsAnswer}`,
       },
       {
         id: 'cost',
@@ -1142,7 +1240,7 @@ const en: Copy = {
   },
   dsh: {
     title: 'Built on DeepSeek Harness',
-    body: 'Tobs runs on DSH’s own session management and harness, so any LLM provider you connect in DSH works for your Bots, and it installs alongside other DSH plugins. Some plugins may not be compatible yet; if you hit one, please open an issue or a PR.',
+    body: 'Tobs uses DSH’s session management and harness for API models. Bots can use compatible models configured in DSH, and Tobs can be installed alongside other DSH plugins. Some plugins may not be compatible yet; if you hit one, please open an issue or a PR.',
     issues: 'Open an issue on GitHub',
   },
   reviews: {

@@ -380,7 +380,7 @@ type MobileStep = keyof Demos['mobile']['steps'];
 const MOBILE_STEPS: MobileStep[] = ['pair', 'chat', 'approve', 'browser'];
 
 /** A pairing code drawn like a QR code: three finder squares and seeded modules. */
-function PairCode() {
+export function PairCode() {
   const size = 21;
   const cells = useMemo(() => {
     const out: [number, number][] = [];

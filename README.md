@@ -22,10 +22,14 @@ pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 For repeatable local model setup across product worktrees, see the
 [shared model wizard](planning/task-evidence/README.md).
 
-- **Live demo**: the Hero pairs the complete desktop panel with a native-style phone presentation
-  (`src/components/LiveDemo.tsx`, `HeroPhoneChat.tsx`, `HeroPhoneHome.tsx`). Both share the script
-  and approval resolver from `src/demoCopy.ts`; nothing talks to a model. The separate duplicate
-  demo below the Hero has been removed. Keep the scripts to what the copy already claims.
+- **Live demo**: the Hero couples the desktop workspace (`src/components/LiveDemo.tsx`) with
+  the phone's chat, pairing and Activity flows (`HeroPhoneChat.tsx`, `HeroPhoneHome.tsx`). The
+  v1.8.0 fixtures add member roles to Launch crew, a model dialog to Bot DMs, and detail panes
+  linked from messages and the Sessions list. The five Control Rail buttons switch the left panel, and the Host scope filters Channels,
+  Chats and Notifications. The Messages header opens its own Simple Layout subpanel column. Mira’s Memory rows open the file
+  reader or Git diff in the conversation area. The phone Profile uses the same Session, Memory,
+  Channel file and routine data as the desktop subpanels. `src/demoCopy.ts` and `src/previewCopy.ts` hold
+  the scripts and preview copy. The demo runs entirely in the visitor’s browser.
 - **Native screenshots**: the 1.5 release article reuses historical iOS Simulator captures, with
   source revisions, hashes and scope in `public/blog-figures/tobs-1-5/provenance.json`. Keep the
   originals unchanged and display them at their original aspect ratio. They are not evidence of
@@ -34,8 +38,9 @@ For repeatable local model setup across product worktrees, see the
   install identity. It targets the desktop-owned Profile via the actual desktop app/bundled CLI;
   copying is not installation. No installer runs in the browser. Keep the OS/user-confirmation,
   compatibility, Profile preservation and Bot-mode verification boundaries when editing it.
-- **Copy** lives in `src/content.ts`, `src/heroCopy.ts` and `src/setupPrompt.ts`. It only claims what the BotHarness README, CONTEXT and
-  CHANGELOG say has shipped; keep it that way when editing.
+- **Copy** lives in `src/content.ts`, `src/heroCopy.ts`, `src/previewCopy.ts` and `src/setupPrompt.ts`.
+  Current-release claims follow the BotHarness README, CONTEXT and CHANGELOG. Mark upcoming
+  features with the preview version and check their scope against upstream implementation and qualification.
 - **Avatar Studio**: `/avatar` and `/en/avatar` (`avatar.html`, `src/AvatarApp.tsx`) hold the full avatar editor in three panels: stage and tools, parts and drawing, colors and shape. The home page keeps the name, stage and tool morphs and links there. Both read and write the same design in this browser (`src/avatarStore.ts`).
 - **Font**: Fusion Pixel 12px SC (OFL). Dev serves the whole font; `vite build` subsets it to the
   characters in `index.html` and `src/` (about 13 KB instead of 600 KB), so new copy is covered

@@ -13,12 +13,15 @@ import {
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Lang } from '../content';
 import { HERO_COPY } from '../heroCopy';
+import type { ModelId } from '../previewCopy';
 import {
+  HERO_CONVERSATIONS,
   PHONE_HOSTS as HOSTS,
   PHONE_REQUESTS as REQUESTS,
   type PhoneHostId,
 } from '../heroPhoneData';
 import { prefersReducedMotion } from './PixelAvatar';
+import { HeroPhoneSettings, type PhoneSettingsPage } from './HeroPhoneSettings';
 
 export type PhoneScreen = 'chat' | 'chats' | 'activity' | 'settings';
 type Decision = 'allow' | 'deny';
@@ -36,9 +39,9 @@ export function HeroPhoneSource({ host }: { host: PhoneHostId }) {
   const source = HOSTS.find((item) => item.id === host)!;
   const Icon = host === 'studio' ? Laptop : FlaskConical;
   return (
-    <span className="hero-phone-source" data-host={host}>
+    <span className="hero-phone-source" data-host={host} title={source.name}>
       <Icon size={11} aria-hidden="true" />
-      {source.name}
+      <span>{source.name}</span>
     </span>
   );
 }
@@ -52,6 +55,9 @@ export function HeroPhoneHome({
   renderAvatar,
   renderChat,
   sharedRequest,
+  onPairComputer,
+  defaultModel,
+  onDefaultModel,
 }: {
   lang: Lang;
   autoScreen: PhoneScreen;
@@ -60,9 +66,13 @@ export function HeroPhoneHome({
   renderAvatar: (name: string, size: number) => ReactNode;
   renderChat: (onBack: () => void) => ReactNode;
   sharedRequest?: SharedPhoneRequest;
+  onPairComputer: () => void;
+  defaultModel: ModelId;
+  onDefaultModel: (model: ModelId) => void;
 }) {
   const t = HERO_COPY[lang];
   const [screen, setScreen] = useState(autoScreen);
+  const [settingsPage, setSettingsPage] = useState<PhoneSettingsPage>('root');
   const [host, setHost] = useState<PhoneHostId | 'all'>('all');
   const [decisions, setDecisions] = useState<Record<string, Decision>>({});
   const content = useRef<HTMLDivElement>(null);
@@ -111,6 +121,7 @@ export function HeroPhoneHome({
   }, [screen, autoPlay]);
   const navigate = (next: PhoneScreen, focus = false) => {
     focusContent.current = focus;
+    if (next === 'settings') setSettingsPage('root');
     setScreen(next);
   };
   const requests: PhoneRequest[] = [...REQUESTS];
@@ -121,18 +132,12 @@ export function HeroPhoneHome({
   const visibleRequests = requests.filter((request) => host === 'all' || request.host === host);
   const pending = visibleRequests.filter((request) => !decisionOf(request)).length;
   const title = lang === 'zh' ? '发布小队' : 'Launch crew';
-  const rows = [
-    { title, bot: '', host: 'studio' as const, channel: 0, preview: t.chatPreview },
-    { title: 'Mira', bot: 'Mira', host: 'studio' as const, channel: 1, preview: t.studioPreview },
-    {
-      title: 'Mira',
-      bot: 'Mira',
-      host: 'research' as const,
-      channel: 1,
-      preview: t.researchPreview,
+  const rows = HERO_CONVERSATIONS.filter((row) => host === 'all' || row.host === host).map(
+    ({ host, index, preview }) => {
+      const bot = index === 1 ? 'Mira' : index === 2 ? 'Nova' : '';
+      return { title: bot || title, bot, host, channel: index, preview: t[preview] };
     },
-    { title: 'Nova', bot: 'Nova', host: 'research' as const, channel: 2, preview: t.checkPreview },
-  ].filter((row) => host === 'all' || row.host === host);
+  );
   const pickers = useRef(new Map<string, HTMLDetailsElement>());
   const hostPicker = (compact: boolean) => (
     <details
@@ -178,6 +183,11 @@ export function HeroPhoneHome({
             {host === value ? <Check size={14} aria-hidden="true" /> : null}
           </button>
         ))}
+        {!compact ? (
+          <button type="button" onClick={onPairComputer}>
+            {t.pairComputer}
+          </button>
+        ) : null}
       </div>
     </details>
   );
@@ -192,139 +202,139 @@ export function HeroPhoneHome({
         renderChat(() => navigate('chats', true))
       ) : (
         <>
-          <div className="hero-phone-page" key={screen}>
-            <header className="hero-phone-page-head">
-              {screen === 'chats' ? (
-                hostPicker(false)
-              ) : (
-                <h3 tabIndex={-1}>
-                  {screen === 'activity' ? t.activity : t.settings}
-                  {screen === 'activity' && host !== 'all' ? <HeroPhoneSource host={host} /> : null}
-                </h3>
-              )}
-              {screen === 'activity' ? hostPicker(true) : null}
-            </header>
-            <div className="hero-phone-page-feed">
-              {screen === 'chats' ? (
-                <>
-                  <p className="hero-phone-section-label">
-                    {t.pinned} {rows.length}
-                  </p>
-                  <ul className="hero-phone-conversations">
-                    {rows.map((row) => (
-                      <li key={`${row.host}-${row.channel}`}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            onOpenChannel(row.channel, row.host);
-                            navigate('chat', true);
-                          }}
-                        >
-                          {row.bot ? (
-                            renderAvatar(row.bot, 31)
-                          ) : (
-                            <span className="hero-phone-group-icon">
-                              <Hash size={21} aria-hidden="true" />
-                            </span>
-                          )}
-                          <span className="hero-phone-conversation-copy">
-                            <span className="hero-phone-conversation-title">
-                              <strong>{row.title}</strong>
-                              <HeroPhoneSource host={row.host} />
-                            </span>
-                            <span className="hero-phone-row-preview">{row.preview}</span>
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : screen === 'activity' ? (
-                <>
-                  <div className="hero-phone-activity-sections">
-                    <strong>{t.needsAction}</strong>
-                    <span>{t.related}</span>
-                    <span>{t.unread}</span>
-                  </div>
-                  <ul className="hero-phone-requests">
-                    {visibleRequests.map((request) => {
-                      const decision = decisionOf(request);
-                      return (
-                        <li key={request.id} data-request={request.id} data-decision={decision}>
-                          <div className="hero-phone-request-source">
-                            {renderAvatar(request.bot, 24)}
-                            <strong>{request.bot}</strong>
-                            <HeroPhoneSource host={request.host} />
-                          </div>
-                          {decision ? (
-                            <p
-                              className="hero-phone-request-result"
-                              tabIndex={-1}
-                              aria-live="polite"
-                            >
-                              {decision !== 'deny' ? (
-                                <Check size={13} aria-hidden="true" />
-                              ) : (
-                                <X size={13} aria-hidden="true" />
-                              )}
-                              {decision === 'deny' ? t.rejected : t.approved}
-                            </p>
-                          ) : (
-                            <div className="hero-phone-request-card">
-                              <strong>{t.toolRequest}</strong>
-                              <code>{request.command}</code>
-                              <div>
-                                <button type="button" onClick={() => decide(request.id, 'allow')}>
-                                  {t.allowOnce}
-                                </button>
-                                <button type="button" onClick={() => decide(request.id, 'deny')}>
-                                  {t.reject}
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  {pending === 0 ? (
-                    <p className="hero-phone-caught-up" role="status">
-                      <Check size={20} aria-hidden="true" />
-                      {t.allHandled}
+          {screen === 'settings' ? (
+            <HeroPhoneSettings
+              lang={lang}
+              page={settingsPage}
+              onPage={setSettingsPage}
+              defaultModel={defaultModel}
+              onModel={onDefaultModel}
+            />
+          ) : (
+            <div className="hero-phone-page" key={screen}>
+              <header className="hero-phone-page-head">
+                {screen === 'chats' ? (
+                  hostPicker(false)
+                ) : (
+                  <h3 tabIndex={-1}>
+                    {t.activity}
+                    {host !== 'all' ? <HeroPhoneSource host={host} /> : null}
+                  </h3>
+                )}
+                {screen === 'activity' ? hostPicker(true) : null}
+              </header>
+              <div className="hero-phone-page-feed">
+                {screen === 'chats' ? (
+                  <>
+                    <p className="hero-phone-section-label">
+                      {t.pinned} {rows.length}
                     </p>
-                  ) : null}
-                </>
-              ) : (
-                <>
-                  <p className="hero-phone-section-label">{t.connectedComputers}</p>
-                  <ul className="hero-phone-computers">
-                    {HOSTS.map((item) => (
-                      <li key={item.id}>
-                        <HeroPhoneSource host={item.id} />
-                        <span className="hero-phone-connected">{t.connected}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
+                    <ul className="hero-phone-conversations">
+                      {rows.map((row) => (
+                        <li key={`${row.host}-${row.channel}`}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onOpenChannel(row.channel, row.host);
+                              navigate('chat', true);
+                            }}
+                          >
+                            {row.bot ? (
+                              renderAvatar(row.bot, 31)
+                            ) : (
+                              <span className="hero-phone-group-icon">
+                                <Hash size={21} aria-hidden="true" />
+                              </span>
+                            )}
+                            <span className="hero-phone-conversation-copy">
+                              <span className="hero-phone-conversation-title">
+                                <strong>{row.title}</strong>
+                                <HeroPhoneSource host={row.host} />
+                              </span>
+                              <span className="hero-phone-row-preview">{row.preview}</span>
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <>
+                    <div className="hero-phone-activity-sections">
+                      <strong>{t.needsAction}</strong>
+                      <span>{t.related}</span>
+                      <span>{t.unread}</span>
+                    </div>
+                    <ul className="hero-phone-requests">
+                      {visibleRequests.map((request) => {
+                        const decision = decisionOf(request);
+                        return (
+                          <li key={request.id} data-request={request.id} data-decision={decision}>
+                            <div className="hero-phone-request-source">
+                              {renderAvatar(request.bot, 24)}
+                              <strong>{request.bot}</strong>
+                              <HeroPhoneSource host={request.host} />
+                            </div>
+                            {decision ? (
+                              <p
+                                className="hero-phone-request-result"
+                                tabIndex={-1}
+                                aria-live="polite"
+                              >
+                                {decision !== 'deny' ? (
+                                  <Check size={13} aria-hidden="true" />
+                                ) : (
+                                  <X size={13} aria-hidden="true" />
+                                )}
+                                {decision === 'deny' ? t.rejected : t.approved}
+                              </p>
+                            ) : (
+                              <div className="hero-phone-request-card">
+                                <strong>{t.toolRequest}</strong>
+                                <code>{request.command}</code>
+                                <div>
+                                  <button type="button" onClick={() => decide(request.id, 'allow')}>
+                                    {t.allowOnce}
+                                  </button>
+                                  <button type="button" onClick={() => decide(request.id, 'deny')}>
+                                    {t.reject}
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    {pending === 0 ? (
+                      <p className="hero-phone-caught-up" role="status">
+                        <Check size={20} aria-hidden="true" />
+                        {t.allHandled}
+                      </p>
+                    ) : null}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-          <nav className="hero-phone-tabbar" aria-label={t.mobileNavigation}>
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                aria-pressed={screen === tab.id}
-                onClick={() => navigate(tab.id)}
-              >
-                <span>
-                  <tab.Icon size={21} aria-hidden="true" />
-                  {tab.id === 'activity' && pending > 0 ? <i>{pending}</i> : null}
-                </span>
-                {tab.label}
-              </button>
-            ))}
-          </nav>
+          )}
+          {screen !== 'settings' || settingsPage === 'root' ? (
+            <nav className="hero-phone-tabbar" aria-label={t.mobileNavigation}>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  aria-pressed={screen === tab.id}
+                  onClick={() => navigate(tab.id)}
+                >
+                  <span>
+                    <tab.Icon size={21} aria-hidden="true" />
+                    {tab.id === 'activity' && pending > 0 ? <i>{pending}</i> : null}
+                  </span>
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          ) : null}
         </>
       )}
     </div>

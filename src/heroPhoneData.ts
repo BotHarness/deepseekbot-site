@@ -2,8 +2,14 @@ import type { DemoChannel, DemoStep } from './demoCopy';
 
 export type PhoneHostId = 'studio' | 'research';
 export const PHONE_HOSTS = [
-  { id: 'studio', name: 'Studio Mac' },
+  { id: 'studio', name: 'Studio Linux' },
   { id: 'research', name: 'Research PC' },
+] as const;
+export const HERO_CONVERSATIONS = [
+  { host: 'studio', index: 0, preview: 'chatPreview' },
+  { host: 'studio', index: 1, preview: 'studioPreview' },
+  { host: 'research', index: 1, preview: 'researchPreview' },
+  { host: 'research', index: 2, preview: 'checkPreview' },
 ] as const;
 export const PHONE_REQUESTS = [
   { id: 'studio-check', host: 'studio', bot: 'Nova', command: 'git diff --check' },
@@ -15,6 +21,7 @@ type Story = {
   introReply: string;
   researchPrompt: string;
   researchReply: string;
+  researchCommit: string;
   checkPrompt: string;
   checkReply: string;
 };
@@ -52,5 +59,27 @@ export function phoneChannel(
       steps = [...intro, ...steps.slice(approval)];
     }
   }
-  return { ...channel, id: phoneChannelKey(host, channel.id), steps };
+  const panel =
+    host === 'research' && index === 1
+      ? channel.panel.map((section) => {
+          if (section.id === 'commits')
+            return {
+              ...section,
+              items: section.items.map((item) => ({
+                ...item,
+                title: story.researchCommit,
+                sha: 'b48d1fc',
+              })),
+            };
+          if (section.id === 'channel-files')
+            return {
+              ...section,
+              items: [
+                { id: 'research-brief', title: 'research/brief.md', text: story.researchReply },
+              ],
+            };
+          return section;
+        })
+      : channel.panel;
+  return { ...channel, id: phoneChannelKey(host, channel.id), steps, panel };
 }
