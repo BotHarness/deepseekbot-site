@@ -1,13 +1,4 @@
-import {
-  Check,
-  ChevronLeft,
-  Laptop,
-  ScanLine,
-  ShieldCheck,
-  Smartphone,
-  Wifi,
-  X,
-} from 'lucide-react';
+import { Check, ChevronLeft, Laptop, ScanLine, ShieldCheck, Wifi, X } from 'lucide-react';
 import { useId } from 'react';
 import type { Lang } from '../content';
 import { HERO_PAIRING_COPY } from '../heroPairingCopy';
@@ -32,21 +23,21 @@ export function HeroPairingDialog({ lang, computer, state, onChange, onFinish }:
   const titleId = useId();
   const current = step === 'method' ? 0 : 1;
   const methodName = method === 'lan' ? t.lan : 'Tailscale';
-  const showCode = step === 'code' || step === 'scan';
-  const verified = step === 'verify' || step === 'approve';
+  const showFingerprint = step === 'verify' || step === 'approve';
   return (
     <div className="hero-pair-overlay">
       <div className="hero-pair-stack">
         <p className="hero-pair-stage-title" id={titleId}>
-          {step === 'paired' ? t.connectedTitle : t.stageTitle}
+          {t.stageTitle}
         </p>
         <section className="hero-pair-dialog app-pane" role="dialog" aria-labelledby={titleId}>
           <header>
-            {current > 0 && step !== 'paired' ? (
+            {current > 0 ? (
               <button
                 type="button"
-                className="app-icon-btn"
+                className="app-icon-btn hero-pair-back"
                 aria-label={t.back}
+                disabled={step === 'paired'}
                 onClick={() => onChange('method')}
               >
                 <ChevronLeft size={16} aria-hidden="true" />
@@ -94,63 +85,52 @@ export function HeroPairingDialog({ lang, computer, state, onChange, onFinish }:
                   </button>
                 </div>
               </>
-            ) : showCode ? (
-              <div className="hero-pair-code">
-                <h4 data-pair-focus tabIndex={-1}>
-                  {t.code}
-                </h4>
-                <div className="hero-pair-qr" role="img" aria-label={t.qrLabel}>
-                  <PairCode />
-                </div>
-                <small>
-                  {computer} · {methodName}
-                </small>
-                {step === 'code' ? (
-                  <button
-                    type="button"
-                    className="app-btn hero-pair-primary"
-                    onClick={() => onChange('scan')}
-                  >
-                    {t.openScanner}
-                  </button>
-                ) : null}
-              </div>
-            ) : verified ? (
-              <>
-                <h4 data-pair-focus tabIndex={-1}>
-                  {step === 'verify' ? t.verify : t.approve}
-                </h4>
-                <div className="hero-pair-ready">
-                  <Smartphone size={18} aria-hidden="true" />
-                  <div>
-                    <strong>{t.phone}</strong>
-                    <p>{t.verifyHint}</p>
-                  </div>
-                </div>
-                <code className="hero-pair-fingerprint">{FINGERPRINT}</code>
-                {step === 'approve' ? (
-                  <button
-                    type="button"
-                    className="app-btn hero-pair-primary"
-                    onClick={() => onChange('paired')}
-                  >
-                    {t.approve}
-                  </button>
-                ) : null}
-              </>
             ) : (
-              <>
-                <h4 data-pair-focus tabIndex={-1}>
-                  {t.paired}
-                </h4>
-                <div className="hero-pair-ready">
-                  <Check size={18} aria-hidden="true" />
-                  {t.phone}
+              <div className="hero-pair-code">
+                <div className="hero-pair-code-image">
+                  <div className="hero-pair-qr" role="img" aria-label={t.qrLabel}>
+                    <PairCode />
+                  </div>
+                  <small>
+                    {computer} · {methodName}
+                  </small>
                 </div>
-                <button type="button" className="app-btn hero-pair-primary" onClick={onFinish}>
-                  {t.done}
-                </button>
-              </>
+                <div className="hero-pair-code-status">
+                  <h4 className="hero-pair-code-heading" data-pair-focus tabIndex={-1}>
+                    {step === 'paired' ? <Check size={16} aria-hidden="true" /> : null}
+                    {step === 'paired' ? t.paired : t.scanTitle}
+                  </h4>
+                  {showFingerprint ? (
+                    <>
+                      <small>{t.verifyHint}</small>
+                      <code className="hero-pair-fingerprint">{FINGERPRINT}</code>
+                    </>
+                  ) : step !== 'paired' ? (
+                    <small>{t.code}</small>
+                  ) : null}
+                  {step === 'code' ? (
+                    <button
+                      type="button"
+                      className="app-btn hero-pair-primary"
+                      onClick={() => onChange('scan')}
+                    >
+                      {t.openScanner}
+                    </button>
+                  ) : step === 'approve' ? (
+                    <button
+                      type="button"
+                      className="app-btn hero-pair-primary"
+                      onClick={() => onChange('paired')}
+                    >
+                      {t.approve}
+                    </button>
+                  ) : step === 'paired' ? (
+                    <button type="button" className="app-btn hero-pair-primary" onClick={onFinish}>
+                      {t.done}
+                    </button>
+                  ) : null}
+                </div>
+              </div>
             )}
             <small className="hero-pair-note">{t.demo}</small>
           </div>

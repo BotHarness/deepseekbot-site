@@ -733,6 +733,9 @@ a.beta-button {
 .hero-pair-dialog > header strong {
   flex: 1;
 }
+.hero-pair-back:disabled {
+  visibility: hidden;
+}
 .hero-pair-dialog-body {
   display: grid;
   gap: 14px;
@@ -793,8 +796,7 @@ a.beta-button {
   display: grid;
   gap: 6px;
 }
-.hero-pair-choices button,
-.hero-pair-ready {
+.hero-pair-choices button {
   display: flex;
   min-width: 0;
   align-items: flex-start;
@@ -805,23 +807,16 @@ a.beta-button {
   background: var(--app-side);
   color: var(--app-ink);
   text-align: start;
-}
-.hero-pair-choices button {
   cursor: pointer;
 }
 .hero-pair-choices button:hover {
   background: var(--app-hover);
 }
-.hero-pair-choices svg,
-.hero-pair-ready svg {
+.hero-pair-choices svg {
   flex: none;
   margin-top: 1px;
 }
-.hero-pair-ready svg {
-  color: var(--app-ok);
-}
 .hero-pair-choices small,
-.hero-pair-ready p,
 .hero-pair-note,
 .hero-pair-code small {
   display: block;
@@ -831,9 +826,32 @@ a.beta-button {
 }
 .hero-pair-code {
   display: grid;
+  grid-template-columns: min(38%, 146px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(10px, 3vw, 18px);
+}
+.hero-pair-code-image {
+  display: grid;
   justify-items: center;
-  gap: 8px;
+  gap: 5px;
   text-align: center;
+}
+.hero-pair-code-status {
+  display: grid;
+  justify-items: start;
+  gap: 7px;
+}
+.hero-pair-code-heading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hero-pair-code-heading svg {
+  flex: none;
+  color: var(--app-ok);
+}
+.hero-pair-code-status .hero-pair-fingerprint {
+  font-size: 11px;
 }
 .hero-pair-qr {
   display: grid;
@@ -851,9 +869,6 @@ a.beta-button {
   border-color: var(--app-info);
   background: var(--app-info-bg);
   color: var(--app-info);
-}
-.hero-pair-code .hero-pair-primary {
-  justify-self: center;
 }
 .hero-pair-phone {
   display: flex;
