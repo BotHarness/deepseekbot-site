@@ -1061,18 +1061,25 @@ button.app-chat-identity {
   isolation: isolate;
   margin: 0;
   padding: 32px 28px 20px;
+}
+
+.feature-demo,
+.workflow-bento > .workflow-card {
   background: linear-gradient(var(--sky-top), var(--sky-bottom));
   border: var(--px) solid var(--px-ink);
   box-shadow: 6px 6px 0 var(--px-shadow);
 }
 .feature-row:nth-child(3n + 2) .feature-demo,
-.workflow-feature-grid .feature-demo[data-demo='schedules'] {
+.workflow-feature-grid .feature-demo[data-demo='schedules'],
+.workflow-bento > .workflow-card--chat {
   background: linear-gradient(var(--grass-light), var(--grass));
 }
-.feature-row:nth-child(3n) .feature-demo {
+.feature-row:nth-child(3n) .feature-demo,
+.workflow-bento > .workflow-card--memory {
   background: linear-gradient(#ffcf8a, #f59a6b);
 }
-:root[data-theme='dark'] .feature-row:nth-child(3n) .feature-demo {
+:root[data-theme='dark'] .feature-row:nth-child(3n) .feature-demo,
+:root[data-theme='dark'] .workflow-bento > .workflow-card--memory {
   background: linear-gradient(#3a2550, #6b3a4f);
 }
 .feature-demo figcaption {

@@ -12,7 +12,31 @@
 }
 
 .workflow-bento {
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.workflow-bento-description br {
+  display: none;
+}
+
+@media (min-width: 861px) {
+  .workflow-bento {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .workflow-bento-description br {
+    display: revert;
+  }
+
+  .workflow-bento > :is(.workflow-card--engine, .workflow-card--chat) {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+
+  .workflow-bento > :is(.workflow-card--engine, .workflow-card--chat) > .workflow-demo {
+    margin-top: 0;
+  }
 }
 
 .workflow-card,
@@ -46,16 +70,8 @@
   color: var(--ink-soft);
 }
 
-.workflow-card--engine {
-  background: color-mix(in srgb, var(--workflow-surface), var(--accent) 20%);
-}
-
-.workflow-card--chat {
-  background: color-mix(in srgb, var(--workflow-surface), var(--grass-light) 31%);
-}
-
-.workflow-card--memory {
-  background: color-mix(in srgb, var(--workflow-surface), var(--soil) 29%);
+.workflow-bento :is(.workflow-card > p, .workflow-card > div > p, .workflow-link) {
+  color: var(--ink);
 }
 
 .workflow-card--memory {
@@ -274,7 +290,6 @@
 }
 
 .workflow-bento .workflow-link {
-  color: color-mix(in srgb, var(--accent), var(--ink) 38%);
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
@@ -560,7 +575,6 @@
 }
 
 @media (max-width: 680px) {
-  .workflow-bento,
   .workflow-feature-grid,
   .workflow-people-panels,
   .workflow-card--memory {

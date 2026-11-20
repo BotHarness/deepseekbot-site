@@ -193,12 +193,18 @@ export function HowTobsWorks({ copy, lang }: { copy: Copy; lang: Lang }) {
       <div className="workflow-bento">
         <article className="workflow-card workflow-card--engine">
           <h3>{t.engine}</h3>
-          <p>{t.engineBody}</p>
+          <p className="workflow-bento-description">
+            {t.engineBody[0]} <br />
+            {t.engineBody[1]}
+          </p>
           <EngineDemo lang={lang} />
         </article>
         <article className="workflow-card workflow-card--chat">
           <h3>{t.chat}</h3>
-          <p>{t.chatBody}</p>
+          <p className="workflow-bento-description">
+            {t.chatBody[0]} <br />
+            {t.chatBody[1]}
+          </p>
           <ConversationDemo t={t} />
         </article>
         <article className="workflow-card workflow-card--memory">

@@ -6,14 +6,13 @@ export const HOMEPAGE_COPY = {
     howLead:
       'Harness 负责执行任务，BotHarness 管理对话、协作与长期记忆——建好一个 Bot，直接发消息就能开工。',
     engine: '用已有的模型与订阅',
-    engineBody:
-      '在 DeepSeek Harness 里接入兼容的 API 模型，或在本机用 Codex、Claude Code 的官方 CLI 登录符合条件的订阅。',
+    engineBody: ['在 DeepSeek Harness 里接入 API 模型，', '或在本机用 Codex 或 Claude Code 订阅。'],
     enginePicker: '选择运行方式',
     apiHint: '在 DSH 配置兼容模型和 API Key',
     codexHint: '用官方 Codex CLI 登录符合条件的 ChatGPT 订阅',
     claudeHint: '用官方 Claude Code CLI 登录符合条件的 Claude 订阅',
     chat: '给 Bot 发条消息',
-    chatBody: '私聊一个 Bot，或在群里 @ 多个 Bot，沿着同一段对话接力。',
+    chatBody: ['私聊一个 Bot，或在群里 @ 多个 Bot，', '让它们接着同一段对话继续工作。'],
     dm: '私聊',
     group: '共享频道',
     sampleRoom: '发布小队',
@@ -94,16 +93,20 @@ export const HOMEPAGE_COPY = {
     how: 'How Tobs works',
     howLead:
       'The harness runs the work while BotHarness handles conversations, collaboration, and memory—create a Bot and message it like a teammate.',
-    engine: 'Use the AI you already pay for',
-    engineBody:
-      'Connect a compatible API model in DeepSeek Harness, or sign in to an eligible subscription locally with the official Codex or Claude Code CLI.',
+    engine: 'Use your own AI',
+    engineBody: [
+      'Use an API key in DeepSeek Harness,',
+      'or use a Codex or Claude Code plan locally.',
+    ],
     enginePicker: 'Choose how to run a Bot',
     apiHint: 'Configure a compatible model and API key in DSH',
     codexHint: 'Sign in to an eligible ChatGPT subscription with the official Codex CLI',
     claudeHint: 'Sign in to an eligible Claude subscription with the official Claude Code CLI',
-    chat: 'Send your Bots a message',
-    chatBody:
-      'DM one Bot or @mention several in a Group so they can pick up where each other left off.',
+    chat: 'Message your Bots',
+    chatBody: [
+      'DM a Bot or @mention several in a Group',
+      'so they can pick up where the others left off.',
+    ],
     dm: 'Direct message',
     group: 'Shared Channel',
     sampleRoom: 'Launch crew',
