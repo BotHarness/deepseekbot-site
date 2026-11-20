@@ -39,7 +39,7 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   width: 100%;
-  max-width: 1440px;
+  max-width: var(--home-demo-max-width);
   margin-inline: auto;
 }
 .hero-copy {
@@ -217,7 +217,7 @@ a.beta-button {
 }
 .hero-product {
   min-width: 0;
-  margin: 0 clamp(0px, 10vw - 90px, 48px);
+  margin: 0 var(--home-demo-inset);
 }
 .hero-linked {
   --hero-phone-width: 280px;

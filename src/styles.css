@@ -314,12 +314,18 @@ a:where(:not(.astryx-button)) {
 }
 
 /* ---- hero ---- */
+:root {
+  --home-demo-gutter: 24px;
+  --home-demo-max-width: 1440px;
+  --home-demo-inset: clamp(0px, 10vw - 90px, 48px);
+}
+
 .hero {
   position: relative;
   overflow: hidden;
   display: grid;
   gap: 32px;
-  padding: 72px 24px 0;
+  padding: 72px var(--home-demo-gutter) 0;
   background: linear-gradient(var(--sky-top), var(--sky-bottom));
   isolation: isolate;
 }
@@ -1514,6 +1520,10 @@ a.sponsor-x:hover .sponsor-x-name {
   }
 }
 @media (max-width: 860px) {
+  :root {
+    --home-demo-gutter: 16px;
+  }
+
   .consent-bar {
     left: 16px;
     max-width: none;
@@ -1540,7 +1550,7 @@ a.sponsor-x:hover .sponsor-x-name {
     width: 32px;
   }
   .hero {
-    padding: 48px 16px 0;
+    padding-top: 48px;
   }
   .ground {
     margin-inline: -16px;
