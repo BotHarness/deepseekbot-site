@@ -42,7 +42,7 @@ export function AvatarApp() {
         <p className="kicker">{copy.studio.kicker}</p>
         <h1 className="market-title">{copy.studio.title}</h1>
         <p className="section-lead">{copy.studio.lead}</p>
-        <Playground copy={copy} lang={lang} design={design} studio />
+        <Playground copy={copy} design={design} />
       </main>
       <footer className="footer market-footer">
         <SponsorFooter lang={lang} />

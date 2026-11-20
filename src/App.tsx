@@ -11,7 +11,6 @@ import { LiveDemo } from './components/LiveDemo';
 import { Install } from './components/Install';
 import { MobileBeta } from './components/MobileBeta';
 import { PromoVideo } from './components/PromoVideo';
-import { Playground } from './components/Playground';
 import { Sponsors } from './components/Sponsors';
 import { HomepageFeatures, HomepageFooter, HowTobsWorks } from './components/HomepageSections';
 import { COPY, LINKS } from './content';
@@ -99,28 +98,6 @@ export function App() {
           <h2 id="video-title">{copy.video.title}</h2>
           <p className="section-lead">{copy.video.lead}</p>
           <PromoVideo copy={copy} />
-        </section>
-
-        <section className="section section--alt" id="avatar" aria-labelledby="avatar-title">
-          <p className="kicker">{copy.playground.kicker}</p>
-          <h2 id="avatar-title">{copy.playground.title}</h2>
-          <p className="section-lead">{copy.playground.lead}</p>
-          <p className="botpixel-cta">
-            <span>{copy.playground.botpixel.ask}</span>
-            <a
-              className="has-tip"
-              href={LINKS.botpixel}
-              target="_blank"
-              rel="noreferrer"
-              aria-describedby="botpixel-tip"
-            >
-              {copy.playground.botpixel.link} →
-              <span className="tip" role="tooltip" id="botpixel-tip">
-                {copy.playground.botpixel.tip}
-              </span>
-            </a>
-          </p>
-          <Playground copy={copy} lang={lang} design={design} />
         </section>
 
         <section className="section" id="reviews" aria-labelledby="reviews-title">

@@ -41,7 +41,7 @@ For repeatable local model setup across product worktrees, see the
 - **Copy** lives in `src/content.ts`, `src/heroCopy.ts`, `src/previewCopy.ts` and `src/setupPrompt.ts`.
   Current-release claims follow the BotHarness README, CONTEXT and CHANGELOG. Mark upcoming
   features with the preview version and check their scope against upstream implementation and qualification.
-- **Avatar Studio**: `/avatar` and `/en/avatar` (`avatar.html`, `src/AvatarApp.tsx`) hold the full avatar editor in three panels: stage and tools, parts and drawing, colors and shape. The home page keeps the name, stage and tool morphs and links there. Both read and write the same design in this browser (`src/avatarStore.ts`).
+- **Avatar Studio**: `/avatar` and `/en/avatar` (`avatar.html`, `src/AvatarApp.tsx`) hold the full avatar editor in three panels: stage and tools, parts and drawing, colors and shape. The homepage companion wears the design saved in the browser (`src/avatarStore.ts`).
 - **Font**: Fusion Pixel 12px SC (OFL). Dev serves the whole font; `vite build` subsets it to the
   characters in `index.html` and `src/` (about 13 KB instead of 600 KB), so new copy is covered
   automatically.

@@ -228,9 +228,6 @@ export interface Copy {
     };
   };
   playground: {
-    kicker: string;
-    title: string;
-    lead: string;
     nameLabel: string;
     namePlaceholder: string;
     toolsLabel: string;
@@ -239,9 +236,6 @@ export interface Copy {
     download: string;
     editor: { title: string; lead: string; parts: string; reset: string; shuffle: string };
     caption: string;
-    botpixel: { ask: string; link: string; tip: string };
-    /** the home page's way into the Avatar Studio, which holds the full editor */
-    studio: { title: string; body: string; cta: string };
   };
   avatarLabels: AvatarLabels;
   install: {
@@ -679,9 +673,6 @@ const zh: Copy = {
     },
   },
   playground: {
-    kicker: 'BotPixel',
-    title: '输入名字，得到一张脸',
-    lead: '每个 Bot 的默认头像都由名字生成，同一个名字总是生成同一张脸。Bot 工作时，头像会一颗像素一颗像素地变成它正在用的工具。',
     nameLabel: 'Bot 名字',
     namePlaceholder: '比如 Mira',
     toolsLabel: '让它用一个工具',
@@ -696,16 +687,6 @@ const zh: Copy = {
       shuffle: '随机捏一个',
     },
     caption: '头像来自开源的 @botharness/pixel-avatar，变形来自 @botharness/pixel-morph。',
-    botpixel: {
-      ask: '想在自己的项目里用像素头像？',
-      link: 'BotPixel 开源在 GitHub',
-      tip: '同一个名字生成同一张脸，还能变成工具图标。npm i @botharness/pixel-avatar',
-    },
-    studio: {
-      title: '想细细捏一张脸？',
-      body: '头像工坊里有全部物种、部件、颜色和绘制工具，画好的部件还能导出。设计会保存在这个浏览器里。',
-      cta: '打开头像工坊',
-    },
   },
   avatarLabels: ZH_AVATAR_LABELS,
   demo: ZH_DEMO,
@@ -1194,9 +1175,6 @@ const en: Copy = {
     },
   },
   playground: {
-    kicker: 'BotPixel',
-    title: 'Type a name, get a face',
-    lead: 'Every Bot’s default avatar is generated from its name, and the same name always gives the same face. While a Bot works, its avatar turns into the tool it is using, pixel by pixel.',
     nameLabel: 'Bot name',
     namePlaceholder: 'e.g. Mira',
     toolsLabel: 'Hand it a tool',
@@ -1212,16 +1190,6 @@ const en: Copy = {
     },
     caption:
       'Avatars by the open-source @botharness/pixel-avatar, morphs by @botharness/pixel-morph.',
-    botpixel: {
-      ask: 'Want pixel avatars in your own project?',
-      link: 'BotPixel is open source on GitHub',
-      tip: 'The same name always gives the same face, and it morphs into tool icons. npm i @botharness/pixel-avatar',
-    },
-    studio: {
-      title: 'Want to get every detail right?',
-      body: 'The Avatar Studio has every species, part, color and drawing tool, and drawn parts can be exported. Your design is saved in this browser.',
-      cta: 'Open the Avatar Studio',
-    },
   },
   avatarLabels: EN_AVATAR_LABELS,
   demo: EN_DEMO,
