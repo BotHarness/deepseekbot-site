@@ -24,7 +24,7 @@ For repeatable local model setup across product worktrees, see the
 
 - **Live demo**: the Hero couples the desktop workspace (`src/components/LiveDemo.tsx`) with
   the phone's chat, pairing and Activity flows (`HeroPhoneChat.tsx`, `HeroPhoneHome.tsx`). The
-  v1.8.0 fixtures add member roles to Launch crew, a model dialog to Nova’s DM, and detail panes
+  v1.8.0 fixtures add member roles to Launch crew, a model dialog to Bot DMs, and detail panes
   linked from messages and the Sessions list. The five Control Rail buttons switch the left panel, and the Host scope filters Channels,
   Chats and Notifications. The Messages header opens its own Simple Layout subpanel column. Mira’s Memory rows open the file
   reader or Git diff in the conversation area. The phone Profile uses the same Session, Memory,

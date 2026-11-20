@@ -64,7 +64,7 @@ export const PREVIEW_COPY = {
     marketMira: '研究资料和整理简报',
     marketNova: '检查改动和跟进发布',
     caption:
-      '在共享频道发消息，或点消息里的 Session 查看详情。在 Nova 私聊中，桌面可从顶栏切换模型，手机可点头像进入资料页的设置。演示人物和任务均为虚构，消息只在当前页面显示。',
+      '在共享频道发消息，或点消息里的 Session 查看详情。打开任一 Bot 私聊，桌面可从消息栏右上角切换模型，手机可点头像进入资料页的设置。在 Research PC 上可体验 API 和本机订阅来源。演示人物和任务均为虚构，消息只在当前页面显示。',
     teamTitle: '团队模式（Team mode）',
     teamBody:
       '一台 Host 服务一个小团队。Owner 主动开启试用并邀请成员，各自用自己的账号登录。Owner 和获授权的 Admin 管理成员与角色，成员按权限私聊，在共享 Channel 里和同事、Bot 协作。v1.8.0 试用以通过 Bot 执行隔离验收的 Linux Host 为范围。',
@@ -187,7 +187,7 @@ export const PREVIEW_COPY = {
     marketMira: 'Research and short briefs',
     marketNova: 'Code review and release follow-up',
     caption:
-      'Post in the shared Channel or follow a Session link. In Nova’s DM, change models from the desktop header or from Profile Settings on the phone. The people and tasks are fictional, and demo messages stay on this page.',
+      'Post in the shared Channel or follow a Session link. In any Bot DM, change models at the top right of Messages on desktop or in Profile Settings on the phone. Open a Research PC DM to try API and local subscription sources. The people and tasks are fictional, and demo messages stay on this page.',
     teamTitle: 'Team mode',
     teamBody:
       'One Host serves a small team. The Owner opts in and invites people to sign in with their own accounts. The Owner and authorized Admins manage members and roles. Members can message each other and work with Bots in shared Channels according to their permissions. The v1.8.0 trial targets Linux Hosts that pass Bot execution isolation checks.',

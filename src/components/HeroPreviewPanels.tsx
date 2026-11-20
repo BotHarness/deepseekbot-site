@@ -42,11 +42,13 @@ export function ModelSource({ model, t }: { model: PreviewModel; t: PreviewCopy 
 export function PreviewModelDialog({
   t,
   plan,
+  allowSubscriptions,
   onSave,
   onCancel,
 }: {
   t: PreviewCopy;
   plan: ModelPlan;
+  allowSubscriptions: boolean;
   onSave: (plan: ModelPlan) => void;
   onCancel: () => void;
 }) {
@@ -56,7 +58,10 @@ export function PreviewModelDialog({
   const [search, setSearch] = useState('');
   const roleButtons = useRef<Partial<Record<Role, HTMLButtonElement>>>({});
   const [filter, setFilter] = useState<ModelId | 'all'>('all');
-  const matches = PREVIEW_MODELS.filter(
+  const availableModels = allowSubscriptions
+    ? PREVIEW_MODELS
+    : PREVIEW_MODELS.filter((model) => model.source === 'api');
+  const matches = availableModels.filter(
     (model) =>
       (filter === 'all' || filter === model.id) &&
       (model.name + ' ' + source(model, t)).toLowerCase().includes(search.trim().toLowerCase()),
@@ -73,7 +78,7 @@ export function PreviewModelDialog({
         >
           <Layers2 size={16} aria-hidden="true" />
         </button>
-        {PREVIEW_MODELS.map((model) => (
+        {availableModels.map((model) => (
           <button
             type="button"
             key={model.id}
@@ -135,14 +140,16 @@ export function PreviewModelDialog({
   return (
     <>
       <div className="preview-model-fields">
-        <div className="preview-segments" role="group" aria-label={t.modelPicker}>
-          <button type="button" aria-pressed={!preset} onClick={() => setPreset(false)}>
-            {t.specific}
-          </button>
-          <button type="button" aria-pressed={preset} onClick={() => setPreset(true)}>
-            {t.presets}
-          </button>
-        </div>
+        {allowSubscriptions ? (
+          <div className="preview-segments" role="group" aria-label={t.modelPicker}>
+            <button type="button" aria-pressed={!preset} onClick={() => setPreset(false)}>
+              {t.specific}
+            </button>
+            <button type="button" aria-pressed={preset} onClick={() => setPreset(true)}>
+              {t.presets}
+            </button>
+          </div>
+        ) : null}
         {preset ? (
           <button
             type="button"

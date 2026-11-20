@@ -130,7 +130,7 @@
   min-width: 0;
   align-items: center;
   gap: 6px;
-  margin-inline-start: 4px;
+  margin-inline-start: auto;
   padding: 4px 8px;
   border: 0;
   border-radius: 6px;
@@ -144,7 +144,15 @@
   background: var(--app-hover);
 }
 
-.preview-model-trigger > span:last-child {
+.app-chat-head .preview-model-trigger + .app-panel-toggle {
+  margin-inline-start: 4px;
+}
+
+.preview-model-trigger > svg {
+  flex: none;
+}
+
+.preview-model-trigger-name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

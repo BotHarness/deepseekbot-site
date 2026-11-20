@@ -7,6 +7,7 @@ import {
   BatteryFull,
   Brain,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Ellipsis,
@@ -852,13 +853,12 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       aria-label={preview.modelPicker + ' · ' + model.name}
       aria-haspopup="dialog"
       aria-expanded={previewPanel?.surface === 'desktop' && previewPanel.kind === 'models'}
-      title={
-        model.provider + ' · ' + (model.source === 'api' ? preview.api : preview.plans[model.id])
-      }
+      title={`${model.name} · ${model.provider} · ${model.source === 'api' ? preview.api : preview.plans[model.id]}`}
       onClick={(event) => showPreview('models', 'desktop', event.currentTarget)}
     >
       <PreviewModelIcon brand={model.brand} subscription={model.source === 'subscription'} />
-      <span>{model.name}</span>
+      <span className="preview-model-trigger-name">{model.name}</span>
+      <ChevronDown size={12} aria-hidden="true" />
     </button>
   );
   const teamMembers = [
@@ -1027,6 +1027,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           <PreviewModelDialog
             t={preview}
             plan={modelPlan}
+            allowSubscriptions={phoneHost === 'research'}
             onCancel={closePreview}
             onSave={(next) => {
               saveModelPlan(next);
@@ -1488,7 +1489,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   </span>
                 ) : null}
               </span>
-              {isPreviewBot ? modelTrigger : null}
+              {linkedPhone && channel.kind === 'dm' ? modelTrigger : null}
               <button
                 type="button"
                 className="app-icon-btn app-panel-toggle"
