@@ -21,6 +21,7 @@ type Role = 'main' | 'task';
 export type ModelPlan = Record<Role, ModelId>;
 export const DEFAULT_PREVIEW_MODELS: ModelPlan = { main: 'deepseek', task: 'opencode' };
 const PRESET: ModelPlan = { main: 'claude', task: 'codex' };
+const MODEL_SOURCES = ['api', 'subscription'] as const;
 
 export function previewModel(id: ModelId) {
   return PREVIEW_MODELS.find((model) => model.id === id)!;
@@ -58,14 +59,13 @@ export function PreviewModelDialog({
   const [search, setSearch] = useState('');
   const roleButtons = useRef<Partial<Record<Role, HTMLButtonElement>>>({});
   const [filter, setFilter] = useState<ModelId | 'all'>('all');
-  const availableModels = allowSubscriptions
-    ? PREVIEW_MODELS
-    : PREVIEW_MODELS.filter((model) => model.source === 'api');
-  const matches = availableModels.filter(
-    (model) =>
+  const matches = PREVIEW_MODELS.filter((model) => {
+    const name = allowSubscriptions || model.source === 'api' ? model.name : model.provider;
+    return (
       (filter === 'all' || filter === model.id) &&
-      (model.name + ' ' + source(model, t)).toLowerCase().includes(search.trim().toLowerCase()),
-  );
+      (name + ' ' + source(model, t)).toLowerCase().includes(search.trim().toLowerCase())
+    );
+  });
   const modelOptions = (
     <div className="preview-model-menu">
       <div className="preview-filters" role="group" aria-label={t.catalog}>
@@ -78,20 +78,24 @@ export function PreviewModelDialog({
         >
           <Layers2 size={16} aria-hidden="true" />
         </button>
-        {availableModels.map((model) => (
-          <button
-            type="button"
-            key={model.id}
-            aria-label={source(model, t)}
-            title={source(model, t)}
-            aria-pressed={filter === model.id}
-            onClick={() => setFilter(model.id)}
-          >
-            <PreviewModelIcon
-              brand={'providerBrand' in model ? model.providerBrand : model.brand}
-              subscription={model.source === 'subscription'}
-            />
-          </button>
+        {MODEL_SOURCES.map((kind) => (
+          <div className="preview-model-filter-group" role="group" aria-label={t[kind]} key={kind}>
+            {PREVIEW_MODELS.filter((model) => model.source === kind).map((model) => (
+              <button
+                type="button"
+                key={model.id}
+                aria-label={source(model, t)}
+                title={source(model, t)}
+                aria-pressed={filter === model.id}
+                onClick={() => setFilter(model.id)}
+              >
+                <PreviewModelIcon
+                  brand={'providerBrand' in model ? model.providerBrand : model.brand}
+                  subscription={kind === 'subscription'}
+                />
+              </button>
+            ))}
+          </div>
         ))}
       </div>
       <div className="preview-model-results">
@@ -105,34 +109,53 @@ export function PreviewModelDialog({
           />
         </label>
         {matches.length === 0 ? <p className="preview-hint">{t.noModels}</p> : null}
-        <ul className="preview-list">
-          {matches.map((model) => (
-            <li key={model.id}>
-              <button
-                type="button"
-                className="preview-model-row"
-                aria-pressed={role ? draft[role] === model.id : false}
-                onClick={() => {
-                  if (!role) return;
-                  setDraft({ ...draft, [role]: model.id });
-                  setRole(null);
-                  setSearch('');
-                  roleButtons.current[role]?.focus();
-                }}
-              >
-                <PreviewModelIcon
-                  brand={model.brand}
-                  subscription={model.source === 'subscription'}
-                />
-                <span className="preview-model-label">
-                  <strong>{model.name}</strong>
-                  <ModelSource model={model} t={t} />
-                </span>
-                {role && draft[role] === model.id ? <Check size={16} aria-hidden="true" /> : null}
-              </button>
-            </li>
-          ))}
-        </ul>
+        {MODEL_SOURCES.map((kind) => {
+          const models = matches.filter((model) => model.source === kind);
+          const unavailable = kind === 'subscription' && !allowSubscriptions;
+          if (models.length === 0) return null;
+          return (
+            <div className="preview-model-group" key={kind}>
+              <div className="preview-model-group-label" aria-hidden="true">
+                {t[kind]}
+              </div>
+              <ul className="preview-list" aria-label={t[kind]}>
+                {models.map((model) => (
+                  <li key={model.id}>
+                    <button
+                      type="button"
+                      className="preview-model-row"
+                      aria-pressed={role ? draft[role] === model.id : false}
+                      disabled={unavailable}
+                      onClick={() => {
+                        if (!role) return;
+                        setDraft({ ...draft, [role]: model.id });
+                        setRole(null);
+                        setSearch('');
+                        roleButtons.current[role]?.focus();
+                      }}
+                    >
+                      <PreviewModelIcon
+                        brand={model.brand}
+                        subscription={kind === 'subscription'}
+                      />
+                      <span className="preview-model-label">
+                        <strong>{unavailable ? model.provider : model.name}</strong>
+                        {unavailable ? (
+                          <span className="preview-model-source">{t.subscriptionLocalOnly}</span>
+                        ) : (
+                          <ModelSource model={model} t={t} />
+                        )}
+                      </span>
+                      {role && draft[role] === model.id ? (
+                        <Check size={16} aria-hidden="true" />
+                      ) : null}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
