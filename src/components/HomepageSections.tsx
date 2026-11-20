@@ -9,7 +9,7 @@ import {
   Send,
   Terminal,
 } from 'lucide-react';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { LINKS, QQ_GROUP, type Copy, type Lang } from '../content';
 import { HOMEPAGE_COPY } from '../homepageCopy';
 import { HERO_CONVERSATIONS, PHONE_HOSTS, type PhoneHostId } from '../heroPhoneData';
@@ -348,7 +348,7 @@ function SessionDemo({ copy, lang }: { copy: Copy; lang: Lang }) {
   const [draft, setDraft] = useState('');
   const [messages, setMessages] = useState<string[]>([]);
   return (
-    <div className="workflow-demo workflow-session app">
+    <div className="workflow-demo workflow-session">
       <PreviewSessionDetail
         t={PREVIEW_COPY[lang]}
         isTeam={false}
@@ -369,6 +369,33 @@ function SessionDemo({ copy, lang }: { copy: Copy; lang: Lang }) {
   );
 }
 
+function FeatureRow({
+  id,
+  title,
+  description,
+  details,
+  children,
+}: {
+  id?: string;
+  title: string;
+  description?: string;
+  details?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <article className="workflow-feature-row" id={id}>
+      <div className="workflow-feature-copy">
+        <h3>{title}</h3>
+        {description ? <p>{description}</p> : null}
+        {details}
+      </div>
+      <div className="workflow-feature-preview">
+        <div className="app workflow-feature-pane">{children}</div>
+      </div>
+    </article>
+  );
+}
+
 export function HomepageFeatures({ copy, lang }: { copy: Copy; lang: Lang }) {
   const t = HOMEPAGE_COPY[lang];
   const preview = PREVIEW_COPY[lang];
@@ -376,45 +403,51 @@ export function HomepageFeatures({ copy, lang }: { copy: Copy; lang: Lang }) {
     <section className="section workflow-section" id="features" aria-labelledby="features-title">
       <h2 id="features-title">{t.features}</h2>
       <p className="section-lead">{t.featuresLead}</p>
-      <div className="workflow-feature-grid">
+      <div className="workflow-feature-rows">
         {copy.features.items
           .filter((item) => item.demo === 'identity' || item.demo === 'schedules')
           .map((item) => (
-            <article className="workflow-card" key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
+            <FeatureRow key={item.title} title={item.title} description={item.body}>
               <FeatureDemo copy={copy} demo={item.demo!} />
-            </article>
+            </FeatureRow>
           ))}
-        <article className="workflow-card" id="hosts">
-          <h3>{t.network}</h3>
-          <p>{t.networkBody}</p>
+        <FeatureRow
+          id="hosts"
+          title={t.network}
+          description={t.networkBody}
+          details={
+            <a className="workflow-link" href={guidePath(lang, 'private-connect')}>
+              {t.networkGuide} <ArrowRight size={16} aria-hidden="true" />
+            </a>
+          }
+        >
           <NetworkDemo copy={copy} lang={lang} />
-          <a className="workflow-link" href={guidePath(lang, 'private-connect')}>
-            {t.networkGuide} <ArrowRight size={16} aria-hidden="true" />
-          </a>
-        </article>
-        <article className="workflow-card" id="sessions">
-          <h3>{preview.sessionsTitle}</h3>
-          <p>{preview.sessionsBody}</p>
+        </FeatureRow>
+        <FeatureRow id="sessions" title={preview.sessionsTitle} description={preview.sessionsBody}>
           <SessionDemo copy={copy} lang={lang} />
-        </article>
-        <article className="workflow-card workflow-card--people" id="team">
-          <h3>{t.people}</h3>
-          <div className="workflow-people-panels">
-            <section aria-labelledby="workflow-team-title">
-              <h4 id="workflow-team-title">{t.team}</h4>
-              <p>{t.teamBody}</p>
-              <TeamDemo t={t} />
-            </section>
-            <section id="integrations" aria-labelledby="workflow-im-title">
-              <h4 id="workflow-im-title">{t.im}</h4>
-              <p>{t.imBody}</p>
-              <p>{t.roadmap}</p>
-              <ImDemo lang={lang} />
-            </section>
+        </FeatureRow>
+        <FeatureRow
+          id="team"
+          title={t.people}
+          details={
+            <>
+              <div className="workflow-feature-topic">
+                <h4>{t.team}</h4>
+                <p>{t.teamBody}</p>
+              </div>
+              <div className="workflow-feature-topic" id="integrations">
+                <h4>{t.im}</h4>
+                <p>{t.imBody}</p>
+                <p>{t.roadmap}</p>
+              </div>
+            </>
+          }
+        >
+          <div className="workflow-feature-people">
+            <TeamDemo t={t} />
+            <ImDemo lang={lang} />
           </div>
-        </article>
+        </FeatureRow>
       </div>
     </section>
   );

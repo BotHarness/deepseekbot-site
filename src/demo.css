@@ -1070,7 +1070,6 @@ button.app-chat-identity {
   box-shadow: 6px 6px 0 var(--px-shadow);
 }
 .feature-row:nth-child(3n + 2) .feature-demo,
-.workflow-feature-grid .feature-demo[data-demo='schedules'],
 .workflow-bento > .workflow-card--chat {
   background: linear-gradient(var(--grass-light), var(--grass));
 }

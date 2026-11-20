@@ -336,7 +336,7 @@ const zh: Copy = {
         icon: 'present',
         demo: 'identity',
         title: '持久身份',
-        body: '按分工创建负责研究、设计或开发的 Bot，每个都有自己的名字和头像。SOUL.md 记录性格、语气和工作原则，MEMORY.md 沉淀核心记忆，跨对话、跨文件夹持续延续。',
+        body: '给研究、设计或开发 Bot 定下各自的工作方式。SOUL.md 保存性格和工作原则，MEMORY.md 留住关键信息，下次聊天还能接着做。',
       },
       {
         icon: 'read',
@@ -360,7 +360,7 @@ const zh: Copy = {
         icon: 'todo',
         demo: 'schedules',
         title: '定时任务',
-        body: '自己设定执行计划，或交给 Bot 帮你维护。每次触发和处理记录都清晰可查，随时可以暂停，也能锁定以防 Bot 改动；只要应用保持运行，任务就会按时执行。',
+        body: '让 Bot 定期跟踪竞品或整理简报。应用运行时任务会按计划执行，你也可以手动运行、暂停、锁定或查看每次执行记录。',
       },
       {
         icon: 'present',
@@ -835,7 +835,7 @@ const en: Copy = {
         icon: 'present',
         demo: 'identity',
         title: 'Persistent identity',
-        body: 'Create Bots for research, design, or engineering, each with its own name and avatar. SOUL.md defines its persona, voice, and working principles, while MEMORY.md preserves core memory across chats and folders.',
+        body: 'Give your research, design, or engineering Bot its own way of working. SOUL.md defines its voice and rules, and MEMORY.md carries key context into the next chat.',
       },
       {
         icon: 'read',
@@ -859,7 +859,7 @@ const en: Copy = {
         icon: 'todo',
         demo: 'schedules',
         title: 'Scheduled tasks',
-        body: 'Set up recurring schedules yourself or let a Bot manage them for you. Inspect every trigger and run log, pause anytime, or lock a schedule so Bots cannot modify it—tasks run automatically while the app is open.',
+        body: 'Have a Bot track competitors or prepare a regular brief. Tasks run on schedule while the app is open, and you can run them manually, pause or lock them, or review past runs.',
       },
       {
         icon: 'present',

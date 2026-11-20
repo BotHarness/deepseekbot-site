@@ -43,8 +43,8 @@ export const HOMEPAGE_COPY = {
     download: '下载桌面端',
     setupModels: '模型配置',
     getStarted: '打开使用指南',
-    features: '把合适的事交给合适的 Bot',
-    featuresLead: '给 Bot 设定身份和任务，再决定它在哪运行、谁能和它协作。',
+    features: 'Tobs 能让 Bot 做什么',
+    featuresLead: '让 Bot 记住自己的工作方式、按时完成例行任务，并在你的电脑和团队之间协作。',
     network: '把多台 Host 上的 Bot 连在一起',
     networkBody:
       '在一个客户端里访问家里电脑、办公电脑或自管服务器上的 Bot，按 Host 筛选频道，或查看全部。',
@@ -136,8 +136,9 @@ export const HOMEPAGE_COPY = {
     download: 'Download desktop',
     setupModels: 'Model setup',
     getStarted: 'Open the user guide',
-    features: 'Give each Bot the work that fits',
-    featuresLead: 'Give each Bot a job, choose where it runs, and decide who can work with it.',
+    features: 'What Bots can do with Tobs',
+    featuresLead:
+      'Give each Bot a way of working it can remember, put recurring tasks on a schedule, and work together across devices and chat apps.',
     network: 'Connect Bots across Hosts',
     networkBody:
       'Reach Bots on your home computer, work computer, or server from one client, with channels grouped together or filtered by Host.',
