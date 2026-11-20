@@ -15,18 +15,15 @@ import {
   GitCommitVertical,
   Hash,
   ListTodo,
-  House,
-  Image,
   MessagesSquare,
+  Monitor,
+  Store,
   PanelRightClose,
   PanelRightOpen,
-  Paperclip,
   Plus,
   Plug,
   RotateCcw,
-  Search,
   ScanLine,
-  Settings,
   Signal,
   Wifi,
   Users,
@@ -55,10 +52,18 @@ import {
 import { PhonePair } from './FeatureDemos';
 import { HeroPhoneChat } from './HeroPhoneChat';
 import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
-import { phoneChannel, phoneChannelKey, type PhoneHostId } from '../heroPhoneData';
+import {
+  HERO_CONVERSATIONS,
+  PHONE_HOSTS,
+  phoneChannel,
+  phoneChannelKey,
+  type PhoneHostId,
+} from '../heroPhoneData';
+import { marketHref } from '../marketRoutes';
+import { guidePath } from '../site';
 import type { Copy } from '../content';
 import type { DemoChannel, DemoIcon, DemoStep, PanelSection } from '../demoCopy';
-import { DEEPSEEKBOT_RECIPE, recipeFor } from '../mascot';
+import { recipeFor } from '../mascot';
 import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
 
 const TOOL_MS = 1100;
@@ -85,6 +90,8 @@ function Icon({ name }: { name: DemoIcon }) {
 type Extra = { kind: 'user'; text: string; author?: string } | { kind: 'fallback'; bot: string };
 type PreviewPanel = 'models' | 'session' | 'members';
 type PreviewSurface = 'desktop' | 'phone';
+type SidePanel = 'notifications' | 'channels' | 'chats' | 'marketplace' | 'environment';
+type HostScope = PhoneHostId | 'all';
 const TEAM_MEMBER = { desktop: 'Mei', phone: 'Jun' } as const;
 
 /** Allow once, Always allow or Reject, like the desktop approval card. */
@@ -103,11 +110,6 @@ function StatusGlyph({ status, label }: { status: RowStatus; label?: string }) {
     );
   return <span className="app-status" data-status={status} title={label} aria-hidden="true" />;
 }
-
-/** Token usage bars for one range of the Home card; seeded, not measured. */
-const usageBars = (count: number, seed: number) =>
-  Array.from({ length: count }, (_, i) => 0.25 + (((i + 1) * 37 + seed * 53) % 70) / 100);
-const RANGE_BARS = [6, 7, 4, 12];
 
 const fill = (template: string, values: Record<string, string>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? '');
@@ -382,11 +384,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const [panelHeights, setPanelHeights] = useState<Record<string, number>>({});
   const panelResizeStart = useRef<{ y: number; height: number }>(null);
   const subpanelId = useId();
-  // the Control Rail's panels and views
-  const [view, setView] = useState<'chat' | 'home'>('chat');
-  const [sidePanel, setSidePanel] = useState<'channels' | 'activity' | null>('channels');
-  const [wallpaper, setWallpaper] = useState(false);
-  const [range, setRange] = useState(1);
+  const sidePanelId = useId();
+  const [sidePanel, setSidePanel] = useState<SidePanel>('channels');
+  const [hostScope, setHostScope] = useState<HostScope>('all');
+  const [addingRemote, setAddingRemote] = useState(false);
   const [expandedSubpanels, setExpandedSubpanels] = useState<Set<string>>(
     () => new Set(['sessions']),
   );
@@ -401,6 +402,21 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   };
 
   const channel = channels[active]!;
+  const channelRows = useMemo(
+    () =>
+      linkedPhone
+        ? HERO_CONVERSATIONS.map(({ host, index, preview }) => ({
+            host,
+            index,
+            channel: {
+              ...phoneChannel(t.channels[index]!, index, host, hero),
+              preview: hero[preview],
+            },
+          }))
+        : t.channels.map((channel, index) => ({ host: 'studio' as const, index, channel })),
+    [hero, linkedPhone, t.channels],
+  );
+  const scopedRows = channelRows.filter((row) => hostScope === 'all' || row.host === hostScope);
   const isTeam = linkedPhone && phoneHost === 'studio' && active === 0;
   const isPreviewBot = linkedPhone && phoneHost === 'research' && active === 2;
   const hasDesktopSession = previewPanel?.kind === 'session' && previewPanel.surface === 'desktop';
@@ -616,7 +632,6 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     track('demo:channel_open', {
       channel: linkedPhone ? phoneChannelKey(host, t.channels[index]!.id) : channels[index]!.id,
     });
-    setView('chat');
     if (index === active) setRun((n) => n + 1);
     else setActive(index);
   };
@@ -857,62 +872,46 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         </li>
       );
     });
-  const statusOf = (index: number): RowStatus => {
-    if (index !== active) return seen.has(channels[index]!.id) ? 'done' : undefined;
+  const statusOf = (row: DemoChannel): RowStatus => {
+    if (row.id !== channel.id) return seen.has(row.id) ? 'done' : undefined;
     if (waiting) return 'needs';
     if (working || typing || !done) return inView ? 'working' : undefined;
     return 'done';
   };
   const unreadOf = (c: DemoChannel) =>
-    c.steps.filter((step) => step.kind !== 'user' && step.kind !== 'event').length;
+    seen.has(c.id)
+      ? 0
+      : c.steps.filter((step) => step.kind !== 'user' && step.kind !== 'event').length;
   const statusLabel = (status: RowStatus) =>
     status === 'working'
-      ? t.tob.states.working
+      ? t.states.working
       : status === 'needs'
         ? t.needsYou
         : status === 'done'
-          ? t.tob.states.idle
+          ? t.states.idle
           : undefined;
-  const bots = [...new Set(channels.flatMap((c) => c.bots))];
-  const botState = (bot: string) => {
-    if (waiting && channel.bots.includes(bot) && steps.at(-1)?.kind === 'approval') {
-      const last = steps.at(-1);
-      if (last && last.kind === 'approval' && last.bot === bot) return 'needs' as const;
-    }
-    if (working?.bot === bot) return 'working' as const;
-    return 'idle' as const;
-  };
-  const needing = channels
-    .map((c, index) => ({ c, index }))
-    .filter(({ index }) => statusOf(index) === 'needs');
-  const unseen = channels
-    .map((c, index) => ({ c, index }))
-    .filter(({ c, index }) => index !== active && !seen.has(c.id));
-  const railButton = (
-    id: string,
-    label: string,
-    Svg: LucideIcon,
-    pressed: boolean,
-    onClick: () => void,
-    count?: number,
-  ) => (
-    <button
-      type="button"
-      className="app-rail-btn"
-      data-rail={id}
-      aria-pressed={pressed}
-      aria-label={label}
-      title={label}
-      onClick={() => {
-        takeOver();
-        if (linkedPhone && phonePhase === 'pair') pairingWith.current?.();
-        onClick();
-      }}
-    >
-      <Svg size={18} strokeWidth={1.75} aria-hidden="true" />
-      {count ? <span className="app-corner-count">{count}</span> : null}
-    </button>
+  const needing = scopedRows.filter((row) => statusOf(row.channel) === 'needs');
+  const unseen = scopedRows.filter(
+    (row) => row.channel.id !== channel.id && !seen.has(row.channel.id),
   );
+  const sidePanels = [
+    {
+      id: 'notifications',
+      label: preview.notifications,
+      icon: Bell,
+      count: needing.length + unseen.length,
+    },
+    { id: 'channels', label: t.channelsPanel, icon: Hash },
+    { id: 'chats', label: preview.chats, icon: MessagesSquare },
+    { id: 'marketplace', label: preview.marketplace, icon: Store },
+    { id: 'environment', label: preview.environment, icon: Monitor },
+  ] as const;
+  const sidePanelTitle = sidePanels.find((item) => item.id === sidePanel)!;
+  const SideIcon = sidePanelTitle.icon;
+  const showChannels = sidePanel === 'channels' || sidePanel === 'chats';
+  const showHost = linkedPhone && hostScope === 'all';
+  const visibleConversations =
+    sidePanel === 'chats' ? scopedRows.filter((row) => row.channel.kind === 'dm') : scopedRows;
 
   return (
     <div
@@ -969,178 +968,247 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         </div>
         <div
           className="app-body"
-          data-wallpaper={wallpaper ? '' : undefined}
           inert={previewPanel?.kind === 'models' && previewPanel.surface === 'desktop'}
         >
           <nav className="app-rail" aria-label={t.rail}>
-            <span className="app-rail-me" aria-hidden="true">
-              <Avatar name="DeepSeekBot" size={26} />
-            </span>
-            {railButton('home', t.home, House, view === 'home', () => {
-              if (previewPanel?.surface === 'desktop') setPreviewPanel(undefined);
-              setView((v) => (v === 'home' ? 'chat' : 'home'));
-            })}
-            {railButton(
-              'activity',
-              t.activity,
-              Bell,
-              sidePanel === 'activity',
-              () => setSidePanel((current) => (current === 'activity' ? null : 'activity')),
-              needing.length + unseen.length,
-            )}
-            {railButton('channels', t.channelsPanel, Hash, sidePanel === 'channels', () =>
-              setSidePanel((current) => (current === 'channels' ? null : 'channels')),
-            )}
-            {railButton('messages', t.messages, MessagesSquare, view === 'chat', () =>
-              setView('chat'),
-            )}
-            <span className="app-rail-gap" />
-            {railButton('wallpaper', t.wallpaper, Image, wallpaper, () => setWallpaper((v) => !v))}
-            <span className="app-rail-btn app-rail-btn--static" aria-hidden="true">
-              <Settings size={18} strokeWidth={1.75} />
-            </span>
+            <img className="app-rail-logo" src="/logo.png" width={36} height={36} alt="Tobs" />
+            {sidePanels.map(({ id, label, icon: Glyph, ...item }) => (
+              <button
+                key={id}
+                type="button"
+                className="app-rail-btn"
+                data-rail={id}
+                aria-pressed={sidePanel === id}
+                aria-controls={sidePanelId}
+                aria-label={label}
+                title={label}
+                onClick={() => {
+                  takeOver();
+                  if (linkedPhone && phonePhase === 'pair') pairingWith.current?.();
+                  setSidePanel(id);
+                }}
+              >
+                <Glyph size={18} strokeWidth={1.75} aria-hidden="true" />
+                {'count' in item && item.count ? (
+                  <span className="app-corner-count" aria-hidden="true">
+                    {item.count}
+                  </span>
+                ) : null}
+              </button>
+            ))}
           </nav>
 
           <section
-            className="app-pane app-side-panel app-pane--channels"
-            aria-label={t.channelsPanel}
-            hidden={sidePanel !== 'channels'}
-          >
-            <header className="app-pane-head" aria-hidden="true">
-              <Hash className="app-icon" size={16} strokeWidth={1.75} />
-              <span className="app-pane-title">{t.channelsPanel}</span>
-              <Search className="app-icon" size={15} strokeWidth={1.75} />
-              <Ellipsis className="app-icon" size={15} strokeWidth={1.75} />
-              <Plus className="app-icon" size={15} strokeWidth={1.75} />
-            </header>
-            <ul className="app-channels">
-              {channels.map((c, index) => {
-                const status = statusOf(index);
-                const unread = seen.has(c.id) ? 0 : unreadOf(c);
-                return (
-                  <li key={c.id}>
-                    <button
-                      type="button"
-                      className="app-channel"
-                      aria-current={index === active && view === 'chat' ? 'true' : undefined}
-                      data-status={status}
-                      onClick={() => open(index)}
-                    >
-                      <span className="app-channel-avatar">
-                        {c.kind === 'group' ? (
-                          <GroupAvatar bots={c.bots} size={36} />
-                        ) : (
-                          <Avatar name={c.bots[0]!} size={36} />
-                        )}
-                        {unread ? (
-                          <span className="app-corner-count" aria-hidden="true">
-                            {unread}
-                          </span>
-                        ) : null}
-                      </span>
-                      <span className="app-channel-text">
-                        <span className="app-channel-top">
-                          <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
-                          <time>{c.time}</time>
-                        </span>
-                        <span className="app-channel-line">
-                          <span className="app-channel-preview">{c.preview}</span>
-                          <StatusGlyph status={status} label={statusLabel(status)} />
-                        </span>
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-
-          <section
-            className="app-pane app-side-panel app-activity"
-            aria-label={t.activity}
-            hidden={sidePanel !== 'activity'}
+            className="app-pane app-side-panel"
+            id={sidePanelId}
+            aria-label={sidePanelTitle.label}
           >
             <header className="app-pane-head">
-              <Bell className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
-              <span className="app-pane-title">{t.activity}</span>
+              <SideIcon className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
+              <span className="app-pane-title">{sidePanelTitle.label}</span>
+              {linkedPhone && (showChannels || sidePanel === 'notifications') ? (
+                <select
+                  className="app-host-filter"
+                  aria-label={hero.chooseHost}
+                  value={hostScope}
+                  onChange={(event) => setHostScope(event.target.value as HostScope)}
+                >
+                  <option value="all">{hero.all}</option>
+                  {PHONE_HOSTS.map(({ id, name }) => (
+                    <option key={id} value={id}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              ) : null}
+              {sidePanel === 'environment' ? (
+                <button
+                  className="app-icon-btn"
+                  type="button"
+                  aria-expanded={addingRemote}
+                  aria-label={preview.addRemote}
+                  title={preview.addRemote}
+                  onClick={() => setAddingRemote((value) => !value)}
+                >
+                  <Plus size={16} aria-hidden="true" />
+                </button>
+              ) : null}
             </header>
-            {needing.length + unseen.length === 0 ? (
-              <p className="app-activity-empty">{t.nothingWaiting}</p>
-            ) : (
-              <ul className="app-activity-list">
-                {[
-                  ...needing.map((row) => ({ ...row, tag: t.needsYou, tone: 'waiting' })),
-                  ...unseen.map((row) => ({ ...row, tag: t.unread, tone: 'info' })),
-                ].map(({ c, index, tag, tone }) => (
-                  <li key={c.id}>
-                    <button type="button" onClick={() => open(index)}>
-                      <span className="app-badge" data-tone={tone}>
-                        {tag}
-                      </span>
-                      <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
-                      <small>{c.preview}</small>
-                    </button>
-                  </li>
-                ))}
+
+            {showChannels ? (
+              <ul className="app-channels">
+                {visibleConversations.map(({ channel: c, index, host }) => {
+                  const status = statusOf(c);
+                  const unread = unreadOf(c);
+                  return (
+                    <li key={c.id}>
+                      <button
+                        type="button"
+                        className="app-channel"
+                        aria-current={c.id === channel.id ? 'true' : undefined}
+                        data-status={status}
+                        onClick={() => open(index, undefined, host)}
+                      >
+                        <span className="app-channel-avatar">
+                          {c.kind === 'group' ? (
+                            <GroupAvatar bots={c.bots} size={32} />
+                          ) : (
+                            <Avatar name={c.bots[0]!} size={32} />
+                          )}
+                          {unread ? (
+                            <span className="app-corner-count" aria-hidden="true">
+                              {unread}
+                            </span>
+                          ) : null}
+                        </span>
+                        <span className="app-channel-text">
+                          <span className="app-channel-top">
+                            <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
+                            <time>{c.time}</time>
+                          </span>
+                          <span className="app-channel-line">
+                            <span className="app-channel-preview">{c.preview}</span>
+                            <StatusGlyph status={status} label={statusLabel(status)} />
+                          </span>
+                          {showHost ? <HeroPhoneSource host={host} /> : null}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
+            ) : sidePanel === 'notifications' ? (
+              needing.length + unseen.length === 0 ? (
+                <p className="app-activity-empty">{t.nothingWaiting}</p>
+              ) : (
+                <ul className="app-activity-list">
+                  {[
+                    ...needing.map((row) => ({ ...row, tag: t.needsYou, tone: 'waiting' })),
+                    ...unseen.map((row) => ({ ...row, tag: t.unread, tone: 'info' })),
+                  ].map(({ channel: c, index, host, tag, tone }) => (
+                    <li key={c.id}>
+                      <button type="button" onClick={() => open(index, undefined, host)}>
+                        <span className="app-badge" data-tone={tone}>
+                          {tag}
+                        </span>
+                        <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
+                        <small>{c.preview}</small>
+                        {showHost ? <HeroPhoneSource host={host} /> : null}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )
+            ) : sidePanel === 'marketplace' ? (
+              <div className="app-side-content">
+                {[
+                  { name: 'Mira', description: preview.marketMira },
+                  { name: 'Nova', description: preview.marketNova },
+                ].map(({ name, description }) => (
+                  <div className="app-market-row" key={name}>
+                    <Avatar name={name} size={30} />
+                    <span>
+                      <strong>{name}</strong>
+                      <small>{description}</small>
+                    </span>
+                  </div>
+                ))}
+                <a className="app-side-link" href={marketHref(lang, { kind: 'home' })}>
+                  {preview.openMarketplace} →
+                </a>
+              </div>
+            ) : (
+              <div className="app-side-content">
+                {addingRemote ? (
+                  <div className="app-env-info">
+                    <strong>{preview.addRemote}</strong>
+                    <p>{preview.remoteHelp}</p>
+                    <a href={guidePath(lang, 'private-connect')}>{preview.connectionGuide} →</a>
+                  </div>
+                ) : null}
+                <button
+                  type="button"
+                  className="app-env-row"
+                  aria-pressed={hostScope === 'all'}
+                  onClick={() => setHostScope('all')}
+                >
+                  <Monitor size={15} aria-hidden="true" />
+                  <strong>{hero.all}</strong>
+                </button>
+                {PHONE_HOSTS.map(({ id, name }) => (
+                  <div className="app-env-host" key={id}>
+                    <button
+                      type="button"
+                      className="app-env-row"
+                      aria-pressed={hostScope === id}
+                      onClick={() => setHostScope(id)}
+                    >
+                      <HeroPhoneSource host={id} />
+                      <small>{id === 'studio' ? preview.thisHost : preview.remoteHost}</small>
+                    </button>
+                    {id === 'research' ? (
+                      <details className="app-env-connection">
+                        <summary
+                          aria-label={`${preview.editConnection} · ${name}`}
+                          title={preview.editConnection}
+                        >
+                          <Ellipsis size={15} aria-hidden="true" />
+                        </summary>
+                        <div className="app-env-info">
+                          <strong>{name}</strong>
+                          <p>{hero.connected} · Tailscale</p>
+                          <a href={guidePath(lang, 'private-connect')}>
+                            {preview.connectionGuide} →
+                          </a>
+                        </div>
+                      </details>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
             )}
           </section>
 
-          <section
-            className="app-pane app-chat"
-            aria-label={view === 'home' ? t.home : `${t.messages} · ${channel.title}`}
-            data-view={view}
-          >
-            <header
-              className="app-pane-head app-chat-head"
-              data-preview-context={view === 'chat' && (isTeam || isPreviewBot) ? '' : undefined}
-            >
-              {view === 'home' ? (
-                <>
-                  <House className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
-                  <span className="app-pane-title">{t.home}</span>
-                </>
-              ) : (
-                <>
-                  <MessagesSquare
-                    className="app-icon"
-                    size={16}
-                    strokeWidth={1.75}
-                    aria-hidden="true"
-                  />
-                  <span className="app-pane-title">{t.messages}</span>
-                  <span className="app-pill">
-                    {channel.kind === 'group' ? (
-                      <GroupAvatar bots={channel.bots} size={22} />
-                    ) : (
-                      <Avatar name={channel.bots[0]!} size={22} />
-                    )}
-                    {channel.title}
-                  </span>
-                  {isTeam ? (
-                    <span className="app-badge preview-team-badge">{preview.teamScope}</span>
-                  ) : null}
-                  {isPreviewBot ? modelTrigger('desktop') : null}
-                  <button
-                    type="button"
-                    className="app-icon-btn app-panel-toggle"
-                    aria-expanded={panelOpen}
-                    aria-controls={subpanelId}
-                    aria-label={panelOpen ? t.hideSidebar : t.showSidebar}
-                    title={panelOpen ? t.hideSidebar : t.showSidebar}
-                    onClick={() => {
-                      touched.current = true;
-                      setPanelOpen((open) => !open);
-                    }}
-                  >
-                    {panelOpen ? (
-                      <PanelRightClose size={16} strokeWidth={1.75} aria-hidden="true" />
-                    ) : (
-                      <PanelRightOpen size={16} strokeWidth={1.75} aria-hidden="true" />
-                    )}
-                  </button>
-                </>
-              )}
+          <section className="app-pane app-chat" aria-label={`${t.messages} · ${channel.title}`}>
+            <header className="app-pane-head app-chat-head">
+              <MessagesSquare
+                className="app-icon"
+                size={16}
+                strokeWidth={1.75}
+                aria-hidden="true"
+              />
+              <span className="app-pane-title">{t.messages}</span>
+              <span className="app-pill">
+                {channel.kind === 'group' ? (
+                  <GroupAvatar bots={channel.bots} size={22} />
+                ) : (
+                  <Avatar name={channel.bots[0]!} size={22} />
+                )}
+                {channel.title}
+              </span>
+              {linkedPhone ? <HeroPhoneSource host={phoneHost} /> : null}
+              {isTeam ? (
+                <span className="app-badge preview-team-badge">{preview.teamScope}</span>
+              ) : null}
+              {isPreviewBot ? modelTrigger('desktop') : null}
+              <button
+                type="button"
+                className="app-icon-btn app-panel-toggle"
+                aria-expanded={panelOpen}
+                aria-controls={subpanelId}
+                aria-label={panelOpen ? t.hideSidebar : t.showSidebar}
+                title={panelOpen ? t.hideSidebar : t.showSidebar}
+                onClick={() => {
+                  touched.current = true;
+                  setPanelOpen((open) => !open);
+                }}
+              >
+                {panelOpen ? (
+                  <PanelRightClose size={16} strokeWidth={1.75} aria-hidden="true" />
+                ) : (
+                  <PanelRightOpen size={16} strokeWidth={1.75} aria-hidden="true" />
+                )}
+              </button>
             </header>
             <div className="app-message-split" data-session={hasDesktopSession ? '' : undefined}>
               <div className="app-message-content">
@@ -1154,83 +1222,6 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                       autoPlay={!isInteractive}
                       onNext={() => pairingWith.current?.()}
                     />
-                  </div>
-                ) : view === 'home' ? (
-                  <div className="app-home">
-                    <p className="app-home-hello">
-                      <PixelAvatar recipe={DEEPSEEKBOT_RECIPE} size={40} />
-                      <strong>{t.tob.greeting}</strong>
-                    </p>
-                    <p className="app-home-lead">{t.tob.description}</p>
-                    <p className="app-composer app-home-input" aria-hidden="true">
-                      <Paperclip className="app-composer-plus" size={16} strokeWidth={1.75} />
-                      <span>{t.tob.input}</span>
-                      <span className="app-send" data-off="">
-                        <ArrowUp size={16} strokeWidth={2} />
-                      </span>
-                    </p>
-                    <ul className="app-home-starters" aria-label={t.tob.name}>
-                      {t.tob.starters.map((starter) => (
-                        <li key={starter}>{starter}</li>
-                      ))}
-                    </ul>
-                    <div className="app-home-cards">
-                      <section className="app-home-card" aria-label={t.tob.usage}>
-                        <p className="app-home-card-head">
-                          <strong>{t.tob.usage}</strong>
-                          <span className="app-segment" role="group" aria-label={t.tob.usage}>
-                            {t.tob.ranges.map((label, index) => (
-                              <button
-                                key={label}
-                                type="button"
-                                aria-pressed={range === index}
-                                onClick={() => setRange(index)}
-                              >
-                                {label}
-                              </button>
-                            ))}
-                          </span>
-                        </p>
-                        <div
-                          className="app-bars"
-                          role="img"
-                          aria-label={`${t.tob.usage} · ${t.tob.ranges[range]}`}
-                        >
-                          {usageBars(RANGE_BARS[range]!, range).map((h, index) => (
-                            <i
-                              key={`${range}-${index}`}
-                              style={{ height: `${Math.round(h * 100)}%` }}
-                            />
-                          ))}
-                        </div>
-                      </section>
-                      <section className="app-home-card" aria-label={t.tob.botActivity}>
-                        <p className="app-home-card-head">
-                          <strong>{t.tob.botActivity}</strong>
-                        </p>
-                        <ul className="app-home-bots">
-                          {bots.map((bot) => {
-                            const state = botState(bot);
-                            const time =
-                              (
-                                channels.find((c) => c.kind === 'dm' && c.bots[0] === bot) ??
-                                channels.find((c) => c.bots.includes(bot))
-                              )?.time ?? '';
-                            return (
-                              <li key={bot} data-state={state}>
-                                <Avatar name={bot} size={28} />
-                                <span>
-                                  <strong>{bot}</strong>
-                                  <small>
-                                    {t.tob.states[state]} · {time}
-                                  </small>
-                                </span>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </section>
-                    </div>
                   </div>
                 ) : (
                   <>
@@ -1309,7 +1300,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 aria-valuemin={MIN_SUBPANEL_WIDTH}
                 aria-valuemax={maxColumnWidth}
                 aria-valuenow={visibleColumnWidth}
-                hidden={!panelOpen || view !== 'chat'}
+                hidden={!panelOpen}
                 onKeyDown={(event) => {
                   if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
                   event.preventDefault();
@@ -1329,7 +1320,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 className="app-panel"
                 aria-label={t.sidebar}
                 style={{ width: `${visibleColumnWidth}%` }}
-                hidden={!panelOpen || view !== 'chat'}
+                hidden={!panelOpen}
               >
                 {panel.map((section) => {
                   const open = expandedSubpanels.has(section.id);

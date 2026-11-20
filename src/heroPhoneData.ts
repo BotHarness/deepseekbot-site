@@ -5,6 +5,12 @@ export const PHONE_HOSTS = [
   { id: 'studio', name: 'Studio Linux' },
   { id: 'research', name: 'Research PC' },
 ] as const;
+export const HERO_CONVERSATIONS = [
+  { host: 'studio', index: 0, preview: 'chatPreview' },
+  { host: 'studio', index: 1, preview: 'studioPreview' },
+  { host: 'research', index: 1, preview: 'researchPreview' },
+  { host: 'research', index: 2, preview: 'checkPreview' },
+] as const;
 export const PHONE_REQUESTS = [
   { id: 'studio-check', host: 'studio', bot: 'Nova', command: 'git diff --check' },
   { id: 'research-report', host: 'research', bot: 'Mira', command: 'python summarize.py' },

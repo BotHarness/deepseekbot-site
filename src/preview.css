@@ -5,20 +5,144 @@
   text-align: center;
 }
 
-.app-chat-head[data-preview-context] .app-pane-title {
+.app-chat-head .app-pane-title {
   flex: none;
 }
 
-.app-chat-head[data-preview-context] .app-pill {
-  position: static;
+.app-chat-head .app-pill {
   min-width: 0;
   white-space: nowrap;
-  translate: none;
 }
 
-.app-chat-head[data-preview-context] .app-panel-toggle {
+.app-chat-head .app-panel-toggle {
   flex: none;
   margin-left: auto;
+}
+
+.app-host-filter {
+  width: fit-content;
+  min-width: 0;
+  max-width: 54%;
+  padding: 3px;
+  border: 0;
+  border-radius: 5px;
+  background: var(--app-side);
+  font-size: 11px !important;
+}
+
+.app-channel-text > .hero-phone-source {
+  justify-self: start;
+  margin-top: 2px;
+}
+
+.app-side-content {
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 6px 10px;
+}
+
+.app-market-row,
+.app-env-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+}
+
+.app-market-row small,
+.app-env-row small {
+  color: var(--app-soft);
+  font-size: 11px;
+}
+
+.app-market-row small {
+  display: block;
+}
+
+.app-side-link {
+  display: block;
+  margin: 10px 8px 2px;
+}
+
+.app-side-link,
+.app-env-info a {
+  color: var(--app-info);
+  font-size: 12px;
+}
+
+.app-env-host {
+  position: relative;
+}
+
+.app-env-row {
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 2px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.app-env-row:hover,
+.app-env-row[aria-pressed='true'] {
+  background: var(--app-hover);
+}
+
+.app-env-row .hero-phone-source {
+  gap: 4px;
+  font-size: 12px;
+}
+
+.app-env-row small {
+  flex: 0 0 100%;
+}
+
+.app-env-host:has(.app-env-connection) .app-env-row {
+  padding-right: 30px;
+}
+
+.app-env-connection summary {
+  position: absolute;
+  top: 7px;
+  right: 4px;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 4px;
+  color: var(--app-soft);
+  cursor: pointer;
+  list-style: none;
+}
+
+.app-env-connection summary::-webkit-details-marker {
+  display: none;
+}
+
+.app-env-connection summary:hover {
+  background: var(--app-side);
+}
+
+.app-env-info {
+  padding: 8px;
+  border-radius: 5px;
+  background: var(--app-side);
+  font-size: 12px;
+}
+
+.app-env-info p {
+  margin: 4px 0;
+  color: var(--app-soft);
+}
+
+@media (max-width: 900px) {
+  .app-chat-head > .hero-phone-source {
+    display: none;
+  }
 }
 
 .preview-team-badge,

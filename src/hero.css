@@ -256,7 +256,7 @@ a.beta-button--ios {
   gap: var(--hero-workspace-gap);
   padding: var(--hero-workspace-gap);
 }
-.hero-desktop .app-body:not([data-wallpaper]) {
+.hero-desktop .app-body {
   --pane-bg: color-mix(in srgb, var(--hero-workspace-base) 85%, var(--hero-workspace-surface));
 }
 .hero-desktop .app-rail,
@@ -265,8 +265,8 @@ a.beta-button--ios {
   border-radius: var(--hero-pane-radius);
   background: var(--pane-bg);
 }
-.hero-desktop .app-body:not([data-wallpaper]) .app-chat,
-.hero-desktop .app-body:not([data-wallpaper]) .app-panel {
+.hero-desktop .app-body .app-chat,
+.hero-desktop .app-body .app-panel {
   background: var(--hero-workspace-canvas);
 }
 .hero-desktop .app-chat-head,

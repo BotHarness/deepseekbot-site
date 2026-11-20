@@ -86,24 +86,10 @@ export interface DemoCopy {
   needsYou: string;
   /** the full-height Control Rail on the left and the panels it opens */
   rail: string;
-  home: string;
   channelsPanel: string;
-  activity: string;
   unread: string;
   nothingWaiting: string;
-  wallpaper: string;
-  /** Home: Tob, the local steward, with Token usage and Bot activity */
-  tob: {
-    name: string;
-    greeting: string;
-    description: string;
-    input: string;
-    starters: string[];
-    usage: string;
-    ranges: string[];
-    botActivity: string;
-    states: { working: string; needs: string; idle: string };
-  };
+  states: { working: string; idle: string };
   replay: string;
   sidebar: string;
   hideSidebar: string;
@@ -246,28 +232,10 @@ const zhDemo: DemoCopy = {
   tool: '工具',
   needsYou: '需要你',
   rail: '工作区控制列',
-  home: '首页',
   channelsPanel: '频道列表',
-  activity: '活动',
   unread: '未读',
   nothingWaiting: '没有等你处理的事',
-  wallpaper: '壁纸',
-  tob: {
-    name: '托布',
-    greeting: '你好，我是托布',
-    description: '你的本地总管。了解 Bot 的状态，或告诉我你想调整什么。',
-    input: '有什么可以帮你？',
-    starters: [
-      '帮我创建一个 Bot',
-      '看看我的 Bot 最近怎么样',
-      '有哪些事情需要我处理？',
-      '最近有哪些记忆更新？',
-    ],
-    usage: 'Token 用量',
-    ranges: ['今日', '7 天', '4 周', '12 周'],
-    botActivity: 'Bot 活跃情况',
-    states: { working: '工作中', needs: '需要你', idle: '空闲' },
-  },
+  states: { working: '工作中', idle: '空闲' },
   replay: '再看一遍',
   sidebar: '子面板栏',
   hideSidebar: '收起子面板栏',
@@ -614,28 +582,10 @@ const enDemo: DemoCopy = {
   tool: 'Tool',
   needsYou: 'Needs you',
   rail: 'Workspace controls',
-  home: 'Home',
   channelsPanel: 'Channels',
-  activity: 'Activity',
   unread: 'Unread',
   nothingWaiting: 'Nothing waiting on you',
-  wallpaper: 'Wallpaper',
-  tob: {
-    name: 'Tob',
-    greeting: 'Hello, I’m Tob',
-    description: 'Your local steward. Check on your Bots or tell me what you’d like to change.',
-    input: 'What can I help you with?',
-    starters: [
-      'Help me create a Bot',
-      'How are my Bots doing?',
-      'What needs my attention?',
-      'What memories changed recently?',
-    ],
-    usage: 'Token usage',
-    ranges: ['Today', '7 days', '4 weeks', '12 weeks'],
-    botActivity: 'Bot activity',
-    states: { working: 'Working', needs: 'Needs you', idle: 'Idle' },
-  },
+  states: { working: 'Working', idle: 'Idle' },
   replay: 'Replay',
   sidebar: 'Subpanel column',
   hideSidebar: 'Hide Subpanel column',

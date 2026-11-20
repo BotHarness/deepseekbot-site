@@ -14,6 +14,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Lang } from '../content';
 import { HERO_COPY } from '../heroCopy';
 import {
+  HERO_CONVERSATIONS,
   PHONE_HOSTS as HOSTS,
   PHONE_REQUESTS as REQUESTS,
   type PhoneHostId,
@@ -121,18 +122,12 @@ export function HeroPhoneHome({
   const visibleRequests = requests.filter((request) => host === 'all' || request.host === host);
   const pending = visibleRequests.filter((request) => !decisionOf(request)).length;
   const title = lang === 'zh' ? '发布小队' : 'Launch crew';
-  const rows = [
-    { title, bot: '', host: 'studio' as const, channel: 0, preview: t.chatPreview },
-    { title: 'Mira', bot: 'Mira', host: 'studio' as const, channel: 1, preview: t.studioPreview },
-    {
-      title: 'Mira',
-      bot: 'Mira',
-      host: 'research' as const,
-      channel: 1,
-      preview: t.researchPreview,
+  const rows = HERO_CONVERSATIONS.filter((row) => host === 'all' || row.host === host).map(
+    ({ host, index, preview }) => {
+      const bot = index === 1 ? 'Mira' : index === 2 ? 'Nova' : '';
+      return { title: bot || title, bot, host, channel: index, preview: t[preview] };
     },
-    { title: 'Nova', bot: 'Nova', host: 'research' as const, channel: 2, preview: t.checkPreview },
-  ].filter((row) => host === 'all' || row.host === host);
+  );
   const pickers = useRef(new Map<string, HTMLDetailsElement>());
   const hostPicker = (compact: boolean) => (
     <details
