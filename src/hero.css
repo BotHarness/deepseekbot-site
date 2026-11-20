@@ -226,12 +226,47 @@ a.beta-button--ios {
   display: none;
 }
 .hero-linked > .hero-desktop {
+  --hero-workspace-base: #fff;
+  --hero-workspace-surface: #f5f6f7;
+  --hero-workspace-canvas: var(--hero-workspace-surface);
+  --hero-workspace-gap: 4px;
+  --hero-pane-radius: 4px;
   width: 100%;
   height: calc(var(--hero-phone-width) * 2868 / 1320 + 32px);
   max-width: none;
   border: 2px solid var(--px-ink);
   border-radius: 14px;
   box-shadow: 6px 6px 0 var(--px-shadow);
+}
+:root[data-theme='dark'] .hero-linked > .hero-desktop {
+  --hero-workspace-base: #151517;
+  --hero-workspace-surface: #353638;
+  --hero-workspace-canvas: var(--hero-workspace-base);
+}
+.hero-desktop .app-titlebar,
+.hero-desktop .app-body {
+  background-color: var(--hero-workspace-canvas);
+}
+.hero-desktop .app-titlebar,
+.hero-desktop .app-body .app-pane-head {
+  border-bottom: 0;
+}
+/* The Control Rail and dock panels sit on the same canvas, with room between them. */
+.hero-desktop .app-body {
+  gap: var(--hero-workspace-gap);
+  padding: var(--hero-workspace-gap);
+}
+.hero-desktop .app-body:not([data-wallpaper]) {
+  --pane-bg: color-mix(in srgb, var(--hero-workspace-base) 85%, var(--hero-workspace-surface));
+}
+.hero-desktop .app-stack {
+  gap: var(--hero-workspace-gap);
+}
+.hero-desktop .app-rail,
+.hero-desktop .app-body .app-pane {
+  border: 0;
+  border-radius: var(--hero-pane-radius);
+  background: var(--pane-bg);
 }
 .hero-linked .hero-desktop .app-pane--channels {
   flex-basis: 200px;

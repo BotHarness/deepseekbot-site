@@ -1401,7 +1401,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             >
               {phonePhase === 'intro' ? (
                 <div className="hero-phone-intro">
-                  <Avatar name="DeepSeekBot" size={88} />
+                  <img src="/logo.png" width={88} height={88} alt="" />
                   <strong>Tobs</strong>
                 </div>
               ) : phonePhase === 'pair' ? (
