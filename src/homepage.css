@@ -465,8 +465,14 @@
 }
 
 .workflow-feature-pane [data-demo='schedules'] .app--mini {
-  block-size: clamp(326px, 35vw, 400px);
+  block-size: 326px;
   overflow: auto;
+}
+
+@container (min-width: 600px) {
+  .workflow-feature-pane [data-demo='schedules'] .app--mini {
+    block-size: 268px;
+  }
 }
 
 .workflow-feature-pane :is(.mini-bot, .mini-file, .mini-schedules li, .mini-history li) {
