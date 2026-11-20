@@ -77,15 +77,12 @@ import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './Pix
 
 const TOOL_MS = 1100;
 const PAIR_START: PairState = { step: 'method', method: 'lan' };
-const PAIR_TOUR = {
-  method: { next: 'prepare', ms: 1500 },
-  prepare: { next: 'code', ms: 1500 },
-  code: { next: 'scan', ms: 1200 },
-  scan: { next: 'verify', ms: 1350 },
-  verify: { next: 'approve', ms: 1350 },
-  approve: { next: 'paired', ms: 1250 },
-  paired: { next: null, ms: 1050 },
-} as const;
+const PAIR_TOUR: Partial<Record<PairStep, { next: PairStep | null; ms: number }>> = {
+  method: { next: 'scan', ms: 850 },
+  scan: { next: 'approve', ms: 1250 },
+  approve: { next: 'paired', ms: 800 },
+  paired: { next: null, ms: 700 },
+};
 const MIN_SUBPANEL_HEIGHT = 120;
 const MAX_SUBPANEL_HEIGHT = 640;
 const MIN_SUBPANEL_WIDTH = 20;
@@ -452,7 +449,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     touched.current = true;
     setIsInteractive(true);
   };
-  const pairingOnPhone = ['scan', 'verify', 'paired'].includes(pairing.step);
+  const pairingOnPhone =
+    ['scan', 'verify', 'paired'].includes(pairing.step) ||
+    (pairing.step === 'approve' && !isInteractive);
   const finishPairing = useCallback(() => {
     restorePairFocus.current = touched.current;
     if (pairingWith.current) pairingWith.current();
@@ -477,7 +476,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
 
   useEffect(() => {
     if (phonePhase !== 'pair' || isInteractive) return;
-    const { next, ms } = PAIR_TOUR[pairing.step];
+    const timing = PAIR_TOUR[pairing.step];
+    if (!timing) return;
+    const { next, ms } = timing;
     const timer = window.setTimeout(
       () => {
         if (touched.current) return;

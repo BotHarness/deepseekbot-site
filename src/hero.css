@@ -758,15 +758,27 @@ a.beta-button--ios {
 .hero-pair-overlay {
   position: absolute;
   z-index: 10;
-  inset: 36px 0 0;
+  inset: 0;
   display: grid;
-  place-items: center;
+  place-items: safe center;
   padding: 12px;
-  background: rgb(0 0 0 / 0.34);
+  overflow: auto;
+  background: rgb(10 12 20 / 0.57);
+  backdrop-filter: blur(6px);
+}
+.hero-pair-stack {
+  display: grid;
+  width: min(440px, 100%);
+  gap: 12px;
+}
+.hero-pair-stage-title {
+  margin: 0;
+  color: #fff;
+  font: 400 clamp(16px, 2vw, 22px) / 1.4 var(--pixel-font);
+  text-align: center;
+  text-wrap: balance;
 }
 .hero-pair-dialog {
-  width: min(440px, 100%);
-  max-height: 100%;
   border: 1px solid var(--app-line);
   border-radius: 12px;
   background: var(--app-bg);
