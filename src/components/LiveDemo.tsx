@@ -7,20 +7,16 @@ import {
   BatteryFull,
   Brain,
   Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Ellipsis,
-  FileText,
   FolderKey,
   GitBranch,
-  GitCommitVertical,
   Hash,
   MessagesCircle,
   Monitor,
   PanelRight,
   Plus,
-  Plug,
   RotateCcw,
   ScanLine,
   Server,
@@ -55,6 +51,8 @@ import { PhonePair } from './FeatureDemos';
 import { HeroPhoneChat } from './HeroPhoneChat';
 import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
 import { MarketplaceIcon } from './MarketplaceIcon';
+import { MemoryMarkdownIcon } from './MemoryMarkdownIcon';
+import { PreviewModelIcon } from './PreviewModelIcon';
 import {
   HERO_CONVERSATIONS,
   PHONE_HOSTS,
@@ -394,6 +392,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const [seen, setSeen] = useState<Set<string>>(() => new Set());
   const [panelOpen, setPanelOpen] = useState(false);
   const [columnWidth, setColumnWidth] = useState(34);
+  const [sessionWidth, setSessionWidth] = useState(40);
   const [panelHeights, setPanelHeights] = useState<Record<string, number>>({});
   const panelResizeStart = useRef<{ y: number; height: number }>(null);
   const subpanelId = useId();
@@ -437,6 +436,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const hasDesktopSession = previewPanel?.kind === 'session' && previewPanel.surface === 'desktop';
   const maxColumnWidth = hasDesktopSession ? 40 : 60;
   const visibleColumnWidth = Math.min(columnWidth, maxColumnWidth);
+  const maxSessionWidth = panelOpen ? Math.min(60, 75 - visibleColumnWidth) : 60;
+  const visibleSessionWidth = Math.min(sessionWidth, maxSessionWidth);
   const sessionTitle = isTeam ? preview.session : preview.localSession;
   const model = previewModel(modelPlan.main);
   const panel = useMemo(() => {
@@ -458,6 +459,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
 
   function resizeSubpanelColumn(width: number) {
     setColumnWidth(Math.round(Math.min(maxColumnWidth, Math.max(MIN_SUBPANEL_WIDTH, width))));
+  }
+
+  function resizeSession(width: number) {
+    setSessionWidth(Math.round(Math.min(maxSessionWidth, Math.max(MIN_SUBPANEL_WIDTH, width))));
   }
 
   useLayoutEffect(() => {
@@ -739,17 +744,17 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const modelTrigger = (surface: PreviewSurface) => (
     <button
       type="button"
-      className="app-btn preview-model-trigger"
+      className="preview-model-trigger"
       aria-label={preview.modelPicker + ' · ' + model.name}
+      aria-haspopup="dialog"
       aria-expanded={previewPanel?.surface === surface && previewPanel.kind === 'models'}
       title={
         model.provider + ' · ' + (model.source === 'api' ? preview.api : preview.plans[model.id])
       }
       onClick={(event) => showPreview('models', surface, event.currentTarget)}
     >
-      {model.name}
-      {model.source === 'subscription' ? <Plug size={12} aria-hidden="true" /> : null}
-      <ChevronDown size={13} aria-hidden="true" />
+      <PreviewModelIcon brand={model.brand} subscription={model.source === 'subscription'} />
+      <span>{model.name}</span>
     </button>
   );
   const teamMembers = [
@@ -775,13 +780,15 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     const kind = previewPanel.kind;
     const title =
       kind === 'session' ? sessionTitle : kind === 'models' ? preview.modelPicker : preview.members;
+    const Panel = surface === 'desktop' && kind === 'session' ? 'aside' : 'section';
     return (
-      <section
+      <Panel
         className="app-pane preview-panel"
         data-kind={kind}
         data-surface={surface}
         role={kind === 'models' ? 'dialog' : 'region'}
         aria-label={title}
+        style={Panel === 'aside' ? { width: `${visibleSessionWidth}%` } : undefined}
       >
         <header className="app-pane-head preview-panel-head">
           {surface === 'phone' ? (
@@ -834,7 +841,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             </ul>
           </div>
         )}
-      </section>
+      </Panel>
     );
   };
   const renderSteps = (surface: PreviewSurface) =>
@@ -1360,7 +1367,37 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   )}
                 </div>
               </div>
-              {hasDesktopSession ? renderPreview('desktop') : null}
+              {hasDesktopSession ? (
+                <>
+                  <div
+                    className="app-session-resize"
+                    role="separator"
+                    tabIndex={0}
+                    aria-label={sessionTitle}
+                    aria-orientation="vertical"
+                    aria-valuemin={MIN_SUBPANEL_WIDTH}
+                    aria-valuemax={maxSessionWidth}
+                    aria-valuenow={visibleSessionWidth}
+                    onKeyDown={(event) => {
+                      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                      event.preventDefault();
+                      resizeSession(visibleSessionWidth + (event.key === 'ArrowLeft' ? 2 : -2));
+                    }}
+                    onPointerDown={(event) => {
+                      if (event.button === 0)
+                        event.currentTarget.setPointerCapture(event.pointerId);
+                    }}
+                    onPointerMove={(event) => {
+                      const divider = event.currentTarget;
+                      if (!divider.hasPointerCapture(event.pointerId)) return;
+                      const splitWidth = divider.parentElement!.getBoundingClientRect().width;
+                      const rightEdge = divider.nextElementSibling!.getBoundingClientRect().right;
+                      resizeSession(((rightEdge - event.clientX) * 100) / splitWidth);
+                    }}
+                  />
+                  {renderPreview('desktop')}
+                </>
+              ) : null}
               <div
                 className="app-column-resize"
                 role="separator"
@@ -1466,7 +1503,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                             .filter(
                               (item) => !(section.id === 'members' && item.id === 'h' && isTeam),
                             )
-                            .map((item) => {
+                            .map((item, index, items) => {
                               const entry = demoMemoryEntry(
                                 lang,
                                 phoneHost,
@@ -1505,9 +1542,25 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                                       onClick={(event) => showMemory(entry, event.currentTarget)}
                                     >
                                       {entry.kind === 'file' ? (
-                                        <FileText size={15} aria-hidden="true" />
+                                        <MemoryMarkdownIcon />
                                       ) : (
-                                        <GitCommitVertical size={15} aria-hidden="true" />
+                                        <svg
+                                          className="preview-memory-graph"
+                                          viewBox="0 0 12 46"
+                                          width={12}
+                                          height={46}
+                                          aria-hidden="true"
+                                        >
+                                          <path
+                                            d={`M6 ${index === 0 ? 12 : 0}V${index === items.length - 1 ? 12 : 46}`}
+                                          />
+                                          <circle
+                                            cx={6}
+                                            cy={12}
+                                            r={index === 0 ? 4 : 3.5}
+                                            data-head={index === 0 || undefined}
+                                          />
+                                        </svg>
                                       )}
                                       {text}
                                       {item.badge ? (

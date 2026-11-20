@@ -4,15 +4,16 @@ import {
   ChevronLeft,
   CircleCheck,
   FileText,
-  Layers,
+  Layers2,
   ListTodo,
-  Plug,
+  Package,
   Search,
   Terminal,
 } from 'lucide-react';
 import { useRef, useState, type Ref } from 'react';
 import type { DemoMemoryEntry } from '../demoMemory';
 import { PREVIEW_MODELS, type ModelId, type PreviewCopy, type PreviewModel } from '../previewCopy';
+import { PreviewModelIcon } from './PreviewModelIcon';
 
 type Role = 'main' | 'task';
 export type ModelPlan = Record<Role, ModelId>;
@@ -30,7 +31,7 @@ function source(model: PreviewModel, t: PreviewCopy) {
 export function ModelSource({ model, t }: { model: PreviewModel; t: PreviewCopy }) {
   return (
     <span className="preview-model-source">
-      {model.source === 'subscription' ? <Plug size={12} aria-hidden="true" /> : null}
+      {'providerBrand' in model ? <PreviewModelIcon brand={model.providerBrand} /> : null}
       {source(model, t)}
     </span>
   );
@@ -52,65 +53,80 @@ export function PreviewModelDialog({
   const [role, setRole] = useState<Role | null>('main');
   const [search, setSearch] = useState('');
   const roleButtons = useRef<Partial<Record<Role, HTMLButtonElement>>>({});
-  const [filter, setFilter] = useState<'all' | 'api' | 'subscription'>('all');
+  const [filter, setFilter] = useState<ModelId | 'all'>('all');
+  const matches = PREVIEW_MODELS.filter(
+    (model) =>
+      (filter === 'all' || filter === model.id) &&
+      (model.name + ' ' + source(model, t)).toLowerCase().includes(search.trim().toLowerCase()),
+  );
   const modelOptions = (
     <div className="preview-model-menu">
-      <label className="preview-model-search">
-        <Search size={14} aria-hidden="true" />
-        <input
-          value={search}
-          placeholder={t.search}
-          aria-label={t.search}
-          onChange={(event) => setSearch(event.target.value)}
-        />
-      </label>
       <div className="preview-filters" role="group" aria-label={t.catalog}>
-        {(['all', 'api', 'subscription'] as const).map((key) => (
+        <button
+          type="button"
+          aria-label={t.all}
+          title={t.all}
+          aria-pressed={filter === 'all'}
+          onClick={() => setFilter('all')}
+        >
+          <Layers2 size={16} aria-hidden="true" />
+        </button>
+        {PREVIEW_MODELS.map((model) => (
           <button
             type="button"
-            key={key}
-            aria-pressed={filter === key}
-            onClick={() => setFilter(key)}
+            key={model.id}
+            aria-label={source(model, t)}
+            title={source(model, t)}
+            aria-pressed={filter === model.id}
+            onClick={() => setFilter(model.id)}
           >
-            {t[key]}
+            <PreviewModelIcon
+              brand={'providerBrand' in model ? model.providerBrand : model.brand}
+              subscription={model.source === 'subscription'}
+            />
           </button>
         ))}
       </div>
-      <ul className="preview-list">
-        {PREVIEW_MODELS.filter(
-          (model) =>
-            (filter === 'all' || filter === model.source) &&
-            (model.name + ' ' + source(model, t))
-              .toLowerCase()
-              .includes(search.trim().toLowerCase()),
-        ).map((model) => (
-          <li key={model.id}>
-            <button
-              type="button"
-              className="preview-model-row"
-              aria-pressed={role ? draft[role] === model.id : false}
-              onClick={() => {
-                if (!role) return;
-                setDraft({ ...draft, [role]: model.id });
-                setRole(null);
-                setSearch('');
-                roleButtons.current[role]?.focus();
-              }}
-            >
-              {model.source === 'api' ? (
-                <Layers size={15} aria-hidden="true" />
-              ) : (
-                <Plug size={15} aria-hidden="true" />
-              )}
-              <span>
-                <strong>{model.name}</strong>
-                <ModelSource model={model} t={t} />
-              </span>
-              {role && draft[role] === model.id ? <Check size={16} aria-hidden="true" /> : null}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="preview-model-results">
+        <label className="preview-model-search">
+          <Search size={14} aria-hidden="true" />
+          <input
+            value={search}
+            placeholder={t.search}
+            aria-label={t.search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+        </label>
+        {matches.length === 0 ? <p className="preview-hint">{t.noModels}</p> : null}
+        <ul className="preview-list">
+          {matches.map((model) => (
+            <li key={model.id}>
+              <button
+                type="button"
+                className="preview-model-row"
+                aria-pressed={role ? draft[role] === model.id : false}
+                onClick={() => {
+                  if (!role) return;
+                  setDraft({ ...draft, [role]: model.id });
+                  setRole(null);
+                  setSearch('');
+                  roleButtons.current[role]?.focus();
+                }}
+              >
+                <PreviewModelIcon
+                  brand={model.brand}
+                  subscription={model.source === 'subscription'}
+                />
+                <span className="preview-model-label">
+                  <strong>{model.name}</strong>
+                  <ModelSource model={model} t={t} />
+                </span>
+                {role && draft[role] === model.id ? <Check size={16} aria-hidden="true" /> : null}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 
@@ -132,8 +148,8 @@ export function PreviewModelDialog({
             aria-pressed={draft.main === PRESET.main && draft.task === PRESET.task}
             onClick={() => setDraft(PRESET)}
           >
-            <Layers size={15} aria-hidden="true" />
-            <span>
+            <Package size={15} aria-hidden="true" />
+            <span className="preview-model-label">
               <strong>{t.preset}</strong>
               <small>
                 {t.main} · Opus 5.5 / {t.task} · GPT-6.1 Sol
@@ -144,33 +160,40 @@ export function PreviewModelDialog({
             ) : null}
           </button>
         ) : (
-          (['main', 'task'] as const).map((key) => (
-            <section key={key} className="preview-model-section">
-              <strong>{t[key]}</strong>
-              <button
-                type="button"
-                className="preview-model-row preview-model-field"
-                aria-label={t[key] + ' · ' + previewModel(draft[key]).name}
-                aria-expanded={role === key}
-                ref={(button) => {
-                  if (button) roleButtons.current[key] = button;
-                  else delete roleButtons.current[key];
-                }}
-                onClick={() => {
-                  setRole(role === key ? null : key);
-                  setFilter('all');
-                  setSearch('');
-                }}
-              >
-                <span>
-                  <strong>{previewModel(draft[key]).name}</strong>
-                  <ModelSource model={previewModel(draft[key])} t={t} />
-                </span>
-                <ChevronDown size={15} aria-hidden="true" />
-              </button>
-              {role === key ? modelOptions : null}
-            </section>
-          ))
+          (['main', 'task'] as const).map((key) => {
+            const model = previewModel(draft[key]);
+            return (
+              <section key={key} className="preview-model-section">
+                <strong>{t[key]}</strong>
+                <button
+                  type="button"
+                  className="preview-model-row preview-model-field"
+                  aria-label={t[key] + ' · ' + model.name}
+                  aria-expanded={role === key}
+                  ref={(button) => {
+                    if (button) roleButtons.current[key] = button;
+                    else delete roleButtons.current[key];
+                  }}
+                  onClick={() => {
+                    setRole(role === key ? null : key);
+                    setFilter('all');
+                    setSearch('');
+                  }}
+                >
+                  <PreviewModelIcon
+                    brand={model.brand}
+                    subscription={model.source === 'subscription'}
+                  />
+                  <span className="preview-model-label">
+                    <strong>{model.name}</strong>
+                    <ModelSource model={model} t={t} />
+                  </span>
+                  <ChevronDown size={15} aria-hidden="true" />
+                </button>
+                {role === key ? modelOptions : null}
+              </section>
+            );
+          })
         )}
         <p className="preview-hint">{t.catalog}</p>
       </div>
@@ -293,7 +316,7 @@ export function PreviewMemoryReader({
           title={t.backToChat}
           onClick={onBack}
         >
-          <ChevronLeft size={18} aria-hidden="true" />
+          <ChevronLeft size={16} aria-hidden="true" />
         </button>
         {entry.kind === 'commit' ? <code className="preview-memory-sha">{entry.sha}</code> : null}
         <strong>{entry.kind === 'file' ? entry.path : entry.title}</strong>
@@ -308,7 +331,7 @@ export function PreviewMemoryReader({
             <p className="preview-memory-changes">{t.changedFiles} · 1</p>
             <details open className="preview-memory-diff">
               <summary>
-                <FileText size={15} aria-hidden="true" />
+                <ChevronDown size={16} aria-hidden="true" />
                 <strong>{entry.path}</strong>
                 <span className="preview-memory-diff-count">
                   <span className="mini-add">

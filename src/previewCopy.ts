@@ -1,11 +1,30 @@
 import type { Lang } from './content';
 
 export const PREVIEW_MODELS = [
-  { id: 'deepseek', name: 'DeepSeek V4 Flash', provider: 'DeepSeek', source: 'api' },
-  { id: 'openai', name: 'GPT-6.1', provider: 'OpenAI', source: 'api' },
-  { id: 'opencode', name: 'DeepSeek V4.1 Flash', provider: 'OpenCode Go', source: 'api' },
-  { id: 'codex', name: 'GPT-6.1 Sol', provider: 'Codex', source: 'subscription' },
-  { id: 'claude', name: 'Opus 5.5', provider: 'Claude Code', source: 'subscription' },
+  {
+    id: 'deepseek',
+    name: 'DeepSeek V4 Flash',
+    provider: 'DeepSeek',
+    brand: 'deepseek',
+    source: 'api',
+  },
+  { id: 'openai', name: 'GPT-6.1', provider: 'OpenAI', brand: 'openai', source: 'api' },
+  {
+    id: 'opencode',
+    name: 'DeepSeek V4.1 Flash',
+    provider: 'OpenCode Go',
+    brand: 'deepseek',
+    providerBrand: 'opencode',
+    source: 'api',
+  },
+  { id: 'codex', name: 'GPT-6.1 Sol', provider: 'Codex', brand: 'openai', source: 'subscription' },
+  {
+    id: 'claude',
+    name: 'Opus 5.5',
+    provider: 'Claude Code',
+    brand: 'claude',
+    source: 'subscription',
+  },
 ] as const;
 
 export type PreviewModel = (typeof PREVIEW_MODELS)[number];
@@ -43,7 +62,7 @@ export const PREVIEW_COPY = {
       'ACP（Agent Client Protocol）让客户端把任务交给外部 Agent，并接收执行结果。Tobs 的通用 ACP 引擎接入仍在规划中。v1.8.0 预告中的订阅引擎使用专用适配，Codex 走 app-server，Claude Code 走 Agent SDK。',
     sessionsTitle: '在对话里打开 Session',
     sessionsBody:
-      '点开消息关联的 Session，或从 Bot 的 Sessions 列表进入。桌面端在消息旁打开详情子面板，可查看目标、待办进度和完整对话。展开已完成轮次，再点开工具步骤查看命令、输出或文件改动。',
+      '点开消息关联的 Session，或从 Bot 的 Sessions 列表进入。桌面端的详情子面板在 Messages 内，与消息并排，可查看目标、待办进度和完整对话。展开已完成轮次，再点开工具步骤查看命令、输出或文件改动。',
     teamQuestion: '团队模式适用于哪些 Host？',
     engineQuestion: '可以用 ChatGPT 或 Claude 的订阅额度吗？',
     sessionsQuestion: '在哪里查看 Bot 的执行过程？',
@@ -56,6 +75,7 @@ export const PREVIEW_COPY = {
     modelPicker: '模型',
     specific: '指定模型',
     search: '搜索模型',
+    noModels: '没有匹配的模型',
     save: '保存',
     cancel: '取消',
     main: '主模型',
@@ -131,7 +151,7 @@ export const PREVIEW_COPY = {
       'ACP (Agent Client Protocol) lets a client delegate work to an external agent and receive its results. Tobs plans generic ACP engine support for a later phase. The subscription engines previewed in v1.8.0 use dedicated adapters, with Codex on app-server and Claude Code on the Agent SDK.',
     sessionsTitle: 'Open a Session from a conversation',
     sessionsBody:
-      'Follow a Session link from a message or open one from the Bot’s Sessions list. On desktop, a detail subpanel opens beside the messages with the goal, to-do progress and full conversation. Expand a completed turn, then open a tool step to see its command, output or file changes.',
+      'Follow a Session link from a message or open one from the Bot’s Sessions list. On desktop, the detail subpanel opens inside Messages, beside the conversation, with the goal, to-do progress and full dialogue. Expand a completed turn, then open a tool step to see its command, output or file changes.',
     teamQuestion: 'Which Hosts can use Team mode?',
     engineQuestion: 'Can I use my ChatGPT or Claude subscription?',
     sessionsQuestion: 'Where can I see how a Bot did its work?',
@@ -144,6 +164,7 @@ export const PREVIEW_COPY = {
     modelPicker: 'Model',
     specific: 'Specific models',
     search: 'Search models',
+    noModels: 'No matching models',
     save: 'Save',
     cancel: 'Cancel',
     main: 'Main model',
