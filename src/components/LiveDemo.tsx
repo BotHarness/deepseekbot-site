@@ -3,29 +3,29 @@ import {
   AlarmClock,
   ArrowUp,
   Bell,
-  BellOff,
+  BellRing,
   BatteryFull,
+  Brain,
   Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   Ellipsis,
   FileText,
-  Files,
-  FolderLock,
+  FolderKey,
+  GitBranch,
   GitCommitVertical,
   Hash,
-  ListTodo,
-  MessagesSquare,
+  MessagesCircle,
   Monitor,
-  Store,
-  PanelRightClose,
-  PanelRightOpen,
+  PanelRight,
   Plus,
   Plug,
   RotateCcw,
   ScanLine,
+  Server,
   Signal,
+  TextQuote,
   Wifi,
   Users,
   X,
@@ -54,6 +54,7 @@ import {
 import { PhonePair } from './FeatureDemos';
 import { HeroPhoneChat } from './HeroPhoneChat';
 import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
+import { MarketplaceIcon } from './MarketplaceIcon';
 import {
   HERO_CONVERSATIONS,
   PHONE_HOSTS,
@@ -76,17 +77,17 @@ const MIN_SUBPANEL_WIDTH = 20;
 
 const ICONS: Record<DemoIcon, LucideIcon> = {
   members: Users,
-  sessions: MessagesSquare,
-  files: Files,
-  history: GitCommitVertical,
+  sessions: TextQuote,
+  files: Brain,
+  history: GitBranch,
   schedules: AlarmClock,
-  workspace: FolderLock,
-  asleep: BellOff,
+  workspace: FolderKey,
+  asleep: BellRing,
 };
 
 function Icon({ name }: { name: DemoIcon }) {
   const Svg = ICONS[name];
-  return <Svg className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />;
+  return <Svg className="app-icon" size={16} aria-hidden="true" />;
 }
 
 /** A message the visitor typed after the script finished, and the Bot's canned answer. */
@@ -140,12 +141,19 @@ function Avatar({ name, size }: { name: string; size: number }) {
   return <PixelAvatar recipe={recipe} size={size} />;
 }
 
-/** A group's icon: its first three members, overlapping. */
+/** Static member stack for a channel without a custom icon. */
 function GroupAvatar({ bots, size }: { bots: string[]; size: number }) {
+  const faces = bots.slice(0, 3);
+  const faceSize = Math.round(size * ([0.64, 0.6, 0.43][faces.length - 1] ?? 0.43));
   return (
-    <span className="app-group-avatar" style={{ width: size, height: size }} aria-hidden="true">
-      {bots.slice(0, 3).map((bot) => (
-        <Avatar key={bot} name={bot} size={Math.round(size * 0.6)} />
+    <span
+      className="app-group-avatar"
+      data-count={faces.length}
+      style={{ width: size, height: size }}
+      aria-hidden="true"
+    >
+      {faces.map((bot) => (
+        <Avatar key={bot} name={bot} size={faceSize} />
       ))}
     </span>
   );
@@ -425,6 +433,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const isTeam = linkedPhone && phoneHost === 'studio' && active === 0;
   const isPreviewBot = linkedPhone && phoneHost === 'research' && active === 2;
   const memoryReader = previewPanel?.kind === 'memory' ? previewPanel.entry : undefined;
+  const hasDesktopMembers = previewPanel?.kind === 'members' && previewPanel.surface === 'desktop';
   const hasDesktopSession = previewPanel?.kind === 'session' && previewPanel.surface === 'desktop';
   const maxColumnWidth = hasDesktopSession ? 40 : 60;
   const visibleColumnWidth = Math.min(columnWidth, maxColumnWidth);
@@ -723,7 +732,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       aria-expanded={previewPanel?.surface === surface && previewPanel.kind === 'session'}
       onClick={(event) => showPreview('session', surface, event.currentTarget)}
     >
-      <ListTodo size={14} aria-hidden="true" />
+      <TextQuote size={14} aria-hidden="true" />
       {sessionTitle}
     </button>
   );
@@ -926,9 +935,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       count: needing.length + unseen.length,
     },
     { id: 'channels', label: t.channelsPanel, icon: Hash },
-    { id: 'chats', label: preview.chats, icon: MessagesSquare },
-    { id: 'marketplace', label: preview.marketplace, icon: Store },
-    { id: 'environment', label: preview.environment, icon: Monitor },
+    { id: 'chats', label: preview.chats, icon: MessagesCircle },
+    { id: 'marketplace', label: preview.marketplace, icon: MarketplaceIcon },
+    { id: 'environment', label: preview.environment, icon: Server },
   ] as const;
   const sidePanelTitle = sidePanels.find((item) => item.id === sidePanel)!;
   const SideIcon = sidePanelTitle.icon;
@@ -936,6 +945,20 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const showHost = linkedPhone && hostScope === 'all';
   const visibleConversations =
     sidePanel === 'chats' ? scopedRows.filter((row) => row.channel.kind === 'dm') : scopedRows;
+  const channelIdentity = (
+    <>
+      <span className="app-chat-avatar" aria-hidden="true">
+        {channel.kind === 'group' ? (
+          <GroupAvatar bots={channel.bots} size={20} />
+        ) : (
+          <Avatar name={channel.bots[0]!} size={20} />
+        )}
+      </span>
+      <span className="app-chat-name" title={channel.title}>
+        {channel.title}
+      </span>
+    </>
+  );
 
   return (
     <div
@@ -1014,7 +1037,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   setSidePanel(id);
                 }}
               >
-                <Glyph size={18} strokeWidth={1.75} aria-hidden="true" />
+                <Glyph size={18} aria-hidden="true" />
                 {'count' in item && item.count ? (
                   <span className="app-corner-count" aria-hidden="true">
                     {item.count}
@@ -1030,7 +1053,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             aria-label={sidePanelTitle.label}
           >
             <header className="app-pane-head">
-              <SideIcon className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
+              <SideIcon className="app-icon" size={16} aria-hidden="true" />
               <span className="app-pane-title">{sidePanelTitle.label}</span>
               {linkedPhone && (showChannels || sidePanel === 'notifications') ? (
                 <select
@@ -1197,25 +1220,26 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
 
           <section className="app-pane app-chat" aria-label={`${t.messages} · ${channel.title}`}>
             <header className="app-pane-head app-chat-head">
-              <MessagesSquare
-                className="app-icon"
-                size={16}
-                strokeWidth={1.75}
-                aria-hidden="true"
-              />
-              <span className="app-pane-title">{t.messages}</span>
-              <span className="app-pill">
-                {channel.kind === 'group' ? (
-                  <GroupAvatar bots={channel.bots} size={22} />
-                ) : (
-                  <Avatar name={channel.bots[0]!} size={22} />
-                )}
-                {channel.title}
+              <span className="app-chat-heading">
+                <MessagesCircle className="app-icon" size={16} aria-hidden="true" />
+                <span className="app-pane-title">{t.messages}</span>
               </span>
-              {linkedPhone ? <HeroPhoneSource host={phoneHost} /> : null}
-              {isTeam ? (
-                <span className="app-badge preview-team-badge">{preview.teamScope}</span>
-              ) : null}
+              <span className="app-chat-breadcrumb">
+                <ChevronRight className="app-icon" size={16} aria-hidden="true" />
+                {isTeam ? (
+                  <button
+                    type="button"
+                    className="app-chat-identity"
+                    aria-label={`${channel.title} · ${preview.members}`}
+                    aria-expanded={hasDesktopMembers}
+                    onClick={(event) => showPreview('members', 'desktop', event.currentTarget)}
+                  >
+                    {channelIdentity}
+                  </button>
+                ) : (
+                  <span className="app-chat-identity">{channelIdentity}</span>
+                )}
+              </span>
               {isPreviewBot ? modelTrigger('desktop') : null}
               <button
                 type="button"
@@ -1230,15 +1254,12 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   setPanelOpen((open) => !open);
                 }}
               >
-                {panelOpen ? (
-                  <PanelRightClose size={16} strokeWidth={1.75} aria-hidden="true" />
-                ) : (
-                  <PanelRightOpen size={16} strokeWidth={1.75} aria-hidden="true" />
-                )}
+                <PanelRight size={16} aria-hidden="true" />
               </button>
             </header>
             <div className="app-message-split" data-session={hasDesktopSession ? '' : undefined}>
               <div className="app-message-content">
+                {hasDesktopMembers ? renderPreview('desktop') : null}
                 {memoryReader ? (
                   <PreviewMemoryReader
                     key={memoryReader.kind + memoryReader.id}
@@ -1248,7 +1269,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                     onBack={closePreview}
                   />
                 ) : null}
-                <div className="app-message-timeline" hidden={memoryReader !== undefined}>
+                <div
+                  className="app-message-timeline"
+                  hidden={memoryReader !== undefined || hasDesktopMembers}
+                >
                   {linkedPhone && phonePhase === 'pair' ? (
                     <div className="hero-desktop-pair">
                       <PhonePair
@@ -1430,7 +1454,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                                   showPreview('session', 'desktop', event.currentTarget)
                                 }
                               >
-                                <ListTodo size={14} aria-hidden="true" />
+                                <TextQuote size={14} aria-hidden="true" />
                                 <span className="app-panel-text">
                                   <span>{sessionTitle}</span>
                                   <small>{preview.complete} · 3/3</small>
