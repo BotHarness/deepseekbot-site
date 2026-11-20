@@ -371,12 +371,14 @@ function SessionDemo({ copy, lang }: { copy: Copy; lang: Lang }) {
 
 function FeatureRow({
   id,
+  artwork,
   title,
   description,
   details,
   children,
 }: {
   id?: string;
+  artwork: 'identity' | 'schedules' | 'hosts' | 'sessions' | 'team';
   title: string;
   description?: string;
   details?: ReactNode;
@@ -390,6 +392,15 @@ function FeatureRow({
         {details}
       </div>
       <div className="workflow-feature-preview">
+        <img
+          className="workflow-feature-art"
+          src={`/demo-backgrounds/${artwork}-v1.webp`}
+          alt=""
+          width={1200}
+          height={800}
+          loading="lazy"
+          decoding="async"
+        />
         <div className="app workflow-feature-pane">{children}</div>
       </div>
     </article>
@@ -404,15 +415,16 @@ export function HomepageFeatures({ copy, lang }: { copy: Copy; lang: Lang }) {
       <h2 id="features-title">{t.features}</h2>
       <p className="section-lead">{t.featuresLead}</p>
       <div className="workflow-feature-rows">
-        {copy.features.items
-          .filter((item) => item.demo === 'identity' || item.demo === 'schedules')
-          .map((item) => (
-            <FeatureRow key={item.title} title={item.title} description={item.body}>
-              <FeatureDemo copy={copy} demo={item.demo!} />
+        {copy.features.items.map(({ demo, title, body }) =>
+          demo === 'identity' || demo === 'schedules' ? (
+            <FeatureRow key={demo} artwork={demo} title={title} description={body}>
+              <FeatureDemo copy={copy} demo={demo} />
             </FeatureRow>
-          ))}
+          ) : null,
+        )}
         <FeatureRow
           id="hosts"
+          artwork="hosts"
           title={t.network}
           description={t.networkBody}
           details={
@@ -423,11 +435,17 @@ export function HomepageFeatures({ copy, lang }: { copy: Copy; lang: Lang }) {
         >
           <NetworkDemo copy={copy} lang={lang} />
         </FeatureRow>
-        <FeatureRow id="sessions" title={preview.sessionsTitle} description={preview.sessionsBody}>
+        <FeatureRow
+          id="sessions"
+          artwork="sessions"
+          title={preview.sessionsTitle}
+          description={preview.sessionsBody}
+        >
           <SessionDemo copy={copy} lang={lang} />
         </FeatureRow>
         <FeatureRow
           id="team"
+          artwork="team"
           title={t.people}
           details={
             <>
