@@ -1189,17 +1189,37 @@ a.beta-button--ios {
   font-size: 10px;
 }
 .hero-phone-tabbar {
+  position: absolute;
+  z-index: 4;
+  inset: auto 8px var(--phone-tabbar-bottom);
+  box-sizing: border-box;
   display: flex;
-  flex: none;
+  height: var(--phone-tabbar-height);
   align-items: stretch;
   gap: 3px;
-  margin: 2px 8px 3px;
   padding: 4px;
   border-radius: 999px;
   border: 1px solid var(--phone-edge);
-  background: var(--phone-glass);
-  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--app-bg) 45%, transparent);
+  backdrop-filter: blur(4px);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+  pointer-events: none;
+}
+.hero-phone-app:has(> .hero-phone-tabbar) {
+  --phone-tabbar-height: 56px;
+  --phone-tabbar-bottom: 22px;
+  --phone-tabbar-inset: calc(var(--phone-tabbar-height) + var(--phone-tabbar-bottom) + 8px);
+}
+.hero-phone-app:has(> .hero-phone-tabbar) .hero-phone-page-feed {
+  padding-block-end: var(--phone-tabbar-inset);
+  scroll-padding-block-end: var(--phone-tabbar-inset);
+}
+.hero-linked-phone:has(.hero-phone-tabbar) > .hero-phone-home {
+  position: absolute;
+  z-index: 4;
+  inset: auto 0 8px;
+  margin: 0 auto;
+  pointer-events: none;
 }
 .hero-phone-tabbar button {
   display: flex;
@@ -1215,9 +1235,10 @@ a.beta-button--ios {
   color: var(--app-soft);
   font-size: 9px;
   cursor: pointer;
+  pointer-events: auto;
 }
 .hero-phone-tabbar button[aria-pressed='true'] {
-  background: var(--app-hover);
+  background: color-mix(in srgb, var(--app-hover) 52%, transparent);
   color: var(--app-user);
 }
 .hero-phone-tabbar button > span {
