@@ -1,14 +1,14 @@
-import { ArrowUp, ChevronLeft, Hash, Mic, Plus } from 'lucide-react';
-import { useEffect, type FormEvent, type ReactNode, type RefObject } from 'react';
+import { ArrowUp, ChevronLeft, Ellipsis, Hash, Mic, Plus } from 'lucide-react';
+import { useEffect, type FormEvent, type MouseEvent, type ReactNode, type RefObject } from 'react';
 
 /** Web presentation of the native chat chrome; the parent owns the shared conversation. */
 export function HeroPhoneChat({
   title,
   onBack,
   group,
-  source,
+  model,
   status,
-  actions,
+  onProfile,
   avatar,
   feedRef,
   children,
@@ -21,9 +21,9 @@ export function HeroPhoneChat({
   title: string;
   onBack: () => void;
   group: boolean;
-  source: ReactNode;
+  model?: ReactNode;
   status?: ReactNode;
-  actions?: ReactNode;
+  onProfile: (event: MouseEvent<HTMLButtonElement>) => void;
   avatar: ReactNode;
   feedRef: RefObject<HTMLDivElement | null>;
   children: ReactNode;
@@ -31,7 +31,7 @@ export function HeroPhoneChat({
   onChange: (value: string) => void;
   onSubmit: (event: FormEvent) => void;
   ready: boolean;
-  labels: { back: string; composer: string; send: string };
+  labels: { back: string; profile: string; composer: string; send: string };
 }) {
   useEffect(() => {
     const feed = feedRef.current;
@@ -43,21 +43,40 @@ export function HeroPhoneChat({
         <button type="button" className="hero-phone-back" aria-label={labels.back} onClick={onBack}>
           <ChevronLeft size={21} strokeWidth={2.2} aria-hidden="true" />
         </button>
-        <div className="hero-phone-title">
-          {group ? <Hash size={19} aria-hidden="true" /> : avatar}
-          <span className="hero-phone-title-copy">
-            <span className="hero-phone-title-name">
-              <strong>{title}</strong>
-              {source}
+        <button
+          type="button"
+          className="hero-phone-title"
+          title={labels.profile}
+          onClick={onProfile}
+        >
+          {group ? (
+            <span className="hero-phone-header-channel" aria-hidden="true">
+              <Hash size={16} />
             </span>
-            {status ? (
-              <span className="hero-phone-chat-status" aria-hidden="true">
-                {status}
-              </span>
-            ) : null}
+          ) : (
+            avatar
+          )}
+          <span className="hero-phone-title-copy">
+            <strong>{title}</strong>
+            <span className="hero-phone-chat-status">
+              {model ? (
+                <span className="hero-phone-header-model">
+                  {model}
+                  <span aria-hidden="true">·</span>
+                </span>
+              ) : null}
+              <span className="hero-phone-header-state">{status}</span>
+            </span>
           </span>
-        </div>
-        {actions}
+        </button>
+        <button
+          type="button"
+          className="hero-phone-back"
+          aria-label={labels.profile}
+          onClick={onProfile}
+        >
+          <Ellipsis size={20} aria-hidden="true" />
+        </button>
       </header>
       <div className="hero-phone-feed" ref={feedRef}>
         <ol className="app-msgs">{children}</ol>

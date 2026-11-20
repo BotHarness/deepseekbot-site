@@ -808,37 +808,163 @@
   display: none;
 }
 
-.hero-phone-head .preview-model-trigger {
-  max-width: 45%;
-  min-height: 34px;
-  margin-left: auto;
-  line-height: 1.2;
-}
-
-.hero-phone-head:has(.preview-model-trigger, .preview-phone-members) .hero-phone-title {
-  flex: 0 1 auto;
-  padding-inline: 7px;
-  gap: 4px;
-}
-
-.hero-phone-head:has(.preview-model-trigger) .hero-phone-source > span {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-
-.hero-phone-head .preview-phone-members {
-  flex: none;
-  margin-left: auto;
-}
-
 .hero-phone-app .preview-panel {
   flex: 1;
   margin: 0 4px 12px;
   border: 0;
   border-radius: 0;
+}
+
+.hero-phone-app .hero-phone-profile {
+  gap: 8px;
+  margin-inline: 0;
+  padding-inline: 12px;
+}
+
+.hero-phone-profile-head {
+  display: flex;
+  flex: none;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-phone-profile-identity {
+  display: flex;
+  flex: none;
+  min-height: 114px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--app-side);
+}
+
+.hero-phone-profile-identity > span {
+  display: flex;
+  overflow: hidden;
+  border: 3px solid var(--app-bg);
+  border-radius: 50%;
+}
+
+.hero-phone-profile-identity > strong {
+  z-index: 0;
+  max-width: 95%;
+  margin-top: -4px;
+  padding: 1px 9px;
+  border: 1px solid var(--phone-edge);
+  border-radius: 16px;
+  background: var(--app-bg);
+  font-size: 13px;
+}
+
+.hero-phone-profile-tabs {
+  display: flex;
+  flex: none;
+  justify-content: space-around;
+}
+
+.hero-phone-profile-tabs button,
+.hero-phone-model-families button {
+  display: inline-flex;
+  min-width: 0;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--app-soft);
+  cursor: pointer;
+}
+
+.hero-phone-profile-tabs button[aria-pressed='true'],
+.hero-phone-model-families button[aria-pressed='true'] {
+  background: var(--app-info-bg);
+  color: var(--app-info);
+}
+
+.hero-phone-profile-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.hero-phone-profile-body h3,
+.hero-phone-profile-body h4 {
+  margin: 3px 0 8px;
+  font: inherit;
+  font-weight: 600;
+}
+
+.hero-phone-profile-body h4 {
+  color: var(--app-soft);
+  font-size: 11px;
+}
+
+.hero-phone-profile-rows {
+  margin-block: 8px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--app-side);
+}
+
+.hero-phone-profile-row {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 0;
+  background: transparent;
+  text-align: start;
+}
+
+.hero-phone-profile-row + .hero-phone-profile-row {
+  border-top: 1px solid var(--phone-edge);
+}
+
+button.hero-phone-profile-row {
+  cursor: pointer;
+}
+
+.hero-phone-profile-row > svg {
+  flex: none;
+  color: var(--app-soft);
+}
+
+.hero-phone-profile-row > span:not(.preview-model-icon) {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-phone-profile-row small {
+  color: var(--app-soft);
+  font-size: 11px;
+}
+
+.hero-phone-settings-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hero-phone-model-search {
+  padding: 7px;
+  border-radius: 9px;
+  background: var(--app-side);
+}
+
+.hero-phone-model-families {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  font-size: 11px;
 }
 
 .hero-phone-app .preview-panel-head {

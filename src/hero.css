@@ -405,22 +405,38 @@ a.beta-button--ios {
   cursor: pointer;
 }
 .hero-phone-title {
-  gap: 7px;
-  padding: 0 12px;
+  flex: 1;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 0 8px 0 4px;
   min-width: 0;
-  max-width: calc(100% - 42px);
+  cursor: pointer;
+  text-align: start;
 }
-.hero-phone-title svg {
-  color: var(--app-soft);
+.hero-phone-title > .pixel-avatar,
+.hero-phone-header-channel {
   flex: none;
+}
+.hero-phone-title > .pixel-avatar svg {
+  border-radius: 50%;
+}
+.hero-phone-header-channel {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--app-side);
+  color: var(--app-soft);
 }
 .hero-phone-title-copy {
   display: flex;
   min-width: 0;
   flex-direction: column;
 }
-.hero-phone-title-name,
-.hero-phone-chat-status {
+.hero-phone-chat-status,
+.hero-phone-header-model,
+.hero-phone-header-state {
   display: flex;
   min-width: 0;
   align-items: center;
@@ -428,25 +444,32 @@ a.beta-button--ios {
 }
 .hero-phone-title strong {
   font-size: 13px;
+  line-height: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.hero-phone-title:has(.hero-phone-chat-status) strong {
-  line-height: 15px;
 }
 .hero-phone-chat-status {
   color: var(--app-soft);
   font-size: 10px;
-  line-height: 13px;
+  line-height: 12px;
 }
-.hero-phone-chat-status .pixel-avatar {
+.hero-phone-header-state > .pixel-avatar,
+.hero-phone-header-model > span:last-child {
   flex: none;
 }
-.hero-phone-chat-status > span:last-child {
+.hero-phone-header-model > .preview-model-icon svg {
+  width: 11px;
+  height: 11px;
+}
+.hero-phone-header-model > span:nth-child(2),
+.hero-phone-header-state > span:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.hero-phone-header-state {
+  flex: none;
 }
 .hero-phone-feed {
   flex: 1;
@@ -1103,13 +1126,4 @@ a.beta-button--ios {
   .hero-phone-page {
     animation: none;
   }
-}
-
-.hero-phone-title .hero-phone-source {
-  flex: none;
-  font-size: 8px;
-}
-.hero-phone-title .hero-phone-source svg {
-  width: 9px;
-  height: 9px;
 }

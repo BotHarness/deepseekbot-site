@@ -46,10 +46,12 @@ import {
   PreviewModelDialog,
   PreviewSessionDetail,
   previewModel,
+  type ModelPlan,
 } from './HeroPreviewPanels';
 import { PhonePair } from './FeatureDemos';
 import { HeroPhoneChat } from './HeroPhoneChat';
 import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
+import { HeroPhoneProfile, type PhoneProfilePage, type PhoneProfileTab } from './HeroPhoneProfile';
 import { MarketplaceIcon } from './MarketplaceIcon';
 import { MemoryMarkdownIcon } from './MemoryMarkdownIcon';
 import { PreviewModelIcon } from './PreviewModelIcon';
@@ -96,6 +98,7 @@ type SessionConversation = { draft: string; messages: string[] };
 const EMPTY_SESSION_CONVERSATION: SessionConversation = { draft: '', messages: [] };
 type PreviewPanel =
   | { kind: PreviewKind; surface: PreviewSurface }
+  | { kind: 'profile'; surface: 'phone'; page: PhoneProfilePage }
   | { kind: 'memory'; surface: 'desktop'; entry: DemoMemoryEntry };
 type SidePanel = 'notifications' | 'channels' | 'chats' | 'marketplace' | 'environment';
 type HostScope = PhoneHostId | 'all';
@@ -353,13 +356,16 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const lang = copy.htmlLang === 'en' ? 'en' : 'zh';
   const hero = HERO_COPY[lang];
   const preview = PREVIEW_COPY[lang];
-  const [modelPlan, setModelPlan] = useState(DEFAULT_PREVIEW_MODELS);
+  const [modelPlans, setModelPlans] = useState<Record<string, ModelPlan>>({});
+  const [botProfileTab, setBotProfileTab] = useState<PhoneProfileTab>('work');
+  const [groupProfileTab, setGroupProfileTab] = useState<PhoneProfileTab>('members');
   const [sessionConversations, setSessionConversations] = useState<
     Record<string, SessionConversation>
   >({});
   const [previewPanel, setPreviewPanel] = useState<PreviewPanel>();
   const previewTrigger = useRef<HTMLButtonElement>(null);
   const previewClose = useRef<HTMLButtonElement>(null);
+  const profileReturnFocus = useRef<'models' | 'main' | 'task' | undefined>(undefined);
   const subpanelToggle = useRef<HTMLButtonElement>(null);
   const chatScrollBeforeMemory = useRef<number | undefined>(undefined);
   const restorePreviewFocus = useRef(false);
@@ -443,6 +449,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const visibleSessionWidth = Math.min(sessionWidth, maxSessionWidth);
   const sessionTitle = isTeam ? preview.session : preview.localSession;
   const sessionConversation = sessionConversations[channel.id] ?? EMPTY_SESSION_CONVERSATION;
+  const modelPlan = modelPlans[channel.id] ?? DEFAULT_PREVIEW_MODELS;
   const model = previewModel(modelPlan.main);
   const panel = useMemo(() => {
     const sections = panelAt(channel, shown);
@@ -488,9 +495,21 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     });
   }
 
+  function saveModelPlan(next: ModelPlan) {
+    setModelPlans((current) => ({ ...current, [channel.id]: next }));
+  }
+
   useLayoutEffect(() => {
-    if (previewPanel) previewClose.current?.focus({ preventScroll: true });
-    else if (restorePreviewFocus.current) {
+    if (previewPanel) {
+      const restore = profileReturnFocus.current;
+      profileReturnFocus.current = undefined;
+      const row = restore
+        ? previewClose.current
+            ?.closest('.hero-phone-profile')
+            ?.querySelector<HTMLButtonElement>(`[data-profile-focus="${restore}"]`)
+        : undefined;
+      (row ?? previewClose.current)?.focus({ preventScroll: true });
+    } else if (restorePreviewFocus.current) {
       restorePreviewFocus.current = false;
       const trigger = previewTrigger.current;
       (trigger?.getClientRects().length ? trigger : subpanelToggle.current)?.focus({
@@ -521,6 +540,24 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   function closePreview() {
     restorePreviewFocus.current = true;
     setPreviewPanel(undefined);
+  }
+
+  function openPhoneProfile(trigger: HTMLButtonElement) {
+    previewTrigger.current = trigger;
+    setPreviewPanel({ kind: 'profile', surface: 'phone', page: 'profile' });
+  }
+
+  function phoneProfilePage(page: PhoneProfilePage) {
+    setPreviewPanel({ kind: 'profile', surface: 'phone', page });
+  }
+
+  function backFromPhoneProfile(page: PhoneProfilePage) {
+    if (page === 'profile') {
+      closePreview();
+    } else {
+      profileReturnFocus.current = page;
+      phoneProfilePage(page === 'models' ? 'profile' : 'models');
+    }
   }
 
   // start playing when the window is mostly on screen, once
@@ -765,17 +802,17 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       {sessionTitle}
     </button>
   );
-  const modelTrigger = (surface: PreviewSurface) => (
+  const modelTrigger = (
     <button
       type="button"
       className="preview-model-trigger"
       aria-label={preview.modelPicker + ' · ' + model.name}
       aria-haspopup="dialog"
-      aria-expanded={previewPanel?.surface === surface && previewPanel.kind === 'models'}
+      aria-expanded={previewPanel?.surface === 'desktop' && previewPanel.kind === 'models'}
       title={
         model.provider + ' · ' + (model.source === 'api' ? preview.api : preview.plans[model.id])
       }
-      onClick={(event) => showPreview('models', surface, event.currentTarget)}
+      onClick={(event) => showPreview('models', 'desktop', event.currentTarget)}
     >
       <PreviewModelIcon brand={model.brand} subscription={model.source === 'subscription'} />
       <span>{model.name}</span>
@@ -799,8 +836,53 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       ))}
     </>
   );
+  const profileMembers = (
+    <>
+      <p className="preview-hint">{preview.teamScope}</p>
+      <ul className="preview-list">
+        {teamRoster}
+        {channel.bots.map((bot) => (
+          <li className="app-panel-item" key={bot}>
+            <Avatar name={bot} size={22} />
+            {bot}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
   const renderPreview = (surface: PreviewSurface) => {
     if (previewPanel?.surface !== surface || previewPanel.kind === 'memory') return null;
+    if (previewPanel.kind === 'profile') {
+      const { page } = previewPanel;
+      const group = channel.kind === 'group';
+      return (
+        <HeroPhoneProfile
+          t={preview}
+          title={channel.title}
+          avatar={
+            group ? (
+              <GroupAvatar bots={channel.bots} size={60} />
+            ) : (
+              <Avatar name={channel.bots[0]!} size={60} />
+            )
+          }
+          group={group}
+          tab={group ? groupProfileTab : botProfileTab}
+          onTab={group ? setGroupProfileTab : setBotProfileTab}
+          page={page}
+          plan={modelPlan}
+          onPage={phoneProfilePage}
+          onSelect={(next) => {
+            saveModelPlan(next);
+            backFromPhoneProfile(page);
+          }}
+          onBack={() => backFromPhoneProfile(page)}
+          backRef={previewClose}
+          members={group ? profileMembers : undefined}
+          session={sessionAvailable ? sessionTitle : undefined}
+        />
+      );
+    }
     const kind = previewPanel.kind;
     const title =
       kind === 'session' ? sessionTitle : kind === 'models' ? preview.modelPicker : preview.members;
@@ -845,7 +927,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             plan={modelPlan}
             onCancel={closePreview}
             onSave={(next) => {
-              setModelPlan(next);
+              saveModelPlan(next);
               closePreview();
             }}
           />
@@ -866,18 +948,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             }
           />
         ) : (
-          <div className="app-panel-body">
-            <p className="preview-hint">{preview.teamScope}</p>
-            <ul className="preview-list">
-              {teamRoster}
-              {channel.bots.map((bot) => (
-                <li key={bot} className="app-panel-item">
-                  <Avatar name={bot} size={22} />
-                  {bot}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="app-panel-body">{profileMembers}</div>
         )}
       </Panel>
     );
@@ -1034,7 +1105,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           previewClose.current?.closest('.app')?.contains(event.target as Node)
         ) {
           event.stopPropagation();
-          closePreview();
+          if (previewPanel.kind === 'profile') backFromPhoneProfile(previewPanel.page);
+          else closePreview();
         }
       }}
       data-device={
@@ -1312,7 +1384,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   </span>
                 ) : null}
               </span>
-              {isPreviewBot ? modelTrigger('desktop') : null}
+              {isPreviewBot ? modelTrigger : null}
               <button
                 type="button"
                 className="app-icon-btn app-panel-toggle"
@@ -1738,27 +1810,15 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                       >
                         <HeroPhoneChat
                           onBack={onBack}
-                          actions={
-                            isTeam ? (
-                              <button
-                                type="button"
-                                className="hero-phone-back preview-phone-members"
-                                aria-label={preview.members}
-                                aria-expanded={
-                                  previewPanel?.surface === 'phone' &&
-                                  previewPanel.kind === 'members'
-                                }
-                                onClick={(event) =>
-                                  showPreview('members', 'phone', event.currentTarget)
-                                }
-                              >
-                                <Users size={18} aria-hidden="true" />
-                              </button>
-                            ) : isPreviewBot ? (
-                              modelTrigger('phone')
+                          onProfile={(event) => openPhoneProfile(event.currentTarget)}
+                          model={
+                            channel.kind === 'dm' ? (
+                              <>
+                                <PreviewModelIcon brand={model.brand} />
+                                <span title={model.name}>{model.shortName}</span>
+                              </>
                             ) : undefined
                           }
-                          source={<HeroPhoneSource host={phoneHost} />}
                           status={
                             working ? (
                               <>
@@ -1769,7 +1829,13 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                                   {t.activity[working.tool === 'thinking' ? 'thinking' : 'working']}
                                 </span>
                               </>
-                            ) : undefined
+                            ) : channel.kind === 'group' ? (
+                              fill(preview.phoneProfile.memberCount, {
+                                count: String(channel.bots.length + teamMembers.length),
+                              })
+                            ) : (
+                              t.states.idle
+                            )
                           }
                           title={channel.title}
                           group={channel.bots.length > 1}
@@ -1787,6 +1853,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                           ready={done}
                           labels={{
                             back: hero.back,
+                            profile: preview.phoneProfile.open,
                             composer: isTeam
                               ? fill(preview.composer, { name: 'Jun' })
                               : fill(t.composer, {
