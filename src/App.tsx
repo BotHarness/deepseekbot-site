@@ -4,7 +4,6 @@ import { BotCompanion } from './components/BotCompanion';
 import { useAvatarDesign } from './avatarDesign';
 import { Community } from './components/Community';
 import { Crew } from './components/Crew';
-import { FeatureDemo } from './components/FeatureDemos';
 import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
 import { LiveDemo } from './components/LiveDemo';
@@ -12,14 +11,20 @@ import { Install } from './components/Install';
 import { MobileBeta } from './components/MobileBeta';
 import { PromoVideo } from './components/PromoVideo';
 import { Playground } from './components/Playground';
-import { SymbolIcon } from './components/SymbolIcon';
-import { SponsorFooter, Sponsors } from './components/Sponsors';
+import { Sponsors } from './components/Sponsors';
+import {
+  HomepageFeatures,
+  HomepageFooter,
+  HowTobsWorks,
+  OpenToEveryone,
+} from './components/HomepageSections';
 import { COPY, LINKS } from './content';
 import { HERO_COPY } from './heroCopy';
 import { PREVIEW_COPY } from './previewCopy';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
-import { changelogPath, guidePath, initialMode, pathLang, write, type Mode } from './site';
+import { blogPath, initialMode, pathLang, write, type Mode } from './site';
+import { HOMEPAGE_COPY } from './homepageCopy';
 
 export function App() {
   const lang = pathLang();
@@ -27,6 +32,7 @@ export function App() {
   const copy = COPY[lang];
   const hero = HERO_COPY[lang];
   const preview = PREVIEW_COPY[lang];
+  const home = HOMEPAGE_COPY[lang];
   const design = useAvatarDesign();
 
   useEffect(() => {
@@ -77,7 +83,6 @@ export function App() {
               <HeroLinks lang={lang} />
             </div>
             <figure className="hero-product">
-              <p className="hero-preview-badge">{preview.badge}</p>
               <LiveDemo copy={copy} linkedPhone />
               <figcaption className="hero-caption">{preview.caption}</figcaption>
             </figure>
@@ -85,6 +90,16 @@ export function App() {
           <Crew copy={copy} lang={lang} />
           <div className="ground" aria-hidden="true" />
         </section>
+
+        <HowTobsWorks copy={copy} lang={lang} />
+
+        <section className="section workflow-section" id="install" aria-labelledby="install-title">
+          <h2 id="install-title">{home.install}</h2>
+          <Install copy={copy} lang={lang} />
+          <MobileBeta lang={lang} placement="install" />
+        </section>
+
+        <HomepageFeatures copy={copy} lang={lang} />
 
         <section
           className="section section--alt section--center"
@@ -95,75 +110,6 @@ export function App() {
           <h2 id="video-title">{copy.video.title}</h2>
           <p className="section-lead">{copy.video.lead}</p>
           <PromoVideo copy={copy} />
-        </section>
-
-        <section className="section feature-section" id="features" aria-labelledby="features-title">
-          <p className="kicker">{copy.features.kicker}</p>
-          <h2 id="features-title">{copy.features.title}</h2>
-          <p className="section-lead">{copy.features.lead}</p>
-          <p className="section-lead">
-            {copy.features.release.text}{' '}
-            <a href={copy.features.release.href}>{copy.features.release.label} →</a>
-          </p>
-          <ol className="feature-rows">
-            {copy.features.items
-              .filter((item) => item.demo)
-              .map((item) => (
-                <li key={item.title} className="feature-row">
-                  <div className="feature-text">
-                    <span className="feature-icon">
-                      <SymbolIcon symbol={item.icon} color="#3d5afe" size={40} />
-                    </span>
-                    <h3>
-                      {item.title}
-                      {item.tag ? <span className="tag">{item.tag}</span> : null}
-                    </h3>
-                    <p>{item.body}</p>
-                    {item.guide ? (
-                      <a className="feature-guide" href={guidePath(lang, item.guide.slug)}>
-                        {item.guide.label} →
-                      </a>
-                    ) : null}
-                    {item.cta ? (
-                      <a className="feature-guide" href={item.cta.href}>
-                        {item.cta.label} →
-                      </a>
-                    ) : null}
-                  </div>
-                  <FeatureDemo copy={copy} demo={item.demo!} />
-                </li>
-              ))}
-          </ol>
-          <ul className="feature-grid">
-            {copy.features.items
-              .filter((item) => !item.demo)
-              .map((item) => (
-                <li key={item.title} className="feature frame">
-                  <span className="feature-icon">
-                    <SymbolIcon symbol={item.icon} color="#3d5afe" size={40} />
-                  </span>
-                  <h3>
-                    {item.title}
-                    {item.tag ? <span className="tag">{item.tag}</span> : null}
-                  </h3>
-                  <p>{item.body}</p>
-                  {item.guide ? (
-                    <a className="feature-guide" href={guidePath(lang, item.guide.slug)}>
-                      {item.guide.label} →
-                    </a>
-                  ) : null}
-                </li>
-              ))}
-          </ul>
-          <aside className="dsh-note frame">
-            <h3>{copy.dsh.title}</h3>
-            <p>
-              {copy.dsh.body}{' '}
-              <a href={LINKS.issues} target="_blank" rel="noreferrer">
-                {copy.dsh.issues}
-              </a>
-            </p>
-          </aside>
         </section>
 
         <section className="section section--alt" id="avatar" aria-labelledby="avatar-title">
@@ -188,13 +134,6 @@ export function App() {
           <Playground copy={copy} lang={lang} design={design} />
         </section>
 
-        <section className="section" id="install" aria-labelledby="install-title">
-          <p className="kicker">{copy.install.kicker}</p>
-          <h2 id="install-title">{copy.install.title}</h2>
-          <MobileBeta lang={lang} placement="install" />
-          <Install copy={copy} lang={lang} />
-        </section>
-
         <section className="section" id="reviews" aria-labelledby="reviews-title">
           <p className="kicker">{copy.reviews.kicker}</p>
           <h2 id="reviews-title">{copy.reviews.title}</h2>
@@ -215,9 +154,10 @@ export function App() {
           <Community copy={copy} />
         </section>
 
-        <Sponsors lang={lang} />
-
         <Faq copy={copy} />
+
+        <OpenToEveryone lang={lang} />
+        <Sponsors lang={lang} />
 
         <section
           className="section section--alt compare-section"
@@ -240,38 +180,15 @@ export function App() {
             ))}
           </ul>
           <p className="compare-note">{copy.compare.note}</p>
+          <a className="workflow-link" href={blogPath(lang)}>
+            {home.blog} →
+          </a>
         </section>
       </main>
 
       <BotCompanion lang={lang} design={design} />
 
-      <footer className="footer">
-        <SponsorFooter lang={lang} />
-        <div className="footer-links">
-          <a href="#compare">{copy.compare.kicker}</a>
-          <a href={LINKS.github} target="_blank" rel="noreferrer">
-            GitHub
-          </a>
-          <a href={LINKS.docs} target="_blank" rel="noreferrer">
-            botharness.ai
-          </a>
-          <a href={LINKS.npm} target="_blank" rel="noreferrer">
-            npm
-          </a>
-          <a href={LINKS.botpixel} target="_blank" rel="noreferrer">
-            BotPixel
-          </a>
-          <a href={changelogPath(lang)}>{copy.nav.changelog}</a>
-          <a href={LINKS.discord} target="_blank" rel="noreferrer">
-            Discord
-          </a>
-          <a href={lang === 'zh' ? '/privacy/' : '/en/privacy/'}>{copy.footer.privacy}</a>
-          <a href={lang === 'zh' ? '/terms/' : '/en/terms/'}>{copy.footer.terms}</a>
-        </div>
-        <p>
-          {copy.footer.built} {copy.footer.license} {copy.footer.community}
-        </p>
-      </footer>
+      <HomepageFooter copy={copy} lang={lang} />
     </Theme>
   );
 }

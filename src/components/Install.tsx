@@ -2,7 +2,8 @@ import { Button } from '@astryxdesign/core/Button';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { useState, type ReactNode } from 'react';
 import { track } from '../analytics';
-import { DESKTOP_PACKAGE, INSTALL_STEPS, type Copy, type Lang } from '../content';
+import { DESKTOP_PACKAGE, DSH_VERSION, INSTALL_STEPS, type Copy, type Lang } from '../content';
+import { HOMEPAGE_COPY } from '../homepageCopy';
 import { docsPath, guidePath } from '../site';
 
 export function Command({
@@ -83,7 +84,7 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
   const [way, setWay] = useState<Way>('desktop');
   const t = copy.install;
   return (
-    <div className="install frame">
+    <div className="install workflow-install">
       <SegmentedControl
         label={t.tabsLabel}
         value={way}
@@ -99,10 +100,25 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
 
       {way === 'desktop' ? (
         <>
-          <p className="install-lead">{t.desktop.lead}</p>
-          <ol className="steps">
-            {t.desktop.steps.map((step, i) => (
-              <Step key={step} n={i + 1} title={step}>
+          <ol className="workflow-install-cards" data-placement="install_desktop">
+            {HOMEPAGE_COPY[lang].installSteps.map((step, i) => (
+              <li key={step.title} className="workflow-card">
+                <span className="workflow-step-no" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+                {i === 0 ? (
+                  <div>
+                    <small>
+                      {HOMEPAGE_COPY[lang].recommendedDsh} {DSH_VERSION}
+                    </small>
+                    <br />
+                    <a className="workflow-link" href={t.desktop.downloadUrl}>
+                      {HOMEPAGE_COPY[lang].download} →
+                    </a>
+                  </div>
+                ) : null}
                 {i === 1 ? (
                   <Command
                     command={DESKTOP_PACKAGE}
@@ -111,14 +127,20 @@ export function Install({ copy, lang }: { copy: Copy; lang: Lang }) {
                     onCopy={() => track('install:command_copy', { tab: 'desktop', step: i + 1 })}
                   />
                 ) : null}
-              </Step>
+                {i === 2 ? (
+                  <a className="workflow-link" href={guidePath(lang, 'settings')}>
+                    {HOMEPAGE_COPY[lang].setupModels} →
+                  </a>
+                ) : null}
+                {i === 3 ? (
+                  <a className="workflow-link" href={docsPath(lang)}>
+                    {HOMEPAGE_COPY[lang].getStarted} →
+                  </a>
+                ) : null}
+              </li>
             ))}
-            <NextStep copy={copy} lang={lang} way="desktop" />
           </ol>
           <p className="install-links">
-            <a href={t.desktop.downloadUrl} target="_blank" rel="noreferrer">
-              {t.desktop.download}
-            </a>
             <a href={t.desktop.docsUrl} target="_blank" rel="noreferrer">
               {t.desktop.docs}
             </a>

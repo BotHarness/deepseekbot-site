@@ -73,7 +73,7 @@ interface Feature {
   /** an on-page link in place of a guide, such as the community section */
   cta?: { label: string; href: string };
   /** the hands-on demo shown beside it; features without one are listed as cards */
-  demo?: keyof FeatureDemoCopy;
+  demo?: keyof FeatureDemoCopy | 'browser';
 }
 
 export interface Copy {
@@ -384,25 +384,21 @@ const zh: Copy = {
         icon: 'subagent',
         title: PREVIEW_COPY.zh.teamTitle,
         body: PREVIEW_COPY.zh.teamBody,
-        tag: PREVIEW_COPY.zh.badge,
       },
       {
         icon: 'thinking',
         title: PREVIEW_COPY.zh.modelsTitle,
         body: PREVIEW_COPY.zh.modelsBody,
-        tag: PREVIEW_COPY.zh.badge,
       },
       {
         icon: 'workflow',
         title: PREVIEW_COPY.zh.enginesTitle,
         body: PREVIEW_COPY.zh.enginesBody,
-        tag: PREVIEW_COPY.zh.badge,
       },
       {
         icon: 'goal',
         title: PREVIEW_COPY.zh.sessionsTitle,
         body: PREVIEW_COPY.zh.sessionsBody,
-        tag: PREVIEW_COPY.zh.badge,
       },
       {
         icon: 'web',
@@ -413,6 +409,7 @@ const zh: Copy = {
       },
       {
         icon: 'bash',
+        demo: 'browser',
         title: 'Computer 与 Browser use',
         body: 'Browser 与 Computer 已随正式包附带，每个 Bot 默认关闭访问，授权后才能操作。支持 macOS、Windows、Linux 本机电脑与 Docker Computer，Bot 浏览器可实时预览并由你接管；首次使用可能需要下载驱动或安装系统依赖。只读分享不能点击或导航，agent-browser 试用驱动为可选加装。',
         tag: '随包附带 · 按需授权',
@@ -543,17 +540,17 @@ const zh: Copy = {
       {
         id: 'team-preview',
         question: PREVIEW_COPY.zh.teamQuestion,
-        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.teamAnswer}`,
+        answer: PREVIEW_COPY.zh.teamAnswer,
       },
       {
         id: 'engines-preview',
         question: PREVIEW_COPY.zh.engineQuestion,
-        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.engineAnswer}`,
+        answer: PREVIEW_COPY.zh.engineAnswer,
       },
       {
         id: 'acp-preview',
         question: PREVIEW_COPY.zh.acpTitle,
-        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.acpBody}`,
+        answer: PREVIEW_COPY.zh.acpBody,
         links: [
           { label: 'ACP 接入讨论', href: 'https://github.com/BotHarness/DeepSeekBot/issues/4254' },
         ],
@@ -561,7 +558,7 @@ const zh: Copy = {
       {
         id: 'sessions-preview',
         question: PREVIEW_COPY.zh.sessionsQuestion,
-        answer: `${PREVIEW_COPY.zh.badge} · ${PREVIEW_COPY.zh.sessionsAnswer}`,
+        answer: PREVIEW_COPY.zh.sessionsAnswer,
       },
       {
         id: 'cost',
@@ -886,25 +883,21 @@ const en: Copy = {
         icon: 'subagent',
         title: PREVIEW_COPY.en.teamTitle,
         body: PREVIEW_COPY.en.teamBody,
-        tag: PREVIEW_COPY.en.badge,
       },
       {
         icon: 'thinking',
         title: PREVIEW_COPY.en.modelsTitle,
         body: PREVIEW_COPY.en.modelsBody,
-        tag: PREVIEW_COPY.en.badge,
       },
       {
         icon: 'workflow',
         title: PREVIEW_COPY.en.enginesTitle,
         body: PREVIEW_COPY.en.enginesBody,
-        tag: PREVIEW_COPY.en.badge,
       },
       {
         icon: 'goal',
         title: PREVIEW_COPY.en.sessionsTitle,
         body: PREVIEW_COPY.en.sessionsBody,
-        tag: PREVIEW_COPY.en.badge,
       },
       {
         icon: 'web',
@@ -933,6 +926,7 @@ const en: Copy = {
       },
       {
         icon: 'bash',
+        demo: 'browser',
         title: 'Computer and Browser use',
         body: 'Browser and Computer are bundled, with access off for each Bot until you enable it. Use a local macOS, Windows or Linux computer, or Docker Computer; watch the Bot Browser live and take over when needed. First use may download drivers or require system dependencies. Read-only sharing cannot click or navigate; the agent-browser trial driver is an optional add-on.',
         tag: 'Bundled · access by permission',
@@ -1045,17 +1039,17 @@ const en: Copy = {
       {
         id: 'team-preview',
         question: PREVIEW_COPY.en.teamQuestion,
-        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.teamAnswer}`,
+        answer: PREVIEW_COPY.en.teamAnswer,
       },
       {
         id: 'engines-preview',
         question: PREVIEW_COPY.en.engineQuestion,
-        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.engineAnswer}`,
+        answer: PREVIEW_COPY.en.engineAnswer,
       },
       {
         id: 'acp-preview',
         question: PREVIEW_COPY.en.acpTitle,
-        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.acpBody}`,
+        answer: PREVIEW_COPY.en.acpBody,
         links: [
           {
             label: 'ACP integration discussion',
@@ -1066,7 +1060,7 @@ const en: Copy = {
       {
         id: 'sessions-preview',
         question: PREVIEW_COPY.en.sessionsQuestion,
-        answer: `${PREVIEW_COPY.en.badge} · ${PREVIEW_COPY.en.sessionsAnswer}`,
+        answer: PREVIEW_COPY.en.sessionsAnswer,
       },
       {
         id: 'cost',

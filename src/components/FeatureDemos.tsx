@@ -72,8 +72,11 @@ function Identity({ t }: { t: Demos['identity'] }) {
 }
 
 /** Git Memory: commits and the diff each one made. */
-function Memory({ t }: { t: Demos['memory'] }) {
+type MemoryRestore = { action: string; done: string };
+
+function Memory({ t, restore }: { t: Demos['memory']; restore?: MemoryRestore }) {
   const [at, setAt] = useState(0);
+  const [restored, setRestored] = useState<string>();
   const commit = t.commits[at]!;
   const added = commit.diff.filter((line) => line.startsWith('+')).length;
   const removed = commit.diff.filter((line) => line.startsWith('-')).length;
@@ -128,6 +131,18 @@ function Memory({ t }: { t: Demos['memory'] }) {
             </span>
           ))}
         </pre>
+        {restore ? (
+          <div className="workflow-memory-actions">
+            <button
+              type="button"
+              className="workflow-action"
+              onClick={() => setRestored(commit.sha)}
+            >
+              {restore.action}
+            </button>
+            <small role="status">{restored ? `${restore.done} ${restored}` : ''}</small>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -875,26 +890,36 @@ function Mobile({ t }: { t: Demos['mobile'] }) {
   );
 }
 
-export function FeatureDemo({ copy, demo }: { copy: Copy; demo: keyof Demos }) {
+export function FeatureDemo({
+  copy,
+  demo,
+  memoryRestore,
+}: {
+  copy: Copy;
+  demo: keyof Demos | 'browser';
+  memoryRestore?: MemoryRestore;
+}) {
   const d = copy.featureDemos;
   const body =
     demo === 'identity' ? (
       <Identity t={d.identity} />
     ) : demo === 'memory' ? (
-      <Memory t={d.memory} />
+      <Memory t={d.memory} restore={memoryRestore} />
     ) : demo === 'groups' ? (
       <Groups t={d.groups} />
     ) : demo === 'folders' ? (
       <Folders t={d.folders} />
     ) : demo === 'mobile' ? (
       <Mobile t={d.mobile} />
+    ) : demo === 'browser' ? (
+      <PhoneBrowser t={d.mobile} />
     ) : (
       <Schedules t={d.schedules} />
     );
   return (
     <figure className="feature-demo" data-demo={demo}>
       <div className={demo === 'mobile' ? 'app app--phone' : 'app app--mini'}>{body}</div>
-      <figcaption>{d[demo].label}</figcaption>
+      <figcaption>{demo === 'browser' ? d.mobile.browser.title : d[demo].label}</figcaption>
     </figure>
   );
 }

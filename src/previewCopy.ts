@@ -49,7 +49,6 @@ export type ModelId = PreviewModel['id'];
 
 export const PREVIEW_COPY = {
   zh: {
-    badge: 'v1.8.0 预告',
     notifications: '通知',
     chats: '聊天',
     marketplace: 'Bot 市场',
@@ -67,7 +66,7 @@ export const PREVIEW_COPY = {
       '在共享频道发消息，或点消息里的 Session 查看详情。打开任一 Bot 私聊，桌面可从消息栏右上角切换模型，手机可点头像进入资料页的设置。在 Research PC 上可体验 API 和本机订阅来源。演示人物和任务均为虚构，消息只在当前页面显示。',
     teamTitle: '团队模式（Team mode）',
     teamBody:
-      '一台 Host 服务一个小团队。Owner 主动开启试用并邀请成员，各自用自己的账号登录。Owner 和获授权的 Admin 管理成员与角色，成员按权限私聊，在共享 Channel 里和同事、Bot 协作。v1.8.0 试用以通过 Bot 执行隔离验收的 Linux Host 为范围。',
+      '一台 Host 服务一个小团队。Owner 主动开启试用并邀请成员，各自用自己的账号登录。Owner 和获授权的 Admin 管理成员与角色，成员按权限私聊，在共享 Channel 里和同事、Bot 协作。适用范围为通过 Bot 执行隔离检查的 Linux Host。',
     modelsTitle: '在一个 Model Picker 里选模型',
     modelsBody:
       '桌面选择器列出通过 DSH 配置的 API 模型，以及本机已登录的订阅引擎。分别设置 Bot 的主模型和任务模型，也可以用 Model Preset 一次应用两项。手机可在 Bot 资料页设置 Host 的 API 模型。',
@@ -76,7 +75,7 @@ export const PREVIEW_COPY = {
       '在自己的电脑安装 Codex 或 Claude Code，通过对应 CLI 的官方流程为 Tobs 使用的独立配置登录。选择 Codex 会使用该 ChatGPT 订阅的可用额度，选择 Claude Code 会使用该 Claude 订阅的可用额度。订阅引擎仅面向本机 Host。',
     acpTitle: 'ACP 能接入其他 Agent 吗？',
     acpBody:
-      'ACP（Agent Client Protocol）让客户端把任务交给外部 Agent，并接收执行结果。Tobs 的通用 ACP 引擎接入仍在规划中。v1.8.0 预告中的订阅引擎使用专用适配，Codex 走 app-server，Claude Code 走 Agent SDK。',
+      'ACP（Agent Client Protocol）让客户端把任务交给外部 Agent，并接收执行结果。Tobs 的通用 ACP 引擎接入仍在规划中。Tobs 的订阅引擎使用专用适配，Codex 走 app-server，Claude Code 走 Agent SDK。',
     sessionsTitle: '在对话里打开 Session',
     sessionsBody:
       '点开消息关联的 Session，或从 Bot 的 Sessions 列表进入。桌面端可在 Messages 的详情子面板里查看目标、待办和对话。展开工具步骤查看输出，也可以直接给这个 Assignment 发消息。',
@@ -206,7 +205,6 @@ export const PREVIEW_COPY = {
       '在 Nova 私聊里点开 Bot 消息的 Session 链接，或从 Bot 的 Sessions 列表进入。在共享 Channel 里也可以打开有权限查看的成员分享链接。Session 会保留实际执行时的模型，之后切换模型也可以回看。',
   },
   en: {
-    badge: 'v1.8.0 preview',
     notifications: 'Notifications',
     chats: 'Chats',
     marketplace: 'Bot Marketplace',
@@ -224,7 +222,7 @@ export const PREVIEW_COPY = {
       'Post in the shared Channel or follow a Session link. In any Bot DM, change models at the top right of Messages on desktop or in Profile Settings on the phone. Open a Research PC DM to try API and local subscription sources. The people and tasks are fictional, and demo messages stay on this page.',
     teamTitle: 'Team mode',
     teamBody:
-      'One Host serves a small team. The Owner opts in and invites people to sign in with their own accounts. The Owner and authorized Admins manage members and roles. Members can message each other and work with Bots in shared Channels according to their permissions. The v1.8.0 trial targets Linux Hosts that pass Bot execution isolation checks.',
+      'One Host serves a small team. The Owner opts in and invites people to sign in with their own accounts. The Owner and authorized Admins manage members and roles. Members can message each other and work with Bots in shared Channels according to their permissions. Team mode is available on Linux Hosts that pass Bot execution isolation checks.',
     modelsTitle: 'One Model Picker',
     modelsBody:
       'The desktop picker shows API models configured in DSH alongside signed-in local Subscription Engines. Set a Bot’s main and task models, or apply both with a Model Preset. On mobile, open the Bot’s Profile Settings to choose from the Host’s API catalog.',
@@ -233,7 +231,7 @@ export const PREVIEW_COPY = {
       'Install Codex or Claude Code on your own computer and use its official CLI sign-in for the separate configuration Tobs uses. Codex draws from your eligible ChatGPT plan’s quota and Claude Code draws from your eligible Claude plan’s quota. Subscription Engines are for local Hosts.',
     acpTitle: 'Can I connect other agents with ACP?',
     acpBody:
-      'ACP (Agent Client Protocol) lets a client delegate work to an external agent and receive its results. Tobs plans generic ACP engine support for a later phase. The subscription engines previewed in v1.8.0 use dedicated adapters, with Codex on app-server and Claude Code on the Agent SDK.',
+      'ACP (Agent Client Protocol) lets a client delegate work to an external agent and receive its results. Tobs plans generic ACP engine support for a later phase. Tobs subscription engines use dedicated adapters, with Codex on app-server and Claude Code on the Agent SDK.',
     sessionsTitle: 'Open a Session from a conversation',
     sessionsBody:
       'Follow a Session link from a message or open one from the Bot’s Sessions list. The desktop detail subpanel in Messages shows goals, to-dos and conversation. Expand a tool step to see its output, or send a message directly to the Assignment.',

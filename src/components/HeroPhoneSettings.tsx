@@ -20,6 +20,7 @@ import {
 import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import type { Lang } from '../content';
 import { HERO_COPY } from '../heroCopy';
+import { VERSION } from '../installRelease';
 import { PREVIEW_COPY, type ModelId } from '../previewCopy';
 import { HeroPhoneModelPicker } from './HeroPhoneProfile';
 import { previewModel } from './HeroPreviewPanels';
@@ -211,7 +212,7 @@ export function HeroPhoneSettings({
             <section>
               <h4>{p.about}</h4>
               <div className="hero-settings-card">
-                <SettingsRow icon={<Info />} label={p.version} detail={t.badge} />
+                <SettingsRow icon={<Info />} label={p.version} detail={VERSION} />
               </div>
             </section>
           </>
