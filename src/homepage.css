@@ -299,23 +299,12 @@
   border-radius: 8px;
 }
 
+.workflow-card--memory :is(.app--mini, .mini-diff) {
+  border-radius: 0;
+}
+
 .workflow-card .mini-tabs {
   min-width: 0;
-}
-
-.workflow-memory-actions {
-  display: grid;
-  gap: 6px;
-  margin-top: 9px;
-}
-
-.app .workflow-memory-actions .workflow-action {
-  justify-self: start;
-  color: var(--accent-ink);
-}
-
-.workflow-memory-actions small {
-  color: var(--app-soft);
 }
 
 .workflow-link {

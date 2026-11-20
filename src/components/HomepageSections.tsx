@@ -222,11 +222,7 @@ export function HowTobsWorks({ copy, lang }: { copy: Copy; lang: Lang }) {
               {t.cloneGuide} <ArrowRight size={16} aria-hidden="true" />
             </a>
           </div>
-          <FeatureDemo
-            copy={copy}
-            demo="memory"
-            memoryRestore={{ action: t.restore, done: t.restored }}
-          />
+          <FeatureDemo copy={copy} demo="memory" />
         </article>
       </div>
     </section>

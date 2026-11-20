@@ -30,8 +30,6 @@ export const HOMEPAGE_COPY = {
       'Bot 的记忆存在 Git 仓库里，随时可以查看改动、恢复到某次提交，或从有权限的远程仓库克隆。',
     memoryGuide: '查看记忆演化',
     cloneGuide: '查看 Bot 的导出与导入',
-    restore: '恢复到这次提交',
-    restored: '示例 Memory 已恢复到',
     install: '从安装到发出第一条消息',
     installSteps: [
       { title: '下载 DeepSeek Harness', body: '安装并打开桌面端，进入你的 Profile。' },
@@ -116,8 +114,6 @@ export const HOMEPAGE_COPY = {
       'Every Bot’s memory is a Git repo you can inspect, restore to a saved commit, or clone from a remote you can access.',
     memoryGuide: 'Explore Memory history',
     cloneGuide: 'Export and import Bots',
-    restore: 'Restore to this commit',
-    restored: 'Sample Memory restored to',
     install: 'From install to your first chat',
     installSteps: [
       {

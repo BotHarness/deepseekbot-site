@@ -72,11 +72,8 @@ function Identity({ t }: { t: Demos['identity'] }) {
 }
 
 /** Git Memory: commits and the diff each one made. */
-type MemoryRestore = { action: string; done: string };
-
-function Memory({ t, restore }: { t: Demos['memory']; restore?: MemoryRestore }) {
+function Memory({ t }: { t: Demos['memory'] }) {
   const [at, setAt] = useState(0);
-  const [restored, setRestored] = useState<string>();
   const commit = t.commits[at]!;
   const added = commit.diff.filter((line) => line.startsWith('+')).length;
   const removed = commit.diff.filter((line) => line.startsWith('-')).length;
@@ -131,18 +128,6 @@ function Memory({ t, restore }: { t: Demos['memory']; restore?: MemoryRestore })
             </span>
           ))}
         </pre>
-        {restore ? (
-          <div className="workflow-memory-actions">
-            <button
-              type="button"
-              className="workflow-action"
-              onClick={() => setRestored(commit.sha)}
-            >
-              {restore.action}
-            </button>
-            <small role="status">{restored ? `${restore.done} ${restored}` : ''}</small>
-          </div>
-        ) : null}
       </div>
     </div>
   );
@@ -890,21 +875,13 @@ function Mobile({ t }: { t: Demos['mobile'] }) {
   );
 }
 
-export function FeatureDemo({
-  copy,
-  demo,
-  memoryRestore,
-}: {
-  copy: Copy;
-  demo: keyof Demos | 'browser';
-  memoryRestore?: MemoryRestore;
-}) {
+export function FeatureDemo({ copy, demo }: { copy: Copy; demo: keyof Demos | 'browser' }) {
   const d = copy.featureDemos;
   const body =
     demo === 'identity' ? (
       <Identity t={d.identity} />
     ) : demo === 'memory' ? (
-      <Memory t={d.memory} restore={memoryRestore} />
+      <Memory t={d.memory} />
     ) : demo === 'groups' ? (
       <Groups t={d.groups} />
     ) : demo === 'folders' ? (
