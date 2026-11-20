@@ -875,7 +875,7 @@ function Mobile({ t }: { t: Demos['mobile'] }) {
   );
 }
 
-export function FeatureDemo({ copy, demo }: { copy: Copy; demo: keyof Demos }) {
+export function FeatureDemo({ copy, demo }: { copy: Copy; demo: keyof Demos | 'browser' }) {
   const d = copy.featureDemos;
   const body =
     demo === 'identity' ? (
@@ -888,13 +888,15 @@ export function FeatureDemo({ copy, demo }: { copy: Copy; demo: keyof Demos }) {
       <Folders t={d.folders} />
     ) : demo === 'mobile' ? (
       <Mobile t={d.mobile} />
+    ) : demo === 'browser' ? (
+      <PhoneBrowser t={d.mobile} />
     ) : (
       <Schedules t={d.schedules} />
     );
   return (
     <figure className="feature-demo" data-demo={demo}>
       <div className={demo === 'mobile' ? 'app app--phone' : 'app app--mini'}>{body}</div>
-      <figcaption>{d[demo].label}</figcaption>
+      <figcaption>{demo === 'browser' ? d.mobile.browser.title : d[demo].label}</figcaption>
     </figure>
   );
 }

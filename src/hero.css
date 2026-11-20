@@ -10,12 +10,36 @@
   padding-top: 32px;
   gap: 16px;
 }
+.hero-theme-toggle {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 10px;
+  inset-inline-end: max(12px, calc((100% - 1440px) / 2));
+  display: grid;
+  width: clamp(54px, 7vw, 88px);
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.hero-theme-toggle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.22));
+}
+.hero-theme-toggle:focus-visible {
+  outline: 2px dashed var(--ink);
+  outline-offset: -2px;
+}
 .hero-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   width: 100%;
-  max-width: 1440px;
+  max-width: var(--home-demo-max-width);
   margin-inline: auto;
 }
 .hero-copy {
@@ -156,18 +180,13 @@
   font-size: 13px;
 }
 a.beta-button {
-  color: var(--ink);
+  color: var(--mobile-button-ink);
 }
 .beta-button--ios {
   background: var(--mobile-ios);
-  color: var(--mobile-button-ink);
-}
-a.beta-button--ios {
-  color: var(--mobile-button-ink);
 }
 .beta-button--android {
   background: var(--mobile-android);
-  color: var(--mobile-button-ink);
 }
 .mobile-beta {
   display: flex;
@@ -198,15 +217,7 @@ a.beta-button--ios {
 }
 .hero-product {
   min-width: 0;
-  margin: 0;
-}
-.hero-caption {
-  max-width: 1100px;
-  margin: 16px auto 0;
-  color: var(--ink-soft);
-  font: 400 16px/1.7 var(--pixel-font);
-  text-align: center;
-  -webkit-font-smoothing: none;
+  margin: 0 var(--home-demo-inset);
 }
 .hero-linked {
   --hero-phone-width: 280px;
@@ -616,62 +627,6 @@ a.beta-button--ios {
   border-radius: 4px;
   background: var(--app-ink);
 }
-.android-beta-popover {
-  color: var(--ink) !important;
-  background: var(--bubble) !important;
-  border: 3px solid var(--px-ink) !important;
-  border-radius: 0 !important;
-  box-shadow: 4px 4px 0 var(--px-shadow) !important;
-}
-.android-beta-content {
-  font-family: var(--pixel-font);
-  text-align: left;
-}
-.android-beta-content h3 {
-  margin: 0 0 10px;
-  font-size: 20px;
-}
-.android-beta-content p {
-  font-size: 13px;
-  margin: 0 0 12px;
-  line-height: 1.6;
-}
-.android-beta-content small {
-  display: block;
-  font-size: 12px;
-  color: var(--ink-soft);
-  line-height: 1.6;
-}
-.beta-contact {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  width: 100%;
-  margin: 8px 0;
-  padding: 10px;
-  font: 13px var(--pixel-font);
-  border: 2px solid var(--px-ink);
-  background: var(--bg-alt);
-  color: var(--ink) !important;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-}
-.beta-contact .community-icon-wrap {
-  display: block;
-  width: 20px;
-  height: 20px;
-  flex: none;
-}
-.beta-contact .community-icon-wrap svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.beta-group-number {
-  font: 22px var(--pixel-font) !important;
-  user-select: text;
-}
 @media (max-width: 1100px) {
   .hero-copy {
     grid-template-columns: minmax(0, 1fr);
@@ -734,15 +689,27 @@ a.beta-button--ios {
 .hero-pair-overlay {
   position: absolute;
   z-index: 10;
-  inset: 36px 0 0;
+  inset: 0;
   display: grid;
-  place-items: center;
+  place-items: safe center;
   padding: 12px;
-  background: rgb(0 0 0 / 0.34);
+  overflow: auto;
+  background: rgb(10 12 20 / 0.57);
+  backdrop-filter: blur(6px);
+}
+.hero-pair-stack {
+  display: grid;
+  width: min(440px, 100%);
+  gap: 12px;
+}
+.hero-pair-stage-title {
+  margin: 0;
+  color: #fff;
+  font: 400 clamp(16px, 2vw, 22px) / 1.4 var(--pixel-font);
+  text-align: center;
+  text-wrap: balance;
 }
 .hero-pair-dialog {
-  width: min(440px, 100%);
-  max-height: 100%;
   border: 1px solid var(--app-line);
   border-radius: 12px;
   background: var(--app-bg);
@@ -757,6 +724,9 @@ a.beta-button--ios {
 }
 .hero-pair-dialog > header strong {
   flex: 1;
+}
+.hero-pair-back:disabled {
+  visibility: hidden;
 }
 .hero-pair-dialog-body {
   display: grid;
@@ -818,8 +788,7 @@ a.beta-button--ios {
   display: grid;
   gap: 6px;
 }
-.hero-pair-choices button,
-.hero-pair-ready {
+.hero-pair-choices button {
   display: flex;
   min-width: 0;
   align-items: flex-start;
@@ -830,23 +799,16 @@ a.beta-button--ios {
   background: var(--app-side);
   color: var(--app-ink);
   text-align: start;
-}
-.hero-pair-choices button {
   cursor: pointer;
 }
 .hero-pair-choices button:hover {
   background: var(--app-hover);
 }
-.hero-pair-choices svg,
-.hero-pair-ready svg {
+.hero-pair-choices svg {
   flex: none;
   margin-top: 1px;
 }
-.hero-pair-ready svg {
-  color: var(--app-ok);
-}
 .hero-pair-choices small,
-.hero-pair-ready p,
 .hero-pair-note,
 .hero-pair-code small {
   display: block;
@@ -856,9 +818,32 @@ a.beta-button--ios {
 }
 .hero-pair-code {
   display: grid;
+  grid-template-columns: min(38%, 146px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(10px, 3vw, 18px);
+}
+.hero-pair-code-image {
+  display: grid;
   justify-items: center;
-  gap: 8px;
+  gap: 5px;
   text-align: center;
+}
+.hero-pair-code-status {
+  display: grid;
+  justify-items: start;
+  gap: 7px;
+}
+.hero-pair-code-heading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hero-pair-code-heading svg {
+  flex: none;
+  color: var(--app-ok);
+}
+.hero-pair-code-status .hero-pair-fingerprint {
+  font-size: 11px;
 }
 .hero-pair-qr {
   display: grid;
@@ -876,9 +861,6 @@ a.beta-button--ios {
   border-color: var(--app-info);
   background: var(--app-info-bg);
   color: var(--app-info);
-}
-.hero-pair-code .hero-pair-primary {
-  justify-self: center;
 }
 .hero-pair-phone {
   display: flex;

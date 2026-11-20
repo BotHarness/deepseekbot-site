@@ -68,7 +68,7 @@ export const COMPANION_COPY = {
       land: '稳稳落地！有想做的 Bot 吗？社区里可以一起聊聊。',
       community: '看得有兴趣？来社区一起聊聊你想做的 Bot 吧。',
       bots: '每个 Bot 都有自己的名字、人格和记忆，也能跨文件夹工作。下面的能力区有介绍。',
-      appearance: '下面可以给我换发型、衣服和颜色。捏好我的新形象，也欢迎带到社区分享。',
+      appearance: '可以在头像工坊给我换发型、衣服和颜色。捏好我的新形象，也欢迎带到社区分享。',
     },
   },
   en: {
@@ -91,7 +91,7 @@ export const COMPANION_COPY = {
       community: 'Interested? Come chat with us about the Bot you would like to build.',
       bots: 'Every Bot has a name, personality and memory, and can work across folders. Explore the Features section below.',
       appearance:
-        'Change my hair, clothes and colors below. Share the new look you make for me with our community, too.',
+        'Change my hair, clothes and colors in the Avatar Studio. Share the new look you make for me with our community, too.',
     },
   },
 } as const;

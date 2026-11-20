@@ -4,6 +4,7 @@ import './styles.css';
 import './demo.css';
 import './hero.css';
 import './preview.css';
+import './homepage.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';

@@ -64,8 +64,8 @@ function BecomeSponsor({ lang }: { lang: Lang }) {
   }, [copyState]);
   const mailto = `mailto:${SPONSOR_EMAIL}?subject=${encodeURIComponent(t.emailSubject)}`;
   return (
-    <div className="sponsor-become frame">
-      <h3>{t.title}</h3>
+    <section className="sponsor-become frame" aria-labelledby="become-sponsor-title">
+      <h3 id="become-sponsor-title">{t.title}</h3>
       <p>{t.body}</p>
       <div className="sponsor-contacts">
         <span data-sponsor-contact="email">
@@ -88,7 +88,7 @@ function BecomeSponsor({ lang }: { lang: Lang }) {
       <p className="community-copy-status" role="status">
         {copyState === 'failed' ? t.copyFailed(QQ_GROUP) : ''}
       </p>
-    </div>
+    </section>
   );
 }
 

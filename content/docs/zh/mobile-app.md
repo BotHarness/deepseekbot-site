@@ -20,7 +20,7 @@ DeepSeekBot 手机 App 是你自己电脑上 DeepSeek Harness（DSH）的遥控�
 ## 准备
 
 - 一台 Apple 芯片、macOS 13 或更高版本的 Mac，或 Windows 10 或更高版本的 64 位电脑，用手机时保持开机。Intel 芯片的 Mac 和 Linux 可以用命令行安装。
-- 一部 iPhone，装好 TestFlight 上的 DeepSeekBot 测试版；或一部 Android 手机，加入 Google Play 内部测试。两者目前都只对受邀测试者开放：打开你收到的邀请链接，按提示安装 App。
+- iPhone 用户可通过 [TestFlight](https://testflight.apple.com/join/sA9EznXr) 安装 Tobs 测试版。Android 用户可直接从 [Google Play](https://play.google.com/store/apps/details?id=app.deepseekbot.mobile) 安装 Tobs。无法使用 Google Play 时，可通过 QQ 群 1125565676 或 [Discord](https://discord.gg/aEB2Ayhu7B) 联系开发者，咨询 Android 内测和安装。
 - 一个 [DeepSeek API Key](https://platform.deepseek.com/api_keys)，或者一个用来登录的 DeepSeek 账号，Bot 才能回复。
 - 一个 Tailscale 账号，可以用 Google、Microsoft、GitHub、Apple 等账号注册。
 

@@ -1,0 +1,815 @@
+.workflow-section {
+  --workflow-surface: color-mix(in srgb, var(--bg) 36%, var(--bubble));
+  --workflow-border: color-mix(in srgb, var(--ink) 26%, transparent);
+  --workflow-soft: color-mix(in srgb, var(--bg-alt) 66%, var(--bubble));
+}
+
+.workflow-bento,
+.workflow-install-cards {
+  display: grid;
+  gap: 20px;
+}
+
+.workflow-bento {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.workflow-bento-description br {
+  display: none;
+}
+
+@media (min-width: 861px) {
+  .workflow-bento {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .workflow-bento-description br {
+    display: revert;
+  }
+
+  .workflow-bento > :is(.workflow-card--engine, .workflow-card--chat) {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+
+  .workflow-bento > :is(.workflow-card--engine, .workflow-card--chat) > .workflow-demo {
+    margin-top: 0;
+  }
+}
+
+.workflow-card {
+  background: var(--workflow-surface);
+}
+
+.workflow-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 12px;
+  padding: clamp(16px, 2.3vw, 27px);
+}
+
+.workflow-card h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(21px, 2.1vw, 28px);
+  line-height: 1.18;
+}
+
+.workflow-bento h3 {
+  font-size: clamp(28px, 3.2vw, 40px);
+  text-wrap: balance;
+}
+
+.workflow-card > p,
+.workflow-card > div > p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.workflow-bento :is(.workflow-card > p, .workflow-card > div > p, .workflow-link) {
+  color: var(--ink);
+}
+
+.workflow-card--memory {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  align-items: center;
+  gap: 20px;
+}
+
+.workflow-card--memory h3 {
+  margin-bottom: 12px;
+}
+
+.workflow-demo {
+  min-width: 0;
+  padding: 14px;
+  background: var(--workflow-soft);
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.workflow-bento :is(.workflow-demo, .feature-demo) {
+  background: var(--workflow-surface);
+  border: 0;
+  box-shadow: none;
+}
+
+.workflow-card > .workflow-demo,
+.workflow-card > .feature-demo {
+  margin-top: auto;
+}
+
+.workflow-options,
+.workflow-compose {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.workflow-options button,
+.workflow-action {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 0;
+  background: var(--workflow-surface);
+  color: var(--ink);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.workflow-options button:hover {
+  background: var(--bg-alt);
+}
+
+.workflow-action,
+.workflow-options button[aria-pressed='true'],
+.workflow-install .workflow-install-switch button[aria-checked='true'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.workflow-engine {
+  --engine-base: #fff;
+  --engine-neutral: #575a63;
+}
+
+:root[data-theme='dark'] .workflow-engine {
+  --engine-base: var(--bg);
+  --engine-neutral: #c6cad4;
+}
+
+.workflow-engine .workflow-options button {
+  --engine-accent: var(--engine-neutral);
+  --engine-tint: 15%;
+  padding-inline: 7px;
+  background: color-mix(in srgb, var(--engine-accent) var(--engine-tint), var(--engine-base));
+  color: var(--ink);
+}
+
+.workflow-engine button[data-engine='deepseek'] {
+  --engine-accent: #4d6bfe;
+}
+
+.workflow-engine button[data-engine='claude'] {
+  --engine-accent: #d97757;
+}
+
+.workflow-engine .workflow-options button:hover {
+  --engine-tint: 23%;
+}
+
+.workflow-engine .workflow-options button[aria-pressed='true'] {
+  --engine-tint: 34%;
+}
+
+.workflow-engine-check {
+  flex: none;
+  visibility: hidden;
+}
+
+.workflow-engine button[aria-pressed='true'] .workflow-engine-check {
+  visibility: visible;
+}
+
+.workflow-action {
+  font-weight: 600;
+}
+
+.workflow-action:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.workflow-model,
+.workflow-create {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--workflow-surface);
+}
+
+.workflow-create {
+  flex-wrap: wrap;
+}
+
+.workflow-create > span:nth-child(2),
+.workflow-model > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.workflow-model > div > span,
+.workflow-model small {
+  display: block;
+  color: var(--ink-soft);
+}
+
+.workflow-model small {
+  white-space: nowrap;
+}
+
+.workflow-chat,
+.workflow-message-pair,
+.workflow-hosts {
+  list-style: none;
+  padding: 0;
+  margin: 9px 0;
+}
+
+.workflow-chat {
+  max-height: 230px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.workflow-chat-line,
+.workflow-hosts li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 5px 0;
+}
+
+.workflow-chat-line > :first-child,
+.workflow-hosts li > :first-child {
+  flex: none;
+}
+
+.workflow-chat-line p {
+  margin: 1px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.workflow-chat-line strong {
+  font-size: 12px;
+}
+
+.workflow-compose input {
+  flex: 1;
+  min-width: 120px;
+  padding: 6px 8px;
+  border: 1px solid var(--workflow-border);
+  border-radius: 7px;
+  background: var(--workflow-surface);
+  color: var(--ink);
+}
+
+.workflow-hosts li {
+  align-items: center;
+}
+
+.workflow-hosts {
+  display: grid;
+  min-block-size: 204px;
+  align-content: start;
+  gap: 4px;
+}
+
+.workflow-hosts .hero-phone-source {
+  margin-inline-start: auto;
+  color: var(--ink-soft);
+}
+
+.workflow-card .feature-demo {
+  padding: 12px;
+}
+
+.workflow-bento .feature-demo figcaption {
+  padding: 0;
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+.workflow-card .app--mini {
+  min-height: 0;
+  box-shadow: none;
+  border-radius: 8px;
+}
+
+.workflow-card--memory :is(.app--mini, .mini-diff) {
+  border-radius: 0;
+}
+
+.workflow-card .mini-tabs {
+  min-width: 0;
+}
+
+.workflow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.workflow-bento .workflow-link {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+#features {
+  max-width: calc(var(--home-demo-max-width) + 2 * var(--home-demo-gutter));
+  padding-inline: calc(var(--home-demo-gutter) + var(--home-demo-inset));
+}
+
+.workflow-feature-rows {
+  display: grid;
+  gap: clamp(24px, 3vw, 40px);
+}
+
+.workflow-feature-row {
+  display: grid;
+  grid-template-columns: minmax(210px, 1fr) minmax(0, 3.5fr);
+  align-items: center;
+  gap: clamp(24px, 3.2vw, 44px);
+  padding: clamp(15px, 2.2vw, 28px);
+  background: var(--workflow-surface);
+}
+
+.workflow-feature-copy h3 {
+  margin: 0 0 14px;
+  color: var(--ink);
+  font-size: clamp(25px, 2.6vw, 34px);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.workflow-feature-copy p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+.workflow-feature-copy .workflow-link {
+  margin-top: 16px;
+}
+
+.workflow-feature-topic {
+  margin-top: 18px;
+}
+
+.workflow-feature-topic h4 {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.workflow-feature-topic p + p {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.workflow-feature-preview {
+  --feature-backdrop-start: var(--sky-top);
+  --feature-backdrop-end: var(--sky-bottom);
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  padding: clamp(13px, 2.4vw, 32px);
+  border: var(--px) solid var(--px-ink);
+  background: linear-gradient(145deg, var(--feature-backdrop-start), var(--feature-backdrop-end));
+  box-shadow: 6px 6px 0 var(--px-shadow);
+}
+
+.workflow-feature-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.workflow-feature-art[data-art-theme='dark'],
+:root[data-theme='dark'] .workflow-feature-art[data-art-theme='light'] {
+  opacity: 0;
+}
+
+:root[data-theme='dark'] .workflow-feature-art[data-art-theme='dark'] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .workflow-feature-art {
+    transition: opacity 400ms ease-in-out;
+  }
+}
+
+@media (min-width: 1100px) {
+  .workflow-feature-preview {
+    padding: clamp(48px, 4.6vw, 72px);
+  }
+
+  .workflow-feature-art {
+    object-fit: fill;
+  }
+}
+
+.workflow-feature-row:nth-child(2) .workflow-feature-preview {
+  --feature-backdrop-start: var(--grass);
+  --feature-backdrop-end: color-mix(in srgb, var(--grass-light), var(--bg-alt) 55%);
+}
+
+#hosts .workflow-feature-preview {
+  --feature-backdrop-start: #66b5aa;
+  --feature-backdrop-end: #c6ead7;
+}
+
+#sessions .workflow-feature-preview {
+  --feature-backdrop-start: #a58ad1;
+  --feature-backdrop-end: #e3d9f3;
+}
+
+#team .workflow-feature-preview {
+  --feature-backdrop-start: #dc926b;
+  --feature-backdrop-end: #f8d4a0;
+}
+
+:root[data-theme='dark'] #hosts .workflow-feature-preview {
+  --feature-backdrop-start: #122e3a;
+  --feature-backdrop-end: #326466;
+}
+
+:root[data-theme='dark'] #sessions .workflow-feature-preview {
+  --feature-backdrop-start: #2b1d48;
+  --feature-backdrop-end: #59507b;
+}
+
+:root[data-theme='dark'] #team .workflow-feature-preview {
+  --feature-backdrop-start: #42243c;
+  --feature-backdrop-end: #7f4f51;
+}
+
+.workflow-feature-pane {
+  min-width: 0;
+  padding: clamp(12px, 1.2vw, 17px);
+}
+
+.workflow-feature-pane .workflow-demo,
+.workflow-feature-pane .feature-demo {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+}
+
+.workflow-feature-pane .app--mini {
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.workflow-feature-pane figcaption {
+  padding: 0;
+  background: transparent;
+  color: var(--app-soft);
+  font-family: var(--body-font);
+}
+
+.workflow-feature-pane .workflow-options button {
+  padding-inline: 8px;
+  background: var(--app-side);
+  color: var(--app-ink);
+}
+
+.workflow-feature-pane .workflow-options button:is(:hover, :focus-visible) {
+  background: var(--app-hover);
+}
+
+.workflow-feature-pane .workflow-options button[aria-pressed='true'] {
+  background: var(--app-info-bg);
+}
+
+.workflow-feature-pane .mini-file .mini-code {
+  block-size: 160px;
+  overflow: auto;
+}
+
+.workflow-feature-pane [data-demo='schedules'] .app--mini {
+  block-size: 326px;
+  overflow: auto;
+}
+
+@container (min-width: 600px) {
+  .workflow-feature-pane [data-demo='schedules'] .app--mini {
+    block-size: 268px;
+  }
+}
+
+.workflow-feature-pane :is(.mini-bot, .mini-file, .mini-schedules li, .mini-history li) {
+  border: 0;
+  border-radius: 0;
+  background: var(--app-side);
+}
+
+.workflow-feature-pane .mini-file-tabs {
+  border: 0;
+}
+
+.workflow-feature-pane .workflow-hosts li,
+.workflow-feature-pane .workflow-team-channels li {
+  padding: 8px;
+  background: var(--app-side);
+}
+
+.workflow-feature-pane .workflow-hosts li {
+  min-block-size: 48px;
+}
+
+.workflow-feature-pane .workflow-team-channels li {
+  margin-bottom: 4px;
+}
+
+.workflow-feature-pane .workflow-model {
+  border-radius: 0;
+  background: var(--app-side);
+}
+
+.workflow-feature-pane .workflow-model > div > span,
+.workflow-feature-pane .workflow-team-channels :is(small, li > div span) {
+  color: var(--app-soft);
+}
+
+.workflow-feature-people {
+  display: grid;
+  gap: 24px;
+}
+
+.workflow-session {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.workflow-session .preview-detail {
+  padding: 12px;
+  overflow: visible;
+  overscroll-behavior: auto;
+  background: var(--app-bg);
+}
+
+.workflow-session
+  :is(.preview-goal, .preview-progress, .preview-work, .preview-transcript, details, summary) {
+  border: 0;
+  border-radius: 0;
+}
+
+.workflow-session .preview-goal {
+  background: var(--app-info-bg);
+}
+
+.workflow-session :is(.preview-progress, .preview-work) {
+  background: var(--app-side);
+}
+
+.workflow-session .preview-work details > summary {
+  margin-block: 4px;
+  background: var(--app-hover);
+}
+
+#sessions .app-composer.preview-session-composer {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--app-bg), var(--app-ink) 12%);
+  box-shadow: none;
+}
+
+.workflow-session .preview-session-composer:focus-within {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
+}
+
+.workflow-bento .mini-commits button,
+.workflow-feature-pane
+  :is(.mini-bot, .mini-file-tabs button, .mini-icon-btn, .mini-switch, .app-send),
+.workflow-install .workflow-install-switch,
+.workflow-install .workflow-install-switch button {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.workflow-feature-pane .mini-switch::after {
+  border-radius: 0;
+}
+
+.workflow-feature-pane :is(.mini-bot, .mini-file-tabs button)[aria-selected='true'] {
+  background: var(--app-info-bg);
+}
+
+.workflow-team-channels {
+  display: grid;
+  gap: 4px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflow-team-channels li {
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--workflow-surface);
+}
+
+.workflow-team-channels li > div span {
+  display: block;
+  color: var(--ink-soft);
+}
+
+.workflow-team-channels small {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink-soft);
+  font: 11px/1.4 var(--body-font);
+}
+
+.workflow-im .workflow-model {
+  block-size: 8em;
+  line-height: 1.45;
+  overflow: auto;
+}
+
+.workflow-section .workflow-install {
+  max-width: none;
+  padding: 0;
+}
+
+.workflow-install-cards {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 22px 0;
+  list-style: none;
+  padding: 0;
+}
+
+.workflow-install-cards .workflow-card {
+  padding: 18px;
+}
+
+.workflow-install-cards .workflow-card h3 {
+  font-size: 21px;
+}
+
+.workflow-install-cards p {
+  flex: 1;
+}
+
+.workflow-install-cards .command {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  outline: none;
+}
+
+.workflow-install-cards .command code {
+  font-size: 12px;
+}
+
+.workflow-install-cards .command button {
+  justify-self: end;
+}
+
+.workflow-install-cards[data-placement='install_dev'] .command {
+  margin-block-start: auto;
+}
+
+.workflow-install-cards[data-placement='install_dev'] .command code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.workflow-install-links {
+  display: grid;
+  gap: 6px;
+}
+
+.workflow-install-links .workflow-link {
+  margin-top: 0;
+}
+
+.workflow-step-no {
+  width: fit-content;
+  padding: 1px 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font: 18px/1.45 var(--pixel-font);
+}
+
+.workflow-footer-inner {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.1fr) repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1072px;
+  margin: 0 auto 28px;
+  text-align: start;
+}
+
+.workflow-footer-brand a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font: 28px/1 var(--pixel-font);
+  text-decoration: none;
+}
+
+.workflow-footer-brand p {
+  margin-top: 10px;
+}
+
+.workflow-footer h2 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 17px;
+}
+
+.workflow-footer ul {
+  display: grid;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.workflow-footer nav a {
+  color: var(--ink-soft);
+}
+
+.workflow-section :is(button, a, input, summary):focus-visible,
+.workflow-footer a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 880px) {
+  .workflow-install-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workflow-footer-inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workflow-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 900px) {
+  .workflow-feature-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 901px) {
+  .workflow-feature-row:nth-child(even) {
+    grid-template-columns: minmax(0, 3.5fr) minmax(210px, 1fr);
+  }
+
+  .workflow-feature-row:nth-child(even) .workflow-feature-preview {
+    order: -1;
+  }
+}
+
+@media (max-width: 680px) {
+  .workflow-card--memory {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .workflow-install-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .workflow-model {
+    flex-wrap: wrap;
+  }
+
+  .workflow-options button {
+    min-height: 39px;
+  }
+}

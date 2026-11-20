@@ -2,8 +2,7 @@ import { Button } from '@astryxdesign/core/Button';
 import { TextInput } from '@astryxdesign/core/TextInput';
 import { PART_SLOTS, wornPart, type PartSlot, type PixelSymbol } from '@botharness/pixel-avatar';
 import { useRef, useState } from 'react';
-import { SYMBOL_ORDER, type Copy, type Lang } from '../content';
-import { avatarPath } from '../site';
+import { SYMBOL_ORDER, type Copy } from '../content';
 import { track } from '../analytics';
 import { downloadAvatar } from '../download';
 import type { AvatarDesign } from '../avatarDesign';
@@ -13,21 +12,8 @@ import { SymbolIcon } from './SymbolIcon';
 
 const CUSTOM_SLOTS = Object.keys(PART_SLOTS) as PartSlot[];
 
-/**
- * The avatar stage, name and tool morphs. On the home page it links to the Avatar Studio; in the
- * studio (`studio`) the full editor sits beside it in two more panels.
- */
-export function Playground({
-  copy,
-  lang,
-  design,
-  studio = false,
-}: {
-  copy: Copy;
-  lang: Lang;
-  design: AvatarDesign;
-  studio?: boolean;
-}) {
+/** The Avatar Studio stage, tool morphs and editor panels. */
+export function Playground({ copy, design }: { copy: Copy; design: AvatarDesign }) {
   const { name, seed, recipe, edited } = design;
   const avatar = useRef<PixelAvatarHandle>(null);
   const [tool, setTool] = useState<PixelSymbol | null>(null);
@@ -43,7 +29,7 @@ export function Playground({
     design.shuffle();
   };
 
-  const editor = studio ? (
+  const editor = (
     <FaceEditor
       copy={copy}
       recipe={recipe}
@@ -57,12 +43,6 @@ export function Playground({
         design.reset();
       }}
     />
-  ) : (
-    <div className="studio-card frame" data-placement="playground">
-      <h3>{t.studio.title}</h3>
-      <p>{t.studio.body}</p>
-      <Button label={`${t.studio.cta} →`} variant="primary" size="lg" href={avatarPath(lang)} />
-    </div>
   );
 
   const stage = (
@@ -131,12 +111,10 @@ export function Playground({
           />
         </div>
       </div>
-      {studio ? null : editor}
-      {studio ? null : tools}
     </div>
   );
 
-  return studio ? (
+  return (
     <div className="studio">
       <div className="studio-left">
         {stage}
@@ -144,11 +122,6 @@ export function Playground({
       </div>
       {editor}
       <div className="studio-tools">{tools}</div>
-    </div>
-  ) : (
-    <div className="playground">
-      {stage}
-      {controls}
     </div>
   );
 }

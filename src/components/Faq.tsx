@@ -14,6 +14,13 @@ export function Faq({ copy }: { copy: Copy }) {
             </summary>
             <div className="faq-answer">
               <p>{item.answer}</p>
+              {item.points ? (
+                <ul className="faq-points">
+                  {item.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              ) : null}
               {item.links ? (
                 <ul className="faq-links">
                   {item.links.map((link) => (

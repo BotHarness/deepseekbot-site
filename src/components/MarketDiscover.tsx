@@ -16,7 +16,8 @@ import {
   type SectionName,
 } from '../marketApi';
 import { marketBase, marketHref } from '../marketRoutes';
-import { BotBanner, BotCard, BotFace, botName, fill, plainClick } from './Market';
+import { BotBanner, BotCard, fill, plainClick } from './Market';
+import { BotFace, botName } from './MarketBot';
 
 // The Daily Picks row shows the newest Digest large and the six before it, like the app.
 const DAILY_PICKS_SHOWN = 7;

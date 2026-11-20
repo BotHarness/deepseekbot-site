@@ -35,13 +35,13 @@ export const SPONSORS_COPY = {
   zh: {
     kicker: '赞助商',
     title: '感谢赞助商',
-    lead: '赞助支持 Tobs 的开源开发，不影响产品路线。',
+    lead: '赞助款用于开源开发。产品路线由 Tobs 团队决定。',
     tier: '月度赞助商',
     footer: '赞助商',
     xLabel: (s: Sponsor) => `${s.x.name}（@${s.x.handle}）的 X 主页，将在新标签页打开`,
     become: {
       title: '成为赞助商',
-      body: '按月赞助 Tobs 的开源开发。你的品牌会出现在官网首页的赞助区、GitHub README 和全站页脚，我们也会提供展示位的曝光和点击数据。欢迎通过以下方式联系：',
+      body: '按月赞助能支持 Tobs 持续开发，让它永久免费开源。我们会在官网首页、GitHub README 和全站页脚展示你的品牌，并提供曝光和点击数据。',
       email: '发邮件',
       emailSubject: '赞助 Tobs',
       discord: '在 Discord 找我们',
@@ -53,13 +53,13 @@ export const SPONSORS_COPY = {
   en: {
     kicker: 'Sponsors',
     title: 'Thanks to our sponsors',
-    lead: 'Sponsorship supports open-source work on Tobs. It does not steer the roadmap.',
+    lead: 'Sponsorship funds open-source development. The Tobs team sets the roadmap.',
     tier: 'Monthly sponsor',
     footer: 'Sponsored by',
     xLabel: (s: Sponsor) => `${s.x.name} (@${s.x.handle}) on X. Opens in a new tab.`,
     become: {
       title: 'Become a sponsor',
-      body: 'Sponsor open-source work on Tobs monthly. Your brand appears in the homepage sponsor section, the GitHub README and every page footer, and we share view and click numbers for your placements. Reach us through any of these:',
+      body: 'Monthly sponsorship funds development and helps keep Tobs permanently free and open source. We feature your brand on the homepage, the GitHub README, and every page footer, and share views and clicks for those placements.',
       email: 'Email us',
       emailSubject: 'Sponsoring Tobs',
       discord: 'Find us on Discord',

@@ -20,7 +20,7 @@ The software is free. DSH and DeepSeekBot are open source and need no account. T
 ## What you need
 
 - A Mac with Apple silicon (macOS 13 or later) or a Windows 10 or later x64 computer that stays on while you use the phone. Intel Macs and Linux work with the command-line install.
-- An iPhone with the DeepSeekBot beta from TestFlight, or an Android phone with the Google Play internal test. Both are invitation-only for now: open the invitation link you received and install the app from there.
+- On iPhone, install the Tobs beta via [TestFlight](https://testflight.apple.com/join/sA9EznXr). On Android, install Tobs directly from [Google Play](https://play.google.com/store/apps/details?id=app.deepseekbot.mobile). If you can’t access Google Play, contact the developers in QQ group 1125565676 or on [Discord](https://discord.gg/aEB2Ayhu7B) about Android beta access and installation.
 - A [DeepSeek API key](https://platform.deepseek.com/api_keys), or a DeepSeek account to sign in with, so your Bots can reply.
 - A Tailscale account. You can sign up with Google, Microsoft, GitHub, Apple and others.
 

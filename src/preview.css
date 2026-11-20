@@ -1,10 +1,3 @@
-.hero-preview-badge {
-  margin: 0 0 2px;
-  color: var(--ink);
-  font: 15px var(--pixel-font);
-  text-align: center;
-}
-
 .app-host-filter {
   width: fit-content;
   min-width: 0;
@@ -27,6 +20,12 @@
   padding: 4px 6px 10px;
 }
 
+.app-market-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .app-market-row,
 .app-env-row {
   display: flex;
@@ -36,6 +35,44 @@
   padding: 8px;
 }
 
+.app-market-row {
+  border-radius: 5px;
+  color: var(--app-ink);
+  text-decoration: none;
+}
+
+.app-market-row:is(:hover, :focus-visible) {
+  background: var(--app-hover);
+}
+
+.app-market-row:focus-visible,
+.app-market-retry:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
+}
+
+.app-market-row > .bot-face {
+  display: flex;
+  flex: none;
+  align-items: center;
+  image-rendering: pixelated;
+}
+
+.app-market-row .bot-face img {
+  object-fit: contain;
+}
+
+.app-market-copy {
+  min-width: 0;
+}
+
+.app-market-copy strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .app-market-row small,
 .app-env-row small {
   color: var(--app-soft);
@@ -43,7 +80,15 @@
 }
 
 .app-market-row small {
-  display: block;
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.app-market-retry {
+  margin-inline: 8px;
 }
 
 .app-side-link {

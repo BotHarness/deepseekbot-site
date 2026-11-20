@@ -1,24 +1,37 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { mobileInstallEvent, TESTFLIGHT_URL } from '../src/mobileBeta.ts';
+import { GOOGLE_PLAY_URL, mobileInstallEvent, TESTFLIGHT_URL } from '../src/mobileBeta.ts';
 import { setupPrompt } from '../src/setupPrompt.ts';
 import { DESKTOP_PACKAGE, DSH_VERSION } from '../src/installRelease.ts';
 import { COMMUNITY_LINKS, QQ_GROUP } from '../src/communityLinks.ts';
 
-test('TestFlight clicks identify platform and placement without URL query or user data', () => {
+test('mobile install clicks identify platform and placement without URL query or user data', () => {
   for (const placement of ['hero', 'install']) {
     assert.deepEqual(
       mobileInstallEvent(new URL(TESTFLIGHT_URL + '?email=private@example.invalid'), placement),
       ['mobile_beta:install_link_click', { platform: 'ios', destination: 'testflight', placement }],
     );
+    assert.deepEqual(
+      mobileInstallEvent(new URL(GOOGLE_PLAY_URL + '&email=private@example.invalid'), placement),
+      [
+        'mobile_beta:install_link_click',
+        { platform: 'android', destination: 'google_play', placement },
+      ],
+    );
   }
 });
 
-test('unrelated and lookalike links cannot count as this TestFlight installation', () => {
+test('unrelated and lookalike links cannot count as a Tobs installation click', () => {
   for (const url of [
     'https://testflight.apple.com.evil.invalid/join/sA9EznXr',
     'http://testflight.apple.com/join/sA9EznXr',
     'https://testflight.apple.com/join/another',
+    'https://play.google.com.evil.invalid/store/apps/details?id=app.deepseekbot.mobile',
+    'http://play.google.com/store/apps/details?id=app.deepseekbot.mobile',
+    'https://play.google.com/store/apps/details?id=other.app',
+    'https://play.google.com/store/apps/details',
+    'https://play.google.com/store/apps?id=app.deepseekbot.mobile',
+    GOOGLE_PLAY_URL + '&id=other.app',
     'https://discord.gg/aEB2Ayhu7B',
   ])
     assert.equal(mobileInstallEvent(new URL(url), 'install'), null);
@@ -52,10 +65,11 @@ test('localized prompts distinguish permission, verification and optional follow
   assert.match(en, /ordinary npm dsh CLI cannot manage the Desktop Profile/);
 });
 
-test('mobile follow-up is opt-in and supplies installation, invitation and pairing paths in both languages', () => {
+test('mobile follow-up is opt-in and supplies store links, Android contacts and pairing paths in both languages', () => {
   for (const lang of ['zh', 'en']) {
     const prompt = setupPrompt(lang);
     assert.ok(prompt.includes(TESTFLIGHT_URL));
+    assert.ok(prompt.includes(GOOGLE_PLAY_URL));
     assert.ok(prompt.includes(COMMUNITY_LINKS.discord));
     assert.ok(prompt.includes(QQ_GROUP));
     assert.ok(
@@ -64,6 +78,7 @@ test('mobile follow-up is opt-in and supplies installation, invitation and pairi
     assert.ok(prompt.includes('Google Play'));
     assert.ok(prompt.includes('Connect'));
     assert.ok(prompt.includes('Tailscale'));
+    assert.doesNotMatch(prompt, /Google Play 邮箱|Google Play email/);
     const desktopComplete = prompt.search(/^5\. /m);
     const mobileFollowUp = prompt.search(/^6\. /m);
     assert.ok(desktopComplete >= 0);
