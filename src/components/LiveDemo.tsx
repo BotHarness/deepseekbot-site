@@ -995,7 +995,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           inert={previewPanel?.kind === 'models' && previewPanel.surface === 'desktop'}
         >
           <nav className="app-rail" aria-label={t.rail}>
-            <img className="app-rail-logo" src="/logo.png" width={36} height={36} alt="Tobs" />
+            <span className="app-rail-brand">
+              <img src="/logo.png" width={18} height={18} alt="Tobs" />
+            </span>
             {sidePanels.map(({ id, label, icon: Glyph, ...item }) => (
               <button
                 key={id}
