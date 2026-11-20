@@ -32,15 +32,6 @@ export const HOMEPAGE_COPY = {
     cloneGuide: '查看 Bot 的导出与导入',
     restore: '恢复到这次提交',
     restored: '示例 Memory 已恢复到',
-    opinion: '模型已经这么强了，为什么还需要多个 Bot？',
-    opinionLead:
-      '其实很多时候一个就够了。大多数人完全可以先用一个全能助手，等真正需要分工时再添新成员。',
-    opinionPoints: [
-      '多 Bot 首先是为了隔离上下文。就像不同项目有各自的 Git 仓库，研究、写作和发布分开管理，互不干扰。',
-      '角色分工也是典型场景：不同职责需要独立的系统提示词与记忆，文件权限和工作边界同样可以按 Bot 切分。',
-      '预算充足时可以全用最强模型；预算有限时，把日常或轻量任务交给性价比更高的模型会划算得多。',
-      '就像刚起步的团队，先一个人把事跑通，等工作量和分工需求上来了，再按需招人。',
-    ],
     install: '从安装到发出第一条消息',
     installSteps: [
       { title: '下载 DeepSeek Harness', body: '安装并打开桌面端，进入你的 Profile。' },
@@ -126,15 +117,6 @@ export const HOMEPAGE_COPY = {
     cloneGuide: 'Export and import Bots',
     restore: 'Restore to this commit',
     restored: 'Sample Memory restored to',
-    opinion: 'If models are already this capable, why use more than one Bot?',
-    opinionLead:
-      'Often you don’t need to. Most people do fine starting with a single assistant and adding more only when the work calls for it.',
-    opinionPoints: [
-      'Multiple Bots start with clean context boundaries—just like separate Git repos keep research, writing, and releases from stepping on each other.',
-      'Distinct roles need distinct system prompts and memory, and separating Bots also lets you scope permissions and folder access per job.',
-      'If token budget is no concern, run your strongest model everywhere; when budget matters, you can route routine work to faster, lower-cost models.',
-      'Think of a small startup: begin with one generalist, then bring in specialists once the workload justifies it.',
-    ],
     install: 'From install to your first chat',
     installSteps: [
       {

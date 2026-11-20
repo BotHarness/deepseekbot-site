@@ -226,15 +226,6 @@ export function HowTobsWorks({ copy, lang }: { copy: Copy; lang: Lang }) {
           />
         </article>
       </div>
-      <details className="workflow-opinion">
-        <summary>{t.opinion}</summary>
-        <p>{t.opinionLead}</p>
-        <ul>
-          {t.opinionPoints.map((point) => (
-            <li key={point}>{point}</li>
-          ))}
-        </ul>
-      </details>
     </section>
   );
 }

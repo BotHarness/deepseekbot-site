@@ -140,6 +140,7 @@ export interface Copy {
       id: string;
       question: string;
       answer: string;
+      points?: string[];
       links?: { label: string; href: string }[];
     }[];
   };
@@ -463,6 +464,18 @@ const zh: Copy = {
     kicker: 'FAQ',
     title: '常见问题',
     items: [
+      {
+        id: 'multiple-bots',
+        question: '模型已经这么强了，为什么还需要多个 Bot？',
+        answer:
+          '其实很多时候一个就够了。大多数人完全可以先用一个全能助手，等真正需要分工时再添新成员。',
+        points: [
+          '多 Bot 首先是为了隔离上下文。就像不同项目有各自的 Git 仓库，研究、写作和发布分开管理，互不干扰。',
+          '角色分工也是典型场景：不同职责需要独立的系统提示词与记忆，文件权限和工作边界同样可以按 Bot 切分。',
+          '预算充足时可以全用最强模型；预算有限时，把日常或轻量任务交给性价比更高的模型会划算得多。',
+          '就像刚起步的团队，先一个人把事跑通，等工作量和分工需求上来了，再按需招人。',
+        ],
+      },
       {
         id: 'affiliation',
         question: 'Tobs 和 DeepSeek 有什么关系？',
@@ -956,6 +969,18 @@ const en: Copy = {
     kicker: 'FAQ',
     title: 'Frequently asked questions',
     items: [
+      {
+        id: 'multiple-bots',
+        question: 'If models are already this capable, why use more than one Bot?',
+        answer:
+          'Often you don’t need to. Most people do fine starting with a single assistant and adding more only when the work calls for it.',
+        points: [
+          'Multiple Bots start with clean context boundaries—just like separate Git repos keep research, writing, and releases from stepping on each other.',
+          'Distinct roles need distinct system prompts and memory, and separating Bots also lets you scope permissions and folder access per job.',
+          'If token budget is no concern, run your strongest model everywhere; when budget matters, you can route routine work to faster, lower-cost models.',
+          'Think of a small startup: begin with one generalist, then bring in specialists once the workload justifies it.',
+        ],
+      },
       {
         id: 'affiliation',
         question: 'Is Tobs affiliated with DeepSeek?',

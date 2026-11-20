@@ -1237,6 +1237,16 @@ a:where(:not(.astryx-button)) {
 .faq-answer p {
   margin: 0;
 }
+.faq-points {
+  margin: 12px 0 0;
+  padding-inline-start: 1.4em;
+  list-style: disc;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.faq-points li + li {
+  margin-top: 6px;
+}
 .faq-links {
   display: flex;
   flex-wrap: wrap;

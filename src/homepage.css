@@ -39,8 +39,7 @@
   }
 }
 
-.workflow-card,
-.workflow-opinion {
+.workflow-card {
   background: var(--workflow-surface);
 }
 
@@ -292,26 +291,6 @@
 .workflow-bento .workflow-link {
   text-decoration: underline;
   text-underline-offset: 0.18em;
-}
-
-.workflow-opinion {
-  color: var(--ink-soft);
-  font-size: 14px;
-}
-
-.workflow-opinion {
-  margin-top: 20px;
-  padding: 15px 18px;
-}
-
-.workflow-opinion summary {
-  color: var(--ink);
-  cursor: pointer;
-  font-weight: 650;
-}
-
-.workflow-opinion li + li {
-  margin-top: 5px;
 }
 
 .workflow-feature-grid {
