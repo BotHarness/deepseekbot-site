@@ -22,10 +22,11 @@ pnpm verify   # format:check, lint, docs-sync regression tests, typecheck, build
 For repeatable local model setup across product worktrees, see the
 [shared model wizard](planning/task-evidence/README.md).
 
-- **Live demo**: the Hero's v1.8.0 preview pairs a desktop workspace with a native-style phone
-  presentation (`src/components/HeroPreview.tsx`). It uses fictional Channels, Models and Sessions
-  from `src/previewCopy.ts`. The current-release tour remains available in the same slot and reuses
-  the approval script from `src/demoCopy.ts`. Both demos run entirely in the visitor's browser.
+- **Live demo**: the Hero couples the desktop workspace (`src/components/LiveDemo.tsx`) with
+  the phone's chat, pairing and Activity flows (`HeroPhoneChat.tsx`, `HeroPhoneHome.tsx`). The
+  v1.8.0 fixtures add member roles to Launch crew, a model dialog to Nova’s DM, and detail panes
+  linked from messages and the Sessions list. `src/demoCopy.ts` and `src/previewCopy.ts` hold
+  the scripts and preview copy. The demo runs entirely in the visitor’s browser.
 - **Native screenshots**: the 1.5 release article reuses historical iOS Simulator captures, with
   source revisions, hashes and scope in `public/blog-figures/tobs-1-5/provenance.json`. Keep the
   originals unchanged and display them at their original aspect ratio. They are not evidence of

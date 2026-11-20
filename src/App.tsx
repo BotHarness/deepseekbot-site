@@ -7,7 +7,6 @@ import { Crew } from './components/Crew';
 import { FeatureDemo } from './components/FeatureDemos';
 import { Faq } from './components/Faq';
 import { HeroLinks } from './components/HeroLinks';
-import { HeroPreview } from './components/HeroPreview';
 import { LiveDemo } from './components/LiveDemo';
 import { Install } from './components/Install';
 import { MobileBeta } from './components/MobileBeta';
@@ -28,7 +27,6 @@ export function App() {
   const copy = COPY[lang];
   const hero = HERO_COPY[lang];
   const preview = PREVIEW_COPY[lang];
-  const [stableTour, setStableTour] = useState(false);
   const design = useAvatarDesign();
 
   useEffect(() => {
@@ -79,16 +77,9 @@ export function App() {
               <HeroLinks lang={lang} />
             </div>
             <figure className="hero-product">
-              <div className="hero-preview-nav">
-                <strong>{stableTour ? copy.hero.badge : preview.badge}</strong>
-                <button type="button" onClick={() => setStableTour((visible) => !visible)}>
-                  {stableTour ? preview.previewTour : preview.stableTour}
-                </button>
-              </div>
-              {stableTour ? <LiveDemo copy={copy} linkedPhone /> : <HeroPreview t={preview} />}
-              <figcaption className="hero-caption">
-                {stableTour ? copy.hero.lead : preview.caption}
-              </figcaption>
+              <p className="hero-preview-badge">{preview.badge}</p>
+              <LiveDemo copy={copy} linkedPhone />
+              <figcaption className="hero-caption">{preview.caption}</figcaption>
             </figure>
           </div>
           <Crew copy={copy} lang={lang} />

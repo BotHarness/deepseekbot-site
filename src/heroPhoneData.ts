@@ -2,7 +2,7 @@ import type { DemoChannel, DemoStep } from './demoCopy';
 
 export type PhoneHostId = 'studio' | 'research';
 export const PHONE_HOSTS = [
-  { id: 'studio', name: 'Studio Mac' },
+  { id: 'studio', name: 'Studio Linux' },
   { id: 'research', name: 'Research PC' },
 ] as const;
 export const PHONE_REQUESTS = [

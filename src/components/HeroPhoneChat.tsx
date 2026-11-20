@@ -7,6 +7,7 @@ export function HeroPhoneChat({
   onBack,
   group,
   source,
+  actions,
   avatar,
   feedRef,
   children,
@@ -20,6 +21,7 @@ export function HeroPhoneChat({
   onBack: () => void;
   group: boolean;
   source: ReactNode;
+  actions?: ReactNode;
   avatar: ReactNode;
   feedRef: RefObject<HTMLDivElement | null>;
   children: ReactNode;
@@ -44,6 +46,7 @@ export function HeroPhoneChat({
           <strong>{title}</strong>
           {source}
         </div>
+        {actions}
       </header>
       <div className="hero-phone-feed" ref={feedRef}>
         <ol className="app-msgs">{children}</ol>

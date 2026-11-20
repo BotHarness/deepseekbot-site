@@ -36,9 +36,9 @@ export function HeroPhoneSource({ host }: { host: PhoneHostId }) {
   const source = HOSTS.find((item) => item.id === host)!;
   const Icon = host === 'studio' ? Laptop : FlaskConical;
   return (
-    <span className="hero-phone-source" data-host={host}>
+    <span className="hero-phone-source" data-host={host} title={source.name}>
       <Icon size={11} aria-hidden="true" />
-      {source.name}
+      <span>{source.name}</span>
     </span>
   );
 }

@@ -6,12 +6,15 @@ import {
   BellOff,
   BatteryFull,
   Check,
+  ChevronDown,
+  ChevronLeft,
   ChevronRight,
   Ellipsis,
   Files,
   FolderLock,
   GitCommitVertical,
   Hash,
+  ListTodo,
   House,
   Image,
   MessagesSquare,
@@ -19,6 +22,7 @@ import {
   PanelRightOpen,
   Paperclip,
   Plus,
+  Plug,
   RotateCcw,
   Search,
   ScanLine,
@@ -26,11 +30,27 @@ import {
   Signal,
   Wifi,
   Users,
+  X,
   type LucideIcon,
 } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import { track } from '../analytics';
 import { HERO_COPY } from '../heroCopy';
+import { PREVIEW_COPY } from '../previewCopy';
+import {
+  DEFAULT_PREVIEW_MODELS,
+  PreviewModelDialog,
+  PreviewSessionDetail,
+  previewModel,
+} from './HeroPreviewPanels';
 import { PhonePair } from './FeatureDemos';
 import { HeroPhoneChat } from './HeroPhoneChat';
 import { HeroPhoneHome, HeroPhoneSource } from './HeroPhoneHome';
@@ -58,7 +78,10 @@ function Icon({ name }: { name: DemoIcon }) {
 }
 
 /** A message the visitor typed after the script finished, and the Bot's canned answer. */
-type Extra = { kind: 'user'; text: string } | { kind: 'fallback'; bot: string };
+type Extra = { kind: 'user'; text: string; author?: string } | { kind: 'fallback'; bot: string };
+type PreviewPanel = 'models' | 'session' | 'members';
+type PreviewSurface = 'desktop' | 'phone';
+const TEAM_MEMBER = { desktop: 'Mei', phone: 'Jun' } as const;
 
 /** Allow once, Always allow or Reject, like the desktop approval card. */
 type Answer = 'allow' | 'always' | 'deny';
@@ -138,6 +161,38 @@ function Working({ bot, tool, label }: { bot: string; tool: PixelSymbol; label: 
   );
 }
 
+function HumanMessage({
+  text,
+  name,
+  author,
+  isPeer,
+  avatarSize,
+}: {
+  text: string;
+  name: string;
+  author?: string;
+  isPeer?: boolean;
+  avatarSize: number;
+}) {
+  if (isPeer && author) {
+    return (
+      <li className="app-msg app-msg--bot">
+        <Avatar name={author} size={avatarSize} />
+        <div>
+          <span className="app-msg-name">{author}</span>
+          <p className="app-bubble">{text}</p>
+        </div>
+      </li>
+    );
+  }
+  return (
+    <li className="app-msg app-msg--user" data-member={author ? '' : undefined}>
+      <span className="app-msg-name">{author ?? name}</span>
+      <p className="app-bubble">{text}</p>
+    </li>
+  );
+}
+
 function Message({
   step,
   t,
@@ -146,6 +201,9 @@ function Message({
   onAnswer,
   avatarSize = 32,
   outcomeLabels,
+  author,
+  isPeer,
+  sessionLink,
 }: {
   step: DemoStep;
   t: Copy['demo'];
@@ -154,14 +212,20 @@ function Message({
   onAnswer: (answer: Answer) => void;
   avatarSize?: number;
   outcomeLabels?: Record<Answer, string>;
+  author?: string;
+  isPeer?: boolean;
+  sessionLink?: ReactNode;
 }) {
   switch (step.kind) {
     case 'user':
       return (
-        <li className="app-msg app-msg--user">
-          <span className="app-msg-name">{t.human}</span>
-          <p className="app-bubble">{step.text}</p>
-        </li>
+        <HumanMessage
+          text={step.text}
+          name={t.human}
+          author={author}
+          isPeer={isPeer}
+          avatarSize={avatarSize}
+        />
       );
     case 'bot':
       return (
@@ -170,6 +234,7 @@ function Message({
           <div>
             <span className="app-msg-name">{step.bot}</span>
             <p className="app-bubble">{step.text}</p>
+            {sessionLink}
           </div>
         </li>
       );
@@ -269,6 +334,15 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const t = copy.demo;
   const lang = copy.htmlLang === 'en' ? 'en' : 'zh';
   const hero = HERO_COPY[lang];
+  const preview = PREVIEW_COPY[lang];
+  const [modelPlan, setModelPlan] = useState(DEFAULT_PREVIEW_MODELS);
+  const [previewPanel, setPreviewPanel] = useState<{
+    kind: PreviewPanel;
+    surface: PreviewSurface;
+  }>();
+  const previewTrigger = useRef<HTMLButtonElement>(null);
+  const previewClose = useRef<HTMLButtonElement>(null);
+  const restorePreviewFocus = useRef(false);
   const [phoneHost, setPhoneHost] = useState<PhoneHostId>('studio');
   const channels = useMemo(
     () =>
@@ -319,7 +393,33 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   };
 
   const channel = channels[active]!;
+  const isTeam = linkedPhone && phoneHost === 'studio' && active === 0;
+  const isPreviewBot = linkedPhone && phoneHost === 'research' && active === 2;
+  const sessionTitle = isTeam ? preview.session : preview.localSession;
+  const model = previewModel(modelPlan.main);
   const panel = useMemo(() => panelAt(channel, shown), [channel, shown]);
+
+  useLayoutEffect(() => {
+    if (previewPanel) previewClose.current?.focus({ preventScroll: true });
+    else if (restorePreviewFocus.current) {
+      restorePreviewFocus.current = false;
+      previewTrigger.current?.focus({ preventScroll: true });
+    }
+  }, [previewPanel]);
+
+  function showPreview(kind: PreviewPanel, surface: PreviewSurface, trigger: HTMLButtonElement) {
+    if (previewPanel?.kind === kind && previewPanel.surface === surface) {
+      closePreview();
+      return;
+    }
+    previewTrigger.current = trigger;
+    setPreviewPanel({ kind, surface });
+  }
+
+  function closePreview() {
+    restorePreviewFocus.current = true;
+    setPreviewPanel(undefined);
+  }
 
   // start playing when the window is mostly on screen, once
   useEffect(() => {
@@ -474,7 +574,12 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         el.scrollTo({ top: el.scrollHeight, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   }, [shown, working, extra, answers, done, phonePhase]);
 
-  const open = (index: number, synced = false, host: PhoneHostId = phoneHost) => {
+  const open = (
+    index: number,
+    synced = phonePhase !== 'intro' && phonePhase !== 'pair',
+    host: PhoneHostId = index === 0 ? 'studio' : index === 2 ? 'research' : phoneHost,
+  ) => {
+    setPreviewPanel(undefined);
     setPhoneHost(host);
     startSynced.current = synced;
     setShown(0);
@@ -503,15 +608,17 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
     resolve(value);
   };
 
-  const send = (event: FormEvent) => {
+  const send = (event: FormEvent, surface: PreviewSurface) => {
     event.preventDefault();
     const text = draft.trim();
     if (!text || !done) return;
     touched.current = true;
     track('demo:message_send', { channel: channel.id });
     setDraft('');
+    const author = isTeam ? TEAM_MEMBER[surface] : undefined;
+    setExtra((prev) => [...prev, { kind: 'user', text, author }]);
+    if (isTeam) return;
     const bot = channel.bots[0]!;
-    setExtra((prev) => [...prev, { kind: 'user', text }]);
     setWorking({ bot, tool: 'thinking' });
     const timer = window.setTimeout(
       () => {
@@ -538,16 +645,192 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           onDecide: answer,
         }
       : undefined;
-  const renderStep = (step: DemoStep, index: number) => (
-    <Message
-      key={`${channel.id}-${run}-${index}`}
-      step={step}
-      t={t}
-      answer={answers[index]}
-      waiting={waiting && index === shown - 1}
-      onAnswer={answer}
-    />
+  const sessionMessage = isPreviewBot
+    ? channel.steps.findLastIndex((step) => step.kind === 'bot')
+    : 2;
+  const sessionAvailable =
+    (isTeam || isPreviewBot) && sessionMessage >= 0 && shown > sessionMessage;
+  // Studio and Research PC keep their original timelines. Attach each Session to its own message.
+  const sessionLink = (surface: PreviewSurface) => (
+    <button
+      type="button"
+      className="app-btn preview-session-link"
+      aria-expanded={previewPanel?.surface === surface && previewPanel.kind === 'session'}
+      onClick={(event) => showPreview('session', surface, event.currentTarget)}
+    >
+      <ListTodo size={14} aria-hidden="true" />
+      {sessionTitle}
+    </button>
   );
+  const modelTrigger = (surface: PreviewSurface) => (
+    <button
+      type="button"
+      className="app-btn preview-model-trigger"
+      aria-label={preview.modelPicker + ' · ' + model.name}
+      aria-expanded={previewPanel?.surface === surface && previewPanel.kind === 'models'}
+      title={
+        model.provider + ' · ' + (model.source === 'api' ? preview.api : preview.plans[model.id])
+      }
+      onClick={(event) => showPreview('models', surface, event.currentTarget)}
+    >
+      {model.name}
+      {model.source === 'subscription' ? <Plug size={12} aria-hidden="true" /> : null}
+      <ChevronDown size={13} aria-hidden="true" />
+    </button>
+  );
+  const teamMembers = [
+    { name: 'Mei', role: preview.owner },
+    { name: 'Lea', role: preview.admin },
+    { name: 'Jun', role: preview.member },
+  ];
+  const teamRoster = (
+    <>
+      {teamMembers.map(({ name, role }) => (
+        <li className="app-panel-item" key={name}>
+          <Avatar name={name} size={22} />
+          <span className="app-panel-text">
+            <span>{name}</span>
+            <small>{role}</small>
+          </span>
+        </li>
+      ))}
+    </>
+  );
+  const renderPreview = (surface: PreviewSurface) => {
+    if (previewPanel?.surface !== surface) return null;
+    const kind = previewPanel.kind;
+    const title =
+      kind === 'session' ? sessionTitle : kind === 'models' ? preview.modelPicker : preview.members;
+    return (
+      <section
+        className="app-pane preview-panel"
+        data-kind={kind}
+        data-surface={surface}
+        role={kind === 'models' ? 'dialog' : 'region'}
+        aria-label={title}
+      >
+        <header className="app-pane-head preview-panel-head">
+          {surface === 'phone' ? (
+            <button
+              ref={previewClose}
+              type="button"
+              className="app-icon-btn"
+              aria-label={preview.back}
+              onClick={closePreview}
+            >
+              <ChevronLeft size={18} aria-hidden="true" />
+            </button>
+          ) : null}
+          <strong className="app-pane-title">{title}</strong>
+          {surface === 'desktop' ? (
+            <button
+              ref={previewClose}
+              type="button"
+              className="app-icon-btn"
+              aria-label={preview.close}
+              onClick={closePreview}
+            >
+              <X size={17} aria-hidden="true" />
+            </button>
+          ) : null}
+        </header>
+        {kind === 'models' ? (
+          <PreviewModelDialog
+            t={preview}
+            plan={modelPlan}
+            onCancel={closePreview}
+            onSave={(next) => {
+              setModelPlan(next);
+              closePreview();
+            }}
+          />
+        ) : kind === 'session' ? (
+          <PreviewSessionDetail t={preview} isTeam={isTeam} />
+        ) : (
+          <div className="app-panel-body">
+            <p className="preview-hint">{preview.teamScope}</p>
+            <ul className="preview-list">
+              {teamRoster}
+              {channel.bots.map((bot) => (
+                <li key={bot} className="app-panel-item">
+                  <Avatar name={bot} size={22} />
+                  {bot}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+    );
+  };
+  const renderSteps = (surface: PreviewSurface) =>
+    steps.flatMap((step, index) => {
+      const key = `${channel.id}-${run}-${index}`;
+      const phone = surface === 'phone';
+      const message = (
+        <Message
+          key={key}
+          step={step}
+          t={t}
+          answer={answers[index]}
+          waiting={waiting && index === shown - 1}
+          onAnswer={answer}
+          author={isTeam ? TEAM_MEMBER.desktop : undefined}
+          isPeer={isTeam && phone}
+          avatarSize={phone ? 22 : undefined}
+          outcomeLabels={
+            phone
+              ? { allow: hero.approved, always: hero.alwaysApproved, deny: hero.rejected }
+              : undefined
+          }
+          sessionLink={
+            isPreviewBot && index === sessionMessage ? (
+              <div className="preview-message-link">
+                <small>{preview.newSession}</small>
+                {sessionLink(surface)}
+              </div>
+            ) : undefined
+          }
+        />
+      );
+      return isTeam && index === sessionMessage
+        ? [
+            message,
+            <li className="app-msg app-msg--bot" key={key + '-shared'}>
+              <Avatar name="Jun" size={phone ? 22 : 32} />
+              <div>
+                <span className="app-msg-name">Jun</span>
+                <p className="app-bubble">{preview.teamLink}</p>
+                {sessionLink(surface)}
+              </div>
+            </li>,
+          ]
+        : [message];
+    });
+  const renderExtra = (surface: PreviewSurface) =>
+    extra.map((item, index) => {
+      const avatarSize = surface === 'phone' ? 22 : 32;
+      return item.kind === 'user' ? (
+        <HumanMessage
+          key={index}
+          text={item.text}
+          name={t.human}
+          author={item.author}
+          isPeer={item.author !== TEAM_MEMBER[surface]}
+          avatarSize={avatarSize}
+        />
+      ) : (
+        <li className="app-msg app-msg--bot" key={index}>
+          <Avatar name={item.bot} size={avatarSize} />
+          <div>
+            <span className="app-msg-name">{item.bot}</span>
+            <p className="app-bubble">
+              {t.fallback} {surface === 'desktop' ? <a href="#install">{t.fallbackCta}</a> : null}
+            </p>
+          </div>
+        </li>
+      );
+    });
   const statusOf = (index: number): RowStatus => {
     if (index !== active) return seen.has(channels[index]!.id) ? 'done' : undefined;
     if (waiting) return 'needs';
@@ -613,6 +896,16 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
       ref={root}
       onFocusCapture={takeOver}
       onPointerDownCapture={takeOver}
+      onKeyDown={(event) => {
+        if (
+          event.key === 'Escape' &&
+          previewPanel &&
+          previewClose.current?.closest('.app')?.contains(event.target as Node)
+        ) {
+          event.stopPropagation();
+          closePreview();
+        }
+      }}
       data-device={
         linkedPhone
           ? phonePhase === 'intro' || phonePhase === 'pair'
@@ -652,14 +945,19 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           className="app-body"
           data-panel={panelOpen ? undefined : 'closed'}
           data-wallpaper={wallpaper ? '' : undefined}
+          data-session={
+            previewPanel?.kind === 'session' && previewPanel.surface === 'desktop' ? '' : undefined
+          }
+          inert={previewPanel?.kind === 'models' && previewPanel.surface === 'desktop'}
         >
           <nav className="app-rail" aria-label={t.rail}>
             <span className="app-rail-me" aria-hidden="true">
               <Avatar name="DeepSeekBot" size={26} />
             </span>
-            {railButton('home', t.home, House, view === 'home', () =>
-              setView((v) => (v === 'home' ? 'chat' : 'home')),
-            )}
+            {railButton('home', t.home, House, view === 'home', () => {
+              if (previewPanel?.surface === 'desktop') setPreviewPanel(undefined);
+              setView((v) => (v === 'home' ? 'chat' : 'home'));
+            })}
             {railButton(
               'activity',
               t.activity,
@@ -740,7 +1038,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             aria-label={view === 'home' ? t.home : channel.title}
             data-view={view}
           >
-            <header className="app-pane-head app-chat-head">
+            <header
+              className="app-pane-head app-chat-head"
+              data-preview-context={view === 'chat' && (isTeam || isPreviewBot) ? '' : undefined}
+            >
               {view === 'home' ? (
                 <>
                   <House className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
@@ -763,6 +1064,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                     )}
                     {channel.title}
                   </span>
+                  {isTeam ? (
+                    <span className="app-badge preview-team-badge">{preview.teamScope}</span>
+                  ) : null}
+                  {isPreviewBot ? modelTrigger('desktop') : null}
                   <button
                     type="button"
                     className="app-icon-btn app-panel-toggle"
@@ -771,6 +1076,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                     title={panelOpen ? t.hideSidebar : t.showSidebar}
                     onClick={() => {
                       touched.current = true;
+                      if (previewPanel?.surface === 'desktop' && previewPanel.kind === 'session') {
+                        setPreviewPanel(undefined);
+                      }
                       setPanelOpen((open) => !open);
                     }}
                   >
@@ -876,25 +1184,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 <div className="app-feed" ref={feed}>
                   <ol className="app-msgs">
                     <li className="app-day">{t.today}</li>
-                    {steps.map(renderStep)}
-                    {extra.map((item, index) =>
-                      item.kind === 'user' ? (
-                        <li key={`x${index}`} className="app-msg app-msg--user">
-                          <span className="app-msg-name">{t.human}</span>
-                          <p className="app-bubble">{item.text}</p>
-                        </li>
-                      ) : (
-                        <li key={`x${index}`} className="app-msg app-msg--bot">
-                          <Avatar name={item.bot} size={32} />
-                          <div>
-                            <span className="app-msg-name">{item.bot}</span>
-                            <p className="app-bubble">
-                              {t.fallback} <a href="#install">{t.fallbackCta}</a>
-                            </p>
-                          </div>
-                        </li>
-                      ),
-                    )}
+                    {renderSteps('desktop')}
+                    {renderExtra('desktop')}
                     {working ? (
                       <Working
                         bot={working.bot}
@@ -922,7 +1213,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 </div>
                 <form
                   className="app-composer"
-                  onSubmit={send}
+                  onSubmit={(event) => send(event, 'desktop')}
                   data-typing={typing ? '' : undefined}
                 >
                   <Plus
@@ -935,8 +1226,16 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                     value={draft}
                     readOnly={!done}
                     onChange={(event) => setDraft(event.target.value)}
-                    placeholder={fill(t.composer, { name: channel.title })}
-                    aria-label={fill(t.composer, { name: channel.title })}
+                    placeholder={
+                      isTeam
+                        ? fill(preview.composer, { name: 'Mei' })
+                        : fill(t.composer, { name: channel.title })
+                    }
+                    aria-label={
+                      isTeam
+                        ? fill(preview.composer, { name: 'Mei' })
+                        : fill(t.composer, { name: channel.title })
+                    }
                     maxLength={200}
                   />
                   <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
@@ -947,6 +1246,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
               </>
             )}
           </section>
+
+          {previewPanel?.kind === 'session' ? renderPreview('desktop') : null}
 
           <div className="app-stack" hidden={!activityOpen && !panelOpen}>
             <section
@@ -1014,28 +1315,58 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                           <Icon name={section.icon} />
                           <span className="app-panel-title">{section.title}</span>
                           {section.items.length ? (
-                            <span className="app-count">{section.items.length}</span>
+                            <span className="app-count">
+                              {section.items.length +
+                                (section.id === 'members' && isTeam ? teamMembers.length - 1 : 0) +
+                                (section.id === 'sessions' && sessionAvailable ? 1 : 0)}
+                            </span>
                           ) : null}
                         </button>
                       </h4>
                       <ul hidden={!open}>
-                        {section.items.map((item) => (
-                          // keyed by its badge too, so a status change flashes the row
-                          <li
-                            key={`${item.id}-${item.badge ?? ''}`}
-                            className="app-panel-item"
-                            data-tone={item.tone}
-                          >
-                            {section.id === 'members' && item.id !== 'h' ? (
-                              <Avatar name={item.title} size={22} />
-                            ) : null}
-                            <span className="app-panel-text">
-                              <span>{item.title}</span>
-                              {item.meta ? <small>{item.meta}</small> : null}
-                            </span>
-                            {item.badge ? <span className="app-badge">{item.badge}</span> : null}
+                        {section.id === 'members' && isTeam ? teamRoster : null}
+                        {section.id === 'sessions' && sessionAvailable ? (
+                          <li className="app-panel-item">
+                            <button
+                              type="button"
+                              className="app-btn preview-session-row"
+                              aria-expanded={
+                                previewPanel?.surface === 'desktop' &&
+                                previewPanel.kind === 'session'
+                              }
+                              onClick={(event) =>
+                                showPreview('session', 'desktop', event.currentTarget)
+                              }
+                            >
+                              <ListTodo size={14} aria-hidden="true" />
+                              <span className="app-panel-text">
+                                <span>{sessionTitle}</span>
+                                <small>{preview.complete} · 3/3</small>
+                              </span>
+                            </button>
                           </li>
-                        ))}
+                        ) : null}
+                        {section.items
+                          .filter(
+                            (item) => !(section.id === 'members' && item.id === 'h' && isTeam),
+                          )
+                          .map((item) => (
+                            // keyed by its badge too, so a status change flashes the row
+                            <li
+                              key={`${item.id}-${item.badge ?? ''}`}
+                              className="app-panel-item"
+                              data-tone={item.tone}
+                            >
+                              {section.id === 'members' && item.id !== 'h' ? (
+                                <Avatar name={item.title} size={22} />
+                              ) : null}
+                              <span className="app-panel-text">
+                                <span>{item.title}</span>
+                                {item.meta ? <small>{item.meta}</small> : null}
+                              </span>
+                              {item.badge ? <span className="app-badge">{item.badge}</span> : null}
+                            </li>
+                          ))}
                       </ul>
                     </section>
                   );
@@ -1044,6 +1375,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
             </aside>
           </div>
         </div>
+        {previewPanel?.kind === 'models' && previewPanel.surface === 'desktop' ? (
+          <div className="preview-model-overlay">{renderPreview('desktop')}</div>
+        ) : null}
       </div>
       {linkedPhone ? (
         <div className="hero-phone-wrap">
@@ -1090,78 +1424,74 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   onOpenChannel={(index, host) => open(index, true, host)}
                   renderAvatar={(name, size) => <Avatar name={name} size={size} />}
                   renderChat={(onBack) => (
-                    <HeroPhoneChat
-                      onBack={onBack}
-                      source={<HeroPhoneSource host={phoneHost} />}
-                      title={channel.title}
-                      group={channel.bots.length > 1}
-                      avatar={
-                        channel.bots.length > 1 ? (
-                          <GroupAvatar bots={channel.bots} size={28} />
-                        ) : (
-                          <Avatar name={channel.bots[0]!} size={28} />
-                        )
-                      }
-                      feedRef={phoneFeed}
-                      value={draft}
-                      onChange={setDraft}
-                      onSubmit={send}
-                      ready={done}
-                      labels={{
-                        back: hero.back,
-                        composer: fill(t.composer, {
-                          name: `${channel.bots.length > 1 ? '#' : ''}${channel.title}`,
-                        }),
-                        send: t.send,
-                      }}
-                    >
-                      {steps.map((step, index) => (
-                        <Message
-                          key={`${channel.id}-${run}-${index}`}
-                          step={step}
-                          t={t}
-                          answer={answers[index]}
-                          waiting={waiting && index === shown - 1}
-                          onAnswer={answer}
-                          avatarSize={22}
-                          outcomeLabels={{
-                            allow: hero.approved,
-                            always: hero.alwaysApproved,
-                            deny: hero.rejected,
-                          }}
-                        />
-                      ))}
-                      {extra.map((item, index) => (
-                        <li
-                          className={
-                            item.kind === 'user' ? 'app-msg app-msg--user' : 'app-msg app-msg--bot'
+                    <>
+                      <div
+                        className="preview-phone-chat"
+                        hidden={previewPanel?.surface === 'phone'}
+                      >
+                        <HeroPhoneChat
+                          onBack={onBack}
+                          actions={
+                            isTeam ? (
+                              <button
+                                type="button"
+                                className="hero-phone-back preview-phone-members"
+                                aria-label={preview.members}
+                                aria-expanded={
+                                  previewPanel?.surface === 'phone' &&
+                                  previewPanel.kind === 'members'
+                                }
+                                onClick={(event) =>
+                                  showPreview('members', 'phone', event.currentTarget)
+                                }
+                              >
+                                <Users size={18} aria-hidden="true" />
+                              </button>
+                            ) : isPreviewBot ? (
+                              modelTrigger('phone')
+                            ) : undefined
                           }
-                          key={`extra-${index}`}
+                          source={<HeroPhoneSource host={phoneHost} />}
+                          title={channel.title}
+                          group={channel.bots.length > 1}
+                          avatar={
+                            channel.bots.length > 1 ? (
+                              <GroupAvatar bots={channel.bots} size={28} />
+                            ) : (
+                              <Avatar name={channel.bots[0]!} size={28} />
+                            )
+                          }
+                          feedRef={phoneFeed}
+                          value={draft}
+                          onChange={setDraft}
+                          onSubmit={(event) => send(event, 'phone')}
+                          ready={done}
+                          labels={{
+                            back: hero.back,
+                            composer: isTeam
+                              ? fill(preview.composer, { name: 'Jun' })
+                              : fill(t.composer, {
+                                  name: `${channel.bots.length > 1 ? '#' : ''}${channel.title}`,
+                                }),
+                            send: t.send,
+                          }}
                         >
-                          {item.kind === 'user' ? (
-                            <p className="app-bubble">{item.text}</p>
-                          ) : (
-                            <>
-                              <Avatar name={item.bot} size={22} />
-                              <div>
-                                <span className="app-msg-name">{item.bot}</span>
-                                <p className="app-bubble">{t.fallback}</p>
-                              </div>
-                            </>
-                          )}
-                        </li>
-                      ))}
-                      {working ? (
-                        <Working
-                          bot={working.bot}
-                          tool={working.tool}
-                          label={fill(t.working, {
-                            bot: working.bot,
-                            tool: copy.symbols[working.tool],
-                          })}
-                        />
-                      ) : null}
-                    </HeroPhoneChat>
+                          {renderSteps('phone')}
+                          {renderExtra('phone')}
+                          {working ? (
+                            <Working
+                              bot={working.bot}
+                              tool={working.tool}
+                              label={fill(t.working, {
+                                bot: working.bot,
+                                tool: copy.symbols[working.tool],
+                              })}
+                            />
+                          ) : null}
+                        </HeroPhoneChat>
+                      </div>
+                      {renderPreview('phone')}
+                    </>
                   )}
                 />
               )}
