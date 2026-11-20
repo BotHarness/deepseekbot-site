@@ -132,15 +132,54 @@
   background: var(--bg-alt);
 }
 
-.workflow-engine .workflow-options button {
-  padding-inline: 7px;
-}
-
 .workflow-action,
 .workflow-options button[aria-pressed='true'],
 .workflow-install .workflow-install-switch button[aria-checked='true'] {
   background: var(--accent);
   color: var(--accent-ink);
+}
+
+.workflow-engine {
+  --engine-base: #fff;
+  --engine-neutral: #575a63;
+}
+
+:root[data-theme='dark'] .workflow-engine {
+  --engine-base: var(--bg);
+  --engine-neutral: #c6cad4;
+}
+
+.workflow-engine .workflow-options button {
+  --engine-accent: var(--engine-neutral);
+  --engine-tint: 15%;
+  padding-inline: 7px;
+  background: color-mix(in srgb, var(--engine-accent) var(--engine-tint), var(--engine-base));
+  color: var(--ink);
+}
+
+.workflow-engine button[data-engine='deepseek'] {
+  --engine-accent: #4d6bfe;
+}
+
+.workflow-engine button[data-engine='claude'] {
+  --engine-accent: #d97757;
+}
+
+.workflow-engine .workflow-options button:hover {
+  --engine-tint: 23%;
+}
+
+.workflow-engine .workflow-options button[aria-pressed='true'] {
+  --engine-tint: 34%;
+}
+
+.workflow-engine-check {
+  flex: none;
+  visibility: hidden;
+}
+
+.workflow-engine button[aria-pressed='true'] .workflow-engine-check {
+  visibility: visible;
 }
 
 .workflow-action {

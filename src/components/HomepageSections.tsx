@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  Check,
   Hash,
   Link2,
   LockKeyhole,
@@ -42,11 +43,13 @@ function EngineDemo({ lang }: { lang: Lang }) {
           <button
             key={option.id}
             type="button"
+            data-engine={option.id}
             aria-pressed={index === i}
             onClick={() => setIndex(i)}
           >
             <PreviewModelIcon brand={previewModel(option.id).brand} subscription={i !== 0} />
             {option.name}
+            <Check className="workflow-engine-check" size={12} aria-hidden="true" />
           </button>
         ))}
       </div>
