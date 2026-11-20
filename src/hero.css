@@ -259,20 +259,32 @@ a.beta-button--ios {
 .hero-desktop .app-body:not([data-wallpaper]) {
   --pane-bg: color-mix(in srgb, var(--hero-workspace-base) 85%, var(--hero-workspace-surface));
 }
-.hero-desktop .app-stack {
-  gap: var(--hero-workspace-gap);
-}
 .hero-desktop .app-rail,
 .hero-desktop .app-body .app-pane {
   border: 0;
   border-radius: var(--hero-pane-radius);
   background: var(--pane-bg);
 }
-.hero-linked .hero-desktop .app-pane--channels {
+.hero-desktop .app-body:not([data-wallpaper]) .app-chat,
+.hero-desktop .app-body:not([data-wallpaper]) .app-panel {
+  background: var(--hero-workspace-canvas);
+}
+.hero-desktop .app-chat-head,
+.hero-desktop .app-message-content,
+.hero-desktop .app-panel-section {
+  background: var(--pane-bg);
+  border-radius: var(--hero-pane-radius);
+}
+.hero-desktop .app-message-split {
+  margin-top: 2px;
+}
+.hero-linked .hero-desktop .app-side-panel {
   flex-basis: 200px;
 }
-.hero-linked .hero-desktop .app-stack {
-  flex-basis: 200px;
+@media (max-width: 720px) {
+  .hero-linked .hero-desktop .app-side-panel {
+    flex-basis: auto;
+  }
 }
 .hero-phone-wrap {
   min-width: 0;
@@ -599,11 +611,6 @@ a.beta-button--ios {
 .beta-group-number {
   font: 22px var(--pixel-font) !important;
   user-select: text;
-}
-@media (min-width: 1081px) {
-  .hero-linked .hero-desktop .app-stack {
-    display: flex;
-  }
 }
 @media (max-width: 1100px) {
   .hero-copy {

@@ -47,8 +47,10 @@
   overflow-wrap: anywhere;
 }
 
-.preview-panel[data-kind='session'][data-surface='desktop'] {
-  flex: 0 0 clamp(215px, 26%, 340px);
+.app-message-split > .preview-panel[data-kind='session'] {
+  --pane-bg: inherit;
+  flex: 0 0 clamp(188px, 32%, 340px);
+  margin-inline-start: var(--hero-workspace-gap, 4px);
 }
 
 .preview-model-overlay {
@@ -411,10 +413,6 @@
 }
 
 @media (max-width: 1270px) {
-  .app-body[data-session] .app-stack {
-    display: none;
-  }
-
   .app-chat-head .preview-team-badge {
     display: none;
   }
@@ -430,12 +428,18 @@
   }
 }
 
-@media (min-width: 601px) and (max-width: 720px) {
-  .app-body[data-session] .app-chat {
+@container (max-width: 580px) {
+  .app-message-split[data-session] > :is(.app-panel, .app-column-resize) {
+    display: none;
+  }
+}
+@container (max-width: 410px) {
+  .app-message-split[data-session] > .app-message-content {
     display: none;
   }
 
-  .preview-panel[data-kind='session'][data-surface='desktop'] {
+  .app-message-split > .preview-panel[data-kind='session'] {
     flex: 1;
+    margin-inline-start: 0;
   }
 }

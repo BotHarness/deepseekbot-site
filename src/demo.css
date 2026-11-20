@@ -342,7 +342,7 @@
   flex: 1;
   color: var(--app-ink);
 }
-.app-pane--channels {
+.app-side-panel {
   flex: 0 0 236px;
 }
 .app-channels {
@@ -468,8 +468,19 @@
 /* middle: Messages, or Home */
 .app-chat {
   flex: 1;
+  container-type: inline-size;
 }
-.app-chat > .app-feed {
+.app-message-split,
+.app-message-content {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+.app-message-content {
+  flex-direction: column;
+}
+.app-message-content > .app-feed {
   flex: 1;
 }
 .app-chat-head .app-pill {
@@ -756,17 +767,12 @@
   cursor: default;
 }
 
-/* right: the Channel sidebar */
-/* right: Activity above the Channel subpanels, stacked like the desktop dock */
-.app-stack {
-  display: flex;
-  flex: 0 0 256px;
-  flex-direction: column;
-  gap: 6px;
-  min-height: 0;
-}
+/* The active conversation owns the right Subpanel column. */
 .app-panel {
-  flex: 1;
+  flex: none;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 .app-panel-body {
   min-height: 0;
@@ -774,9 +780,30 @@
   padding: 10px;
   scrollbar-width: thin;
 }
-.app-activity {
-  flex: 0 1 auto;
-  max-height: 46%;
+.app-column-resize,
+.app-subpanel-resize {
+  touch-action: none;
+}
+.app-column-resize {
+  flex: 0 0 var(--hero-workspace-gap, 4px);
+  cursor: col-resize;
+}
+.app-subpanel-resize {
+  height: var(--hero-workspace-gap, 4px);
+  cursor: row-resize;
+}
+.app-column-resize:is(:hover, :active),
+.app-subpanel-resize:is(:hover, :active) {
+  background: var(--app-hover);
+}
+.app-column-resize:focus-visible,
+.app-subpanel-resize:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
+}
+.app-subpanel-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .app-activity-empty {
   margin: 0;
@@ -817,7 +844,7 @@
   white-space: nowrap;
 }
 .app-panel-section + .app-panel-section {
-  margin-top: 8px;
+  margin-top: 2px;
 }
 .app-panel h4 {
   margin: 0;
@@ -828,9 +855,10 @@
   align-items: center;
   gap: 6px;
   width: 100%;
-  padding: 5px 6px;
+  min-height: 34px;
+  padding: 5px 9px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 4px;
   background: none;
   font-size: 13px !important;
   font-weight: 600 !important;
@@ -1022,19 +1050,7 @@
 }
 
 @media (max-width: 1080px) {
-  /* room for Activity only; the Channel subpanels stay folded away */
-  .app-panel,
-  .app-panel-toggle,
-  .app-stack:not(:has(> .app-activity:not([hidden]))) {
-    display: none !important;
-  }
-  .app-stack {
-    flex-basis: 220px;
-  }
-  .app-activity {
-    max-height: none;
-  }
-  .app-pane--channels {
+  .app-side-panel {
     flex-basis: 220px;
   }
 }
@@ -1059,15 +1075,14 @@
   .app-rail-me {
     margin: 0 4px 0 0;
   }
-  .app-pane--channels {
+  .app-side-panel {
     flex: none;
   }
   .app-pane--channels .app-pane-head {
     display: none;
   }
-  .app-stack,
-  .app-rail-btn[data-rail='activity'] {
-    display: none !important;
+  .app-activity {
+    max-height: 156px;
   }
   .app-channels {
     display: flex;

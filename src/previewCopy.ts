@@ -15,7 +15,7 @@ export const PREVIEW_COPY = {
   zh: {
     badge: 'v1.8.0 预告',
     caption:
-      '试着在共享频道发条消息、从 Nova 私聊切换模型，或点开消息里的 Session。人物和任务均为虚构，演示消息只在当前页面显示。',
+      '从消息标题栏展开子面板，或点消息里的 Session 查看详情。你也可以在共享频道发消息、从 Nova 私聊切换模型。演示人物和任务均为虚构，消息只在当前页面显示。',
     teamTitle: '团队模式（Team mode）',
     teamBody:
       '一台 Host 服务一个小团队。Owner 主动开启试用并邀请成员，各自用自己的账号登录。Owner 和获授权的 Admin 管理成员与角色，成员按权限私聊，在共享 Channel 里和同事、Bot 协作。v1.8.0 试用以通过 Bot 执行隔离验收的 Linux Host 为范围。',
@@ -87,7 +87,7 @@ export const PREVIEW_COPY = {
   en: {
     badge: 'v1.8.0 preview',
     caption:
-      'Send a message in the shared Channel, change the model in Nova’s DM, or follow a Session link. The people and tasks are fictional, and demo messages stay on this page.',
+      'Open subpanels from the Messages header or follow a Session link. You can also post in the shared Channel and change the model in Nova’s DM. The people and tasks are fictional, and demo messages stay on this page.',
     teamTitle: 'Team mode',
     teamBody:
       'One Host serves a small team. The Owner opts in and invites people to sign in with their own accounts. The Owner and authorized Admins manage members and roles. Members can message each other and work with Bots in shared Channels according to their permissions. The v1.8.0 trial targets Linux Hosts that pass Bot execution isolation checks.',

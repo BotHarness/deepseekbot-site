@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import {
   useEffect,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -61,6 +62,9 @@ import { DEEPSEEKBOT_RECIPE, recipeFor } from '../mascot';
 import { PixelAvatar, prefersReducedMotion, type PixelAvatarHandle } from './PixelAvatar';
 
 const TOOL_MS = 1100;
+const MIN_SUBPANEL_HEIGHT = 120;
+const MAX_SUBPANEL_HEIGHT = 640;
+const MIN_SUBPANEL_WIDTH = 20;
 
 const ICONS: Record<DemoIcon, LucideIcon> = {
   members: Users,
@@ -373,15 +377,19 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const [done, setDone] = useState(false);
   const [extra, setExtra] = useState<Extra[]>([]);
   const [seen, setSeen] = useState<Set<string>>(() => new Set());
-  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [columnWidth, setColumnWidth] = useState(34);
+  const [panelHeights, setPanelHeights] = useState<Record<string, number>>({});
+  const panelResizeStart = useRef<{ y: number; height: number }>(null);
+  const subpanelId = useId();
   // the Control Rail's panels and views
   const [view, setView] = useState<'chat' | 'home'>('chat');
-  const [channelsOpen, setChannelsOpen] = useState(true);
-  const [activityOpen, setActivityOpen] = useState(false);
+  const [sidePanel, setSidePanel] = useState<'channels' | 'activity' | null>('channels');
   const [wallpaper, setWallpaper] = useState(false);
   const [range, setRange] = useState(1);
-  // sidebar sections the visitor folded, by section id; they stay folded across chats
-  const [folded, setFolded] = useState<Set<string>>(() => new Set());
+  const [expandedSubpanels, setExpandedSubpanels] = useState<Set<string>>(
+    () => new Set(['sessions']),
+  );
   const [phonePhase, setPhonePhase] = useState<'intro' | 'pair' | 'sync' | 'home' | 'activity'>(
     'intro',
   );
@@ -395,9 +403,27 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const channel = channels[active]!;
   const isTeam = linkedPhone && phoneHost === 'studio' && active === 0;
   const isPreviewBot = linkedPhone && phoneHost === 'research' && active === 2;
+  const hasDesktopSession = previewPanel?.kind === 'session' && previewPanel.surface === 'desktop';
+  const maxColumnWidth = hasDesktopSession ? 40 : 60;
+  const visibleColumnWidth = Math.min(columnWidth, maxColumnWidth);
   const sessionTitle = isTeam ? preview.session : preview.localSession;
   const model = previewModel(modelPlan.main);
-  const panel = useMemo(() => panelAt(channel, shown), [channel, shown]);
+  const panel = useMemo(() => {
+    const sections = panelAt(channel, shown);
+    const sessions = sections.find((section) => section.id === 'sessions');
+    return sessions ? [sessions, ...sections.filter((section) => section !== sessions)] : sections;
+  }, [channel, shown]);
+
+  function resizeSubpanel(id: string, height: number) {
+    setPanelHeights((previous) => ({
+      ...previous,
+      [id]: Math.round(Math.min(MAX_SUBPANEL_HEIGHT, Math.max(MIN_SUBPANEL_HEIGHT, height))),
+    }));
+  }
+
+  function resizeSubpanelColumn(width: number) {
+    setColumnWidth(Math.round(Math.min(maxColumnWidth, Math.max(MIN_SUBPANEL_WIDTH, width))));
+  }
 
   useLayoutEffect(() => {
     if (previewPanel) previewClose.current?.focus({ preventScroll: true });
@@ -943,11 +969,7 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
         </div>
         <div
           className="app-body"
-          data-panel={panelOpen ? undefined : 'closed'}
           data-wallpaper={wallpaper ? '' : undefined}
-          data-session={
-            previewPanel?.kind === 'session' && previewPanel.surface === 'desktop' ? '' : undefined
-          }
           inert={previewPanel?.kind === 'models' && previewPanel.surface === 'desktop'}
         >
           <nav className="app-rail" aria-label={t.rail}>
@@ -962,12 +984,12 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
               'activity',
               t.activity,
               Bell,
-              activityOpen,
-              () => setActivityOpen((v) => !v),
+              sidePanel === 'activity',
+              () => setSidePanel((current) => (current === 'activity' ? null : 'activity')),
               needing.length + unseen.length,
             )}
-            {railButton('channels', t.channelsPanel, Hash, channelsOpen, () =>
-              setChannelsOpen((v) => !v),
+            {railButton('channels', t.channelsPanel, Hash, sidePanel === 'channels', () =>
+              setSidePanel((current) => (current === 'channels' ? null : 'channels')),
             )}
             {railButton('messages', t.messages, MessagesSquare, view === 'chat', () =>
               setView('chat'),
@@ -980,9 +1002,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           </nav>
 
           <section
-            className="app-pane app-pane--channels"
+            className="app-pane app-side-panel app-pane--channels"
             aria-label={t.channelsPanel}
-            hidden={!channelsOpen}
+            hidden={sidePanel !== 'channels'}
           >
             <header className="app-pane-head" aria-hidden="true">
               <Hash className="app-icon" size={16} strokeWidth={1.75} />
@@ -1034,8 +1056,39 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
           </section>
 
           <section
+            className="app-pane app-side-panel app-activity"
+            aria-label={t.activity}
+            hidden={sidePanel !== 'activity'}
+          >
+            <header className="app-pane-head">
+              <Bell className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
+              <span className="app-pane-title">{t.activity}</span>
+            </header>
+            {needing.length + unseen.length === 0 ? (
+              <p className="app-activity-empty">{t.nothingWaiting}</p>
+            ) : (
+              <ul className="app-activity-list">
+                {[
+                  ...needing.map((row) => ({ ...row, tag: t.needsYou, tone: 'waiting' })),
+                  ...unseen.map((row) => ({ ...row, tag: t.unread, tone: 'info' })),
+                ].map(({ c, index, tag, tone }) => (
+                  <li key={c.id}>
+                    <button type="button" onClick={() => open(index)}>
+                      <span className="app-badge" data-tone={tone}>
+                        {tag}
+                      </span>
+                      <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
+                      <small>{c.preview}</small>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section
             className="app-pane app-chat"
-            aria-label={view === 'home' ? t.home : channel.title}
+            aria-label={view === 'home' ? t.home : `${t.messages} · ${channel.title}`}
             data-view={view}
           >
             <header
@@ -1072,13 +1125,11 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                     type="button"
                     className="app-icon-btn app-panel-toggle"
                     aria-expanded={panelOpen}
+                    aria-controls={subpanelId}
                     aria-label={panelOpen ? t.hideSidebar : t.showSidebar}
                     title={panelOpen ? t.hideSidebar : t.showSidebar}
                     onClick={() => {
                       touched.current = true;
-                      if (previewPanel?.surface === 'desktop' && previewPanel.kind === 'session') {
-                        setPreviewPanel(undefined);
-                      }
                       setPanelOpen((open) => !open);
                     }}
                   >
@@ -1091,217 +1142,221 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                 </>
               )}
             </header>
-            {linkedPhone && phonePhase === 'pair' ? (
-              <div className="hero-desktop-pair">
-                <PhonePair
-                  t={{
-                    ...copy.featureDemos.mobile,
-                    pair: { ...copy.featureDemos.mobile.pair, title: hero.pairTitle },
-                  }}
-                  autoPlay={!isInteractive}
-                  onNext={() => pairingWith.current?.()}
-                />
-              </div>
-            ) : view === 'home' ? (
-              <div className="app-home">
-                <p className="app-home-hello">
-                  <PixelAvatar recipe={DEEPSEEKBOT_RECIPE} size={40} />
-                  <strong>{t.tob.greeting}</strong>
-                </p>
-                <p className="app-home-lead">{t.tob.description}</p>
-                <p className="app-composer app-home-input" aria-hidden="true">
-                  <Paperclip className="app-composer-plus" size={16} strokeWidth={1.75} />
-                  <span>{t.tob.input}</span>
-                  <span className="app-send" data-off="">
-                    <ArrowUp size={16} strokeWidth={2} />
-                  </span>
-                </p>
-                <ul className="app-home-starters" aria-label={t.tob.name}>
-                  {t.tob.starters.map((starter) => (
-                    <li key={starter}>{starter}</li>
-                  ))}
-                </ul>
-                <div className="app-home-cards">
-                  <section className="app-home-card" aria-label={t.tob.usage}>
-                    <p className="app-home-card-head">
-                      <strong>{t.tob.usage}</strong>
-                      <span className="app-segment" role="group" aria-label={t.tob.usage}>
-                        {t.tob.ranges.map((label, index) => (
-                          <button
-                            key={label}
-                            type="button"
-                            aria-pressed={range === index}
-                            onClick={() => setRange(index)}
-                          >
-                            {label}
-                          </button>
-                        ))}
+            <div className="app-message-split" data-session={hasDesktopSession ? '' : undefined}>
+              <div className="app-message-content">
+                {linkedPhone && phonePhase === 'pair' ? (
+                  <div className="hero-desktop-pair">
+                    <PhonePair
+                      t={{
+                        ...copy.featureDemos.mobile,
+                        pair: { ...copy.featureDemos.mobile.pair, title: hero.pairTitle },
+                      }}
+                      autoPlay={!isInteractive}
+                      onNext={() => pairingWith.current?.()}
+                    />
+                  </div>
+                ) : view === 'home' ? (
+                  <div className="app-home">
+                    <p className="app-home-hello">
+                      <PixelAvatar recipe={DEEPSEEKBOT_RECIPE} size={40} />
+                      <strong>{t.tob.greeting}</strong>
+                    </p>
+                    <p className="app-home-lead">{t.tob.description}</p>
+                    <p className="app-composer app-home-input" aria-hidden="true">
+                      <Paperclip className="app-composer-plus" size={16} strokeWidth={1.75} />
+                      <span>{t.tob.input}</span>
+                      <span className="app-send" data-off="">
+                        <ArrowUp size={16} strokeWidth={2} />
                       </span>
                     </p>
-                    <div
-                      className="app-bars"
-                      role="img"
-                      aria-label={`${t.tob.usage} · ${t.tob.ranges[range]}`}
-                    >
-                      {usageBars(RANGE_BARS[range]!, range).map((h, index) => (
-                        <i
-                          key={`${range}-${index}`}
-                          style={{ height: `${Math.round(h * 100)}%` }}
-                        />
+                    <ul className="app-home-starters" aria-label={t.tob.name}>
+                      {t.tob.starters.map((starter) => (
+                        <li key={starter}>{starter}</li>
                       ))}
-                    </div>
-                  </section>
-                  <section className="app-home-card" aria-label={t.tob.botActivity}>
-                    <p className="app-home-card-head">
-                      <strong>{t.tob.botActivity}</strong>
-                    </p>
-                    <ul className="app-home-bots">
-                      {bots.map((bot) => {
-                        const state = botState(bot);
-                        const time =
-                          (
-                            channels.find((c) => c.kind === 'dm' && c.bots[0] === bot) ??
-                            channels.find((c) => c.bots.includes(bot))
-                          )?.time ?? '';
-                        return (
-                          <li key={bot} data-state={state}>
-                            <Avatar name={bot} size={28} />
-                            <span>
-                              <strong>{bot}</strong>
-                              <small>
-                                {t.tob.states[state]} · {time}
-                              </small>
-                            </span>
-                          </li>
-                        );
-                      })}
                     </ul>
-                  </section>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="app-feed" ref={feed}>
-                  <ol className="app-msgs">
-                    <li className="app-day">{t.today}</li>
-                    {renderSteps('desktop')}
-                    {renderExtra('desktop')}
-                    {working ? (
-                      <Working
-                        bot={working.bot}
-                        tool={working.tool}
-                        label={fill(t.working, {
-                          bot: working.bot,
-                          tool: copy.symbols[working.tool],
-                        })}
-                      />
-                    ) : null}
-                    {done && extra.length === 0 ? (
-                      <li className="app-event app-event--replay">
-                        <button type="button" className="app-btn" onClick={() => open(active)}>
-                          <RotateCcw
-                            className="app-icon"
-                            size={14}
-                            strokeWidth={1.75}
-                            aria-hidden="true"
+                    <div className="app-home-cards">
+                      <section className="app-home-card" aria-label={t.tob.usage}>
+                        <p className="app-home-card-head">
+                          <strong>{t.tob.usage}</strong>
+                          <span className="app-segment" role="group" aria-label={t.tob.usage}>
+                            {t.tob.ranges.map((label, index) => (
+                              <button
+                                key={label}
+                                type="button"
+                                aria-pressed={range === index}
+                                onClick={() => setRange(index)}
+                              >
+                                {label}
+                              </button>
+                            ))}
+                          </span>
+                        </p>
+                        <div
+                          className="app-bars"
+                          role="img"
+                          aria-label={`${t.tob.usage} · ${t.tob.ranges[range]}`}
+                        >
+                          {usageBars(RANGE_BARS[range]!, range).map((h, index) => (
+                            <i
+                              key={`${range}-${index}`}
+                              style={{ height: `${Math.round(h * 100)}%` }}
+                            />
+                          ))}
+                        </div>
+                      </section>
+                      <section className="app-home-card" aria-label={t.tob.botActivity}>
+                        <p className="app-home-card-head">
+                          <strong>{t.tob.botActivity}</strong>
+                        </p>
+                        <ul className="app-home-bots">
+                          {bots.map((bot) => {
+                            const state = botState(bot);
+                            const time =
+                              (
+                                channels.find((c) => c.kind === 'dm' && c.bots[0] === bot) ??
+                                channels.find((c) => c.bots.includes(bot))
+                              )?.time ?? '';
+                            return (
+                              <li key={bot} data-state={state}>
+                                <Avatar name={bot} size={28} />
+                                <span>
+                                  <strong>{bot}</strong>
+                                  <small>
+                                    {t.tob.states[state]} · {time}
+                                  </small>
+                                </span>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </section>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="app-feed" ref={feed}>
+                      <ol className="app-msgs">
+                        <li className="app-day">{t.today}</li>
+                        {renderSteps('desktop')}
+                        {renderExtra('desktop')}
+                        {working ? (
+                          <Working
+                            bot={working.bot}
+                            tool={working.tool}
+                            label={fill(t.working, {
+                              bot: working.bot,
+                              tool: copy.symbols[working.tool],
+                            })}
                           />
-                          {t.replay}
-                        </button>
-                      </li>
-                    ) : null}
-                  </ol>
-                </div>
-                <form
-                  className="app-composer"
-                  onSubmit={(event) => send(event, 'desktop')}
-                  data-typing={typing ? '' : undefined}
-                >
-                  <Plus
-                    className="app-composer-plus"
-                    size={18}
-                    strokeWidth={1.75}
-                    aria-hidden="true"
-                  />
-                  <input
-                    value={draft}
-                    readOnly={!done}
-                    onChange={(event) => setDraft(event.target.value)}
-                    placeholder={
-                      isTeam
-                        ? fill(preview.composer, { name: 'Mei' })
-                        : fill(t.composer, { name: channel.title })
-                    }
-                    aria-label={
-                      isTeam
-                        ? fill(preview.composer, { name: 'Mei' })
-                        : fill(t.composer, { name: channel.title })
-                    }
-                    maxLength={200}
-                  />
-                  <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
-                    <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
-                    <span className="visually-hidden">{t.send}</span>
-                  </button>
-                </form>
-              </>
-            )}
-          </section>
-
-          {previewPanel?.kind === 'session' ? renderPreview('desktop') : null}
-
-          <div className="app-stack" hidden={!activityOpen && !panelOpen}>
-            <section
-              className="app-pane app-activity"
-              aria-label={t.activity}
-              hidden={!activityOpen}
-            >
-              <header className="app-pane-head">
-                <Bell className="app-icon" size={16} strokeWidth={1.75} aria-hidden="true" />
-                <span className="app-pane-title">{t.activity}</span>
-              </header>
-              {needing.length + unseen.length === 0 ? (
-                <p className="app-activity-empty">{t.nothingWaiting}</p>
-              ) : (
-                <ul className="app-activity-list">
-                  {[
-                    ...needing.map((row) => ({ ...row, tag: t.needsYou, tone: 'waiting' })),
-                    ...unseen.map((row) => ({ ...row, tag: t.unread, tone: 'info' })),
-                  ].map(({ c, index, tag, tone }) => (
-                    <li key={c.id}>
-                      <button type="button" onClick={() => open(index)}>
-                        <span className="app-badge" data-tone={tone}>
-                          {tag}
-                        </span>
-                        <strong>{c.kind === 'group' ? `# ${c.title}` : c.title}</strong>
-                        <small>{c.preview}</small>
+                        ) : null}
+                        {done && extra.length === 0 ? (
+                          <li className="app-event app-event--replay">
+                            <button type="button" className="app-btn" onClick={() => open(active)}>
+                              <RotateCcw
+                                className="app-icon"
+                                size={14}
+                                strokeWidth={1.75}
+                                aria-hidden="true"
+                              />
+                              {t.replay}
+                            </button>
+                          </li>
+                        ) : null}
+                      </ol>
+                    </div>
+                    <form
+                      className="app-composer"
+                      onSubmit={(event) => send(event, 'desktop')}
+                      data-typing={typing ? '' : undefined}
+                    >
+                      <Plus
+                        className="app-composer-plus"
+                        size={18}
+                        strokeWidth={1.75}
+                        aria-hidden="true"
+                      />
+                      <input
+                        value={draft}
+                        readOnly={!done}
+                        onChange={(event) => setDraft(event.target.value)}
+                        placeholder={
+                          isTeam
+                            ? fill(preview.composer, { name: 'Mei' })
+                            : fill(t.composer, { name: channel.title })
+                        }
+                        aria-label={
+                          isTeam
+                            ? fill(preview.composer, { name: 'Mei' })
+                            : fill(t.composer, { name: channel.title })
+                        }
+                        maxLength={200}
+                      />
+                      <button type="submit" className="app-send" disabled={!done || !draft.trim()}>
+                        <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
+                        <span className="visually-hidden">{t.send}</span>
                       </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-
-            <aside className="app-pane app-panel" aria-label={t.sidebar} hidden={!panelOpen}>
-              <header className="app-pane-head" aria-hidden="true">
-                <Users className="app-icon" size={16} strokeWidth={1.75} />
-                <span className="app-pane-title">{t.sidebar}</span>
-              </header>
-              <div className="app-panel-body">
+                    </form>
+                  </>
+                )}
+              </div>
+              {hasDesktopSession ? renderPreview('desktop') : null}
+              <div
+                className="app-column-resize"
+                role="separator"
+                tabIndex={0}
+                aria-label={t.sidebar}
+                aria-orientation="vertical"
+                aria-valuemin={MIN_SUBPANEL_WIDTH}
+                aria-valuemax={maxColumnWidth}
+                aria-valuenow={visibleColumnWidth}
+                hidden={!panelOpen || view !== 'chat'}
+                onKeyDown={(event) => {
+                  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                  event.preventDefault();
+                  resizeSubpanelColumn(visibleColumnWidth + (event.key === 'ArrowLeft' ? 2 : -2));
+                }}
+                onPointerDown={(event) => {
+                  if (event.button === 0) event.currentTarget.setPointerCapture(event.pointerId);
+                }}
+                onPointerMove={(event) => {
+                  if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+                  const box = event.currentTarget.parentElement!.getBoundingClientRect();
+                  resizeSubpanelColumn(((box.right - event.clientX) * 100) / box.width);
+                }}
+              />
+              <aside
+                id={subpanelId}
+                className="app-panel"
+                aria-label={t.sidebar}
+                style={{ width: `${visibleColumnWidth}%` }}
+                hidden={!panelOpen || view !== 'chat'}
+              >
                 {panel.map((section) => {
-                  const open = !folded.has(section.id);
+                  const open = expandedSubpanels.has(section.id);
+                  const height = panelHeights[section.id] ?? 320;
+                  const entryId = `${subpanelId}-${section.id}`;
+                  const count =
+                    section.items.length +
+                    (section.id === 'members' && isTeam ? teamMembers.length - 1 : 0) +
+                    (section.id === 'sessions' && sessionAvailable ? 1 : 0);
                   return (
-                    <section key={section.id} className="app-panel-section">
+                    <section
+                      key={section.id}
+                      className="app-panel-section"
+                      data-subpanel-section={section.id}
+                    >
                       <h4>
                         <button
                           type="button"
                           className="app-panel-head"
                           aria-expanded={open}
+                          aria-controls={entryId}
                           onClick={() => {
                             touched.current = true;
-                            setFolded((prev) => {
+                            setExpandedSubpanels((prev) => {
                               const next = new Set(prev);
-                              if (open) next.add(section.id);
-                              else next.delete(section.id);
+                              if (open) next.delete(section.id);
+                              else next.add(section.id);
                               return next;
                             });
                           }}
@@ -1314,66 +1369,106 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                           />
                           <Icon name={section.icon} />
                           <span className="app-panel-title">{section.title}</span>
-                          {section.items.length ? (
-                            <span className="app-count">
-                              {section.items.length +
-                                (section.id === 'members' && isTeam ? teamMembers.length - 1 : 0) +
-                                (section.id === 'sessions' && sessionAvailable ? 1 : 0)}
-                            </span>
-                          ) : null}
+                          {count ? <span className="app-count">{count}</span> : null}
                         </button>
                       </h4>
-                      <ul hidden={!open}>
-                        {section.id === 'members' && isTeam ? teamRoster : null}
-                        {section.id === 'sessions' && sessionAvailable ? (
-                          <li className="app-panel-item">
-                            <button
-                              type="button"
-                              className="app-btn preview-session-row"
-                              aria-expanded={
-                                previewPanel?.surface === 'desktop' &&
-                                previewPanel.kind === 'session'
-                              }
-                              onClick={(event) =>
-                                showPreview('session', 'desktop', event.currentTarget)
-                              }
-                            >
-                              <ListTodo size={14} aria-hidden="true" />
-                              <span className="app-panel-text">
-                                <span>{sessionTitle}</span>
-                                <small>{preview.complete} · 3/3</small>
-                              </span>
-                            </button>
-                          </li>
-                        ) : null}
-                        {section.items
-                          .filter(
-                            (item) => !(section.id === 'members' && item.id === 'h' && isTeam),
-                          )
-                          .map((item) => (
-                            // keyed by its badge too, so a status change flashes the row
-                            <li
-                              key={`${item.id}-${item.badge ?? ''}`}
-                              className="app-panel-item"
-                              data-tone={item.tone}
-                            >
-                              {section.id === 'members' && item.id !== 'h' ? (
-                                <Avatar name={item.title} size={22} />
-                              ) : null}
-                              <span className="app-panel-text">
-                                <span>{item.title}</span>
-                                {item.meta ? <small>{item.meta}</small> : null}
-                              </span>
-                              {item.badge ? <span className="app-badge">{item.badge}</span> : null}
+                      <div
+                        id={entryId}
+                        className="app-subpanel-body"
+                        style={{ height }}
+                        hidden={!open}
+                      >
+                        <ul>
+                          {section.id === 'members' && isTeam ? teamRoster : null}
+                          {section.id === 'sessions' && sessionAvailable ? (
+                            <li className="app-panel-item">
+                              <button
+                                type="button"
+                                className="app-btn preview-session-row"
+                                aria-expanded={
+                                  previewPanel?.surface === 'desktop' &&
+                                  previewPanel.kind === 'session'
+                                }
+                                onClick={(event) =>
+                                  showPreview('session', 'desktop', event.currentTarget)
+                                }
+                              >
+                                <ListTodo size={14} aria-hidden="true" />
+                                <span className="app-panel-text">
+                                  <span>{sessionTitle}</span>
+                                  <small>{preview.complete} · 3/3</small>
+                                </span>
+                              </button>
                             </li>
-                          ))}
-                      </ul>
+                          ) : null}
+                          {section.items
+                            .filter(
+                              (item) => !(section.id === 'members' && item.id === 'h' && isTeam),
+                            )
+                            .map((item) => (
+                              // keyed by its badge too, so a status change flashes the row
+                              <li
+                                key={`${item.id}-${item.badge ?? ''}`}
+                                className="app-panel-item"
+                                data-tone={item.tone}
+                              >
+                                {section.id === 'members' && item.id !== 'h' ? (
+                                  <Avatar name={item.title} size={22} />
+                                ) : null}
+                                <span className="app-panel-text">
+                                  <span>{item.title}</span>
+                                  {item.meta ? <small>{item.meta}</small> : null}
+                                </span>
+                                {item.badge ? (
+                                  <span className="app-badge">{item.badge}</span>
+                                ) : null}
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                      {open ? (
+                        <div
+                          className="app-subpanel-resize"
+                          role="separator"
+                          tabIndex={0}
+                          aria-label={section.title}
+                          aria-orientation="horizontal"
+                          aria-valuemin={MIN_SUBPANEL_HEIGHT}
+                          aria-valuemax={MAX_SUBPANEL_HEIGHT}
+                          aria-valuenow={height}
+                          onKeyDown={(event) => {
+                            if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+                            event.preventDefault();
+                            resizeSubpanel(
+                              section.id,
+                              height + (event.key === 'ArrowDown' ? 16 : -16),
+                            );
+                          }}
+                          onPointerDown={(event) => {
+                            if (event.button !== 0) return;
+                            panelResizeStart.current = { y: event.clientY, height };
+                            event.currentTarget.setPointerCapture(event.pointerId);
+                          }}
+                          onPointerMove={(event) => {
+                            if (
+                              !event.currentTarget.hasPointerCapture(event.pointerId) ||
+                              !panelResizeStart.current
+                            )
+                              return;
+                            const start = panelResizeStart.current;
+                            resizeSubpanel(section.id, start.height + event.clientY - start.y);
+                          }}
+                          onLostPointerCapture={() => {
+                            panelResizeStart.current = null;
+                          }}
+                        />
+                      ) : null}
                     </section>
                   );
                 })}
-              </div>
-            </aside>
-          </div>
+              </aside>
+            </div>
+          </section>
         </div>
         {previewPanel?.kind === 'models' && previewPanel.surface === 'desktop' ? (
           <div className="preview-model-overlay">{renderPreview('desktop')}</div>

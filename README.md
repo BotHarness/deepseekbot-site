@@ -25,7 +25,8 @@ For repeatable local model setup across product worktrees, see the
 - **Live demo**: the Hero couples the desktop workspace (`src/components/LiveDemo.tsx`) with
   the phone's chat, pairing and Activity flows (`HeroPhoneChat.tsx`, `HeroPhoneHome.tsx`). The
   v1.8.0 fixtures add member roles to Launch crew, a model dialog to Nova’s DM, and detail panes
-  linked from messages and the Sessions list. `src/demoCopy.ts` and `src/previewCopy.ts` hold
+  linked from messages and the Sessions list. The Messages header opens the Simple Layout subpanel
+  column. `src/demoCopy.ts` and `src/previewCopy.ts` hold
   the scripts and preview copy. The demo runs entirely in the visitor’s browser.
 - **Native screenshots**: the 1.5 release article reuses historical iOS Simulator captures, with
   source revisions, hashes and scope in `public/blog-figures/tobs-1-5/provenance.json`. Keep the
