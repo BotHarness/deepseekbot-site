@@ -34,7 +34,7 @@ const BOT_TABS = ['work', 'memory', 'files', 'routines', 'settings'] as const;
 const GROUP_TABS = ['members', 'files', 'work', 'settings'] as const;
 const API_MODELS = PREVIEW_MODELS.filter((model) => model.source === 'api');
 
-function PhoneModelPicker({
+export function HeroPhoneModelPicker({
   t,
   selected,
   onSelect,
@@ -247,7 +247,7 @@ export function HeroPhoneProfile({
               </div>
             </>
           ) : (
-            <PhoneModelPicker
+            <HeroPhoneModelPicker
               key={page}
               t={t}
               selected={plan[page]}

@@ -910,8 +910,7 @@ a.beta-button--ios {
   color: var(--app-soft);
 }
 .hero-phone-conversations,
-.hero-phone-requests,
-.hero-phone-computers {
+.hero-phone-requests {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -1117,19 +1116,168 @@ a.beta-button--ios {
   background: transparent;
   color: var(--app-soft);
 }
-.hero-phone-computers li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 17px 0;
-  border-bottom: 1px solid var(--phone-edge);
+.hero-linked-phone.app:has(.hero-phone-app[data-screen='settings']) {
+  --app-bg: #fdfdfd;
+  --settings-card: #f1f2f4;
 }
-.hero-phone-computers .hero-phone-source {
+:root[data-theme='dark'] .hero-linked-phone.app:has(.hero-phone-app[data-screen='settings']) {
+  --app-bg: #202123;
+  --settings-card: #242529;
+}
+.hero-phone-app[data-screen='settings'] .hero-phone-tabbar button[aria-pressed='true'] {
+  color: var(--app-ink);
+}
+.hero-settings-feed {
+  padding: 10px 12px 18px;
+}
+.hero-phone-settings[data-page='root'] .hero-settings-feed {
+  padding-top: 42px;
+}
+.hero-settings-feed > * + * {
+  margin-top: 22px;
+}
+.hero-settings-feed > h3 {
+  margin: 0 0 6px;
+  font:
+    700 27px/1.2 -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+.hero-settings-feed > h3 + .hero-settings-card {
+  margin-top: 0;
+}
+.hero-settings-feed h4 {
+  margin: 0 0 7px;
+  padding-inline: 12px;
+  color: var(--app-soft);
   font-size: 12px;
+  font-weight: 600;
 }
-.hero-phone-connected {
-  color: var(--app-ok);
+.hero-settings-card {
+  border: 0;
+  border-radius: 19px;
+  background: var(--settings-card);
+  overflow: hidden;
+}
+.hero-settings-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 39px;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  padding: 8px 12px;
+  background: transparent;
+  color: inherit;
+  text-align: start;
+}
+.hero-settings-row + .hero-settings-row::before {
+  position: absolute;
+  inset: 0 12px auto 12px;
+  border-top: 1px solid var(--app-line);
+  content: '';
+}
+.hero-settings-row:has(.hero-settings-icon) + .hero-settings-row::before {
+  inset-inline-start: 42px;
+}
+button.hero-settings-row,
+button.hero-settings-usage {
+  cursor: pointer;
+}
+:is(button.hero-settings-row, button.hero-settings-usage):hover {
+  background: var(--app-hover);
+}
+.hero-settings-icon {
+  display: grid;
+  width: 20px;
+  flex: none;
+  place-items: center;
+}
+.hero-settings-icon > svg {
+  width: 17px;
+  height: 17px;
+}
+.hero-settings-initial {
+  width: 34px;
+  line-height: 38px;
+  font-size: 22px;
+  text-align: center;
+}
+.hero-settings-icon:has(.hero-settings-initial) {
+  width: 34px;
+}
+.hero-settings-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.hero-settings-label small {
+  display: block;
+  color: var(--app-soft);
   font-size: 10px;
+}
+.hero-settings-chevron {
+  flex: none;
+  color: var(--app-soft);
+  opacity: 0.7;
+}
+.hero-settings-usage {
+  display: grid;
+  width: 100%;
+  gap: 6px;
+  padding: 12px;
+  color: inherit;
+  text-align: start;
+}
+.hero-settings-usage-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--app-soft);
+  font-size: 10px;
+}
+.hero-settings-usage-head strong {
+  margin-inline-end: auto;
+  color: var(--app-ink);
+  font-size: 13px;
+}
+.hero-settings-usage-total {
+  color: var(--app-soft);
+}
+.hero-settings-usage-total strong {
+  color: var(--app-ink);
+  font-size: 23px;
+  font-variant-numeric: tabular-nums;
+}
+.hero-settings-usage-chart {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  height: 43px;
+  margin-top: 2px;
+}
+.hero-settings-usage-chart > span {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+}
+.hero-settings-usage-chart i {
+  width: min(100%, 11px);
+  border-radius: 4px 4px 0 0;
+  background: var(--app-info);
+}
+.hero-settings-usage-chart small {
+  color: var(--app-soft);
+  font-size: 9px;
+}
+.hero-phone-settings button:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-phone-page {

@@ -41,7 +41,7 @@ import {
 } from 'react';
 import { track } from '../analytics';
 import { HERO_COPY } from '../heroCopy';
-import { PREVIEW_COPY } from '../previewCopy';
+import { PREVIEW_COPY, type ModelId } from '../previewCopy';
 import {
   DEFAULT_PREVIEW_MODELS,
   PreviewMemoryReader,
@@ -366,6 +366,9 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const hero = HERO_COPY[lang];
   const preview = PREVIEW_COPY[lang];
   const [modelPlans, setModelPlans] = useState<Record<string, ModelPlan>>({});
+  const [hostDefaultModels, setHostDefaultModels] = useState<Partial<Record<PhoneHostId, ModelId>>>(
+    {},
+  );
   const [botProfileTab, setBotProfileTab] = useState<PhoneProfileTab>('work');
   const [groupProfileTab, setGroupProfileTab] = useState<PhoneProfileTab>('members');
   const [profileViews, setProfileViews] = useState<PhoneProfileViews>({
@@ -462,7 +465,8 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
   const visibleSessionWidth = Math.min(sessionWidth, maxSessionWidth);
   const sessionTitle = isTeam ? preview.session : preview.localSession;
   const sessionConversation = sessionConversations[channel.id] ?? EMPTY_SESSION_CONVERSATION;
-  const modelPlan = modelPlans[channel.id] ?? DEFAULT_PREVIEW_MODELS;
+  const hostDefaultModel = hostDefaultModels[phoneHost] ?? DEFAULT_PREVIEW_MODELS.main;
+  const modelPlan = modelPlans[channel.id] ?? { ...DEFAULT_PREVIEW_MODELS, main: hostDefaultModel };
   const model = previewModel(modelPlan.main);
   const panel = useMemo(() => {
     const sections = panelAt(channel, shown);
@@ -1898,6 +1902,10 @@ export function LiveDemo({ copy, linkedPhone = false }: { copy: Copy; linkedPhon
                   }
                   autoPlay={!isInteractive}
                   sharedRequest={sharedRequest}
+                  defaultModel={hostDefaultModel}
+                  onDefaultModel={(id) => {
+                    setHostDefaultModels((previous) => ({ ...previous, [phoneHost]: id }));
+                  }}
                   onOpenChannel={(index, host) => open(index, true, host)}
                   renderAvatar={(name, size) => <Avatar name={name} size={size} />}
                   renderChat={(onBack) => (
