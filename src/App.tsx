@@ -16,7 +16,6 @@ import { Sponsors } from './components/Sponsors';
 import { HomepageFeatures, HomepageFooter, HowTobsWorks } from './components/HomepageSections';
 import { COPY, LINKS } from './content';
 import { HERO_COPY } from './heroCopy';
-import { PREVIEW_COPY } from './previewCopy';
 import { pixelTheme } from './theme';
 import { SiteHeader } from './components/SiteHeader';
 import { blogPath, initialMode, pathLang, write, type Mode } from './site';
@@ -27,7 +26,6 @@ export function App() {
   const [mode, setMode] = useState<Mode>(initialMode);
   const copy = COPY[lang];
   const hero = HERO_COPY[lang];
-  const preview = PREVIEW_COPY[lang];
   const home = HOMEPAGE_COPY[lang];
   const design = useAvatarDesign();
   const changeMode = (next: Mode) => {
@@ -76,7 +74,6 @@ export function App() {
             </div>
             <figure className="hero-product">
               <LiveDemo copy={copy} linkedPhone />
-              <figcaption className="hero-caption">{preview.caption}</figcaption>
             </figure>
           </div>
           <Crew copy={copy} lang={lang} />
