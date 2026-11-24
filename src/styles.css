@@ -1,6 +1,9 @@
 @import './frames.css';
+@import './tobs-core.css';
 
-/* ---- palette: day (default) and night ---- */
+/* ---- palette: day (default) and night ----
+   Brand and accent come from Tobs core (src/tobs-core.css, synced by `pnpm tokens:sync`);
+   the warm pixel-world surfaces are this site's own. */
 :root {
   --px: 4px;
   --pixel-font: 'DSB Pixel', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', monospace;
@@ -11,8 +14,8 @@
   --bg-alt: #efdcae;
   --ink: #3b2414;
   --ink-soft: #6b4a2e;
-  --accent: #3d5afe;
-  --accent-ink: #ffffff;
+  --accent: var(--tobs-core-brand);
+  --accent-ink: var(--tobs-core-on-solid);
   --px-ink: #3b2414;
   --px-shadow: rgb(59 36 20 / 0.35);
   --sky-top: #7cc6ff;
@@ -37,8 +40,6 @@
   --bg-alt: #10152b;
   --ink: #f3e6c8;
   --ink-soft: #c2b59b;
-  --accent: #8c9eff;
-  --accent-ink: #0b0f22;
   --px-ink: #05070f;
   --px-shadow: rgb(0 0 0 / 0.5);
   --sky-top: #070b22;

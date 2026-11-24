@@ -21,13 +21,13 @@
   --app-hover: #ececf0;
   --app-user: #161618;
   --app-user-ink: #ffffff;
-  --app-accent: #3d5afe;
-  --app-ok: #1f8f4e;
-  --app-ok-bg: #e3f5ea;
-  --app-warn: #b45d00;
-  --app-warn-bg: #fff1dc;
-  --app-info: #3653d8;
-  --app-info-bg: #e8edff;
+  --app-accent: var(--tobs-core-brand);
+  --app-ok: var(--tobs-core-success);
+  --app-ok-bg: var(--tobs-core-success-tint);
+  --app-warn: var(--tobs-core-warning);
+  --app-warn-bg: var(--tobs-core-warning-tint);
+  --app-info: var(--tobs-core-info);
+  --app-info-bg: var(--tobs-core-info-tint);
   --app-code: #f5f5f7;
   position: relative;
   color: var(--app-ink);
@@ -48,13 +48,6 @@
   --app-hover: #26262a;
   --app-user: #f2f2f4;
   --app-user-ink: #141416;
-  --app-accent: #8c9eff;
-  --app-ok: #6fd69a;
-  --app-ok-bg: #173826;
-  --app-warn: #ffb766;
-  --app-warn-bg: #3d2a12;
-  --app-info: #a9b8ff;
-  --app-info-bg: #232b52;
   --app-code: #141416;
 }
 .app button,
