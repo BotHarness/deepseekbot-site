@@ -2,8 +2,9 @@
 @import './tobs-core.css';
 
 /* ---- palette: day (default) and night ----
-   Brand and accent come from Tobs core (src/tobs-core.css, synced by `pnpm tokens:sync`);
-   the warm pixel-world surfaces are this site's own. */
+   Brand and accent come from Tobs core (src/tobs-core.css, synced by `pnpm tokens:sync`).
+   The site accent is core's vivid marketing blue; the demo app keeps the app brand.
+   The warm pixel-world surfaces are this site's own. */
 :root {
   --px: 4px;
   --pixel-font: 'DSB Pixel', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', monospace;
@@ -14,7 +15,7 @@
   --bg-alt: #efdcae;
   --ink: #3b2414;
   --ink-soft: #6b4a2e;
-  --accent: var(--tobs-core-brand);
+  --accent: var(--tobs-core-brand-vivid);
   --accent-ink: var(--tobs-core-on-solid);
   --px-ink: #3b2414;
   --px-shadow: rgb(59 36 20 / 0.35);

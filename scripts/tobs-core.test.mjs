@@ -9,7 +9,7 @@ const declared = (css, name) =>
 
 test('the synced core file defines light and dark brand and status colours', () => {
   assert.match(core, /:root\[data-theme='dark'\]/);
-  for (const name of ['brand', 'on-solid', 'success', 'warning', 'danger', 'info']) {
+  for (const name of ['brand', 'brand-vivid', 'on-solid', 'success', 'warning', 'danger', 'info']) {
     assert.equal(declared(core, `--tobs-core-${name}`).length, 2, `--tobs-core-${name}`);
   }
 });
@@ -22,7 +22,7 @@ test('styles.css loads core before its own palette', () => {
 
 test('brand, accent and status colours read core instead of local hex values', () => {
   const pairs = [
-    ['src/styles.css', '--accent', 'var(--tobs-core-brand)'],
+    ['src/styles.css', '--accent', 'var(--tobs-core-brand-vivid)'],
     ['src/styles.css', '--accent-ink', 'var(--tobs-core-on-solid)'],
     ['src/demo.css', '--app-accent', 'var(--tobs-core-brand)'],
     ['src/demo.css', '--app-ok', 'var(--tobs-core-success)'],
