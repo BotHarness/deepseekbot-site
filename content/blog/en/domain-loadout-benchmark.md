@@ -1,7 +1,7 @@
 ---
 {
   "title": "Small Models with a Domain Loadout: Benchmarking Non-Standard Back-Office Work",
-  "description": "Most back-office time goes to exceptions, not standard flows. Across three real hotel back-office cases (anonymized) and ~880 billed runs, we benchmarked cheap small models with a Domain Loadout against generic shell tools, coarse workflow tools, and TypeSafe's JEV 1.14.",
+  "description": "Most back-office time goes to exceptions, not standard flows. Across three real hotel back-office cases (anonymized) and ~880 billed runs, we benchmarked cheap small models with a Domain Loadout against generic shell tools, coarse workflow tools, and TypeSafe's JEV 1.14—and broke down where the savings come from, how far the tools generalize, and how Loadouts differ from fine-tuning and MCP.",
   "date": "2026-11-28",
   "tags": [
     "Benchmark",
@@ -97,7 +97,7 @@ Looking at accuracy alongside billed cost, wall-clock time, and step count on **
 
 </div>
 
-Four findings stand out—including where the Domain Loadout wins, and where we should be careful not to overclaim:
+Three findings stand out—including where the Domain Loadout wins, and where we should be careful not to overclaim:
 
 ### 1. On standard work, JEV is hard to beat
 
@@ -122,7 +122,7 @@ A common first attempt at enterprise agents is wrapping an existing batch script
 
 Even more telling was a governance incident in an early pilot round: **the model temporarily edited the official rules file, ran the predefined workflow, and restored the file afterward to force an answer.** That episode is why we added the input-integrity check across all arms and locked the Domain Loadout's file tools to read-only.
 
-## Result 2: On smaller or cheaper models, the efficiency gap widens
+## Result 2: On smaller models, the efficiency gap widens—and where the savings actually come from
 
 We next tested **generic tools vs Domain Loadout** across two additional small models—`gpt-6-luna` and `mimo-v2.6-flash`—on the same 24 held-out test tasks (2 runs each, compared alongside flash's 3 runs):
 
@@ -145,13 +145,30 @@ We next tested **generic tools vs Domain Loadout** across two additional small m
 
 </div>
 
-Accuracy remained essentially tied across all three models (`gpt-6-luna` differed by a single run; `mimo-v2.6-flash` matched identically, with every failure in both arms caused by hitting the 10-minute wall-time limit on a slower model).
+Accuracy remained essentially tied across all three models (`gpt-6-luna` differed by a single run; `mimo-v2.6-flash` matched identically, with every failure in both arms caused by hitting the 10-minute wall-time limit on a slower model). Meanwhile, cost and runtime dropped everywhere—most sharply on **`gpt-6-luna`**, where the Domain Loadout cut non-standard cost by **65%** ($0.0029 vs $0.0083) and cut runtime in half (**22s vs 44s, −51%**).
 
-Meanwhile, cost and runtime dropped everywhere—most sharply on **`gpt-6-luna`**, where the Domain Loadout cut non-standard cost by **65%** ($0.0029 vs $0.0083) and cut runtime in half (**22s vs 44s, −51%**).
+### Inside the bill: do the savings come from input tokens or output tokens?
 
-The intuition is straightforward: with generic tools, the model has to read the rules, write a fresh script, and double-check its math every time. With a Domain Loadout, the "how to calculate" lives inside tested Domain Tools, so a smaller model only has to decide "which steps to combine for this request."
+A natural guess is that Domain Loadouts save money simply by shrinking input prompts. Breaking down actual billed token usage—uncached input, cache read/write, and output—tells a sharper story. **The savings come from two mechanisms working together: (1) fewer turns breaking the multi-turn context snowball in cache reads/writes, and (2) cutting expensive output tokens that generic agents burn writing and debugging scripts.** Which one dominates depends on the model's pricing and behavior:
 
-## Result 3: No fine-tuning—two rounds of tool tuning generalize to held-out hard tasks
+<div class="table-wrap benchmark-table">
+
+| Model | Arm | Steps | Input (cost) | Output (cost) | Main savings driver |
+| --- | --- | --- | --- | --- | --- |
+| `deepseek-v4.1-flash` | Generic | 12.1 | 312k ($0.0067) | 14,855 ($0.0084) | — |
+| `deepseek-v4.1-flash` | **Domain Loadout** | **9.3** | 374k ($0.0080) | **8,973 ($0.0051)** | **Input actually rose +$0.0013; 100% of net savings came from −40% output tokens** (−$0.0033) |
+| `gpt-6-luna` | Generic | 10.3 | 253.5k ($0.0064) | 3,754 ($0.0019) | — |
+| `gpt-6-luna` | **Domain Loadout** | **6.6** | **66.9k ($0.0024)** | **1,086 ($0.0005)** | **Input 75%** (cache write 44% + cache read 31%) + **Output 25%** |
+| `mimo-v2.6-flash` | Generic | 12.5 | 272.3k ($0.0067) | 12,109 ($0.0034) | — |
+| `mimo-v2.6-flash` | **Domain Loadout** | **9.6** | **168.8k ($0.0059)** | **8,329 ($0.0023)** | **Output 57%** + **uncached input 28%** + **cache read 15%** |
+
+</div>
+
+That breakdown explains both the big wins and the counter-case:
+- **Why did `flash` spend less even though its input tokens rose?** On commission and pricing tasks, `flash` often pulled bulky tool/file payloads into context (the same habit that made `pricing-hard` pricier), lifting total input by ~62k tokens. Yet `flash` charges **$0.567/M** for output—**11×** uncached input and **31×** cache reads. Generic runs emitted `14.9k` output tokens writing and fixing scripts; emitting compact structured tool calls cut output by **40%**, more than offsetting the extra input.
+- **Why did `gpt-6-luna` save 65%?** Beyond dropping from `10.3` to `6.6` steps, `luna` consistently queried targeted slices via `*_query` instead of reading whole files, slashing average context per step from `24.5k` to `10.2k`. Total input fell **74%** (`cache write` `33.6k → 14.7k`, `cache read` `219.9k → 52.2k`) alongside a **71%** drop in output tokens.
+
+## Result 3: Two rounds of tool tuning—and how far the tools generalize
 
 A fair concern with custom Domain Tools is maintenance: do domain experts have to anticipate every exception on day one?
 
@@ -183,19 +200,47 @@ None of the round-1 additions were task-specific hacks—they were five general 
 
 Then we re-ran the **held-out test tasks**, which were never used for tuning:
 - **Non-standard pass rate** climbed from **42/54 (78%)** to **54/54 (100%)**.
-- **Hard tasks** jumped from **15/27 (56%)** to **27/27 (100%)**, while mean cost fell from **$0.0477** to **$0.0179** and mean time dropped from **150s** to **56s**.
+- **Hard tasks** jumped from **15/27 (56%)** to **27/27 (100%)**, mean time dropped from **150s** to **56s**, and mean cost fell from **$0.0477** to **$0.0179** (saving $0.0298, or **−62%**). Inside that `v0 → r2` drop: **59% came from lower cache-read input** (cutting steps from `23.3` to `10.5` dropped repeated cache reads from `1,392k` to `421k`), **41% came from −60% output tokens** (`35,832 → 14,388` as dead-end retries and row-by-row edits vanished), and uncached input barely moved (~0.5%).
 
 Across the entire study—about **880 graded runs** plus debugging and smoke tests—total model spend was roughly **$14**.
 
-That points to a practical maintenance loop: domain experts don't have to predict every corner case upfront. Whenever a real failure shows up, they turn the missing step into a rule-following Domain Tool, and the model can immediately recombine it for future exceptions.
+### How far does it generalize when the task or industry changes?
+
+Looking at the actual tool schemas makes the generalization boundary concrete. Rather than building one bespoke tool per test case, all three cases follow the same **four-stage primitive pattern**: **view/derive rule copies (`*_rules_view` / `*_rules_derive`) → query/bulk-derive data copies (`*_query` / `*_derive` + a few domain actions) → deterministic compute engine (`*_compute`) → row-level merge (`table_merge`)**.
+
+That draws an honest line between what transfers automatically and what does not:
+
+- **Covered out-of-the-box without editing the tools:**
+  - **New periods and data**: different months or weeks, different staff/room/platform names, new amounts and ratios (the held-out test set itself uses unseen months and weeks).
+  - **New combinations of existing exception types**: stacking a mid-month resignation handover, an arbitrary joint-sale split, next-month bill exclusions, a per-person withholding exception, and manual adjustments in one request—the model simply composes the primitives in sequence (as on the 27/27 held-out hard runs).
+  - **Parameter-level policy shifts**: promo-window thresholds, department-specific holiday pay vs comp-day policies, excluding a platform, or changing cache-day limits all work through derived rule copies plus `table_merge`.
+- **Where the real boundaries sit:**
+  - **A genuinely new business mechanic inside the same domain (cross-category exceptions)**: if commission rules suddenly add dynamic weighting by hotel-wide monthly occupancy, or rostering adds hourly contractor payroll, the existing `*_compute` engine and tool schemas don't have those concepts—and with no shell, the model cannot improvise them. The fix isn't retraining the model; it's adding that missing step as one new primitive or schema field, just as in `r0 → r1 → r2`.
+  - **Switching to a completely different industry (e.g., e-commerce claims, supply-chain reconciliation, insurance)**: this specific hotel tool package **cannot be dropped in as-is**. Every domain has its own tables and deterministic settlement logic, so it needs its own 6–8 Domain Tools. **What transfers across industries is the Loadout architecture itself**: any operation with official base rules, structured ledgers, frequent ad-hoc exceptions, and strict audit requirements (finance close, payroll, scheduling, pricing ops, reconciliation) fits the same four-stage primitive design and 1–2 round failure-driven tuning loop.
+
+## Why a Domain Loadout—instead of fine-tuning or bolting on MCP?
+
+Placed next to the two most common engineering alternatives, the distinction comes down to **replacing and bounding the tool schema layer** rather than tuning weights or piling external servers onto a general agent:
+
+<div class="table-wrap benchmark-table">
+
+| Approach | What changes | Maintenance | Boundaries & context |
+| --- | --- | --- | --- |
+| **Fine-tuning** | **Model weights** (rules baked implicitly into parameters) | Needs labeled datasets, training runs, and model versioning; when business policies change, weights go stale | Weights cannot enforce hard permission guardrails or prevent silent rule/file tampering |
+| **Adding MCP servers** | **Additive layer** bolted on top of a closed harness's existing tools | Quick to plug in, but wrapping a rigid workflow as a coarse MCP tool fails 0/54 on exceptions while burning 6× cost | Closed harnesses (e.g., Codex or Claude Code) usually keep shell and file-write tools enabled; stacking MCP schemas bloats context and still lets the model bypass business tools (as seen in our pilot rules-file edit) |
+| **DSH Domain Loadout** | **Replace & bound** the underlying tool set and refine fine-grained tool schemas | **No weight updates**; 1–2 rounds of failure-driven primitive tuning (~$14 total study spend), with rules auditable in code | DSH's open, replaceable tool layer removes shell access, locks official inputs read-only, and exposes only 6–8 sharp tools per assignment—keeping context clean and every step auditable |
+
+</div>
+
+The crux is **additive vs. replaceable**. Bolting MCP onto a closed harness adds more tools next to an open shell: if a tool can't express an exception, the model can still slip around it via the shell, and too many schemas crowd a small model's context. In DSH, a Domain Loadout replaces the tool layer outright—removing general shell risk, locking official inputs read-only, and iterating directly on a compact set of domain tool schemas so cheap small models spend their budget composing verified steps.
 
 ## Complementary, not competing
 
 Taken together, the benchmark points to a clean division of labor for enterprise operations:
 
 1. **Use decision models for business standardization.** When a request matches a known flow, a calibrated decision model like JEV 1.14 is roughly 200× cheaper and 30× faster than running an agent, and escalates cleanly when a case falls outside its options.
-2. **Use a small model + fine-grained Domain Loadout for execution standardization.** For the non-standard exceptions that consume most back-office time, composing tested Domain Tools beats both rigid single-workflow wrappers (which fail while burning 6× the budget) and unguarded shells (which cost more, run slower, and widen the risk surface).
-3. **Keep the tool layer open.** Shipping a Domain Loadout as a lightweight plugin requires an open, replaceable harness like **DeepSeek Harness (DSH)**. If you want to explore how bots, workspaces, and plugins fit together on DSH, start with the [overview](/en/docs/overview/) and [installation guide](/en/docs/installation/).
+2. **Use a small model + fine-grained Domain Loadout for execution standardization.** For the non-standard exceptions that consume most back-office time, composing tested Domain Tools beats fine-tuning overhead, rigid single-workflow wrappers (which fail while burning 6× the budget), and unguarded shells (which cost more, run slower, and widen the risk surface).
+3. **Keep the tool layer open.** Replacing the underlying tool set per assignment and shipping Domain Tools as a plugin requires an open, replaceable harness like **DeepSeek Harness (DSH)**. If you want to explore how bots, workspaces, and plugins fit together on DSH, start with the [overview](/en/docs/overview/) and [installation guide](/en/docs/installation/).
 
 ## Caveats and methodological notes
 
