@@ -297,6 +297,16 @@
 .comparison-table td:first-child {
   min-width: 120px;
 }
+.benchmark-table table {
+  min-width: 560px;
+  overflow-wrap: normal;
+}
+.benchmark-table th {
+  white-space: nowrap;
+}
+.benchmark-table td {
+  word-break: normal;
+}
 .docs-body th,
 .docs-body td {
   padding: 8px 12px;
